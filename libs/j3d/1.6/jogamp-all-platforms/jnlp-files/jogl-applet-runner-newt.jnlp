@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp href="jogl-applet-runner-newt.jnlp">
+  <information>
+    <title>JOGL JNLP Applet Runner NEWT</title>
+    <vendor>JogAmp Community</vendor>
+    <homepage href="http://jogamp.org/jogl/"/>
+    <description>JOGL JNLP Applet Runner NEWT</description>
+    <offline-allowed/>
+  </information>
+  <update check="background" policy="always"/>
+
+    <resources>
+      <j2se href="http://java.sun.com/products/autodl/j2se" version="1.4+"/>
+      <property name="sun.java2d.noddraw" value="true"/>
+      <jar href="jar/jogl-test.jar" main="true"/>
+      <extension name="jogl-all-awt" href="jogl-all-awt.jnlp" />
+    </resources>
+
+  <applet-desc 
+      name="JOGLNewtApplet1Run-Applet"
+      main-class="com.jogamp.newt.awt.applet.JOGLNewtApplet1Run"
+      width="200" 
+      height="200">
+  </applet-desc>
+</jnlp>

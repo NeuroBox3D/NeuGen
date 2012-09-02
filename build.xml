@@ -75,27 +75,27 @@
     -->
 
     <target name= "-post-jar" description="copy java3d lib and log4j-3.properties to dist">
-        <!-- copy java3d lib for linux 64 bit to new dir -->
+<!--         copy java3d lib for linux 64 bit to new dir 
         <copy todir="dist/lib/j3d-1_5_2-linux-amd64">
             <fileset dir="libs/j3d/j3d-1_5_2-linux-amd64"></fileset>
         </copy>
-        <!-- copy java3d lib for linux 32 bit to new dir -->
+         copy java3d lib for linux 32 bit to new dir 
         <copy todir="dist/lib/j3d-1_5_2-linux-i586">
             <fileset dir="libs/j3d/j3d-1_5_2-linux-i586"></fileset>
         </copy>
-        <!-- copy java3d lib for win 64 bit to new dir.. -->
+         copy java3d lib for win 64 bit to new dir.. 
         <copy todir="dist/lib/j3d-1_5_2-windows-amd64">
             <fileset dir="libs/j3d/j3d-1_5_2-windows-amd64"></fileset>
         </copy>
-        <!-- copy j3d lib for win 32 -->
+         copy j3d lib for win 32 
         <copy todir="dist/lib/j3d-1_5_2-windows-i586">
             <fileset dir="libs/j3d/j3d-1_5_2-windows-i586"></fileset>
         </copy>
 
-        <!-- copy j3d lib for macosx -->
+         copy j3d lib for macosx 
         <copy todir="dist/lib/j3d-1_5_2-macosx">
             <fileset dir="libs/j3d/j3d-1_5_2-macosx"></fileset>
-        </copy>
+        </copy>-->
 
         <copy todir="dist/config">
             <fileset dir="config"></fileset>

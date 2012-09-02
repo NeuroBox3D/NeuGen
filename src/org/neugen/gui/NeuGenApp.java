@@ -243,15 +243,19 @@ public final class NeuGenApp extends SingleFrameApplication {
                     }
                 }
             }
+            
+            com.jogamp.common.nio.Buffers b;
 
             String call;
             // Mac (test -classpath)
             if (System.getProperty("os.name").toLowerCase().indexOf("mac") >= 0) {
+                System.out.println("TEST!!!!!!");
                 //call = "java -ea -Xms64m -Xmx" + sValue + "m -jar NeuGenJava.jar runProgram";
                 call = "java -ea -Xms64m -Xmx" + heapSize + "m"
+                        + "-Xbootclasspath/p:lib/j3dcore.jar:lib/j3dutils.jar:lib/vecmath.jar:lib/jogl-all.jar:lib/jogl-all-natives-macosx.jar:lib/gluegen-rt.jar:lib/gluegen.jar:lib/gluegen-rt-natives-macosx-universal.jar"
                         + " -Djava.ext.dirs=./lib "
-                        + " -Djava.library.path=." + file_sep + "lib" + path_sep + "."
-                        + file_sep + "lib" + file_sep + binJ3dDir
+//                        + " -Djava.library.path=." + file_sep + "lib" + path_sep + "."
+//                        + file_sep + "lib" + file_sep + binJ3dDir
                         // + " -jar NeuGenJava.jar runProgram";
                         //+ " -Dj3d.rend=jogl"
                         //+ " -Dj3d.debug=true"
