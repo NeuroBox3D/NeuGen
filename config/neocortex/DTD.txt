@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>
+<!DOCTYPE xed [
+   <!ELEMENT xed (string | real | int | data | true | false | object)*>
+   <!ATTLIST xed major CDATA #REQUIRED minor CDATA #REQUIRED>
+   <!ELEMENT object (string | real | int | data | true | false | object | siblings)*>
+   <!ATTLIST object key CDATA #REQUIRED classdescriptor CDATA #REQUIRED>
+   <!ELEMENT siblings (object)*>
+   <!ELEMENT string (#PCDATA)>
+   <!ATTLIST string key CDATA #REQUIRED>
+   <!ELEMENT real (#PCDATA)>
+   <!ATTLIST real key CDATA #REQUIRED>
+   <!ELEMENT int (#PCDATA)>
+   <!ATTLIST int key CDATA #REQUIRED>
+   <!ELEMENT data (#PCDATA)>
+   <!ATTLIST data key CDATA #REQUIRED>
+   <!ELEMENT true EMPTY>
+   <!ATTLIST true key CDATA #REQUIRED>
+   <!ELEMENT false EMPTY>
+   <!ATTLIST false key CDATA #REQUIRED>
+]>

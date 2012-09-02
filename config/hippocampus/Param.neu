@@ -1,0 +1,1571 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>
+<!DOCTYPE xed [
+   <!ELEMENT xed (string | real | int | data | true | false | object)*>
+   <!ATTLIST xed major CDATA #REQUIRED minor CDATA #REQUIRED>
+   <!ELEMENT object (string | real | int | data | true | false | object | siblings)*>
+   <!ATTLIST object key CDATA #REQUIRED classdescriptor CDATA #REQUIRED>
+   <!ELEMENT siblings (object)*>
+   <!ELEMENT string (#PCDATA)>
+   <!ATTLIST string key CDATA #REQUIRED>
+   <!ELEMENT real (#PCDATA)>
+   <!ATTLIST real key CDATA #REQUIRED>
+   <!ELEMENT int (#PCDATA)>
+   <!ATTLIST int key CDATA #REQUIRED>
+   <!ELEMENT data (#PCDATA)>
+   <!ATTLIST data key CDATA #REQUIRED>
+   <!ELEMENT true EMPTY>
+   <!ATTLIST true key CDATA #REQUIRED>
+   <!ELEMENT false EMPTY>
+   <!ATTLIST false key CDATA #REQUIRED>
+]>
+<xed major="1" minor="0">
+  <object key="net" classdescriptor="net_param">
+    <real key="dist_synapse">2.5</real>
+    <object key="nCA1pyramidal" classdescriptor="">
+      <int key="pyramidale">3</int>
+    </object>
+    <object key="nCalretinin(CR)" classdescriptor="">
+      <int key="oriens">0</int>
+      <int key="pyramidale">0</int>
+      <int key="proximal_radiatum">0</int>
+      <int key="distal_radiatum">1</int>
+    </object>
+    <object key="nCalbindin(CB)" classdescriptor="">
+      <int key="oriens">0</int>
+      <int key="proximal_radiatum">1</int>
+      <int key="distal_radiatum">0</int>
+      <int key="lacunosum/moleculare">0</int>
+    </object>
+    <object key="nCholecystokinin(CCK)" classdescriptor="">
+      <int key="pyramidale">0</int>
+      <int key="distal_radiatum">1</int>
+    </object>
+    <object key="nParvalbumin(PV)" classdescriptor="">
+      <int key="oriens">0</int>
+      <int key="pyramidale">1</int>
+    </object>
+    <object key="nSomatostatin(SOM)" classdescriptor="">
+      <int key="oriens">2</int>
+    </object>
+  </object>
+  <object key="region" classdescriptor="">
+    <object key="ca1" classdescriptor="">
+      <real key="length">400.0</real>
+      <real key="width">400.0</real>
+      <real key="stratum_oriens/alveus">200.0</real>
+      <real key="stratum_pyramidale">100.0</real>
+      <real key="stratum_radiatum">500.0</real>
+      <real key="stratum_lacunosum/moleculare">100.0</real>
+    </object>
+  </object>
+  <object key="neuron" classdescriptor="basic_neuron_param">
+    <object key="axon" classdescriptor="axon_param">
+      <object key="gen_0" classdescriptor="branch_generation">
+        <object key="branch_angle" classdescriptor="minmax_float">
+          <real key="max">30.0</real>
+          <real key="min">10.0</real>
+        </object>
+        <object key="len_param" classdescriptor="float_vector3D">
+          <real key="x">20.0</real>
+          <real key="y">0.0</real>
+          <real key="z">400.0</real>
+        </object>
+        <int key="nbranch_param">3</int>
+        <real key="nparts_density">0.25</real>
+        <object key="siblings" classdescriptor="siblings">
+          <object key="siblings" classdescriptor="sib_generation">
+            <object key="branch_angle" classdescriptor="minmax_float">
+              <real key="max">60.0</real>
+              <real key="min">30.0</real>
+            </object>
+            <object key="len_param" classdescriptor="float_vector3D">
+              <real key="x">10.0</real>
+              <real key="y">0.0</real>
+              <real key="z">0.0</real>
+            </object>
+            <int key="nbranch_param">3</int>
+            <real key="nparts_density">0.25</real>
+            <object key="siblings" classdescriptor="siblings">
+              <object key="siblings" classdescriptor="sib_generation">
+                <object key="branch_angle" classdescriptor="minmax_float">
+                  <real key="max">60.0</real>
+                  <real key="min">30.0</real>
+                </object>
+                <object key="len_param" classdescriptor="float_vector3D">
+                  <real key="x">10.0</real>
+                  <real key="y">0.0</real>
+                  <real key="z">0.0</real>
+                </object>
+                <int key="nbranch_param">2</int>
+                <real key="nparts_density">0.25</real>
+                <object key="siblings" classdescriptor="siblings">
+                  <object key="siblings" classdescriptor="sib_generation">
+                    <object key="branch_angle" classdescriptor="minmax_float">
+                      <real key="max">60.0</real>
+                      <real key="min">30.0</real>
+                    </object>
+                    <object key="len_param" classdescriptor="float_vector3D">
+                      <real key="x">10.0</real>
+                      <real key="y">0.0</real>
+                      <real key="z">0.0</real>
+                    </object>
+                    <int key="nbranch_param">0</int>
+                    <real key="nparts_density">0.25</real>
+                    <object key="siblings" classdescriptor="siblings">
+                      <object key="siblings" classdescriptor="sib_generation">
+                        <object key="branch_angle" classdescriptor="minmax_float">
+                          <real key="max">60.0</real>
+                          <real key="min">30.0</real>
+                        </object>
+                        <object key="len_param" classdescriptor="float_vector3D">
+                          <real key="x">10.0</real>
+                          <real key="y">0.0</real>
+                          <real key="z">0.0</real>
+                        </object>
+                        <int key="nbranch_param">0</int>
+                        <real key="nparts_density">0.25</real>
+                        <object key="siblings" classdescriptor="siblings">
+                          <object key="siblings" classdescriptor="sib_generation">
+                            <object key="branch_angle" classdescriptor="minmax_float">
+                              <real key="max">60.0</real>
+                              <real key="min">30.0</real>
+                            </object>
+                            <object key="len_param" classdescriptor="float_vector3D">
+                              <real key="x">10.0</real>
+                              <real key="y">0.0</real>
+                              <real key="z">0.0</real>
+                            </object>
+                            <int key="nbranch_param">0</int>
+                            <real key="nparts_density">0.25</real>
+                            <object key="siblings" classdescriptor="siblings">
+                              <object key="siblings" classdescriptor="sib_generation">
+                                <object key="branch_angle" classdescriptor="minmax_float">
+                                  <real key="max">60.0</real>
+                                  <real key="min">30.0</real>
+                                </object>
+                                <object key="len_param" classdescriptor="float_vector3D">
+                                  <real key="x">10.0</real>
+                                  <real key="y">0.0</real>
+                                  <real key="z">0.0</real>
+                                </object>
+                                <int key="nbranch_param">0</int>
+                                <real key="nparts_density">0.25</real>
+                                <object key="siblings" classdescriptor="siblings">
+                                  <object key="siblings" classdescriptor="sib_generation">
+                                    <object key="branch_angle" classdescriptor="minmax_float">
+                                      <real key="max">60.0</real>
+                                      <real key="min">30.0</real>
+                                    </object>
+                                    <object key="len_param" classdescriptor="float_vector3D">
+                                      <real key="x">10.0</real>
+                                      <real key="y">0.0</real>
+                                      <real key="z">0.0</real>
+                                    </object>
+                                    <int key="nbranch_param">0</int>
+                                    <real key="nparts_density">0.25</real>
+                                    <object key="siblings" classdescriptor="siblings">
+                                      <object key="siblings" classdescriptor="sib_generation">
+                                        <object key="branch_angle" classdescriptor="minmax_float">
+                                          <real key="max">60.0</real>
+                                          <real key="min">30.0</real>
+                                        </object>
+                                        <object key="len_param" classdescriptor="float_vector3D">
+                                          <real key="x">10.0</real>
+                                          <real key="y">0.0</real>
+                                          <real key="z">0.0</real>
+                                        </object>
+                                        <int key="nbranch_param">0</int>
+                                        <real key="nparts_density">0.25</real>
+                                        <object key="siblings" classdescriptor="siblings">
+                                          <object key="siblings" classdescriptor="sib_generation">
+                                            <object key="branch_angle" classdescriptor="minmax_float">
+                                              <real key="max">60.0</real>
+                                              <real key="min">30.0</real>
+                                            </object>
+                                            <object key="len_param" classdescriptor="float_vector3D">
+                                              <real key="x">10.0</real>
+                                              <real key="y">0.0</real>
+                                              <real key="z">0.0</real>
+                                            </object>
+                                            <int key="nbranch_param">0</int>
+                                            <real key="nparts_density">0.25</real>
+                                            <object key="siblings" classdescriptor="siblings">
+                                              <object key="siblings" classdescriptor="sib_generation">
+                                                <object key="branch_angle" classdescriptor="minmax_float">
+                                                  <real key="max">60.0</real>
+                                                  <real key="min">30.0</real>
+                                                </object>
+                                                <object key="len_param" classdescriptor="float_vector3D">
+                                                  <real key="x">10.0</real>
+                                                  <real key="y">0.0</real>
+                                                  <real key="z">0.0</real>
+                                                </object>
+                                                <int key="nbranch_param">0</int>
+                                                <real key="nparts_density">0.25</real>
+                                              </object>
+                                            </object>
+                                          </object>
+                                        </object>
+                                      </object>
+                                    </object>
+                                  </object>
+                                </object>
+                              </object>
+                            </object>
+                          </object>
+                        </object>
+                      </object>
+                    </object>
+                  </object>
+                </object>
+              </object>
+            </object>
+          </object>
+        </object>
+      </object>
+      <object key="hillock" classdescriptor="">
+        <real key="legth">10.0</real>
+        <real key="proximal_radius">4.0</real>
+      </object>
+      <object key="initial_segment" classdescriptor="">
+        <real key="legth">15.0</real>
+      </object>
+      <object key="myelin" classdescriptor="">
+        <real key="myelinated_legth">100.0</real>
+        <real key="ranvier_legth">5.0</real>
+      </object>
+      <object key="rad" classdescriptor="minmax_float">
+        <real key="max">0.5</real>
+        <real key="min">0.1</real>
+      </object>
+    </object>
+    <object key="dendrite" classdescriptor="dendrite_param">
+      <object key="gen_0" classdescriptor="branch_generation">
+        <object key="branch_angle" classdescriptor="minmax_float">
+          <real key="max">60.0</real>
+          <real key="min">30.0</real>
+        </object>
+        <object key="len_param" classdescriptor="float_vector3D">
+          <real key="x">20.0</real>
+          <real key="y">0.0</real>
+          <real key="z">0.0</real>
+        </object>
+        <int key="nbranch_param">3</int>
+        <real key="nparts_density">0.25</real>
+        <object key="siblings" classdescriptor="siblings">
+          <object key="siblings" classdescriptor="sib_generation">
+            <object key="len_param" classdescriptor="float_vector3D">
+              <real key="x">10.0</real>
+            </object>
+            <object key="siblings" classdescriptor="siblings">
+              <object key="siblings" classdescriptor="sib_generation">
+                <int key="nbranch_param">2</int>
+                <object key="siblings" classdescriptor="siblings">
+                  <object key="siblings" classdescriptor="sib_generation">
+                    <int key="nbranch_param">0</int>
+                    <object key="siblings" classdescriptor="siblings">
+                      <object key="siblings" classdescriptor="sib_generation">
+                        <object key="siblings" classdescriptor="siblings">
+                          <object key="siblings" classdescriptor="sib_generation">
+                            <object key="siblings" classdescriptor="siblings">
+                              <object key="siblings" classdescriptor="sib_generation">
+                                <object key="siblings" classdescriptor="siblings">
+                                  <object key="siblings" classdescriptor="sib_generation">
+                                    <object key="siblings" classdescriptor="siblings">
+                                      <object key="siblings" classdescriptor="sib_generation">
+                                        <object key="siblings" classdescriptor="siblings">
+                                          <object key="siblings" classdescriptor="sib_generation">
+                                            <object key="siblings" classdescriptor="siblings">
+                                              <object key="siblings" classdescriptor="sib_generation">
+</object>
+                                            </object>
+                                          </object>
+                                        </object>
+                                      </object>
+                                    </object>
+                                  </object>
+                                </object>
+                              </object>
+                            </object>
+                          </object>
+                        </object>
+                      </object>
+                    </object>
+                  </object>
+                </object>
+              </object>
+            </object>
+          </object>
+        </object>
+      </object>
+      <object key="rad" classdescriptor="minmax_float">
+        <real key="max">1.5</real>
+        <real key="min">0.25</real>
+      </object>
+    </object>
+    <object key="deviation" classdescriptor="float_vector3D">
+      <real key="x">1.0</real>
+      <real key="y">1.0</real>
+      <real key="z">1.0</real>
+    </object>
+    <int key="napiden">0</int>
+    <int key="nden">11</int>
+    <object key="subclasses" classdescriptor="siblings">
+      <object key="calbindin" classdescriptor="">
+        <object key="axon" classdescriptor="axon_param">
+          <object key="gen_0" classdescriptor="branch_generation">
+            <int key="nbranch_param">20</int>
+            <object key="siblings" classdescriptor="siblings">
+              <object key="siblings" classdescriptor="sib_generation">
+                <object key="siblings" classdescriptor="siblings">
+                  <object key="siblings" classdescriptor="sib_generation">
+                    <object key="siblings" classdescriptor="siblings">
+                      <object key="siblings" classdescriptor="sib_generation">
+                        <object key="siblings" classdescriptor="siblings">
+                          <object key="siblings" classdescriptor="sib_generation">
+                            <object key="siblings" classdescriptor="siblings">
+                              <object key="siblings" classdescriptor="sib_generation">
+                                <object key="siblings" classdescriptor="siblings">
+                                  <object key="siblings" classdescriptor="sib_generation">
+                                    <object key="siblings" classdescriptor="siblings">
+                                      <object key="siblings" classdescriptor="sib_generation">
+                                        <object key="siblings" classdescriptor="siblings">
+                                          <object key="siblings" classdescriptor="sib_generation">
+                                            <object key="siblings" classdescriptor="siblings">
+                                              <object key="siblings" classdescriptor="sib_generation">
+                                                <object key="siblings" classdescriptor="siblings">
+                                                  <object key="siblings" classdescriptor="sib_generation">
+</object>
+                                                </object>
+                                              </object>
+                                            </object>
+                                          </object>
+                                        </object>
+                                      </object>
+                                    </object>
+                                  </object>
+                                </object>
+                              </object>
+                            </object>
+                          </object>
+                        </object>
+                      </object>
+                    </object>
+                  </object>
+                </object>
+                <int key="nbranch_param">0</int>
+                <object key="len_param" classdescriptor="float_vector3D">
+                  <real key="z">350.0</real>
+                </object>
+              </object>
+            </object>
+            <object key="len_param" classdescriptor="float_vector3D">
+              <real key="x">0.0</real>
+              <real key="z">2.0</real>
+              <real key="y">0.0</real>
+            </object>
+            <object key="branch_angle" classdescriptor="minmax_float">
+              <real key="max">120.0</real>
+              <real key="min">70.0</real>
+            </object>
+          </object>
+          <object key="initial_segment" classdescriptor="">
+            <real key="legth">4.0</real>
+          </object>
+          <object key="hillock" classdescriptor="">
+            <real key="legth">2.0</real>
+          </object>
+        </object>
+        <object key="dendrite" classdescriptor="">
+          <object key="gen_0" classdescriptor="">
+            <object key="branch_angle" classdescriptor="">
+              <real key="max">40.0</real>
+              <real key="min">10.0</real>
+            </object>
+            <object key="len_param" classdescriptor="">
+              <real key="x">600.0</real>
+              <real key="y">0.0</real>
+              <real key="z">0.0</real>
+            </object>
+            <int key="nbranch_param">4</int>
+            <real key="nparts_density">0.25</real>
+            <object key="siblings" classdescriptor="siblings">
+              <object key="siblings" classdescriptor="">
+                <object key="branch_angle" classdescriptor="">
+                  <real key="max">60.0</real>
+                  <real key="min">30.0</real>
+                </object>
+                <object key="len_param" classdescriptor="">
+                  <real key="x">50.0</real>
+                </object>
+                <int key="nbranch_param">1</int>
+                <object key="siblings" classdescriptor="siblings">
+                  <object key="siblings" classdescriptor="">
+                    <int key="nbranch_param">0</int>
+                    <object key="siblings" classdescriptor="siblings">
+                      <object key="siblings" classdescriptor="sib_generation">
+                        <object key="siblings" classdescriptor="siblings">
+                          <object key="siblings" classdescriptor="sib_generation">
+                            <object key="siblings" classdescriptor="siblings">
+                              <object key="siblings" classdescriptor="sib_generation">
+                                <object key="siblings" classdescriptor="siblings">
+                                  <object key="siblings" classdescriptor="sib_generation">
+                                    <object key="siblings" classdescriptor="siblings">
+                                      <object key="siblings" classdescriptor="sib_generation">
+                                        <object key="branch_angle" classdescriptor="">
+                                          <real key="max">60.0</real>
+                                          <real key="min">30.0</real>
+                                        </object>
+                                        <object key="siblings" classdescriptor="siblings">
+                                          <object key="siblings" classdescriptor="sib_generation">
+                                            <object key="siblings" classdescriptor="siblings">
+                                              <object key="siblings" classdescriptor="sib_generation">
+                                                <object key="siblings" classdescriptor="siblings">
+                                                  <object key="siblings" classdescriptor="sib_generation">
+</object>
+                                                </object>
+                                              </object>
+                                            </object>
+                                          </object>
+                                        </object>
+                                      </object>
+                                    </object>
+                                  </object>
+                                </object>
+                              </object>
+                            </object>
+                          </object>
+                        </object>
+                      </object>
+                    </object>
+                  </object>
+                </object>
+              </object>
+            </object>
+          </object>
+          <object key="rad" classdescriptor="">
+            <real key="max">0.8</real>
+            <real key="min">0.15</real>
+          </object>
+        </object>
+        <object key="deviation" classdescriptor="">
+          <real key="x">0.5</real>
+          <real key="y">0.5</real>
+          <real key="z">0.5</real>
+        </object>
+        <int key="napiden">0</int>
+        <int key="nden">4</int>
+      </object>
+      <object key="calretinin" classdescriptor="">
+        <object key="axon" classdescriptor="axon_param">
+          <object key="gen_0" classdescriptor="branch_generation">
+            <int key="nbranch_param">26</int>
+            <object key="siblings" classdescriptor="siblings">
+              <object key="siblings" classdescriptor="sib_generation">
+                <object key="siblings" classdescriptor="siblings">
+                  <object key="siblings" classdescriptor="sib_generation">
+                    <object key="siblings" classdescriptor="siblings">
+                      <object key="siblings" classdescriptor="sib_generation">
+                        <object key="siblings" classdescriptor="siblings">
+                          <object key="siblings" classdescriptor="sib_generation">
+                            <object key="siblings" classdescriptor="siblings">
+                              <object key="siblings" classdescriptor="sib_generation">
+                                <object key="siblings" classdescriptor="siblings">
+                                  <object key="siblings" classdescriptor="sib_generation">
+                                    <object key="siblings" classdescriptor="siblings">
+                                      <object key="siblings" classdescriptor="sib_generation">
+                                        <object key="siblings" classdescriptor="siblings">
+                                          <object key="siblings" classdescriptor="sib_generation">
+                                            <object key="siblings" classdescriptor="siblings">
+                                              <object key="siblings" classdescriptor="sib_generation">
+                                                <object key="siblings" classdescriptor="siblings">
+                                                  <object key="siblings" classdescriptor="sib_generation">
+</object>
+                                                </object>
+                                              </object>
+                                            </object>
+                                          </object>
+                                        </object>
+                                      </object>
+                                    </object>
+                                  </object>
+                                </object>
+                              </object>
+                            </object>
+                          </object>
+                        </object>
+                      </object>
+                    </object>
+                  </object>
+                </object>
+                <int key="nbranch_param">0</int>
+                <object key="len_param" classdescriptor="float_vector3D">
+                  <real key="z">200.0</real>
+                </object>
+              </object>
+            </object>
+            <object key="len_param" classdescriptor="float_vector3D">
+              <real key="x">0.0</real>
+              <real key="z">375.0</real>
+            </object>
+          </object>
+        </object>
+        <object key="dendrite" classdescriptor="">
+          <object key="gen_0" classdescriptor="">
+            <object key="branch_angle" classdescriptor="">
+              <real key="max">20.0</real>
+              <real key="min">10.0</real>
+            </object>
+            <object key="len_param" classdescriptor="">
+              <real key="x">0.0</real>
+              <real key="y">0.0</real>
+              <real key="z">550.0</real>
+            </object>
+            <int key="nbranch_param">2</int>
+            <object key="siblings" classdescriptor="siblings">
+              <object key="siblings" classdescriptor="">
+                <object key="branch_angle" classdescriptor="">
+                  <real key="max">60.0</real>
+                  <real key="min">30.0</real>
+                </object>
+                <object key="len_param" classdescriptor="">
+                  <real key="z">50.0</real>
+                </object>
+                <int key="nbranch_param">2</int>
+                <object key="siblings" classdescriptor="siblings">
+                  <object key="siblings" classdescriptor="">
+                    <int key="nbranch_param">0</int>
+                    <object key="siblings" classdescriptor="siblings">
+                      <object key="siblings" classdescriptor="sib_generation">
+                        <object key="siblings" classdescriptor="siblings">
+                          <object key="siblings" classdescriptor="sib_generation">
+                            <object key="siblings" classdescriptor="siblings">
+                              <object key="siblings" classdescriptor="sib_generation">
+                                <object key="siblings" classdescriptor="siblings">
+                                  <object key="siblings" classdescriptor="sib_generation">
+                                    <object key="siblings" classdescriptor="siblings">
+                                      <object key="siblings" classdescriptor="sib_generation">
+                                        <object key="siblings" classdescriptor="siblings">
+                                          <object key="siblings" classdescriptor="sib_generation">
+                                            <object key="branch_angle" classdescriptor="">
+                                              <real key="max">60.0</real>
+                                              <real key="min">30.0</real>
+                                            </object>
+                                            <object key="siblings" classdescriptor="siblings">
+                                              <object key="siblings" classdescriptor="sib_generation">
+                                                <object key="siblings" classdescriptor="siblings">
+                                                  <object key="siblings" classdescriptor="sib_generation">
+</object>
+                                                </object>
+                                              </object>
+                                            </object>
+                                          </object>
+                                        </object>
+                                      </object>
+                                    </object>
+                                  </object>
+                                </object>
+                              </object>
+                            </object>
+                          </object>
+                        </object>
+                      </object>
+                    </object>
+                  </object>
+                </object>
+              </object>
+            </object>
+          </object>
+          <object key="rad" classdescriptor="">
+            <real key="max">0.6</real>
+            <real key="min">0.2</real>
+          </object>
+        </object>
+        <object key="deviation" classdescriptor="">
+          <real key="x">1.0</real>
+          <real key="y">1.0</real>
+          <real key="z">1.0</real>
+        </object>
+        <int key="napiden">0</int>
+        <int key="nden">4</int>
+        <object key="soma" classdescriptor="soma_parameter">
+          <real key="rad">0.5</real>
+        </object>
+      </object>
+      <object key="cholecystokinin" classdescriptor="">
+        <object key="axon" classdescriptor="axon_param">
+          <object key="gen_0" classdescriptor="branch_generation">
+            <int key="nbranch_param">20</int>
+            <object key="siblings" classdescriptor="siblings">
+              <object key="siblings" classdescriptor="sib_generation">
+                <object key="siblings" classdescriptor="siblings">
+                  <object key="siblings" classdescriptor="sib_generation">
+                    <object key="siblings" classdescriptor="siblings">
+                      <object key="siblings" classdescriptor="sib_generation">
+                        <object key="siblings" classdescriptor="siblings">
+                          <object key="siblings" classdescriptor="sib_generation">
+                            <object key="siblings" classdescriptor="siblings">
+                              <object key="siblings" classdescriptor="sib_generation">
+                                <object key="siblings" classdescriptor="siblings">
+                                  <object key="siblings" classdescriptor="sib_generation">
+                                    <object key="siblings" classdescriptor="siblings">
+                                      <object key="siblings" classdescriptor="sib_generation">
+                                        <object key="siblings" classdescriptor="siblings">
+                                          <object key="siblings" classdescriptor="sib_generation">
+                                            <object key="siblings" classdescriptor="siblings">
+                                              <object key="siblings" classdescriptor="sib_generation">
+                                                <object key="siblings" classdescriptor="siblings">
+                                                  <object key="siblings" classdescriptor="sib_generation">
+</object>
+                                                </object>
+                                              </object>
+                                            </object>
+                                          </object>
+                                        </object>
+                                      </object>
+                                    </object>
+                                  </object>
+                                </object>
+                              </object>
+                            </object>
+                          </object>
+                        </object>
+                      </object>
+                    </object>
+                    <object key="branch_angle" classdescriptor="minmax_float">
+                      <real key="max">10.0</real>
+                      <real key="min">5.0</real>
+                    </object>
+                    <object key="len_param" classdescriptor="float_vector3D">
+                      <real key="z">50.0</real>
+                    </object>
+                    <int key="nbranch_param">0</int>
+                  </object>
+                </object>
+                <int key="nbranch_param">2</int>
+                <object key="len_param" classdescriptor="float_vector3D">
+                  <real key="z">0.0</real>
+                  <real key="x">350.0</real>
+                </object>
+                <object key="branch_angle" classdescriptor="minmax_float">
+                  <real key="min">85.0</real>
+                </object>
+              </object>
+            </object>
+            <object key="len_param" classdescriptor="float_vector3D">
+              <real key="x">0.0</real>
+              <real key="z">2.0</real>
+            </object>
+            <object key="branch_angle" classdescriptor="minmax_float">
+              <real key="max">100.0</real>
+              <real key="min">90.0</real>
+            </object>
+          </object>
+          <object key="initial_segment" classdescriptor="">
+            <real key="legth">4.0</real>
+          </object>
+          <object key="hillock" classdescriptor="">
+            <real key="legth">2.0</real>
+          </object>
+        </object>
+        <object key="dendrite" classdescriptor="">
+          <object key="gen_0" classdescriptor="">
+            <object key="branch_angle" classdescriptor="">
+              <real key="max">25.0</real>
+              <real key="min">10.0</real>
+            </object>
+            <object key="len_param" classdescriptor="">
+              <real key="x">0.0</real>
+              <real key="y">0.0</real>
+              <real key="z">850.0</real>
+            </object>
+            <int key="nbranch_param">4</int>
+            <object key="siblings" classdescriptor="siblings">
+              <object key="siblings" classdescriptor="">
+                <object key="branch_angle" classdescriptor="">
+                  <real key="max">60.0</real>
+                  <real key="min">30.0</real>
+                </object>
+                <object key="len_param" classdescriptor="">
+                  <real key="x">150.0</real>
+                  <real key="z">0.0</real>
+                </object>
+                <int key="nbranch_param">2</int>
+                <object key="siblings" classdescriptor="siblings">
+                  <object key="siblings" classdescriptor="">
+                    <int key="nbranch_param">0</int>
+                    <object key="siblings" classdescriptor="siblings">
+                      <object key="siblings" classdescriptor="sib_generation">
+                        <object key="siblings" classdescriptor="siblings">
+                          <object key="siblings" classdescriptor="sib_generation">
+                            <object key="siblings" classdescriptor="siblings">
+                              <object key="siblings" classdescriptor="sib_generation">
+                                <object key="siblings" classdescriptor="siblings">
+                                  <object key="siblings" classdescriptor="sib_generation">
+                                    <object key="siblings" classdescriptor="siblings">
+                                      <object key="siblings" classdescriptor="sib_generation">
+                                        <object key="siblings" classdescriptor="siblings">
+                                          <object key="siblings" classdescriptor="sib_generation">
+                                            <object key="siblings" classdescriptor="siblings">
+                                              <object key="siblings" classdescriptor="sib_generation">
+                                                <object key="siblings" classdescriptor="siblings">
+                                                  <object key="siblings" classdescriptor="sib_generation">
+</object>
+                                                </object>
+                                              </object>
+                                            </object>
+                                          </object>
+                                        </object>
+                                      </object>
+                                    </object>
+                                  </object>
+                                </object>
+                              </object>
+                            </object>
+                          </object>
+                        </object>
+                      </object>
+                    </object>
+                  </object>
+                </object>
+              </object>
+            </object>
+          </object>
+          <object key="rad" classdescriptor="">
+            <real key="max">2.5</real>
+            <real key="min">0.75</real>
+          </object>
+        </object>
+        <object key="deviation" classdescriptor="">
+          <real key="x">0.5</real>
+          <real key="y">0.5</real>
+          <real key="z">0.5</real>
+        </object>
+        <int key="napiden">0</int>
+        <int key="nden">6</int>
+        <object key="soma" classdescriptor="soma_parameter">
+          <real key="rad">2.2</real>
+        </object>
+      </object>
+      <object key="parvalbumin" classdescriptor="">
+        <object key="axon" classdescriptor="axon_param">
+          <object key="gen_0" classdescriptor="branch_generation">
+            <int key="nbranch_param">20</int>
+            <object key="siblings" classdescriptor="siblings">
+              <object key="siblings" classdescriptor="sib_generation">
+                <object key="siblings" classdescriptor="siblings">
+                  <object key="siblings" classdescriptor="sib_generation">
+                    <object key="siblings" classdescriptor="siblings">
+                      <object key="siblings" classdescriptor="sib_generation">
+                        <object key="siblings" classdescriptor="siblings">
+                          <object key="siblings" classdescriptor="sib_generation">
+                            <object key="siblings" classdescriptor="siblings">
+                              <object key="siblings" classdescriptor="sib_generation">
+                                <object key="siblings" classdescriptor="siblings">
+                                  <object key="siblings" classdescriptor="sib_generation">
+                                    <object key="siblings" classdescriptor="siblings">
+                                      <object key="siblings" classdescriptor="sib_generation">
+                                        <object key="siblings" classdescriptor="siblings">
+                                          <object key="siblings" classdescriptor="sib_generation">
+                                            <object key="siblings" classdescriptor="siblings">
+                                              <object key="siblings" classdescriptor="sib_generation">
+                                                <object key="siblings" classdescriptor="siblings">
+                                                  <object key="siblings" classdescriptor="sib_generation">
+</object>
+                                                </object>
+                                              </object>
+                                            </object>
+                                          </object>
+                                        </object>
+                                      </object>
+                                    </object>
+                                  </object>
+                                </object>
+                              </object>
+                            </object>
+                          </object>
+                        </object>
+                      </object>
+                    </object>
+                    <object key="branch_angle" classdescriptor="minmax_float">
+                      <real key="max">60.0</real>
+                    </object>
+                    <object key="len_param" classdescriptor="float_vector3D">
+                      <real key="z">50.0</real>
+                    </object>
+                    <int key="nbranch_param">0</int>
+                  </object>
+                </object>
+                <int key="nbranch_param">5</int>
+                <object key="len_param" classdescriptor="float_vector3D">
+                  <real key="z">300.0</real>
+                </object>
+              </object>
+            </object>
+            <object key="len_param" classdescriptor="float_vector3D">
+              <real key="x">0.0</real>
+              <real key="z">5.0</real>
+            </object>
+            <object key="branch_angle" classdescriptor="minmax_float">
+              <real key="max">90.0</real>
+              <real key="min">80.0</real>
+            </object>
+          </object>
+          <object key="initial_segment" classdescriptor="">
+            <real key="legth">2.0</real>
+          </object>
+          <object key="hillock" classdescriptor="">
+            <real key="legth">1.0</real>
+          </object>
+        </object>
+        <object key="dendrite" classdescriptor="">
+          <object key="gen_0" classdescriptor="">
+            <object key="branch_angle" classdescriptor="">
+              <real key="max">30.0</real>
+              <real key="min">10.0</real>
+            </object>
+            <object key="len_param" classdescriptor="">
+              <real key="x">0.0</real>
+              <real key="y">0.0</real>
+              <real key="z">400.0</real>
+            </object>
+            <int key="nbranch_param">5</int>
+            <object key="siblings" classdescriptor="siblings">
+              <object key="siblings" classdescriptor="">
+                <object key="branch_angle" classdescriptor="">
+                  <real key="max">20.0</real>
+                  <real key="min">10.0</real>
+                </object>
+                <object key="len_param" classdescriptor="">
+                  <real key="z">80.0</real>
+                </object>
+                <int key="nbranch_param">1</int>
+                <object key="siblings" classdescriptor="siblings">
+                  <object key="siblings" classdescriptor="">
+                    <object key="branch_angle" classdescriptor="">
+                      <real key="max">60.0</real>
+                      <real key="min">30.0</real>
+                    </object>
+                    <int key="nbranch_param">0</int>
+                    <object key="siblings" classdescriptor="siblings">
+                      <object key="siblings" classdescriptor="sib_generation">
+                        <object key="siblings" classdescriptor="siblings">
+                          <object key="siblings" classdescriptor="sib_generation">
+                            <object key="siblings" classdescriptor="siblings">
+                              <object key="siblings" classdescriptor="sib_generation">
+                                <object key="siblings" classdescriptor="siblings">
+                                  <object key="siblings" classdescriptor="sib_generation">
+                                    <object key="branch_angle" classdescriptor="">
+                                      <real key="max">60.0</real>
+                                      <real key="min">30.0</real>
+                                    </object>
+                                    <object key="siblings" classdescriptor="siblings">
+                                      <object key="siblings" classdescriptor="sib_generation">
+                                        <object key="siblings" classdescriptor="siblings">
+                                          <object key="siblings" classdescriptor="sib_generation">
+                                            <object key="siblings" classdescriptor="siblings">
+                                              <object key="siblings" classdescriptor="sib_generation">
+                                                <object key="siblings" classdescriptor="siblings">
+                                                  <object key="siblings" classdescriptor="sib_generation">
+</object>
+                                                </object>
+                                              </object>
+                                            </object>
+                                          </object>
+                                        </object>
+                                      </object>
+                                    </object>
+                                  </object>
+                                </object>
+                              </object>
+                            </object>
+                          </object>
+                        </object>
+                      </object>
+                    </object>
+                    <object key="len_param" classdescriptor="">
+                      <real key="z">50.0</real>
+                    </object>
+                  </object>
+                </object>
+              </object>
+            </object>
+          </object>
+          <object key="rad" classdescriptor="">
+            <real key="max">2.0</real>
+            <real key="min">0.5</real>
+          </object>
+        </object>
+        <object key="deviation" classdescriptor="">
+          <real key="x">1.0</real>
+          <real key="y">1.0</real>
+          <real key="z">1.0</real>
+        </object>
+        <int key="napiden">0</int>
+        <int key="nden">5</int>
+        <object key="soma" classdescriptor="soma_parameter">
+          <real key="rad">0.8</real>
+        </object>
+      </object>
+      <object key="pyramidal" classdescriptor="">
+        <object key="axon" classdescriptor="axon_param">
+          <object key="gen_0" classdescriptor="branch_generation">
+            <object key="siblings" classdescriptor="siblings">
+              <object key="siblings" classdescriptor="sib_generation">
+                <object key="siblings" classdescriptor="siblings">
+                  <object key="siblings" classdescriptor="sib_generation">
+                    <object key="siblings" classdescriptor="siblings">
+                      <object key="siblings" classdescriptor="sib_generation">
+                        <object key="siblings" classdescriptor="siblings">
+                          <object key="siblings" classdescriptor="sib_generation">
+                            <object key="siblings" classdescriptor="siblings">
+                              <object key="siblings" classdescriptor="sib_generation">
+                                <object key="siblings" classdescriptor="siblings">
+                                  <object key="siblings" classdescriptor="sib_generation">
+                                    <object key="siblings" classdescriptor="siblings">
+                                      <object key="siblings" classdescriptor="sib_generation">
+                                        <object key="siblings" classdescriptor="siblings">
+                                          <object key="siblings" classdescriptor="sib_generation">
+                                            <object key="siblings" classdescriptor="siblings">
+                                              <object key="siblings" classdescriptor="sib_generation">
+                                                <object key="siblings" classdescriptor="siblings">
+                                                  <object key="siblings" classdescriptor="sib_generation">
+</object>
+                                                </object>
+                                              </object>
+                                            </object>
+                                          </object>
+                                        </object>
+                                      </object>
+                                    </object>
+                                  </object>
+                                </object>
+                              </object>
+                            </object>
+                          </object>
+                        </object>
+                      </object>
+                    </object>
+                  </object>
+                </object>
+              </object>
+            </object>
+          </object>
+        </object>
+        <object key="dendrite" classdescriptor="alias">
+          <object key="apical" classdescriptor="">
+            <object key="gen_0" classdescriptor="">
+              <object key="branch_angle" classdescriptor="">
+                <real key="max">5.0</real>
+                <real key="min">1.0</real>
+              </object>
+              <object key="len_param" classdescriptor="">
+                <real key="x">0.0</real>
+                <real key="y">0.0</real>
+                <real key="z">180.0</real>
+              </object>
+              <int key="nbranch_param">4</int>
+              <object key="siblings" classdescriptor="siblings">
+                <object key="siblings" classdescriptor="">
+                  <int key="nbranch_param">3</int>
+                  <object key="siblings" classdescriptor="siblings">
+                    <object key="siblings" classdescriptor="">
+                      <object key="branch_angle" classdescriptor="">
+                        <real key="max">30.0</real>
+                        <real key="min">10.0</real>
+                      </object>
+                      <object key="len_param" classdescriptor="">
+                        <real key="z">100.0</real>
+                      </object>
+                      <int key="nbranch_param">3</int>
+                      <object key="siblings" classdescriptor="siblings">
+                        <object key="siblings" classdescriptor="">
+                          <int key="nbranch_param">3</int>
+                          <object key="siblings" classdescriptor="siblings">
+                            <object key="siblings" classdescriptor="">
+                              <int key="nbranch_param">2</int>
+                              <object key="siblings" classdescriptor="siblings">
+                                <object key="siblings" classdescriptor="">
+                                  <object key="siblings" classdescriptor="siblings">
+                                    <object key="siblings" classdescriptor="">
+                                      <int key="nbranch_param">0</int>
+                                      <object key="siblings" classdescriptor="siblings">
+                                        <object key="siblings" classdescriptor="sib_generation">
+                                          <object key="siblings" classdescriptor="siblings">
+                                            <object key="siblings" classdescriptor="sib_generation">
+                                              <object key="siblings" classdescriptor="siblings">
+                                                <object key="siblings" classdescriptor="sib_generation">
+                                                  <object key="siblings" classdescriptor="siblings">
+                                                    <object key="siblings" classdescriptor="sib_generation">
+</object>
+                                                  </object>
+                                                </object>
+                                              </object>
+                                            </object>
+                                          </object>
+                                        </object>
+                                      </object>
+                                    </object>
+                                  </object>
+                                </object>
+                              </object>
+                            </object>
+                          </object>
+                        </object>
+                      </object>
+                    </object>
+                  </object>
+                </object>
+              </object>
+            </object>
+            <int key="noblique">2</int>
+            <object key="oblique" classdescriptor="">
+              <object key="gen_0" classdescriptor="">
+                <object key="branch_angle" classdescriptor="">
+                  <real key="max">95.0</real>
+                  <real key="min">85.0</real>
+                </object>
+                <object key="len_param" classdescriptor="">
+                  <real key="x">60.0</real>
+                  <real key="y">0.0</real>
+                  <real key="z">0.0</real>
+                </object>
+                <int key="nbranch_param">3</int>
+                <real key="nparts_density">0.25</real>
+                <object key="siblings" classdescriptor="siblings">
+                  <object key="siblings" classdescriptor="">
+                    <object key="len_param" classdescriptor="">
+                      <real key="x">12.0</real>
+                    </object>
+                    <int key="nbranch_param">1</int>
+                    <object key="siblings" classdescriptor="siblings">
+                      <object key="siblings" classdescriptor="">
+                        <int key="nbranch_param">0</int>
+                        <object key="siblings" classdescriptor="siblings">
+                          <object key="siblings" classdescriptor="">
+                            <object key="siblings" classdescriptor="siblings">
+                              <object key="siblings" classdescriptor="">
+                                <object key="siblings" classdescriptor="siblings">
+                                  <object key="siblings" classdescriptor="">
+                                    <object key="siblings" classdescriptor="siblings">
+                                      <object key="siblings" classdescriptor="">
+                                        <object key="siblings" classdescriptor="siblings">
+                                          <object key="siblings" classdescriptor="">
+                                            <object key="siblings" classdescriptor="siblings">
+                                              <object key="siblings" classdescriptor="">
+                                                <object key="siblings" classdescriptor="siblings">
+                                                  <object key="siblings" classdescriptor="">
+</object>
+                                                </object>
+                                              </object>
+                                            </object>
+                                          </object>
+                                        </object>
+                                      </object>
+                                    </object>
+                                  </object>
+                                </object>
+                              </object>
+                            </object>
+                          </object>
+                        </object>
+                      </object>
+                    </object>
+                  </object>
+                </object>
+              </object>
+            </object>
+            <object key="rad" classdescriptor="minmax_float">
+              <real key="max">1.5</real>
+              <real key="min">0.25</real>
+            </object>
+          </object>
+          <object key="basal" classdescriptor="">
+            <object key="gen_0" classdescriptor="">
+              <object key="branch_angle" classdescriptor="minmax_float">
+                <real key="max">60.0</real>
+                <real key="min">30.0</real>
+              </object>
+              <object key="len_param" classdescriptor="float_vector3D">
+                <real key="x">20.0</real>
+                <real key="y">0.0</real>
+                <real key="z">0.0</real>
+              </object>
+              <int key="nbranch_param">3</int>
+              <object key="siblings" classdescriptor="siblings">
+                <object key="siblings" classdescriptor="sib_generation">
+                  <object key="len_param" classdescriptor="float_vector3D">
+                    <real key="x">10.0</real>
+                  </object>
+                  <object key="siblings" classdescriptor="siblings">
+                    <object key="siblings" classdescriptor="sib_generation">
+                      <int key="nbranch_param">2</int>
+                      <object key="siblings" classdescriptor="siblings">
+                        <object key="siblings" classdescriptor="sib_generation">
+                          <int key="nbranch_param">0</int>
+                          <object key="siblings" classdescriptor="siblings">
+                            <object key="siblings" classdescriptor="sib_generation">
+                              <object key="siblings" classdescriptor="siblings">
+                                <object key="siblings" classdescriptor="sib_generation">
+                                  <object key="siblings" classdescriptor="siblings">
+                                    <object key="siblings" classdescriptor="sib_generation">
+                                      <object key="branch_angle" classdescriptor="minmax_float">
+                                        <real key="max">60.0</real>
+                                        <real key="min">30.0</real>
+                                      </object>
+                                      <object key="len_param" classdescriptor="float_vector3D">
+                                        <real key="x">10.0</real>
+                                        <real key="y">0.0</real>
+                                        <real key="z">0.0</real>
+                                      </object>
+                                      <object key="siblings" classdescriptor="siblings">
+                                        <object key="siblings" classdescriptor="sib_generation">
+                                          <object key="siblings" classdescriptor="siblings">
+                                            <object key="siblings" classdescriptor="sib_generation">
+                                              <object key="siblings" classdescriptor="siblings">
+                                                <object key="siblings" classdescriptor="sib_generation">
+                                                  <object key="siblings" classdescriptor="siblings">
+                                                    <object key="siblings" classdescriptor="sib_generation">
+</object>
+                                                  </object>
+                                                </object>
+                                              </object>
+                                            </object>
+                                          </object>
+                                        </object>
+                                      </object>
+                                    </object>
+                                  </object>
+                                </object>
+                              </object>
+                            </object>
+                          </object>
+                        </object>
+                      </object>
+                    </object>
+                  </object>
+                </object>
+              </object>
+            </object>
+            <object key="rad" classdescriptor="minmax_float">
+              <real key="max">1.5</real>
+              <real key="min">0.25</real>
+            </object>
+          </object>
+        </object>
+        <object key="deviation" classdescriptor="float_vector3D">
+          <real key="x">1.0</real>
+          <real key="y">1.0</real>
+          <real key="z">1.0</real>
+        </object>
+        <int key="napiden">1</int>
+        <int key="nden">8</int>
+        <object key="subclasses" classdescriptor="siblings">
+          <object key="CA1pyramidal" classdescriptor="">
+            <object key="axon" classdescriptor="axon_param">
+              <object key="gen_0" classdescriptor="branch_generation">
+                <object key="siblings" classdescriptor="siblings">
+                  <object key="siblings" classdescriptor="sib_generation">
+                    <object key="siblings" classdescriptor="siblings">
+                      <object key="siblings" classdescriptor="sib_generation">
+                        <object key="siblings" classdescriptor="siblings">
+                          <object key="siblings" classdescriptor="sib_generation">
+                            <object key="siblings" classdescriptor="siblings">
+                              <object key="siblings" classdescriptor="sib_generation">
+                                <object key="siblings" classdescriptor="siblings">
+                                  <object key="siblings" classdescriptor="sib_generation">
+                                    <object key="siblings" classdescriptor="siblings">
+                                      <object key="siblings" classdescriptor="sib_generation">
+                                        <object key="siblings" classdescriptor="siblings">
+                                          <object key="siblings" classdescriptor="sib_generation">
+                                            <object key="siblings" classdescriptor="siblings">
+                                              <object key="siblings" classdescriptor="sib_generation">
+                                                <object key="siblings" classdescriptor="siblings">
+                                                  <object key="siblings" classdescriptor="sib_generation">
+                                                    <object key="siblings" classdescriptor="siblings">
+                                                      <object key="siblings" classdescriptor="sib_generation">
+</object>
+                                                    </object>
+                                                  </object>
+                                                </object>
+                                              </object>
+                                            </object>
+                                          </object>
+                                        </object>
+                                      </object>
+                                    </object>
+                                  </object>
+                                </object>
+                              </object>
+                            </object>
+                          </object>
+                        </object>
+                      </object>
+                    </object>
+                    <object key="len_param" classdescriptor="float_vector3D">
+                      <real key="x">0.0</real>
+                      <real key="z">275.0</real>
+                      <real key="y">0.0</real>
+                    </object>
+                    <int key="nbranch_param">0</int>
+                  </object>
+                </object>
+                <int key="nbranch_param">14</int>
+              </object>
+            </object>
+            <object key="apical" classdescriptor="">
+              <object key="gen_0" classdescriptor="">
+                <object key="branch_angle" classdescriptor="">
+                  <real key="max">5.0</real>
+                  <real key="min">1.0</real>
+                </object>
+                <object key="len_param" classdescriptor="">
+                  <real key="x">0.0</real>
+                  <real key="y">0.0</real>
+                  <real key="z">1000.0</real>
+                </object>
+                <int key="nbranch_param">15</int>
+                <real key="nparts_density">0.15</real>
+                <object key="siblings" classdescriptor="siblings">
+                  <object key="siblings" classdescriptor="sib_generation">
+                    <object key="branch_angle" classdescriptor="">
+                      <real key="max">30.0</real>
+                      <real key="min">10.0</real>
+                    </object>
+                    <object key="len_param" classdescriptor="">
+                      <real key="z">380.0</real>
+                    </object>
+                    <int key="nbranch_param">3</int>
+                    <object key="siblings" classdescriptor="siblings">
+                      <object key="siblings" classdescriptor="sib_generation">
+                        <object key="branch_angle" classdescriptor="">
+                          <real key="max">40.0</real>
+                        </object>
+                        <object key="len_param" classdescriptor="">
+                          <real key="z">600.0</real>
+                        </object>
+                        <int key="nbranch_param">1</int>
+                        <object key="siblings" classdescriptor="siblings">
+                          <object key="siblings" classdescriptor="sib_generation">
+                            <object key="branch_angle" classdescriptor="">
+                              <real key="max">30.0</real>
+                            </object>
+                            <object key="len_param" classdescriptor="">
+                              <real key="z">100.0</real>
+                            </object>
+                            <int key="nbranch_param">0</int>
+                            <object key="siblings" classdescriptor="siblings">
+                              <object key="siblings" classdescriptor="sib_generation">
+                                <object key="siblings" classdescriptor="siblings">
+                                  <object key="siblings" classdescriptor="sib_generation">
+                                    <object key="siblings" classdescriptor="siblings">
+                                      <object key="siblings" classdescriptor="sib_generation">
+                                        <object key="siblings" classdescriptor="siblings">
+                                          <object key="siblings" classdescriptor="sib_generation">
+                                            <object key="siblings" classdescriptor="siblings">
+                                              <object key="siblings" classdescriptor="sib_generation">
+                                                <object key="siblings" classdescriptor="siblings">
+                                                  <object key="siblings" classdescriptor="sib_generation">
+                                                    <object key="siblings" classdescriptor="siblings">
+                                                      <object key="siblings" classdescriptor="sib_generation">
+</object>
+                                                    </object>
+                                                  </object>
+                                                </object>
+                                              </object>
+                                            </object>
+                                          </object>
+                                        </object>
+                                      </object>
+                                    </object>
+                                  </object>
+                                </object>
+                              </object>
+                            </object>
+                          </object>
+                        </object>
+                      </object>
+                    </object>
+                  </object>
+                </object>
+              </object>
+              <int key="noblique">0</int>
+              <object key="oblique" classdescriptor="">
+                <object key="gen_0" classdescriptor="">
+                  <object key="len_param" classdescriptor="">
+                    <real key="x">60.0</real>
+                    <real key="y">0.0</real>
+                    <real key="z">0.0</real>
+                  </object>
+                  <object key="siblings" classdescriptor="siblings">
+                    <object key="siblings" classdescriptor="">
+                      <object key="siblings" classdescriptor="siblings">
+                        <object key="siblings" classdescriptor="">
+                          <object key="siblings" classdescriptor="siblings">
+                            <object key="siblings" classdescriptor="">
+                              <object key="siblings" classdescriptor="siblings">
+                                <object key="siblings" classdescriptor="">
+                                  <object key="siblings" classdescriptor="siblings">
+                                    <object key="siblings" classdescriptor="">
+                                      <object key="siblings" classdescriptor="siblings">
+                                        <object key="siblings" classdescriptor="">
+                                          <object key="siblings" classdescriptor="siblings">
+                                            <object key="siblings" classdescriptor="">
+                                              <object key="siblings" classdescriptor="siblings">
+                                                <object key="siblings" classdescriptor="">
+                                                  <object key="siblings" classdescriptor="siblings">
+                                                    <object key="siblings" classdescriptor="">
+</object>
+                                                  </object>
+                                                </object>
+                                              </object>
+                                            </object>
+                                          </object>
+                                        </object>
+                                      </object>
+                                    </object>
+                                  </object>
+                                </object>
+                              </object>
+                            </object>
+                          </object>
+                        </object>
+                      </object>
+                    </object>
+                  </object>
+                </object>
+              </object>
+              <object key="rad" classdescriptor="minmax_float">
+                <real key="max">1.5</real>
+                <real key="min">0.25</real>
+              </object>
+            </object>
+            <object key="basal" classdescriptor="">
+              <object key="gen_0" classdescriptor="">
+                <object key="branch_angle" classdescriptor="minmax_float">
+                  <real key="max">40.0</real>
+                  <real key="min">10.0</real>
+                </object>
+                <object key="len_param" classdescriptor="float_vector3D">
+                  <real key="x">0.0</real>
+                  <real key="y">0.0</real>
+                  <real key="z">130.0</real>
+                </object>
+                <int key="nbranch_param">6</int>
+                <real key="nparts_density">0.15</real>
+                <object key="siblings" classdescriptor="siblings">
+                  <object key="siblings" classdescriptor="sib_generation">
+                    <object key="branch_angle" classdescriptor="minmax_float">
+                      <real key="min">30.0</real>
+                    </object>
+                    <object key="len_param" classdescriptor="float_vector3D">
+                      <real key="z">120.0</real>
+                    </object>
+                    <int key="nbranch_param">2</int>
+                    <object key="siblings" classdescriptor="siblings">
+                      <object key="siblings" classdescriptor="sib_generation">
+                        <object key="len_param" classdescriptor="float_vector3D">
+                          <real key="z">40.0</real>
+                        </object>
+                        <object key="siblings" classdescriptor="siblings">
+                          <object key="siblings" classdescriptor="sib_generation">
+                            <object key="siblings" classdescriptor="siblings">
+                              <object key="siblings" classdescriptor="sib_generation">
+                                <object key="siblings" classdescriptor="siblings">
+                                  <object key="siblings" classdescriptor="sib_generation">
+                                    <object key="siblings" classdescriptor="siblings">
+                                      <object key="siblings" classdescriptor="sib_generation">
+                                        <object key="siblings" classdescriptor="siblings">
+                                          <object key="siblings" classdescriptor="sib_generation">
+                                            <object key="siblings" classdescriptor="siblings">
+                                              <object key="siblings" classdescriptor="sib_generation">
+                                                <object key="siblings" classdescriptor="siblings">
+                                                  <object key="siblings" classdescriptor="sib_generation">
+                                                    <object key="siblings" classdescriptor="siblings">
+                                                      <object key="siblings" classdescriptor="sib_generation">
+</object>
+                                                    </object>
+                                                  </object>
+                                                </object>
+                                              </object>
+                                            </object>
+                                          </object>
+                                        </object>
+                                      </object>
+                                    </object>
+                                  </object>
+                                </object>
+                              </object>
+                            </object>
+                          </object>
+                        </object>
+                        <int key="nbranch_param">0</int>
+                      </object>
+                    </object>
+                  </object>
+                </object>
+              </object>
+              <object key="rad" classdescriptor="minmax_float">
+                <real key="max">0.5</real>
+                <real key="min">0.15</real>
+              </object>
+            </object>
+            <object key="deviation" classdescriptor="">
+              <real key="x">0.7</real>
+              <real key="y">0.7</real>
+              <real key="z">0.7</real>
+            </object>
+            <int key="napiden">1</int>
+            <int key="nden">5</int>
+          </object>
+        </object>
+      </object>
+      <object key="somatostatin" classdescriptor="">
+        <object key="axon" classdescriptor="axon_param">
+          <object key="gen_0" classdescriptor="branch_generation">
+            <object key="siblings" classdescriptor="siblings">
+              <object key="siblings" classdescriptor="sib_generation">
+                <object key="siblings" classdescriptor="siblings">
+                  <object key="siblings" classdescriptor="sib_generation">
+                    <object key="siblings" classdescriptor="siblings">
+                      <object key="siblings" classdescriptor="sib_generation">
+                        <object key="siblings" classdescriptor="siblings">
+                          <object key="siblings" classdescriptor="sib_generation">
+                            <object key="siblings" classdescriptor="siblings">
+                              <object key="siblings" classdescriptor="sib_generation">
+                                <object key="siblings" classdescriptor="siblings">
+                                  <object key="siblings" classdescriptor="sib_generation">
+                                    <object key="siblings" classdescriptor="siblings">
+                                      <object key="siblings" classdescriptor="sib_generation">
+                                        <object key="siblings" classdescriptor="siblings">
+                                          <object key="siblings" classdescriptor="sib_generation">
+                                            <object key="siblings" classdescriptor="siblings">
+                                              <object key="siblings" classdescriptor="sib_generation">
+                                                <object key="siblings" classdescriptor="siblings">
+                                                  <object key="siblings" classdescriptor="sib_generation">
+</object>
+                                                </object>
+                                              </object>
+                                            </object>
+                                          </object>
+                                        </object>
+                                      </object>
+                                    </object>
+                                  </object>
+                                </object>
+                              </object>
+                            </object>
+                          </object>
+                        </object>
+                      </object>
+                    </object>
+                  </object>
+                </object>
+                <object key="len_param" classdescriptor="float_vector3D">
+                  <real key="z">200.0</real>
+                </object>
+                <int key="nbranch_param">0</int>
+              </object>
+            </object>
+            <object key="len_param" classdescriptor="float_vector3D">
+              <real key="x">0.0</real>
+              <real key="z">950.0</real>
+              <real key="y">0.0</real>
+            </object>
+            <int key="nbranch_param">20</int>
+            <object key="branch_angle" classdescriptor="minmax_float">
+              <real key="max">110.0</real>
+              <real key="min">100.0</real>
+            </object>
+          </object>
+          <object key="initial_segment" classdescriptor="">
+            <real key="legth">5.0</real>
+          </object>
+          <object key="hillock" classdescriptor="">
+            <real key="legth">2.0</real>
+          </object>
+        </object>
+        <object key="dendrite" classdescriptor="">
+          <object key="gen_0" classdescriptor="">
+            <object key="branch_angle" classdescriptor="">
+              <real key="max">15.0</real>
+              <real key="min">10.0</real>
+            </object>
+            <object key="len_param" classdescriptor="">
+              <real key="x">75.0</real>
+              <real key="y">0.0</real>
+              <real key="z">0.0</real>
+            </object>
+            <int key="nbranch_param">4</int>
+            <object key="siblings" classdescriptor="siblings">
+              <object key="siblings" classdescriptor="">
+                <object key="branch_angle" classdescriptor="">
+                  <real key="max">60.0</real>
+                  <real key="min">30.0</real>
+                </object>
+                <object key="len_param" classdescriptor="">
+                  <real key="x">50.0</real>
+                </object>
+                <int key="nbranch_param">2</int>
+                <object key="siblings" classdescriptor="siblings">
+                  <object key="siblings" classdescriptor="">
+                    <int key="nbranch_param">0</int>
+                    <object key="siblings" classdescriptor="siblings">
+                      <object key="siblings" classdescriptor="sib_generation">
+                        <object key="siblings" classdescriptor="siblings">
+                          <object key="siblings" classdescriptor="sib_generation">
+                            <object key="siblings" classdescriptor="siblings">
+                              <object key="siblings" classdescriptor="sib_generation">
+                                <object key="siblings" classdescriptor="siblings">
+                                  <object key="siblings" classdescriptor="sib_generation">
+                                    <object key="siblings" classdescriptor="siblings">
+                                      <object key="siblings" classdescriptor="sib_generation">
+                                        <object key="siblings" classdescriptor="siblings">
+                                          <object key="siblings" classdescriptor="sib_generation">
+                                            <object key="siblings" classdescriptor="siblings">
+                                              <object key="siblings" classdescriptor="sib_generation">
+                                                <object key="siblings" classdescriptor="siblings">
+                                                  <object key="siblings" classdescriptor="sib_generation">
+</object>
+                                                </object>
+                                              </object>
+                                            </object>
+                                          </object>
+                                        </object>
+                                      </object>
+                                    </object>
+                                  </object>
+                                </object>
+                              </object>
+                            </object>
+                          </object>
+                        </object>
+                      </object>
+                    </object>
+                  </object>
+                </object>
+              </object>
+            </object>
+          </object>
+          <object key="rad" classdescriptor="">
+            <real key="max">1.5</real>
+            <real key="min">0.5</real>
+          </object>
+        </object>
+        <object key="deviation" classdescriptor="">
+          <real key="x">0.5</real>
+          <real key="y">0.5</real>
+          <real key="z">0.5</real>
+        </object>
+        <int key="napiden">0</int>
+        <int key="nden">5</int>
+      </object>
+    </object>
+    <object key="soma" classdescriptor="soma_parameter">
+      <real key="rad">5.0</real>
+    </object>
+    <object key="synapse" classdescriptor="synapse_param">
+      <real key="rad">1.0</real>
+    </object>
+  </object>
+</xed>
