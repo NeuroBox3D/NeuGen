@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <comment>NeuGen project directory </comment>
+    <entry key="appendix">Parameters of the .neu files.
+        The indentation follows the branch structure of the data tree. Folders are in bold font, sheets, where values can be changed are in normal font.
+        Default values (taken from experimental findings described in the literature) are in ■ lists.
+    </entry>
+</properties>

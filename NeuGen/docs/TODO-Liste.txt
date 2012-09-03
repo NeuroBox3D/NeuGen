@@ -1,0 +1,57 @@
+TODO-Liste (NeuGen Java Version)
+
+1. (fertig) Speichern der Konfigurationsdateien.
+4. (fertig) Ant: License, cells und config nach dist kopieren (automatisieren).
+5. (fertig) Parameter und Kommentardateien bearbeiten (Axon).
+6. (fertig) Java 3d Bibliotheken hinzufügen und auf Windows und Linux testen.
+7. (fertig) GUI testen, Fehler beheben.
+8. (fertig) Satusleiste zeigt sollte nach einer gewissen Zeit wieder sauber sein. Z.B. nach dem Speichern.
+9. (fertig) Projekt Laden: Projekt Namen und alle Dateien anzeigen.
+10. (fertig) Schluesselabfrage beim ersten Start.
+11. (fertig) Copy Right auf 2010 setzen.
+12. (fertig) Visualisierung: Das Netz richtig plazieren.
+13. (fertig) Density Konfiguration: Parameter an die Visualisierung weitergeben.
+14. (fertig) Density: die Exceptions abfangen.
+15. (fertig) Slider: Parameter in OutputOptions setzen und Klasse für die Daten erzeugen.
+16. (fertig) NeuroML Import.
+17. (fertig) NeuroML Export.
+18. (fertig) Projekt Speichern: Das ganze Netz mitspeichern.
+19. (fertig) Projekt Laden: Das ganze Netz laden.
+20. (fertig) Density-Visualisierung auch fuer importierte Daten.
+21. (fertig) Homepage: Alex Heusel eine Email schreiben für die Zugangsdaten auf den Server.
+22. (fertig) Version an Jens schicken.
+23. (fertig) NeuTria Export.
+24. NeuTria Import.
+25. (fertig) Hoc Export.
+26. Data Explorer Export. (wird zur Zeit nicht gebraucht)
+27. (fertig) Synapsen serialisiern und wieder deserialisieren.
+28. (fertig) SWC Import.
+29. Parameterdateien für NeuGen aus den NeuroML, SWC Dateien erzeugen.
+    - Soma surface
+    - Volume of neuron
+    - Number of branches
+
+30. Hippocampus Zellen generieren.
+    - Pyramidenzellen: CA1, CA3
+    NeuroMorpho.de:
+        - Pyramidal Cell
+        - Granule Cell
+        - Stellate Cell
+        - Calbidin (CB)
+        - Calretinin (CR)
+
+
+     (fertig)   - Schichten des Hippocampus (von oben nach unten):
+            - Alveus (Axons from Pyramidal neurons)
+            - Stratum oriens
+            - Stratum pyramidale
+            - Stratum radiatum
+            - Stratum lacunosum/moleculare
+31. Auf Schnitte prüfen.
+32. FileChooser testen, sollen nur Dateien bzw. Verzeichnisse akzeptieren.
+33. (fertig) OutputOptions: die Daten sollen über Dialoge eingetragen werden.
+34. (fertig) Changes sollen in Help abfragbar sein.
+35. Namen der Neuronen speichern für Synapseninformationen.
+36. (fertig) Neue Version ins Netz stellen.
+37. Prüfe Libs für Linux, Mac. (fertig)
+38. Param anpassen, die Zellen zu den Schichten zuordnen.
