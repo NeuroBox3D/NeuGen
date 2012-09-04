@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.StringTokenizer;
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Node;
@@ -351,6 +352,7 @@ public final class DensityVisualizationTask extends org.jdesktop.application.Tas
         String nextLine = null;
         nextLine = lineReader.readLine().trim();
         String[] dataArray = nextLine.split(" ");
+        
         int verticesVal = Integer.parseInt(dataArray[0]);
         int facesVal = Integer.parseInt(dataArray[1]);
         logger.info("first line: " + nextLine);
