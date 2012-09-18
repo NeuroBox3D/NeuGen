@@ -1,5 +1,6 @@
 package org.neugen.utils;
 
+import java.io.File;
 import org.apache.log4j.PropertyConfigurator;
 
 /**
@@ -11,13 +12,19 @@ public final class NeuGenLogger {
 
     public static void initLogger() {
         if (!loaded) {
-            init();
+            init(new File("log4j-3.properties"));
+        }
+    }
+    
+    public static void initLogger(File f) {
+        if (!loaded) {
+            init(f);
         }
     }
 
-    private static void init() {
+    private static void init(File f) {
         try {
-            PropertyConfigurator.configureAndWatch("log4j-3.properties", 60 * 1000);
+            PropertyConfigurator.configureAndWatch(f.getAbsolutePath(), 60 * 1000);
             loaded = true;
         } catch (Exception ex) {
             ex.getCause();

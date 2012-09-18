@@ -144,177 +144,22 @@ public final class NeuGenApp extends SingleFrameApplication {
     }
 
     /** Main method launching the application.*/
-    public static void main(final String[] args) {
-        NeuGenLogger.initLogger();
+    public static void main(File logProperties, final String[] args) {
+        NeuGenLogger.initLogger(logProperties);
 
         try {
             handleLicenseKey();
         } catch (Exception ex) {
             logger.error(ex);
         }
-
-        if (args.length > 0) {
-            logger.info("Start logging..:*******************************************************");
-            logger.info("Run main program (number of arguments): " + args.length);
-            String version = Utils.getJ3DVersion();
-            logger.info("java3d version = " + version);
-
-            
-            if (System.getProperty("os.name").toLowerCase().indexOf("mac") >= 0) {
-            System.setProperty("j3d.rend", "jogl");
-            } else if (System.getProperty("os.name").toLowerCase().indexOf("win") >= 0) {
-            System.setProperty("j3d.rend", "d3d");
-            } else {
-            System.setProperty("j3d.rend", "ogl");
-            }
-
-            javax.swing.SwingUtilities.invokeLater(new Runnable() {
+        
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
 
                 @Override
                 public void run() {
                     launch(NeuGenApp.class, args);
                 }
             });
-        } else {
-            logger.info("Set first the path to java3d directory.");
-            String file_sep = System.getProperty("file.separator");
-            String path_sep = System.getProperty("path.separator");
-            int heapSize = -1;
-            String antialiasingValue = "false";
-            while (heapSize == -1) {
-                try {
-                    /*
-                    //sValue = JOptionPane.showInputDialog("Please choose the memory you want to give to the " + "process in MB", "1000");
-                    String message = "Please choose the memory you want to give to the process in MB";
-                    String title = "NeuGen Configuration";
-                    Object[] options = {"Yes, please",
-                        "No, thanks",
-                        "No eggs, no ham!"};
-                    JOptionPane.showInputDialog(getApplication().getMainFrame(), message, title, JOptionPane.QUESTION_MESSAGE, null, null, "1000");
-                     *
-                     */
-                    logger.info("starte mem dialog");
-                    MemoryDialog mDialog = new MemoryDialog(new javax.swing.JFrame(), true);
-                    mDialog.setVisible(true);
-                    mDialog.setLocationRelativeTo(null);
-                    if (mDialog.getReturnStatus() == MemoryDialog.RET_OK) {
-                        if(mDialog.getAnitaiasing()) {
-                            antialiasingValue = "true";
-                        }
-                        heapSize = mDialog.getHeapSize();
-                    } else {
-                        System.exit(0);
-                    }
-                } catch (NumberFormatException e1) {
-                    JOptionPane.showMessageDialog(null, heapSize + "is not a valid integer number! ");
-                    logger.error(e1);
-                    heapSize = -1;
-                }
-            }
-            String binJ3dDir = "";
-            if (System.getProperty("os.name").toLowerCase().indexOf("windows") >= 0) {
-                logger.info("os.arch: " + System.getProperty("os.arch"));
-                logger.info("java.vm.name: " + System.getProperty("java.vm.name"));
-                logger.info("os.name: " + System.getProperty("os.name"));
 
-                if (System.getProperty("os.arch").indexOf("64") >= 0) {
-                    binJ3dDir = NeuGenConstants.J3D_WIN_64; //dll
-                } else {
-                    binJ3dDir = NeuGenConstants.J3D_WIN_32;
-                    if (heapSize > 1500) {
-                        heapSize = 1500;
-                    }
-                }
-            } else if (System.getProperty("os.name").toLowerCase().indexOf("linux") >= 0) {
-                if (System.getProperty("os.arch").indexOf("64") >= 0) {
-                    binJ3dDir = NeuGenConstants.J3D_LIN_64;
-                } else {
-                    binJ3dDir = NeuGenConstants.J3D_LIN_32;
-                    if (heapSize > 1500) {
-                        heapSize = 1500;
-                    }
-                }
-            } else if (System.getProperty("os.name").toLowerCase().indexOf("mac") >= 0) {
-                binJ3dDir = NeuGenConstants.J3D_MACOSX;
-                if (System.getProperty("os.arch").indexOf("64") >= 0) {
-                } else {
-                    if (heapSize > 1500) {
-                        heapSize = 1500;
-                    }
-                }
-            }
-
-            String call;
-            // Mac (test -classpath)
-            if (System.getProperty("os.name").toLowerCase().indexOf("mac") >= 0) {
-                //call = "java -ea -Xms64m -Xmx" + sValue + "m -jar NeuGenJava.jar runProgram";
-                call = "java -ea -Xms64m -Xmx" + heapSize + "m"
-                        + " -Djava.ext.dirs=./lib "
-                        + " -Djava.library.path=." + file_sep + "lib" + path_sep + "."
-                        + file_sep + "lib" + file_sep + binJ3dDir
-                        // + " -jar NeuGenJava.jar runProgram";
-                        //+ " -Dj3d.rend=jogl"
-                        //+ " -Dj3d.debug=true"
-                        + " -Dj3d.implicitAntialiasing=" + antialiasingValue
-                        // + " -Dj3d.d3dVertexProcess=mixed"
-                        + " -jar NeuGenJava.jar runProgram";
-            } // Windows
-            else if (System.getProperty("os.name").toLowerCase().indexOf("win") >= 0) {
-                call = "java -ea -Xms64m -Xmx" + heapSize + "m"
-                        + " -Djava.ext.dirs=./lib "
-                        + " -Djava.library.path=." + file_sep + "lib" + path_sep + "."
-                        + file_sep + "lib" + file_sep + binJ3dDir
-                        //+ " -Dj3d.rend=jogl"
-                        //+ " -Dj3d.rend=d3d"
-                        //+ " -Dj3d.debug=true"
-                        //+ " -Dj3d.shadingLanguage=Cg"
-                        + " -Dj3d.implicitAntialiasing=" + antialiasingValue
-                        //+ " -Dj3d.d3dVertexProcess=mixed"
-                        + " -jar NeuGenJava.jar runProgram";
-            } // Linux
-            else {
-                call = "java -ea -Xms64m -Xmx" + heapSize + "m"
-                        + " -Djava.library.path=." + file_sep + "lib" + path_sep + "."
-                        + file_sep + "lib" + file_sep + binJ3dDir
-                        //+ " -jar NeuGenJava.jar runProgram";
-                        //+ " -Dj3d.rend=ogl"
-                        //+ " -Dj3d.debug=true"
-                        + " -Dj3d.implicitAntialiasing=" + antialiasingValue
-                        //+ " -Dj3d.d3dVertexProcess=mixed"
-                        + " -jar NeuGenJava.jar runProgram";
-            }
-
-            logger.info(call);
-            String s = null;
-            try {
-                logger.info("\n" + "*************** NeuGen begin! **********************");
-                logger.info("Running on JVM " + System.getProperty("java.version"));
-                logger.info(System.getProperty("os.name"));
-                // using the Runtime exec method:
-                Process p = Runtime.getRuntime().exec(call);
-                BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
-                BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-                // read the output from the command
-                //System.out.println("Here is the standard output of the command:\n");
-                while ((s = stdInput.readLine()) != null) {
-                    System.out.println(s);
-                }
-                //read any errors from the attempted command
-                //System.out.println("Here is the standard error of the command (if any):\n");
-                while ((s = stdError.readLine()) != null) {
-                    //System.out.println(s);
-                    logger.error(s);
-                }
-                stdInput.close();
-                stdError.close();
-
-                System.gc();
-                System.exit(0);
-            } catch (IOException e) {
-                logger.error("exception happened - here's what I know: ");
-                logger.error(e, e);
-                System.exit(-1);
-            }
-        }
     }
 }
