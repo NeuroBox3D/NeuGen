@@ -2,8 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package edu.gcsc.vrl.neugen.plugin;
+package org.neugen.vrl.plugin;
 
+import com.sun.j3d.exp.swing.JCanvas3D;
 import eu.mihosoft.vrl.io.IOUtil;
 import eu.mihosoft.vrl.system.InitPluginAPI;
 import eu.mihosoft.vrl.system.PluginAPI;
@@ -20,6 +21,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.neugen.gui.NeuGenApp;
+import org.neugen.vrl.JCanvas3DType;
 
 /**
  * 
@@ -32,7 +34,6 @@ public class Configurator extends VPluginConfigurator{
     public Configurator() {
         setIdentifier(new PluginIdentifier("NeuGen", "0.1"));
         setDescription("NeuGen Plugin");
-        exportPackage("edu.gcsc.vrl.neugen");
         exportPackage("org.neugen");
 
         addDependency(new PluginDependency("VRL", "0.4.2", "0.4.x"));
@@ -45,6 +46,8 @@ public class Configurator extends VPluginConfigurator{
         //
         VPluginAPI vapi = (VPluginAPI) api;
         
+        vapi.addTypeRepresentation(JCanvas3DType.class);
+        
         vapi.addAction(new VAction("NeuGen-Test") {
 
             @Override
@@ -56,7 +59,8 @@ public class Configurator extends VPluginConfigurator{
 
     @Override
     public void init(InitPluginAPI iApi) {
-        //
+        logPropFile = 
+                new File(iApi.getResourceFolder(), "log4j-3.properties");
     }
     
     @Override

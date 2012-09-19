@@ -2151,13 +2151,13 @@ public final class NeuGenView extends FrameView implements TreeSaver {
     @Action
     public void quit() {
         if (projectTree == null) {
-            System.exit(0);
+//            System.exit(0);
         } else if (projectTree.ableToClose()) {
             System.gc();
-            System.exit(0);
+//            System.exit(0);
         } else {
             System.gc();
-            System.exit(0);
+//            System.exit(0);
         }
     }
 

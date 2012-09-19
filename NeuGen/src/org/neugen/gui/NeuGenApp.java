@@ -1,23 +1,19 @@
 package org.neugen.gui;
 
-import org.neugen.utils.NeuGenLogger;
 import com.jgoodies.looks.LookUtils;
 import com.jgoodies.looks.Options;
-
-import javax.swing.UIManager;
-import org.jdesktop.application.Application;
-import org.jdesktop.application.SingleFrameApplication;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 import org.apache.log4j.Logger;
-import org.neugen.utils.Utils;
+import org.jdesktop.application.Application;
+import org.jdesktop.application.SingleFrameApplication;
+import org.neugen.utils.NeuGenLogger;
 
 /**
  * The main class of the application.
@@ -75,9 +71,9 @@ public final class NeuGenApp extends SingleFrameApplication {
     protected void shutdown() {
         logger.info("End logging:*******************************************************\n\n");
         // The default shutdown saves session window state.
-        super.shutdown();
+//        super.shutdown();
         // Now perform any other shutdown tasks you need.
-        System.exit(0);
+//        System.exit(0);
     }
 
     /** A convenient static getter for the application instance. */
