@@ -98,7 +98,9 @@ public final class VRLDensityVisualizationTask {
         this.canvas3D = canvas3D;
     }
 
-    public void run(VoxelParams vDialog) throws Exception {
+    public VisualizationContext run(VoxelParams vDialog) throws Exception {
+        
+        VisualizationContext context = null;
 
         switch (dens) {
             case NET: {
@@ -123,7 +125,7 @@ public final class VRLDensityVisualizationTask {
                     Point3i voxelNumber = voxelVolumeIterator.getVoxelNumber();
                     VolumeOfVoxels volumeOfVoxels = new VolumeOfVoxels(voxelNumber, volumeEnd);
                     int thisindex = 0;
-                    float value = 0.0f;
+                    float value;
                     int voxelArraySize = vv.getVoxelArray().size();
                     while (voxelVolumeIterator.hasNext()) {
                         value = voxelVolumeIterator.next();
@@ -132,14 +134,15 @@ public final class VRLDensityVisualizationTask {
                         setMyProgress(thisindex, 0, voxelArraySize);
                     }
                     
-                    ngVisConfig = new DensityVisualizationConfigDialog(this,volumeOfVoxels, dens, canvasParent, canvas3D);
-                    DensityVisualizationConfigDialog.setInstance(ngVisConfig);
-                    ngVisConfig.setLocationRelativeTo(null);
-                    ngVisConfig.setVisible(true);
+//                    ngVisConfig = new DensityVisualizationConfigDialog(this,volumeOfVoxels, dens, canvasParent, canvas3D);
+//                    DensityVisualizationConfigDialog.setInstance(ngVisConfig);
+//                    ngVisConfig.setLocationRelativeTo(null);
+//                    ngVisConfig.setVisible(true);
                     
                 } else {
                     NeuGenView.getInstance().enableButtons();
                 }
+                
                 break;
             }
 
@@ -322,25 +325,19 @@ public final class VRLDensityVisualizationTask {
                         thisindex++;
                         setMyProgress(thisindex, 0, voxelArraySize);
                     }
-
-                    if (bg != null) {
-                        ngVisConfig = new DensityVisualizationConfigDialog(
-                                this, volumeOfVoxels, dens, bg, canvasParent, canvas3D);
-                    } else {
-                        ngVisConfig = new DensityVisualizationConfigDialog(
-                                this, volumeOfVoxels, dens, canvasParent, canvas3D);
-                    }
-
-                    DensityVisualizationConfigDialog.setInstance(ngVisConfig);
-                    ngVisConfig.setLocationRelativeTo(null);
-                    ngVisConfig.setVisible(true);
+                    
+                    context = new VisualizationContext(
+                            canvas3D, bg, volumeOfVoxels, scale, scaleZ);
                     
                 } else {
                     NeuGenView.getInstance().enableButtons();
                 }
+ 
                 break;
             }
         }
+        
+        return context;
 
     }
 

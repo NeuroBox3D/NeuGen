@@ -6,7 +6,6 @@ package org.neugen.vrl;
  *
  */
 
-
 import com.sun.j3d.utils.behaviors.keyboard.KeyNavigatorBehavior;
 
 import java.util.ArrayList;
@@ -74,25 +73,39 @@ import org.neugen.visual.Utils3D;
 import org.neugen.vrl.VRLDensityVisualizationTask.Density;
 
 /**
- * 
+ *
  * @author Michael Hoffer <info@michaelhoffer.de>
  */
 @SuppressWarnings("serial")
 public final class VRLDensityVisualization {
 
-    /** use to log messages */
+    /**
+     * use to log messages
+     */
     private static Logger logger = Logger.getLogger(VRLDensityVisualization.class.getName());
-    /** if true visualization will be done with cubes */
+    /**
+     * if true visualization will be done with cubes
+     */
     private boolean VisualizeWithCubes;
-    /** if true visualization will be done with convex hull */
+    /**
+     * if true visualization will be done with convex hull
+     */
     private boolean VisualizeWithConvexHull;
-    /** if true visualization will be done with a divided convex hull */
+    /**
+     * if true visualization will be done with a divided convex hull
+     */
     private boolean VisualizeWithDividedConvexHull;
-    /** tolerance for the Divided Convex Hull */
+    /**
+     * tolerance for the Divided Convex Hull
+     */
     private double tolerance;
-    /** number of different values to be visualized at once (1-4)  */
+    /**
+     * number of different values to be visualized at once (1-4)
+     */
     private int numberOfVisualizations;
-    /** values to be visualized */
+    /**
+     * values to be visualized
+     */
     private float value1;
     private float value2;
     private float value3;
@@ -107,7 +120,9 @@ public final class VRLDensityVisualization {
     private float transparency3;
     private float transparency4;
     private Color3f backgroundColor;// ColorUtil.white;
-    /** the simple universe containing all things to be visualized */
+    /**
+     * the simple universe containing all things to be visualized
+     */
     private SimpleUniverse simpleUniverse;
     /**
      * a spherical bounding region which is defined by a center point and a
@@ -115,16 +130,20 @@ public final class VRLDensityVisualization {
      * various intersection and culling operations
      */
     private BoundingSphere boundingSphere;
-    /** Volume of Voxels containing the density values */
+    /**
+     * Volume of Voxels containing the density values
+     */
     private VolumeOfVoxels volumeOfVoxels;
 //    private NeuGenView ngView;
-    /** size of panel */
+    /**
+     * size of panel
+     */
     private static final int PWIDTH = 512;
     private static final int PHEIGHT = 512;
     private static final int BOUNDSIZE = 300;  // larger than world
     public float scale, scaleZ;
     private Canvas3D canvas3D;
-    private VRLDensityVisualizationTask task;
+//    private VRLDensityVisualizationTask task;
     private BranchGroup scene;
     private PropertyChangeListener guiListener;
     private static VRLDensityVisualization INSTANCE;
@@ -136,16 +155,15 @@ public final class VRLDensityVisualization {
     private PickTranslateBehavior behavior3;
     private boolean makeVideo = true;
     private RotationInterpolator rotator = null;
-    private final JPanel canvasParent;
+    private final DensityVisualizationParams densityParams;
 
     public static VRLDensityVisualization getInstance() {
         return INSTANCE;
     }
 
-    public static void setInstance(VRLDensityVisualization INSTANCE) {
+    private static void setInstance(VRLDensityVisualization INSTANCE) {
         VRLDensityVisualization.INSTANCE = INSTANCE;
     }
-    
 
     public BranchGroup getScene() {
         return scene;
@@ -153,16 +171,19 @@ public final class VRLDensityVisualization {
 
     public void write(File f) {
         try {
-            SceneGraphFileWriter s = new SceneGraphFileWriter(f, simpleUniverse, false, "Simple Test", null);
+            SceneGraphFileWriter s =
+                    new SceneGraphFileWriter(
+                    f, simpleUniverse, false, "Simple Test", null);
             s.writeBranchGraph(scene);
             s.close();
         } catch (Exception e) {
-            logger.error(e,e);
+            logger.error(e, e);
         }
     }
 
     public void setViewPosition(Vector3f mov, int angle) {
-        TransformGroup tg = this.simpleUniverse.getViewingPlatform().getViewPlatformTransform();
+        TransformGroup tg = this.simpleUniverse.getViewingPlatform().
+                getViewPlatformTransform();
         Transform3D t3dTrans = new Transform3D();
         tg.getTransform(t3dTrans);
         t3dTrans.setTranslation(mov);
@@ -170,7 +191,8 @@ public final class VRLDensityVisualization {
 
         Transform3D t3dRot = new Transform3D();
         tg.getTransform(t3dRot);
-        t3dRot.setRotation(new AxisAngle4f(1f, 0f, 0f, (float) Math.toRadians(angle)));
+        t3dRot.setRotation(
+                new AxisAngle4f(1f, 0f, 0f, (float) Math.toRadians(angle)));
         //ViewT3D.setRotation(new AxisAngle4f(0, 0, 1, (float) Math.toRadians(45)));
         tg.setTransform(t3dRot);
     }
@@ -179,23 +201,24 @@ public final class VRLDensityVisualization {
      * Creates a new instance of NeuGenDensityVisualization. Create a simple
      * scene and attach it to the virtual universe public
      *
-     * @param vov
-     *            the Volume Of Voxels whichs values will be visualized
+     * @param vov the Volume Of Voxels whichs values will be visualized
      */
-    public VRLDensityVisualization(VRLDensityVisualizationTask task, 
-            VolumeOfVoxels vov, Density dens, BranchGroup bg, JPanel canvasParent, Canvas3D canvas3D) {
-        this.scene = bg;
-//        ngView = NeuGenView.getInstance();
-        this.task = task;
-        this.scale = task.getScale();
-        this.scaleZ = task.getScaleZ();
-        this.canvasParent = canvasParent;
-        this.canvas3D = canvas3D;
-        
-        if (getInstance()!=null) {
+    public VRLDensityVisualization(
+            VisualizationContext context,
+            DensityVisualizationParams densityParams) {
+
+        if (getInstance() != null) {
             getInstance().destroy();
         }
-        
+
+        setInstance(this);
+
+        this.densityParams = densityParams;
+        this.scene = context.getBranchGroup();
+        this.scale = context.getScale();
+        this.scaleZ = context.getScaleZ();
+        this.canvas3D = context.getCanvas();
+
         logger.info("scale:" + scale);
 
         if (this.scene != null) {
@@ -270,59 +293,35 @@ public final class VRLDensityVisualization {
             this.scene.addChild(tg);
         }
 
-        //logger.info("NeuGenDensityVisualization");
-        DensityVisualizationConfigDialog ngDenVisConf = DensityVisualizationConfigDialog.getInstance();
-        VisualizeWithCubes = ngDenVisConf.getJRadioButtonVisualizeWithCubes().isSelected();
-        VisualizeWithConvexHull = ngDenVisConf.getJRadioButtonVisualizeWithConvexHull().isSelected();
-        VisualizeWithDividedConvexHull = ngDenVisConf.getJRadioButtonVisualizeWithDividedConvexHull().isSelected();
-        tolerance = Double.parseDouble(ngDenVisConf.getJTextFieldToleranceOfDivision().getText()) / 100.0;
-        numberOfVisualizations = Integer.parseInt(ngDenVisConf.getJComboBoxNumberOfValues().getSelectedItem().toString());
+        VisualizeWithCubes = densityParams.isVisualizeWithCubes();
+        VisualizeWithConvexHull = densityParams.isVisualizeWithConvexHull();
+        VisualizeWithDividedConvexHull = densityParams.isVisualizeWithDividedConvexHull();
+        tolerance = densityParams.getTolerance() / 100.0;
+        numberOfVisualizations = densityParams.getNumberOfVisualizations();
 
-        value1 = Float.parseFloat(ngDenVisConf.getJTextFieldValueOfVisualization1().getText());
-        value2 = Float.parseFloat(ngDenVisConf.getJTextFieldValueOfVisualization2().getText());
-        value3 = Float.parseFloat(ngDenVisConf.getJTextFieldValueOfVisualization3().getText());
-        value4 = Float.parseFloat(ngDenVisConf.getJTextFieldValueOfVisualization4().getText());
+        value1 = densityParams.getValue1();
+        value2 = densityParams.getValue2();
+        value3 = densityParams.getValue3();
+        value4 = densityParams.getValue4();
 
-        Map<String, Color3f> colorMap = new HashMap<String, Color3f>();
-        colorMap.put("deepSkyBlue2", Utils3D.deepSkyBlue2);
-        colorMap.put("dodgerBlue3", Utils3D.dodgerBlue3);
-        colorMap.put("skyBlue1", Utils3D.skyBlue1);
-        colorMap.put("midnightBlue", Utils3D.midnightBlue);
-        color1 = colorMap.get(ngDenVisConf.getJComboBoxColor1().getSelectedItem().toString());
-        color2 = colorMap.get(ngDenVisConf.getJComboBoxColor2().getSelectedItem().toString());
-        color3 = colorMap.get(ngDenVisConf.getJComboBoxColor3().getSelectedItem().toString());
-        color4 = colorMap.get(ngDenVisConf.getJComboBoxColor4().getSelectedItem().toString());
-        logger.info("color1: " + color1.toString());
-        logger.info("color2: " + color2.toString());
-        logger.info("color3: " + color3.toString());
-        logger.info("color4: " + color4.toString());
+        color1 = densityParams.getColor1();
+        color2 = densityParams.getColor2();
+        color3 = densityParams.getColor3();
+        color4 = densityParams.getColor4();
 
-        int backgroundColorInt = ngDenVisConf.getJComboBoxBackgroundColor().getSelectedIndex();
-        if (backgroundColorInt == 1) {
-            backgroundColor = Utils3D.white;
-        } else {
-            backgroundColor = Utils3D.black;
-        }
+        backgroundColor = densityParams.getBackgroundColor();
 
-        logger.info("transparenz begin ");
-        //logger.info("background color: " + backgroundColorInt);
-        //transparency0 = Float.parseFloat(ngDenVisConf.getJTextFieldTransparency0().getText());
-        transparency1 = Float.parseFloat(ngDenVisConf.getJTextFieldTransparency1().getText()) / 100.0f;
-        transparency2 = Float.parseFloat(ngDenVisConf.getJTextFieldTransparency2().getText()) / 100.0f;
-        transparency3 = Float.parseFloat(ngDenVisConf.getJTextFieldTransparency3().getText()) / 100.0f;
-        transparency4 = Float.parseFloat(ngDenVisConf.getJTextFieldTransparency4().getText()) / 100.0f;
+        transparency1 = densityParams.getTransparency1() / 100f;
+        transparency2 = densityParams.getTransparency2() / 100f;
+        transparency3 = densityParams.getTransparency3() / 100f;
+        transparency4 = densityParams.getTransparency4() / 100f;
 
-        logger.info("transparenz end ");
+        //task.setMyProgress(0.1f);
 
-//        C3DScrollPane = ngView.getDensScrollPane();
-//        C3DSplitPane = ngView.getVisualDensSplitPane();
-//        ngView.outPrintln(" visualizing\n\n\n");
-        task.setMyProgress(0.1f);
-
-        volumeOfVoxels = vov;
+        volumeOfVoxels = context.getVolumeOfVoxels();
         //logger.info("number of voxels x: " + vov.getNumberOfVoxelsX());
         boundingSphere = new BoundingSphere(new Point3d(0, 0, 0), BOUNDSIZE);
-     
+
         GraphicsConfigTemplate3D gc3D = new GraphicsConfigTemplate3D();
 
         if (NeuGenApp.antiAliasing) {
@@ -333,36 +332,8 @@ public final class VRLDensityVisualization {
 //        GraphicsDevice gd[] = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
 //        canvas3D = new Canvas3D(gd[0].getBestConfiguration(gc3D));
         simpleUniverse = new SimpleUniverse(canvas3D);
-        
-        
-        
-        
-        
-        
-        /*
-        //GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
-        //canvas3D = new Canvas3D(config);
-        GraphicsConfigTemplate3D template = new GraphicsConfigTemplate3D();
-        //canves3D = new Canvas3D(config);
 
-        if(NeuGenApp.antiAliasing) {
-            template.setSceneAntialiasing(GraphicsConfigTemplate3D.PREFERRED);
-        }
 
-        canvas3D = new Canvas3D(GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getBestConfiguration(template));
-        canvas3D.setFocusable(true);
-        canvas3D.requestFocus();
-        // SimpleUniverse is a Convenience Utility class
-        simpleUniverse = new SimpleUniverse(canvas3D);
-        simpleUniverse.getViewer().getView().setMinimumFrameCycleTime(5);
-     
-        if(NeuGenApp.antiAliasing) {
-            canvas3D.getView().setSceneAntialiasingEnable(true);
-        }
-
-         *
-         */
-       
         synBehavior = new SynchronBehavior(simpleUniverse.getViewingPlatform().getViewPlatformTransform(), null);
         synBehavior.setSchedulingBounds(boundingSphere);
 
@@ -379,9 +350,9 @@ public final class VRLDensityVisualization {
         }
 
         scene = createSceneGraph(false);
-        
 
-        switch (dens) {
+
+        switch (densityParams.getDensityType()) {
             case NET:
                 Point3f upRightCorner = new Point3f(Region.getInstance().getUpRightCorner());
                 Vector3f mov;
@@ -434,15 +405,15 @@ public final class VRLDensityVisualization {
         // BranchGroup scene = createSceneGraph(args.length > 0);
         //scene.compile();
         simpleUniverse.addBranchGraph(this.scene);
-        
+
 //        canvasParent.removeAll();
 //        canvasParent.setLayout(new GridLayout());
 //        canvasParent.add(canvas3D);
-        
 
-        
-        
-        
+
+
+
+
 //        C3DScrollPane.getViewport().add(canvas3D);
 //        C3DScrollPane.setBorder(null);
 //        C3DScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -461,7 +432,7 @@ public final class VRLDensityVisualization {
         canvas3D.addMouseWheelListener(canvasList.getMouseWheelListener());
         canvas3D.addKeyListener(canvasList.getKeyListener());
 
-        switch (dens) {
+        switch (densityParams.getDensityType()) {
             case NET:
                 //VisualBehaviorListener.getInstance().setSimpleValide(simpleUniverse);
                 SynchronBehavior visualSynB = NeuGenVisualization.getSynBehavior();
@@ -474,16 +445,15 @@ public final class VRLDensityVisualization {
                 break;
         }
 
-        
+
 //        ngView.getVisualOutputSplitPane().addPropertyChangeListener(guiListener);
-        task.setMyProgress(1.0f);
+//        task.setMyProgress(1.0f);
 //        ngView.enableButtons();
 //        ngView.enableDensMovieButton();
 //        ngView.outPrintln(Utils.getMemoryStatus());
 //        ngView.outPrintln("end-visualize\n\n");
         System.gc();
     }
-
 
     private void setPickMode(int mode) {
         behavior1.setMode(mode);
@@ -506,8 +476,7 @@ public final class VRLDensityVisualization {
     /**
      * allows for navigation with the mouse
      *
-     * @param canvas3D
-     *            the canvas through which shall be navigated
+     * @param canvas3D the canvas through which shall be navigated
      */
     private void orbitControls(Canvas3D canvas3D) {
         //logger.info("orbitControls");
@@ -531,9 +500,8 @@ public final class VRLDensityVisualization {
         canvas3D.removeKeyListener(canvasList.getKeyListener());
         canvas3D.removeMouseWheelListener(canvasList.getMouseWheelListener());
         simpleUniverse.getViewer().getView().removeAllCanvas3Ds();
-        
+
         canvasList = null;
-        canvasParent.removeAll();
         simpleUniverse.cleanup();
         canvas3D = null;
         scene = null;
@@ -629,10 +597,10 @@ public final class VRLDensityVisualization {
          * from 0 to 1 every 4000 milliseconds.
          */
         /*
-        Alpha rotationAlpha = new Alpha(-1, Alpha.INCREASING_ENABLE,
-        0, 0,
-        32000, 0, 0,
-        0, 0, 0);
+         Alpha rotationAlpha = new Alpha(-1, Alpha.INCREASING_ENABLE,
+         0, 0,
+         32000, 0, 0,
+         0, 0, 0);
          *
          */
 
@@ -657,17 +625,17 @@ public final class VRLDensityVisualization {
     }
 
     /*
-    private RotationInterpolator makeSpin(TransformGroup spinner) {
-    RotationInterpolator rotator = new RotationInterpolator(new Alpha(-1, 0), spinner);
-    //rotator.setTransformAxis(rotate());
-    double rot = Math.toRadians(90);
-    Transform3D rotate1 = new Transform3D();
-    rotate1.rotX(rot);
-    //this.rotate1.setTranslation(new Vector3f(0.3f, 0.3f, 0.0f));
-    rotator.setTransformAxis(rotate1);
-    rotator.setSchedulingBounds(boundingSphere);
-    return rotator;
-    }
+     private RotationInterpolator makeSpin(TransformGroup spinner) {
+     RotationInterpolator rotator = new RotationInterpolator(new Alpha(-1, 0), spinner);
+     //rotator.setTransformAxis(rotate());
+     double rot = Math.toRadians(90);
+     Transform3D rotate1 = new Transform3D();
+     rotate1.rotX(rot);
+     //this.rotate1.setTranslation(new Vector3f(0.3f, 0.3f, 0.0f));
+     rotator.setTransformAxis(rotate1);
+     rotator.setSchedulingBounds(boundingSphere);
+     return rotator;
+     }
      *
      */
     private void addBackground(BranchGroup objRoot) {
@@ -679,10 +647,9 @@ public final class VRLDensityVisualization {
     /**
      * create scene graph branch group
      *
-     * @param wireFrame
-     *            false (not used)
+     * @param wireFrame false (not used)
      * @return contentRoot the BranchGroup containing all things to be
-     *         visualized
+     * visualized
      */
     @SuppressWarnings("unchecked")
     public BranchGroup createSceneGraph(boolean wireFrame) {
@@ -1073,15 +1040,12 @@ public final class VRLDensityVisualization {
     /**
      * method for computing the convex hull
      *
-     * @param miniVoxelArrayList
-     *            list containing coordinates and values
-     * @param triangle3dCreator
-     *            creator for triangles for visualizing the surface of the
-     *            convex hull
-     * @param line3dCreator
-     *            creator for lines surrounding the triangles
-     * @param cube3dCreator
-     *            creator for cubes marking the points of the convex hull
+     * @param miniVoxelArrayList list containing coordinates and values
+     * @param triangle3dCreator creator for triangles for visualizing the
+     * surface of the convex hull
+     * @param line3dCreator creator for lines surrounding the triangles
+     * @param cube3dCreator creator for cubes marking the points of the convex
+     * hull
      */
     @SuppressWarnings("unchecked")
     private void computeConvexHull(List<MiniVoxel> miniVoxelArrayList,

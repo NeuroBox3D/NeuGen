@@ -878,10 +878,10 @@ public final class DensityVisualizationConfigDialog extends JFrame {
     }
 
     private void jButtonVisualizeActionPerformed(java.awt.event.ActionEvent evt) {
-        this.setVisible(false);
-        VRLDensityVisualization densVis = new VRLDensityVisualization(task, volumeOfVoxels, dens, scene, canvasParent, canvas3D);
-        VRLDensityVisualization.setInstance(densVis);
-        writeProp();
+//        this.setVisible(false);
+//        VRLDensityVisualization densVis = new VRLDensityVisualization(task, volumeOfVoxels, dens, scene, canvasParent, canvas3D);
+//        VRLDensityVisualization.setInstance(densVis);
+//        writeProp();
     }
 
     private void jComboBoxNumberOfValuesActionPerformed(
