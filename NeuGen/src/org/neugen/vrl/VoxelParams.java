@@ -4,12 +4,14 @@
  */
 package org.neugen.vrl;
 
+import eu.mihosoft.vrl.annotation.ObjectInfo;
 import javax.vecmath.Point3i;
 
 /**
  *
  * @author Michael Hoffer <info@michaelhoffer.de>
  */
+@ObjectInfo(serializeParam=false)
 public class VoxelParams {
 
     private int x;

@@ -44,7 +44,7 @@ import org.neugen.utils.NGImageIO;
 import org.neugen.utils.Utils;
 
 /**
- * 
+ *
  * @author Michael Hoffer <info@michaelhoffer.de>
  */
 public final class VRLDensityVisualizationTask {
@@ -56,8 +56,6 @@ public final class VRLDensityVisualizationTask {
     private float scale = 0.001f;
     private float scaleZ = 0.001f;
     private Scene s;
-    private final JPanel canvasParent;
-    private final Canvas3D canvas3D;
 
     public float getScaleZ() {
         return scaleZ;
@@ -70,7 +68,7 @@ public final class VRLDensityVisualizationTask {
     void setMyProgress(int thisindex, int i, int voxelArraySize) {
         //
     }
-    
+
     void setMyProgress(float f) {
         //
     }
@@ -81,25 +79,17 @@ public final class VRLDensityVisualizationTask {
     }
     private Density dens;
 
-    public VRLDensityVisualizationTask(Density dens, File f, JPanel canvasParent, Canvas3D canvas3D) {
-        this.dens = dens;
-        this.canvasParent = canvasParent;
-        this.canvas3D = canvas3D;
+    public VRLDensityVisualizationTask() {
+        //
+    }
 
-        VParamUtil.validate(VParamUtil.VALIDATOR_EXISTING_FILE, f);
+    public VisualizationContext run(File f, Density dens, VoxelParams vDialog) throws Exception {
 
         this.dir = f.getParentFile();
         this.selectedFile = f;
-    }
 
-    public VRLDensityVisualizationTask(Density dens, JPanel canvasParent, Canvas3D canvas3D) {
-        this.dens = dens;
-        this.canvasParent = canvasParent;
-        this.canvas3D = canvas3D;
-    }
+        VParamUtil.validate(VParamUtil.VALIDATOR_EXISTING_FILE, selectedFile);
 
-    public VisualizationContext run(VoxelParams vDialog) throws Exception {
-        
         VisualizationContext context = null;
 
         switch (dens) {
@@ -133,21 +123,21 @@ public final class VRLDensityVisualizationTask {
                         thisindex++;
                         setMyProgress(thisindex, 0, voxelArraySize);
                     }
-                    
+
 //                    ngVisConfig = new DensityVisualizationConfigDialog(this,volumeOfVoxels, dens, canvasParent, canvas3D);
 //                    DensityVisualizationConfigDialog.setInstance(ngVisConfig);
 //                    ngVisConfig.setLocationRelativeTo(null);
 //                    ngVisConfig.setVisible(true);
-                    
+
                 } else {
                     NeuGenView.getInstance().enableButtons();
                 }
-                
+
                 break;
             }
 
             case IMAGE: {
-                
+
                 System.out.println("NeuGen.visualType: IMAGE");
 
                 //NGImageIO imageIO = new NGImageIO();
@@ -183,9 +173,9 @@ public final class VRLDensityVisualizationTask {
                             }
                             try {
                                 /*
-                                Image img = Jimi.getImage(file.getAbsolutePath());
-                                ImageIcon imgIcon = new ImageIcon(img);
-                                fileList.add(imgIcon);
+                                 Image img = Jimi.getImage(file.getAbsolutePath());
+                                 ImageIcon imgIcon = new ImageIcon(img);
+                                 fileList.add(imgIcon);
                                  * 
                                  */
                                 logger.info("file name: " + file.getName());
@@ -237,32 +227,32 @@ public final class VRLDensityVisualizationTask {
                         } else if (NGImageIO.isGeom(file.getName())) {
                             bg = getGeom(file);
                         }
-                        
+
                         System.out.println(">> stack loaded");
                     }
 
                     /*
-                    for (ImageIcon image : fileList) {
-                    //Image image = ngView.getFrame().createImage(imageProd);
-                    //image.flush();
-                    //System.out.println(image.getIconHeight());
-                    //System.out.println(image.getIconWidth());
-                    try {
-                    PixelGrabber grabber = new PixelGrabber(image.getImage(), 0, 0, -1, -1, false);
-                    if (grabber.grabPixels()) {
-                    int width = grabber.getWidth();
-                    int height = grabber.getHeight();
-                    int[][] data = imageIO.getData(image.getImage(), width, height);
-                    dataList.add(data);
-                    //setMyProgress(count, 0, numFiles);
-                    } else {
-                    logger.info("geht nichts..");
-                    }
-                    } catch (InterruptedException ex) {
-                    logger.error(ex, ex);
-                    }
-                    count++;
-                    }
+                     for (ImageIcon image : fileList) {
+                     //Image image = ngView.getFrame().createImage(imageProd);
+                     //image.flush();
+                     //System.out.println(image.getIconHeight());
+                     //System.out.println(image.getIconWidth());
+                     try {
+                     PixelGrabber grabber = new PixelGrabber(image.getImage(), 0, 0, -1, -1, false);
+                     if (grabber.grabPixels()) {
+                     int width = grabber.getWidth();
+                     int height = grabber.getHeight();
+                     int[][] data = imageIO.getData(image.getImage(), width, height);
+                     dataList.add(data);
+                     //setMyProgress(count, 0, numFiles);
+                     } else {
+                     logger.info("geht nichts..");
+                     }
+                     } catch (InterruptedException ex) {
+                     logger.error(ex, ex);
+                     }
+                     count++;
+                     }
                      * 
                      */
 
@@ -325,18 +315,17 @@ public final class VRLDensityVisualizationTask {
                         thisindex++;
                         setMyProgress(thisindex, 0, voxelArraySize);
                     }
-                    
-                    context = new VisualizationContext(
-                            canvas3D, bg, volumeOfVoxels, scale, scaleZ);
-                    
+
+                    context = new VisualizationContext(bg, volumeOfVoxels, scale, scaleZ);
+
                 } else {
                     NeuGenView.getInstance().enableButtons();
                 }
- 
+
                 break;
             }
         }
-        
+
         return context;
 
     }
@@ -395,11 +384,11 @@ public final class VRLDensityVisualizationTask {
         }
 
         /*
-        TransformGroup objScale = new TransformGroup();
-        Transform3D t3d = new Transform3D();
-        t3d.setScale(1.0);
-        objScale.setTransform(t3d);
-        s.getSceneGroup().addChild(objScale);
+         TransformGroup objScale = new TransformGroup();
+         Transform3D t3d = new Transform3D();
+         t3d.setScale(1.0);
+         objScale.setTransform(t3d);
+         s.getSceneGroup().addChild(objScale);
          * 
          */
 

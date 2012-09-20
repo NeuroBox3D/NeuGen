@@ -13,29 +13,21 @@ import org.neugen.datastructures.VolumeOfVoxels;
  *
  * @author Michael Hoffer <info@michaelhoffer.de>
  */
-@ObjectInfo(serializeParam=false)
+@ObjectInfo(serializeParam = false)
 public class VisualizationContext {
-    private Canvas3D canvas;
+
     private BranchGroup branchGroup;
     private VolumeOfVoxels volumeOfVoxels;
     private float scale;
     private float scaleZ;
 
-    public VisualizationContext(
-            Canvas3D canvas, BranchGroup branchGroup,
+    public VisualizationContext(BranchGroup branchGroup,
             VolumeOfVoxels volumeOfVoxels, float scale, float scaleZ) {
-        this.canvas = canvas;
+
         this.branchGroup = branchGroup;
         this.volumeOfVoxels = volumeOfVoxels;
         this.scale = scale;
         this.scaleZ = scaleZ;
-    }
-
-    /**
-     * @return the canvas
-     */
-    public Canvas3D getCanvas() {
-        return canvas;
     }
 
     /**
@@ -65,6 +57,4 @@ public class VisualizationContext {
     public float getScaleZ() {
         return scaleZ;
     }
-    
-    
 }

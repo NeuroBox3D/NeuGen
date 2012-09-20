@@ -5,6 +5,7 @@
 package org.neugen.vrl;
 
 import eu.mihosoft.vrl.annotation.ComponentInfo;
+import eu.mihosoft.vrl.annotation.ObjectInfo;
 import eu.mihosoft.vrl.annotation.OutputInfo;
 import eu.mihosoft.vrl.annotation.ParamGroupInfo;
 import eu.mihosoft.vrl.annotation.ParamInfo;
@@ -17,7 +18,8 @@ import org.neugen.datastructures.VolumeOfVoxels;
  *
  * @author Michael Hoffer <info@michaelhoffer.de>
  */
-@ComponentInfo(name = "DensityVisualizationParamsInput", category = "NeuGen")
+@ComponentInfo(name = "Density Params", category = "NeuGen")
+@ObjectInfo(name = "Density Input Params")
 public class DensityVisualizationParamsInput implements Serializable {
 
     private static long serialVersionUID = 1L;
@@ -27,15 +29,18 @@ public class DensityVisualizationParamsInput implements Serializable {
 
     @OutputInfo(style = "silent", name = "params")
     public DensityVisualizationParams setParams(
-            @ParamInfo(name = "Visualization",
+            @ParamGroupInfo(group = "General|false|Visualization Type, Number of Visualizations etc.")
+            @ParamInfo(name = "Visualization Type",
             style = "selection",
             options = "value=[\"Cubes\",\"Convex Hull\",\"Divided Convex Hull\"]") String selectionInput,
+            @ParamGroupInfo(group = "General")
             @ParamInfo(name = "Tolerance") double tolerance,
+            @ParamGroupInfo(group = "General")
             @ParamInfo(name = "Number of Visualizations",
             style = "selection",
             options = "value=[1,2,3,4]") int numberOfVisualizations,
             @ParamGroupInfo(group = "Colors|false|Visualization Colors")
-            @ParamInfo(name = "Background Color") Color backgroundColor,
+            @ParamInfo(name = "BGColor") Color backgroundColor,
             @ParamGroupInfo(group = "Colors")
             @ParamInfo(name = "Color 1") Color color1,
             @ParamGroupInfo(group = "Colors")
@@ -90,3 +95,5 @@ public class DensityVisualizationParamsInput implements Serializable {
                 c.getBlue() / 255f);
     }
 }
+
+

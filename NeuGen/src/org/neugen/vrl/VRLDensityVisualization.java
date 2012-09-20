@@ -204,6 +204,7 @@ public final class VRLDensityVisualization {
      * @param vov the Volume Of Voxels whichs values will be visualized
      */
     public VRLDensityVisualization(
+            Canvas3D canvas3D,
             VisualizationContext context,
             DensityVisualizationParams densityParams) {
 
@@ -217,7 +218,7 @@ public final class VRLDensityVisualization {
         this.scene = context.getBranchGroup();
         this.scale = context.getScale();
         this.scaleZ = context.getScaleZ();
-        this.canvas3D = context.getCanvas();
+        this.canvas3D = canvas3D;
 
         logger.info("scale:" + scale);
 
