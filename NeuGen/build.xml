@@ -74,25 +74,25 @@
 
     -->
 
-    <target name= "-post-jar" description="copy java3d lib and log4j-3.properties to dist">
-        <!-- copy java3d lib for linux 64 bit to new dir -->
+<!--    <target name= "-post-jar" description="copy java3d lib and log4j-3.properties to dist">
+         copy java3d lib for linux 64 bit to new dir 
         <copy todir="dist/lib/j3d-1_5_2-linux-amd64">
             <fileset dir="libs/j3d/j3d-1_5_2-linux-amd64"></fileset>
         </copy>
-        <!-- copy java3d lib for linux 32 bit to new dir -->
+         copy java3d lib for linux 32 bit to new dir 
         <copy todir="dist/lib/j3d-1_5_2-linux-i586">
             <fileset dir="libs/j3d/j3d-1_5_2-linux-i586"></fileset>
         </copy>
-        <!-- copy java3d lib for win 64 bit to new dir.. -->
+         copy java3d lib for win 64 bit to new dir.. 
         <copy todir="dist/lib/j3d-1_5_2-windows-amd64">
             <fileset dir="libs/j3d/j3d-1_5_2-windows-amd64"></fileset>
         </copy>
-        <!-- copy j3d lib for win 32 -->
+         copy j3d lib for win 32 
         <copy todir="dist/lib/j3d-1_5_2-windows-i586">
             <fileset dir="libs/j3d/j3d-1_5_2-windows-i586"></fileset>
         </copy>
 
-        <!-- copy j3d lib for macosx -->
+         copy j3d lib for macosx 
         <copy todir="dist/lib/j3d-1_5_2-macosx">
             <fileset dir="libs/j3d/j3d-1_5_2-macosx"></fileset>
         </copy>
@@ -108,5 +108,64 @@
         <copy file="libs/license/xpp3-license.txt" todir="dist/lib"></copy>
         <copy file="libs/license/xstream-LICENSE.txt" todir="dist/lib"></copy>
         <copy file="libs/license/looks-LICENSE.txt" todir="dist/lib"></copy>
+    </target>-->
+    
+    
+       <target name="-post-jar">
+
+<!-- Change the value of this property to be the name of your JAR,
+minus the .jar extension. It should not have spaces.
+<property name="store.jar.name" value="MyJarName"/>
+-->
+        <property name="store.jar.name" value="${application.title}"/>
+
+
+<!-- don't edit below this line -->
+
+        <property name="store.dir" value="dist-single"/>
+        <property name="store.jar" value="${store.dir}/${store.jar.name}.jar"/>
+
+        <echo message="Packaging ${application.title} into a single JAR at ${store.jar}"/>
+
+        <delete dir="${store.dir}"/>
+        <mkdir dir="${store.dir}"/>
+
+        <jar destfile="${store.dir}/temp_final.jar" filesetmanifest="skip">
+            <zipgroupfileset dir="dist"
+                includes="*.jar"
+                excludes="VRL.jar"/>
+            <zipgroupfileset dir="dist/lib"
+                includes="*.jar"
+                excludes="VRL.jar"/>
+
+            <manifest>
+                <attribute name="Main-Class" value="${main.class}"/>
+            </manifest>
+        </jar>
+
+        <zip destfile="${store.jar}">
+            <zipfileset src="${store.dir}/temp_final.jar"
+            excludes="META-INF/*.SF, META-INF/*.DSA, META-INF/*.RSA"/>
+        </zip>
+
+        <delete file="${store.dir}/temp_final.jar"/>
+
+        <!--Copy VRL.jar to dist and delete lib folder-->
+        <copy todir="dist">
+            <fileset dir="dist-single" includes="**/*"/>
+        </copy>
+
+        <delete dir="dist-single"/>
+        <delete dir="dist/lib"/>
+        
+        <!--Copy final jar to studio plugin folder-->   
+        <property file="build.properties"/>
+        <echo message="Copying ${dist.jar} to ${vrl.dir}/plugin-updates"/>
+        <copy 
+        file="${dist.jar}" 
+        todir="${vrl.dir}/plugin-updates"/>
+        
     </target>
+    
+    
 </project>
