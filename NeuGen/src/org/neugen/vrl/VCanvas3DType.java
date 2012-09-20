@@ -79,7 +79,7 @@ import javax.swing.JLabel;
  * @author Michael Hoffer <info@michaelhoffer.de>
  */
 @TypeInfo(type=void.class, input = false, output = true, style="vcanvas3d")
-public final class JCanvas3DType extends TypeRepresentationBase {
+public final class VCanvas3DType extends TypeRepresentationBase {
 
     private static final long serialVersionUID = 4412789368035724900L;
     private VCanvas3D canvas;
@@ -91,7 +91,7 @@ public final class JCanvas3DType extends TypeRepresentationBase {
     /**
      * Constructor.
      */
-    public JCanvas3DType() {
+    public VCanvas3DType() {
         init();
 
         if (!VGraphicsUtil.NO_3D) {
@@ -109,7 +109,7 @@ public final class JCanvas3DType extends TypeRepresentationBase {
      * @param canvas the 3D canvas
      * @param universeCreator the universe creator
      */
-    public JCanvas3DType(VCanvas3D canvas) {
+    public VCanvas3DType(VCanvas3D canvas) {
         init();
         init3DView(canvas);
     }

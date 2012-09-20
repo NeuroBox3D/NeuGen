@@ -49,7 +49,7 @@ import org.neugen.utils.Utils;
  */
 public final class VRLDensityVisualizationTask {
 
-    DensityVisualizationConfiguration ngVisConfig;
+    DensityVisualizationConfigDialog ngVisConfig;
     private static final Logger logger =
             Logger.getLogger(VRLDensityVisualizationTask.class.getName());
     private File dir, selectedFile;
@@ -132,8 +132,8 @@ public final class VRLDensityVisualizationTask {
                         setMyProgress(thisindex, 0, voxelArraySize);
                     }
                     
-                    ngVisConfig = new DensityVisualizationConfiguration(this,volumeOfVoxels, dens, canvasParent, canvas3D);
-                    DensityVisualizationConfiguration.setInstance(ngVisConfig);
+                    ngVisConfig = new DensityVisualizationConfigDialog(this,volumeOfVoxels, dens, canvasParent, canvas3D);
+                    DensityVisualizationConfigDialog.setInstance(ngVisConfig);
                     ngVisConfig.setLocationRelativeTo(null);
                     ngVisConfig.setVisible(true);
                     
@@ -324,14 +324,14 @@ public final class VRLDensityVisualizationTask {
                     }
 
                     if (bg != null) {
-                        ngVisConfig = new DensityVisualizationConfiguration(
+                        ngVisConfig = new DensityVisualizationConfigDialog(
                                 this, volumeOfVoxels, dens, bg, canvasParent, canvas3D);
                     } else {
-                        ngVisConfig = new DensityVisualizationConfiguration(
+                        ngVisConfig = new DensityVisualizationConfigDialog(
                                 this, volumeOfVoxels, dens, canvasParent, canvas3D);
                     }
 
-                    DensityVisualizationConfiguration.setInstance(ngVisConfig);
+                    DensityVisualizationConfigDialog.setInstance(ngVisConfig);
                     ngVisConfig.setLocationRelativeTo(null);
                     ngVisConfig.setVisible(true);
                     

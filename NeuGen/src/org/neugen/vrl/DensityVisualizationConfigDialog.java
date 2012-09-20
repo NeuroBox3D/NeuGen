@@ -40,12 +40,12 @@ import org.neugen.datastructures.VolumeOfVoxels;
  * @author Simone Eberhard
  */
 @SuppressWarnings("serial")
-public final class DensityVisualizationConfiguration extends JFrame {
+public final class DensityVisualizationConfigDialog extends JFrame {
 
     /** use to log messages */
-    private static Logger logger = Logger.getLogger(DensityVisualizationConfiguration.class.getName());
+    private static Logger logger = Logger.getLogger(DensityVisualizationConfigDialog.class.getName());
     private VolumeOfVoxels volumeOfVoxels;
-    private static DensityVisualizationConfiguration instance;
+    private static DensityVisualizationConfigDialog instance;
     private ButtonGroup buttonGroup1;
     private JButton jButtonVisualize;
     private JComboBox jComboBoxBackgroundColor;
@@ -189,7 +189,7 @@ public final class DensityVisualizationConfiguration extends JFrame {
                 properties.load(stream);
                 stream.close();
             } else {
-                InputStream is = DensityVisualizationConfiguration.class.getResourceAsStream("resources/DensityConfiguration.properties");
+                InputStream is = DensityVisualizationConfigDialog.class.getResourceAsStream("resources/DensityConfiguration.properties");
                 properties.load(is);
                 is.close();
                 propFile = locVoxelProFile;
@@ -202,7 +202,7 @@ public final class DensityVisualizationConfiguration extends JFrame {
     }
 
     /** Creates new form NeuGenDensityVisualizationConfiguration */
-    public DensityVisualizationConfiguration(VRLDensityVisualizationTask task, VolumeOfVoxels volumeOfVoxels,
+    public DensityVisualizationConfigDialog(VRLDensityVisualizationTask task, VolumeOfVoxels volumeOfVoxels,
             VRLDensityVisualizationTask.Density dens, JPanel canvasParent, Canvas3D canvas3D) {
         this.task = task;
         this.volumeOfVoxels = volumeOfVoxels;
@@ -217,7 +217,7 @@ public final class DensityVisualizationConfiguration extends JFrame {
     }
 
     /** Creates new form NeuGenDensityVisualizationConfiguration */
-    public DensityVisualizationConfiguration(VRLDensityVisualizationTask task, VolumeOfVoxels volumeOfVoxels,
+    public DensityVisualizationConfigDialog(VRLDensityVisualizationTask task, VolumeOfVoxels volumeOfVoxels,
             VRLDensityVisualizationTask.Density dens, BranchGroup bg, JPanel canvasParent, Canvas3D canvas3D) {
         this.task = task;
         this.volumeOfVoxels = volumeOfVoxels;
@@ -269,12 +269,12 @@ public final class DensityVisualizationConfiguration extends JFrame {
         this.volumeOfVoxels = volumeOfVoxels;
     }
 
-    public static DensityVisualizationConfiguration getInstance() {
+    public static DensityVisualizationConfigDialog getInstance() {
         return instance;
     }
 
-    public static void setInstance(DensityVisualizationConfiguration instance) {
-        DensityVisualizationConfiguration.instance = instance;
+    public static void setInstance(DensityVisualizationConfigDialog instance) {
+        DensityVisualizationConfigDialog.instance = instance;
     }
 
     private void initComponents() {

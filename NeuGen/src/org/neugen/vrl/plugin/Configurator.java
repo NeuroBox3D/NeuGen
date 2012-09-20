@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.neugen.gui.NeuGenApp;
-import org.neugen.vrl.JCanvas3DType;
+import org.neugen.vrl.VCanvas3DType;
 
 /**
  * 
@@ -46,7 +46,7 @@ public class Configurator extends VPluginConfigurator{
         //
         VPluginAPI vapi = (VPluginAPI) api;
         
-        vapi.addTypeRepresentation(JCanvas3DType.class);
+        vapi.addTypeRepresentation(VCanvas3DType.class);
         
         vapi.addAction(new VAction("NeuGen-Test") {
 

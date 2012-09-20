@@ -271,7 +271,7 @@ public final class VRLDensityVisualization {
         }
 
         //logger.info("NeuGenDensityVisualization");
-        DensityVisualizationConfiguration ngDenVisConf = DensityVisualizationConfiguration.getInstance();
+        DensityVisualizationConfigDialog ngDenVisConf = DensityVisualizationConfigDialog.getInstance();
         VisualizeWithCubes = ngDenVisConf.getJRadioButtonVisualizeWithCubes().isSelected();
         VisualizeWithConvexHull = ngDenVisConf.getJRadioButtonVisualizeWithConvexHull().isSelected();
         VisualizeWithDividedConvexHull = ngDenVisConf.getJRadioButtonVisualizeWithDividedConvexHull().isSelected();
