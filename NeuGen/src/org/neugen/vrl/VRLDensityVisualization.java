@@ -221,78 +221,81 @@ public final class VRLDensityVisualization {
         this.canvas3D = canvas3D;
 
         logger.info("scale:" + scale);
+        
+        System.out.println("SCALE: " + scale);
+        System.out.println("SCALE-Z: " + scaleZ);
 
-        if (this.scene != null) {
-            Shape3D shape = (Shape3D) this.scene.getChild(0);
-            shape.setCapability(Shape3D.ALLOW_APPEARANCE_READ);
-            shape.setCapability(Shape3D.ALLOW_APPEARANCE_WRITE);
-            shape.setCapability(Shape3D.ENABLE_PICK_REPORTING);
-            //create an Appearance and Material
-            Appearance app = new Appearance();
-            app.setCapability(Appearance.ALLOW_MATERIAL_WRITE);
-            app.setCapability(Appearance.ALLOW_MATERIAL_READ);
-            Color3f black = new Color3f(0.0f, 0.0f, 0.0f);
-            Color3f objColor = new Color3f(1.0f, 0.7f, 0.8f);
-            Material mat = new Material(objColor, black, objColor, black, 100.0f);
-            app.setMaterial(mat);
-
-            PolygonAttributes pa = new PolygonAttributes();
-            pa.setPolygonMode(PolygonAttributes.POLYGON_LINE);
-            app.setPolygonAttributes(pa);
-
-
-            ColoringAttributes colorAtt = new ColoringAttributes();
-            colorAtt.setShadeModel(ColoringAttributes.SHADE_GOURAUD);
-            app.setColoringAttributes(colorAtt);
-            //shape.setAppearance(app);
-            //scene.addChild(shape);
-
-            TransparencyAttributes ta = new TransparencyAttributes(TransparencyAttributes.NICEST, 0.8f);
-            app.setTransparencyAttributes(ta);
-            shape.setAppearance(app);
-
-            Transform3D trans3DTmp = new Transform3D();
-            Transform3D transRot = new Transform3D();
-            TransformGroup tg = new TransformGroup();
-            tg.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
-            tg.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
-            tg.setCapability(TransformGroup.ENABLE_PICK_REPORTING);
-
-            TransformGroup spinTg = new TransformGroup();
-            spinTg.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
-            spinTg.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
-            spinTg.setCapability(TransformGroup.ENABLE_PICK_REPORTING);
-
-            //float x = (512.0f/2.0f + 90) * scale;
-            //float x = (512.0f / 2.0f + 75) * scale;
-            float x = (512.0f / 2.0f) * scale;
-            //float y = 10.0f * scale;
-            float y = 0.0f;
-            float z = (512.0f / 2.0f) * scale;
-            //float z = (512.0f / 2.0f + -68) * scale;
-            //float z = (512.0f / 2.0f - 200) * scale;
-            Point3f center = new Point3f(x, y, z);
-            Vector3f dir = new Vector3f(center);
-
-            Vector3f cross2 = new Vector3f(1.0f, 0.0f, 0.0f);
-            transRot.setRotation(new AxisAngle4f(cross2, (float) Math.toRadians(90)));
-            trans3DTmp.mul(transRot);
-
-            Vector3f cross3 = new Vector3f(0.0f, 0.0f, 1.0f);
-            transRot.setRotation(new AxisAngle4f(cross3, (float) Math.toRadians(180)));
-            //trans3DTmp.mul(transRot);
-
-            Vector3f cross1 = new Vector3f(0.0f, 1.0f, 0.0f);
-            transRot.setRotation(new AxisAngle4f(cross1, (float) Math.toRadians(90)));
-            //trans3DTmp.mul(transRot);
-            //trans3DTmp.setTranslation(dir);
-            tg.setTransform(trans3DTmp);
-
-            this.scene.removeChild(shape);
-            spinTg.addChild(shape);
-            tg.addChild(spinTg);
-            this.scene.addChild(tg);
-        }
+//        if (this.scene != null) {
+//            Shape3D shape = (Shape3D) this.scene.getChild(0);
+//            shape.setCapability(Shape3D.ALLOW_APPEARANCE_READ);
+//            shape.setCapability(Shape3D.ALLOW_APPEARANCE_WRITE);
+//            shape.setCapability(Shape3D.ENABLE_PICK_REPORTING);
+//            //create an Appearance and Material
+//            Appearance app = new Appearance();
+//            app.setCapability(Appearance.ALLOW_MATERIAL_WRITE);
+//            app.setCapability(Appearance.ALLOW_MATERIAL_READ);
+//            Color3f black = new Color3f(0.0f, 0.0f, 0.0f);
+//            Color3f objColor = new Color3f(1.0f, 0.7f, 0.8f);
+//            Material mat = new Material(objColor, black, objColor, black, 100.0f);
+//            app.setMaterial(mat);
+//
+//            PolygonAttributes pa = new PolygonAttributes();
+//            pa.setPolygonMode(PolygonAttributes.POLYGON_LINE);
+//            app.setPolygonAttributes(pa);
+//
+//
+//            ColoringAttributes colorAtt = new ColoringAttributes();
+//            colorAtt.setShadeModel(ColoringAttributes.SHADE_GOURAUD);
+//            app.setColoringAttributes(colorAtt);
+//            //shape.setAppearance(app);
+//            //scene.addChild(shape);
+//
+//            TransparencyAttributes ta = new TransparencyAttributes(TransparencyAttributes.NICEST, 0.8f);
+//            app.setTransparencyAttributes(ta);
+//            shape.setAppearance(app);
+//
+//            Transform3D trans3DTmp = new Transform3D();
+//            Transform3D transRot = new Transform3D();
+//            TransformGroup tg = new TransformGroup();
+//            tg.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+//            tg.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
+//            tg.setCapability(TransformGroup.ENABLE_PICK_REPORTING);
+//
+//            TransformGroup spinTg = new TransformGroup();
+//            spinTg.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+//            spinTg.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
+//            spinTg.setCapability(TransformGroup.ENABLE_PICK_REPORTING);
+//
+//            //float x = (512.0f/2.0f + 90) * scale;
+//            //float x = (512.0f / 2.0f + 75) * scale;
+//            float x = (512.0f / 2.0f) * scale;
+//            //float y = 10.0f * scale;
+//            float y = 0.0f;
+//            float z = (512.0f / 2.0f) * scale;
+//            //float z = (512.0f / 2.0f + -68) * scale;
+//            //float z = (512.0f / 2.0f - 200) * scale;
+//            Point3f center = new Point3f(x, y, z);
+//            Vector3f dir = new Vector3f(center);
+//
+//            Vector3f cross2 = new Vector3f(1.0f, 0.0f, 0.0f);
+//            transRot.setRotation(new AxisAngle4f(cross2, (float) Math.toRadians(90)));
+//            trans3DTmp.mul(transRot);
+//
+//            Vector3f cross3 = new Vector3f(0.0f, 0.0f, 1.0f);
+//            transRot.setRotation(new AxisAngle4f(cross3, (float) Math.toRadians(180)));
+//            //trans3DTmp.mul(transRot);
+//
+//            Vector3f cross1 = new Vector3f(0.0f, 1.0f, 0.0f);
+//            transRot.setRotation(new AxisAngle4f(cross1, (float) Math.toRadians(90)));
+//            //trans3DTmp.mul(transRot);
+//            //trans3DTmp.setTranslation(dir);
+//            tg.setTransform(trans3DTmp);
+//
+//            this.scene.removeChild(shape);
+//            spinTg.addChild(shape);
+//            tg.addChild(spinTg);
+//            this.scene.addChild(tg);
+//        }
 
         VisualizeWithCubes = densityParams.isVisualizeWithCubes();
         VisualizeWithConvexHull = densityParams.isVisualizeWithConvexHull();
@@ -382,10 +385,10 @@ public final class VRLDensityVisualization {
                 //Vector3f mov2 = new Vector3f(200f, 0.0f, 300.0f);
                 mov = new Vector3f(200.0f, 50.0f, 700.0f);
                 mov.scale(scale);
-                //mov2.scale(scale);
-                //mov2.x *= scale;
-                //mov2.y *= scale;
-                //mov2.z *= scaleZ;
+//                mov2.scale(scale);
+//                mov2.x *= scale;
+//                mov2.y *= scale;
+//                mov2.z *= scaleZ;
                 setViewPosition(mov, 0);
                 break;
         }
@@ -489,7 +492,7 @@ public final class VRLDensityVisualization {
 
     public void destroy() {
         // Cleanup reference to Java3D
-        if (canvas3D == null) {
+        if (canvas3D == null || canvasList == null || simpleUniverse ==null) {
             return;
         }
         synBehavior = null;
@@ -497,10 +500,16 @@ public final class VRLDensityVisualization {
         behavior1 = null;
         behavior2 = null;
         behavior3 = null;
-        canvas3D.removeMouseListener(canvasList.getMouseListener());
-        canvas3D.removeKeyListener(canvasList.getKeyListener());
-        canvas3D.removeMouseWheelListener(canvasList.getMouseWheelListener());
+        try {
+            canvas3D.removeMouseListener(canvasList.getMouseListener());
+            canvas3D.removeKeyListener(canvasList.getKeyListener());
+            canvas3D.removeMouseWheelListener(canvasList.getMouseWheelListener());
+       
         simpleUniverse.getViewer().getView().removeAllCanvas3Ds();
+        
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
 
         canvasList = null;
         simpleUniverse.cleanup();

@@ -40,15 +40,15 @@ public class DensityVisualizationParamsInput implements Serializable {
             style = "selection",
             options = "value=[1,2,3,4]") int numberOfVisualizations,
             @ParamGroupInfo(group = "Colors|false|Visualization Colors")
-            @ParamInfo(name = "BGColor") Color backgroundColor,
+            @ParamInfo(name = "BGColor", style="color-chooser") Color backgroundColor,
             @ParamGroupInfo(group = "Colors")
-            @ParamInfo(name = "Color 1") Color color1,
+            @ParamInfo(name = "Color 1", style="color-chooser") Color color1,
             @ParamGroupInfo(group = "Colors")
-            @ParamInfo(name = "Color 2") Color color2,
+            @ParamInfo(name = "Color 2", style="color-chooser") Color color2,
             @ParamGroupInfo(group = "Colors")
-            @ParamInfo(name = "Color 3") Color color3,
+            @ParamInfo(name = "Color 3", style="color-chooser") Color color3,
             @ParamGroupInfo(group = "Colors")
-            @ParamInfo(name = "Color 4") Color color4,
+            @ParamInfo(name = "Color 4", style="color-chooser") Color color4,
             @ParamGroupInfo(group = "Values|false|Values")
             @ParamInfo(name = "Value 1") float value1,
             @ParamGroupInfo(group = "Values")

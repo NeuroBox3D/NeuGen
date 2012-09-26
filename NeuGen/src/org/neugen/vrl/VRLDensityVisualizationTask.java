@@ -9,12 +9,15 @@ import com.sun.j3d.loaders.ParsingErrorException;
 import com.sun.j3d.loaders.Scene;
 import com.sun.j3d.loaders.objectfile.ObjectFile;
 import eu.mihosoft.vrl.system.VParamUtil;
-import eu.mihosoft.vrl.system.VSysUtil;
+import eu.mihosoft.vrl.v3d.AppearanceGenerator;
+import eu.mihosoft.vrl.v3d.TxT2Geometry;
+import eu.mihosoft.vrl.v3d.VTriangleArray;
 import ij.ImagePlus;
 import ij.ImageStack;
 import ij.process.ImageConverter;
 import ij.process.ImageProcessor;
 import ij.process.StackConverter;
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -24,10 +27,12 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
+import javax.media.j3d.Appearance;
 import javax.media.j3d.BranchGroup;
-import javax.media.j3d.Canvas3D;
+import javax.media.j3d.Material;
 import javax.media.j3d.Node;
-import javax.swing.JPanel;
+import javax.media.j3d.Shape3D;
+import javax.vecmath.Color3f;
 import javax.vecmath.Point3f;
 import javax.vecmath.Point3i;
 import org.apache.log4j.Logger;
@@ -39,9 +44,7 @@ import org.neugen.datastructures.VoxelVolumeIterator;
 import org.neugen.gui.DensityDialog;
 import org.neugen.gui.NeuGenView;
 import org.neugen.gui.VisualizationTask;
-import org.neugen.gui.VoxelDialog;
 import org.neugen.utils.NGImageIO;
-import org.neugen.utils.Utils;
 
 /**
  *
@@ -290,6 +293,9 @@ public final class VRLDensityVisualizationTask {
                         scaleZ = scannedDepth / faktor;
                         scaleZ /= 10.0f;
                     }
+                    
+//                    scale *= 2.f;
+//                    scaleZ *= 2.f;
 
                     logger.info("scale: " + scale);
                     logger.info("scaleZ: " + scaleZ);
@@ -337,14 +343,31 @@ public final class VRLDensityVisualizationTask {
         nextLine = lineReader.readLine().trim();
         String[] dataArray = nextLine.split(" ");
 
-        int verticesVal = Integer.parseInt(dataArray[0]);
-        int facesVal = Integer.parseInt(dataArray[1]);
+        int numVertices = Integer.parseInt(dataArray[0]);
+        int numTriangles = Integer.parseInt(dataArray[1]);
         logger.info("first line: " + nextLine);
-        logger.info("vertices: " + verticesVal);
-        logger.info("faces:" + facesVal);
+        logger.info("vertices: " + numVertices);
+        logger.info("faces:" + numTriangles);
+
+        System.out.println("first line: " + nextLine);
+        System.out.println("vertices: " + numVertices);
+        System.out.println("faces:" + numTriangles);
+
+        // compute min/max
+//        TxT2Geometry loader = new TxT2Geometry();
+//        VTriangleArray geometry = loader.loadAsVTriangleArray(file);
+//        geometry.centerNodes();
+
+//        Appearance app = AppearanceGenerator.getSolidAppearance(Color.red, true);
+//        BranchGroup result = new BranchGroup();
+//        result.addChild(new Shape3D(geometry.getTriangleArray(),app));
+
+//        if (true) {
+//            return result;
+//        }
 
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < verticesVal; i++) {
+        for (int i = 0; i < numVertices; i++) {
             nextLine = lineReader.readLine().trim();
             StringTokenizer st = new StringTokenizer(nextLine);
             st.nextToken();
@@ -354,7 +377,7 @@ public final class VRLDensityVisualizationTask {
             sb.append(st.nextToken()).append('\n');
         }
 
-        for (int i = 0; i < facesVal; i++) {
+        for (int i = 0; i < numTriangles; i++) {
             nextLine = lineReader.readLine().trim();
             StringTokenizer st = new StringTokenizer(nextLine);
             st.nextToken();
