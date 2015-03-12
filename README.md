@@ -7,6 +7,6 @@ NeuGen generates nonidentical neurons of morphological classes of the cortex, e.
 The generated neurons can be exported into a 3D graphic format for visualization and into multi-compartment files for simulations with the program NEURON. NeuGen is intended for scientists aiming at simulations of realistic networks in 3D.
 
 ## Samples
-![](https://github.com/NeuroBox3D/NeuGen/tree/master/NeuGen/resources/synapse.jpg)
-![](https://github.com/NeuroBox3D/NeuGen/tree/master/NeuGen/resources/neugen.jpg)
-![](https://github.com/NeuroBox3D/NeuGen/tree/master/NeuGen/resources/soma.jpg)
+![](https://github.com/NeuroBox3D/NeuGen/tree/master/resources/synapse.jpg)
+![](https://github.com/NeuroBox3D/NeuGen/tree/master/resources/neugen.jpg)
+![](https://github.com/NeuroBox3D/NeuGen/tree/master/resources/soma.jpg)
