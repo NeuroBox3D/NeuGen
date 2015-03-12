@@ -9,15 +9,11 @@ import com.sun.j3d.loaders.ParsingErrorException;
 import com.sun.j3d.loaders.Scene;
 import com.sun.j3d.loaders.objectfile.ObjectFile;
 import eu.mihosoft.vrl.system.VParamUtil;
-import eu.mihosoft.vrl.v3d.AppearanceGenerator;
-import eu.mihosoft.vrl.v3d.TxT2Geometry;
-import eu.mihosoft.vrl.v3d.VTriangleArray;
 import ij.ImagePlus;
 import ij.ImageStack;
 import ij.process.ImageConverter;
 import ij.process.ImageProcessor;
 import ij.process.StackConverter;
-import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -27,14 +23,14 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
-import javax.media.j3d.Appearance;
 import javax.media.j3d.BranchGroup;
-import javax.media.j3d.Material;
 import javax.media.j3d.Node;
-import javax.media.j3d.Shape3D;
-import javax.vecmath.Color3f;
+import javax.media.j3d.Transform3D;
+import javax.media.j3d.TransformGroup;
+import javax.vecmath.AxisAngle4f;
 import javax.vecmath.Point3f;
 import javax.vecmath.Point3i;
+import javax.vecmath.Vector3f;
 import org.apache.log4j.Logger;
 import org.neugen.datastructures.Net;
 import org.neugen.datastructures.Region;
@@ -365,6 +361,8 @@ public final class VRLDensityVisualizationTask {
 //        if (true) {
 //            return result;
 //        }
+        
+       
 
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < numVertices; i++) {
@@ -416,7 +414,23 @@ public final class VRLDensityVisualizationTask {
          */
 
         Node bg = s.getSceneGroup();//.cloneTree();
-        return (BranchGroup) bg;
+        
+        Transform3D transRot = new Transform3D();
+        TransformGroup tg = new TransformGroup();
+        tg.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+        tg.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
+        tg.setCapability(TransformGroup.ENABLE_PICK_REPORTING);
+        
+        Vector3f cross2 = new Vector3f(1.0f, 0.0f, 0.0f);
+        transRot.setRotation(new AxisAngle4f(cross2, (float) Math.toRadians(90)));
+        tg.setTransform(transRot);
+        
+        tg.addChild(bg);
+        
+        BranchGroup result = new BranchGroup();
+        result.addChild(tg);
+        
+        return result;
     }
 //    protected void succeeded(Void result) {
 //        System.gc();

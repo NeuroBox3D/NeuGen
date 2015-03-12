@@ -62,6 +62,7 @@ import java.awt.GraphicsConfigTemplate;
 import java.awt.GraphicsDevice;
 import java.awt.GridLayout;
 import javax.media.j3d.Group;
+import javax.media.j3d.Node;
 import javax.media.j3d.PickInfo;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -221,7 +222,7 @@ public final class VRLDensityVisualization {
         this.canvas3D = canvas3D;
 
         logger.info("scale:" + scale);
-        
+
         System.out.println("SCALE: " + scale);
         System.out.println("SCALE-Z: " + scaleZ);
 
@@ -492,7 +493,7 @@ public final class VRLDensityVisualization {
 
     public void destroy() {
         // Cleanup reference to Java3D
-        if (canvas3D == null || canvasList == null || simpleUniverse ==null) {
+        if (canvas3D == null || canvasList == null || simpleUniverse == null) {
             return;
         }
         synBehavior = null;
@@ -504,9 +505,9 @@ public final class VRLDensityVisualization {
             canvas3D.removeMouseListener(canvasList.getMouseListener());
             canvas3D.removeKeyListener(canvasList.getKeyListener());
             canvas3D.removeMouseWheelListener(canvasList.getMouseWheelListener());
-       
-        simpleUniverse.getViewer().getView().removeAllCanvas3Ds();
-        
+
+            simpleUniverse.getViewer().getView().removeAllCanvas3Ds();
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -773,6 +774,7 @@ public final class VRLDensityVisualization {
         if (VisualizeWithCubes == true) {
             BranchGroup cubesBG = new BranchGroup();
             cubesBG.setCapability(BranchGroup.ALLOW_DETACH);
+            
             logger.info("visualization with cubes");
             if ((numberOfVisualizations == 1) || (numberOfVisualizations == 2) || (numberOfVisualizations == 3) || (numberOfVisualizations == 4)) {
                 logger.info("visualization with cubes: number of visual 1-4 (color: )" + color1.toString());
@@ -1045,6 +1047,19 @@ public final class VRLDensityVisualization {
         spinner.addChild(scene);
         objRoot.addChild(spinner);
         return objRoot;
+    }
+
+    public TransformGroup rotateNode(Node n) {
+        Transform3D transRot = new Transform3D();
+        TransformGroup tg = new TransformGroup();
+        tg.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+        tg.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
+        tg.setCapability(TransformGroup.ENABLE_PICK_REPORTING);
+
+        Vector3f cross2 = new Vector3f(1.0f, 0.0f, 0.0f);
+        transRot.setRotation(new AxisAngle4f(cross2, (float) Math.toRadians(90)));
+        tg.setTransform(transRot);
+        return tg;
     }
 
     /**

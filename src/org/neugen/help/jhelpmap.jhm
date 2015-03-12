@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
-<!DOCTYPE map PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp Map Version 1.0//EN" "http://java.sun.com/products/javahelp/map_1_0.dtd">
-<map version="1.0">
-    <mapID target="NeuGen" url="index.html"/>
-    <mapID target="NeuGen.GUI" url="gui.html"/>
-    <mapID target="NeuGen.GN" url="generatingNeurons.html"/>
-    <mapID target="NeuGen.IM" url="importing.html"/>
-    <mapID target="NeuGen.Changes" url="changes.html"/>
-</map>

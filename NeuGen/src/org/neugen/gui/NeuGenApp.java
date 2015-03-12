@@ -143,11 +143,31 @@ public final class NeuGenApp extends SingleFrameApplication {
     public static void main(File logProperties, final String[] args) {
         NeuGenLogger.initLogger(logProperties);
 
-        try {
-            handleLicenseKey();
-        } catch (Exception ex) {
-            logger.error(ex);
-        }
+//        try {
+//            handleLicenseKey();
+//        } catch (Exception ex) {
+//            logger.error(ex);
+//        }
+        
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+
+                @Override
+                public void run() {
+                    launch(NeuGenApp.class, args);
+                }
+            });
+
+    }
+    
+    /** Main method launching the application.*/
+    public static void main(final String[] args) {
+        NeuGenLogger.initLogger();
+
+//        try {
+//            handleLicenseKey();
+//        } catch (Exception ex) {
+//            logger.error(ex);
+//        }
         
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
 
