@@ -56,6 +56,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,8 +64,11 @@ import javax.vecmath.Point3f;
 import org.apache.log4j.Logger;
 import org.neugen.datastructures.Axon;
 import org.neugen.datastructures.Cellipsoid;
+import org.neugen.datastructures.Cons;
 import org.neugen.datastructures.Dendrite;
 import org.neugen.datastructures.Net;
+import org.neugen.datastructures.NetBase;
+import org.neugen.datastructures.NeuronalTreeStructure;
 import org.neugen.datastructures.neuron.Neuron;
 import org.neugen.datastructures.Pair;
 import org.neugen.datastructures.Section;
@@ -78,138 +82,153 @@ import org.neugen.utils.Utils;
  */
 final class Neuroml {
 
-    public String xmlns;
-    public String mml;
-    public String meta;
-    public String bio;
-    public String cml;
-    public String xsi;
-    public String schemaLocation;
-    public String name;
-    public String lengthUnits;
+	public String xmlns;
+	public String mml;
+	public String meta;
+	public String bio;
+	public String cml;
+	public String xsi;
+	public String schemaLocation;
+	public String name;
+	public String lengthUnits;
 
-    /**
-     * Level 1: Anatomy only cells specified in MorphML
-     * Level 2: ChannelML and biophysical cell models
-     * Level 3: Networks of biologically realistic cells using NetworkML
-     *
-     * @param schemaLocation
-     * @param name
-     * @param lengthUnits
-     *
-     */
-    public void setHeader(String schemaLocation, String name, String lengthUnits) {
-        xmlns = "http://morphml.org/morphml/schema";
-        mml = "http://morphml.org/morphml/schema";
-        bio = "http://morphml.org/biophysics/schema";
-        cml = "http://morphml.org/channelml/schema";
-        meta = "http://morphml.org/metadata/schema";
-        xsi = "http://www.w3.org/2001/XMLSchema-instance";
-        this.schemaLocation = schemaLocation;
-        this.name = name;
-        this.lengthUnits = lengthUnits;
-    }
+	/**
+	 * Level 1: Anatomy only cells specified in MorphML Level 2: ChannelML
+	 * and biophysical cell models Level 3: Networks of biologically
+	 * realistic cells using NetworkML
+	 *
+	 * @param schemaLocation
+	 * @param name
+	 * @param lengthUnits
+	 *
+	 */
+	public void setHeader(String schemaLocation, String name, String lengthUnits) {
+		xmlns = "http://morphml.org/morphml/schema";
+		mml = "http://morphml.org/morphml/schema";
+		bio = "http://morphml.org/biophysics/schema";
+		cml = "http://morphml.org/channelml/schema";
+		meta = "http://morphml.org/metadata/schema";
+		xsi = "http://www.w3.org/2001/XMLSchema-instance";
+		this.schemaLocation = schemaLocation;
+		this.name = name;
+		this.lengthUnits = lengthUnits;
+	}
 }
 
 /**
  *
- * Defines the smallest unit within a possibly branching structure, such as a dendrite or axon.
- * The parent attribute is used to define connectivity.
- * A segment would be mapped to a compartment in a compartmental modelling application such as GENESIS
+ * Defines the smallest unit within a possibly branching structure, such as a
+ * dendrite or axon. The parent attribute is used to define connectivity. A
+ * segment would be mapped to a compartment in a compartmental modelling
+ * application such as GENESIS
  *
  */
 final class NeuroMLSegment {
 
-    /** The ID of the segment, which should be unique within the cell */
-    public int id;
-    /** A unique name can be given to the segment (Use: optional) */
-    public String name;
-    /** Used to indicate logical connectivity between segments (Use: optional) */
-    public Integer parent;
-    /** The cable ID of which this segment is part (Use: optional) */
-    public Integer cable;
-    /** The start point */
-    public Proximal proximal;
-    /** The end point */
-    public Distal distal;
+	/**
+	 * The ID of the segment, which should be unique within the cell
+	 */
+	public int id;
+	/**
+	 * A unique name can be given to the segment (Use: optional)
+	 */
+	public String name;
+	/**
+	 * Used to indicate logical connectivity between segments (Use:
+	 * optional)
+	 */
+	public Integer parent;
+	/**
+	 * The cable ID of which this segment is part (Use: optional)
+	 */
+	public Integer cable;
+	/**
+	 * The start point
+	 */
+	public Proximal proximal;
+	/**
+	 * The end point
+	 */
+	public Distal distal;
 }
 
 /**
  * Definition of a cell
  */
 final class NeuroMLCell {
-    // a name can be given to the cell (Use: optional)
+	// a name can be given to the cell (Use: optional)
 
-    public String name;
-    // first segment should represent the soma
-    private NeuroMLSegments segments;
-    private NeuroMLCables cables;
+	public String name;
+	// first segment should represent the soma
+	private NeuroMLSegments segments;
+	private NeuroMLCables cables;
 
-    public NeuroMLSegments getSegments() {
-        return segments;
-    }
+	public NeuroMLSegments getSegments() {
+		return segments;
+	}
 
-    public void setSegments(NeuroMLSegments segments) {
-        this.segments = segments;
-    }
+	public void setSegments(NeuroMLSegments segments) {
+		this.segments = segments;
+	}
 
-    public NeuroMLCables getCables() {
-        return cables;
-    }
+	public NeuroMLCables getCables() {
+		return cables;
+	}
 
-    public void setCables(NeuroMLCables cables) {
-        this.cables = cables;
-    }
+	public void setCables(NeuroMLCables cables) {
+		this.cables = cables;
+	}
+
 }
 
 final class NeuroMLCables {
 
-    private List<Cable> cables;
-    private String xmlns;
+	private List<Cable> cables;
+	private String xmlns;
 
-    public NeuroMLCables(List<Cable> cables, String xmlns) {
-        this.cables = cables;
-        this.xmlns = xmlns;
-    }
+	public NeuroMLCables(List<Cable> cables, String xmlns) {
+		this.cables = cables;
+		this.xmlns = xmlns;
+	}
 }
 
 final class NeuroMLSegments {
 
-    private List<NeuroMLSegment> segments;
-    private String xmlns;
+	private List<NeuroMLSegment> segments;
+	private String xmlns;
 
-    public NeuroMLSegments(List<NeuroMLSegment> segments, String xmlns) {
-        this.segments = segments;
-        this.xmlns = xmlns;
-    }
+	public NeuroMLSegments(List<NeuroMLSegment> segments, String xmlns) {
+		this.segments = segments;
+		this.xmlns = xmlns;
+	}
 }
 
 /**
- * NeuroML Level 2
- * Biophysics
+ * NeuroML Level 2 Biophysics
+ *
  * @author sergejwolf
  *
  */
 // TODO:
 final class NeuroMLBiophysics {
 
-    private BioSpecCapacitance specificCapacitance;
+	private BioSpecCapacitance specificCapacitance;
 }
 
 final class BioSpecCapacitance {
 
-    protected BioSpec parameter;
+	protected BioSpec parameter;
 }
 
 final class BioSpecAxialResistance {
 
-    private BioSpec parameter;
+	private BioSpec parameter;
 }
 
 final class BioSpec {
 
-    private int value;
-    private String group;
+	private int value;
+	private String group;
 }
 
 // TODO:
@@ -218,428 +237,497 @@ final class NeuroMLChannel {
 
 /**
  *
- * The start point (and diameter) of the segment.
- * If absent, it is assumed that the distal point of the parent is the start point of this segment.
+ * The start point (and diameter) of the segment. If absent, it is assumed that
+ * the distal point of the parent is the start point of this segment.
  *
  */
 final class Proximal {
 
-    private Float x, y, z, diameter;
+	private Float x, y, z, diameter;
 
-    public Proximal(Float x, Float y, Float z, Float diam) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.diameter = diam;
-    }
+	public Proximal(Float x, Float y, Float z, Float diam) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		this.diameter = diam;
+	}
 }
 
 /**
  *
- * The end point (and diameter) of the segment.
- * Note if the 3D location of the distal point is the same as the proximal point,
- * the segment is assumed to be spherical.
+ * The end point (and diameter) of the segment. Note if the 3D location of the
+ * distal point is the same as the proximal point, the segment is assumed to be
+ * spherical.
  */
 final class Distal {
 
-    private Float x, y, z, diameter;
+	private Float x, y, z, diameter;
 
-    public Distal(Float x, Float y, Float z, Float diam) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.diameter = diam;
-    }
+	public Distal(Float x, Float y, Float z, Float diam) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		this.diameter = diam;
+	}
 }
 
 class Cable {
 
-    private int id;
+	private int id;
 
-    public Cable(int id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-    public String name;
+	public Cable(int id, String name) {
+		this.id = id;
+		this.name = name;
+	}
+	public String name;
 //	public int parent;
-    public String metaGroup;
+	public String metaGroup;
 }
 
 final class CableFAP extends Cable {
 
-    public CableFAP(int id, String name) {
-        super(id, name);
-    }
-    public int fractAlongParent;
+	public CableFAP(int id, String name) {
+		super(id, name);
+	}
+	public int fractAlongParent;
 }
 
-public final class NeuroMLWriter {
+public final class NeuroMLWriter extends NetBase {
+	private static final long serialVersionUID = 1L;
 
-    /** use to log messages */
-    private final static Logger logger = Logger.getLogger(NeuroMLWriter.class.getName());
+	/**
+	 * use to log messages
+	 */
+	private final static Logger logger = Logger.getLogger(NeuroMLWriter.class.getName());
     //private int segId = 0;
-    //protected XMLGeometry geometry;
-    protected final int d = 3;
-    private static XStream xstream;
-    //private int sectionID = 0;
-    private int neuromlLevel = 1;
+	//protected XMLGeometry geometry;
+	protected final int d = 3;
+	private static XStream xstream;
+	//private int sectionID = 0;
+	private int neuromlLevel = 1;
 
-    private void initXStream() {
-        xstream = new XStream(new DomDriver());
-        //xstream.setMode(XStream.NO_REFERENCES);
-    }
+	private void initXStream() {
+		xstream = new XStream(new DomDriver());
+		//xstream.setMode(XStream.NO_REFERENCES);
+	}
 
-    public int getNeuromlLevel() {
-        return neuromlLevel;
-    }
+	public int getNeuromlLevel() {
+		return neuromlLevel;
+	}
 
-    public void setNeuromlLevel(int neuromlLevel) {
-        this.neuromlLevel = neuromlLevel;
-    }
+	public void setNeuromlLevel(int neuromlLevel) {
+		this.neuromlLevel = neuromlLevel;
+	}
 
-    /**
-     * Function to get neuroml output options
-     * @return xstream object with output options for xml format
-     */
-    private void setXStreamOptions(int level) {
-        // aliases for class names
-        xstream.alias("segment", NeuroMLSegment.class);
-        xstream.alias("segments", NeuroMLSegments.class);
-        xstream.addImplicitCollection(NeuroMLSegments.class, "segments");
-        xstream.alias("proximal", Proximal.class);
-        xstream.alias("distal", Distal.class);
-        xstream.alias("cell", NeuroMLCell.class);
-        xstream.alias("morphml", Neuroml.class);
-        xstream.alias("cable", NeuroMLCables.class);
-        xstream.addImplicitCollection(NeuroMLCables.class, "cables");
-        xstream.alias("cable", Cable.class);
-        xstream.alias("cable", CableFAP.class);
+	/**
+	 * Function to get neuroml output options
+	 *
+	 * @return xstream object with output options for xml format
+	 */
+	private void setXStreamOptions(int level) {
+		// aliases for class names
+		xstream.alias("segment", NeuroMLSegment.class);
+		xstream.alias("segments", NeuroMLSegments.class);
+		xstream.addImplicitCollection(NeuroMLSegments.class, "segments");
+		xstream.alias("proximal", Proximal.class);
+		xstream.alias("distal", Distal.class);
+		xstream.alias("cell", NeuroMLCell.class);
+		xstream.alias("morphml", Neuroml.class);
+		xstream.alias("cable", NeuroMLCables.class);
+		xstream.addImplicitCollection(NeuroMLCables.class, "cables");
+		xstream.alias("cable", Cable.class);
+		xstream.alias("cable", CableFAP.class);
 
-        // aliases for variables
-        xstream.aliasAttribute(Neuroml.class, "mml", "\n\txmlns:mml");
-        xstream.aliasAttribute(Neuroml.class, "meta", "\n\txmlns:meta");
-        xstream.aliasAttribute(Neuroml.class, "xsi", "\n\txmlns:xsi");
-        xstream.aliasAttribute(Neuroml.class, "bio", "\n\txmlns:bio");
-        xstream.aliasAttribute(Neuroml.class, "cml", "\n\txmlns:cml");
-        xstream.aliasAttribute(Neuroml.class, "schemaLocation", "\n\txsi:schemaLocation");
-        xstream.aliasAttribute(Neuroml.class, "name", "\n\tname");
-        xstream.aliasAttribute(Neuroml.class, "lengthUnits", "\n\tlengthUnits");
+		// aliases for variables
+		xstream.aliasAttribute(Neuroml.class, "mml", "\n\txmlns:mml");
+		xstream.aliasAttribute(Neuroml.class, "meta", "\n\txmlns:meta");
+		xstream.aliasAttribute(Neuroml.class, "xsi", "\n\txmlns:xsi");
+		xstream.aliasAttribute(Neuroml.class, "bio", "\n\txmlns:bio");
+		xstream.aliasAttribute(Neuroml.class, "cml", "\n\txmlns:cml");
+		xstream.aliasAttribute(Neuroml.class, "schemaLocation", "\n\txsi:schemaLocation");
+		xstream.aliasAttribute(Neuroml.class, "name", "\n\tname");
+		xstream.aliasAttribute(Neuroml.class, "lengthUnits", "\n\tlengthUnits");
 
-        /*
-        if(level == 1) {
-        xstream.omitField(Neuroml.class, "bio");
-        xstream.omitField(Neuroml.class, "cml");
-        }
-         */
+		/*
+		 if(level == 1) {
+		 xstream.omitField(Neuroml.class, "bio");
+		 xstream.omitField(Neuroml.class, "cml");
+		 }
+		 */
+		// set the Neuroml memeber variables as na XML attribute
+		xstream.useAttributeFor(Neuroml.class, "xmlns");
+		xstream.useAttributeFor(Neuroml.class, "mml");
+		xstream.useAttributeFor(Neuroml.class, "meta");
+		xstream.useAttributeFor(Neuroml.class, "bio");
+		xstream.useAttributeFor(Neuroml.class, "cml");
+		xstream.useAttributeFor(Neuroml.class, "xsi");
+		xstream.useAttributeFor(Neuroml.class, "schemaLocation");
+		xstream.useAttributeFor(Neuroml.class, "name");
+		xstream.useAttributeFor(Neuroml.class, "lengthUnits");
 
-        // set the Neuroml memeber variables as na XML attribute
-        xstream.useAttributeFor(Neuroml.class, "xmlns");
-        xstream.useAttributeFor(Neuroml.class, "mml");
-        xstream.useAttributeFor(Neuroml.class, "meta");
-        xstream.useAttributeFor(Neuroml.class, "bio");
-        xstream.useAttributeFor(Neuroml.class, "cml");
-        xstream.useAttributeFor(Neuroml.class, "xsi");
-        xstream.useAttributeFor(Neuroml.class, "schemaLocation");
-        xstream.useAttributeFor(Neuroml.class, "name");
-        xstream.useAttributeFor(Neuroml.class, "lengthUnits");
+		//set the NeuroML member variables as an XML attribute
+		xstream.useAttributeFor(NeuroMLSegment.class, "id");
+		xstream.useAttributeFor(NeuroMLSegment.class, "cable");
+		xstream.useAttributeFor(NeuroMLSegment.class, "parent");
+		xstream.useAttributeFor(NeuroMLSegment.class, "name");
 
+		xstream.useAttributeFor(NeuroMLSegments.class, "xmlns");
 
-        //set the NeuroML member variables as an XML attribute
-        xstream.useAttributeFor(NeuroMLSegment.class, "id");
-        xstream.useAttributeFor(NeuroMLSegment.class, "cable");
-        xstream.useAttributeFor(NeuroMLSegment.class, "parent");
-        xstream.useAttributeFor(NeuroMLSegment.class, "name");
+		//set the Proximal member variables as an XML attribute
+		xstream.useAttributeFor(Proximal.class, "x");
+		xstream.useAttributeFor(Proximal.class, "y");
+		xstream.useAttributeFor(Proximal.class, "z");
+		xstream.useAttributeFor(Proximal.class, "diameter");
+		//set the Distal member variables as an XML attribute
+		xstream.useAttributeFor(Distal.class, "x");
+		xstream.useAttributeFor(Distal.class, "y");
+		xstream.useAttributeFor(Distal.class, "z");
+		xstream.useAttributeFor(Distal.class, "diameter");
+		xstream.useAttributeFor(NeuroMLCell.class, "name");
 
-        xstream.useAttributeFor(NeuroMLSegments.class, "xmlns");
+		xstream.useAttributeFor(NeuroMLCables.class, "xmlns");
+		xstream.useAttributeFor(Cable.class, "id");
+		xstream.useAttributeFor(CableFAP.class, "fractAlongParent");
+		xstream.aliasAttribute(Cable.class, "name", "name");
+		xstream.aliasField("meta:group", Cable.class, "metaGroup");
 
-        //set the Proximal member variables as an XML attribute
-        xstream.useAttributeFor(Proximal.class, "x");
-        xstream.useAttributeFor(Proximal.class, "y");
-        xstream.useAttributeFor(Proximal.class, "z");
-        xstream.useAttributeFor(Proximal.class, "diameter");
-        //set the Distal member variables as an XML attribute
-        xstream.useAttributeFor(Distal.class, "x");
-        xstream.useAttributeFor(Distal.class, "y");
-        xstream.useAttributeFor(Distal.class, "z");
-        xstream.useAttributeFor(Distal.class, "diameter");
-        xstream.useAttributeFor(NeuroMLCell.class, "name");
+	}
 
-        xstream.useAttributeFor(NeuroMLCables.class, "xmlns");
-        xstream.useAttributeFor(Cable.class, "id");
-        xstream.useAttributeFor(CableFAP.class, "fractAlongParent");
-        xstream.aliasAttribute(Cable.class, "name", "name");
-        xstream.aliasField("meta:group", Cable.class, "metaGroup");
+	public static XStream getXstream() {
+		return xstream;
+	}
 
-    }
+	private void copyToNeuroML(List<Section> sections, List<NeuroMLSegment> neuroMLList, List<Cable> cables, int nn, String cableName) {
+		Point3f sstart;
+		Point3f send;
+		float sradiusstart, sradiusend;
+		Map<Section, Pair<Integer, Integer>> sectionToStartEndSegment = new HashMap<Section, Pair<Integer, Integer>>();
 
-    public static XStream getXstream() {
-        return xstream;
-    }
+		// fuelle die Liste: jetzt ist nur die erste Sektion des Teilbaumes in der Liste
+		Section.Iterator secIterator = sections.get(0).getIterator();
+		//Section section = secIterator.getNext();
+		sections.clear();
+		while (secIterator.hasNext()) {
+			Section section = secIterator.next();
+			sections.add(section);
+			//section = secIterator.next();
+		}
 
-    private void copyToNeuroML(List<Section> sections, List<NeuroMLSegment> neuroMLList, List<Cable> cables, int nn, String cableName) {
-        Point3f sstart;
-        Point3f send;
-        float sradiusstart, sradiusend;
-        Map<Section, Pair<Integer, Integer>> sectionToStartEndSegment = new HashMap<Section, Pair<Integer, Integer>>();
+		for (Section section : sections) {
+			//logger.info("section id: " + section.getId() + " | section name: " + section.getName());
+			float fractAlongParent = -1.0f;
+			List<Segment> segments = section.getSegments();
 
-        // fuelle die Liste: jetzt ist nur die erste Sektion des Teilbaumes in der Liste
-        Section.Iterator secIterator = sections.get(0).getIterator();
-        //Section section = secIterator.getNext();
-        sections.clear();
-        while (secIterator.hasNext()) {
-            Section section = secIterator.next();
-            sections.add(section);
-            //section = secIterator.next();
-        }
+			if (segments.size() > 0) {
+				int startSegId = segments.get(0).getId();
+				int endSegId = startSegId;
+				if (segments.size() > 0) {
+					endSegId = segments.get((segments.size() - 1)).getId();
+				}
 
-        for (Section section : sections) {
-            //logger.info("section id: " + section.getId() + " | section name: " + section.getName());
-            float fractAlongParent = -1.0f;
-            List<Segment> segments = section.getSegments();
-
-            if (segments.size() > 0) {
-                int startSegId = segments.get(0).getId();
-                int endSegId = startSegId;
-                if (segments.size() > 0) {
-                    endSegId = segments.get((segments.size() - 1)).getId();
-                }
-
-                sectionToStartEndSegment.put(section, new Pair<Integer, Integer>(startSegId, endSegId));
-                int counter = 0;
-                for (Segment segment : segments) {
-                    sstart = segment.getStart();
-                    send = segment.getEnd();
-                    sradiusstart = segment.getStartRadius();
-                    sradiusend = segment.getEndRadius();
-                    NeuroMLSegment neuroMLSegment = new NeuroMLSegment();
-                    neuroMLSegment.id = segment.getId();
+				sectionToStartEndSegment.put(section, new Pair<Integer, Integer>(startSegId, endSegId));
+				int counter = 0;
+				for (Segment segment : segments) {
+					sstart = segment.getStart();
+					send = segment.getEnd();
+					sradiusstart = segment.getStartRadius();
+					sradiusend = segment.getEndRadius();
+					NeuroMLSegment neuroMLSegment = new NeuroMLSegment();
+					neuroMLSegment.id = segment.getId();
                     //logger.info("segment id: " + segment.getSegmentId());
-                    //neuroMLSegment.name = segment.getName();
-                    //logger.info("name of this segment: " + segment.getName());
-                    //neuroMLSegment.id = segId;
-                    neuroMLSegment.cable = section.getId();
-                    //neuroMLSegment.name = "N" + nn + cableName + sectionId + "_seg_id_" + segmentId;
-                    neuroMLSegment.name = segment.getName();
-                    if (segment.getName() == null) {
-                        neuroMLSegment.name = "N" + nn + cableName + section.getId() + "_seg_id_" + segment.getId();
-                    }
-                    if (counter == 0) {
-                        if (section.getParentalLink() != null && section.getParentalLink().getParental() != null) {
-                            Section parentSection = section.getParentalLink().getParental();
-                            fractAlongParent = parentSection.getFractAlongParentForChild(section);
-                            int parentID = -1;
-                            if (fractAlongParent > 0.0f) {
-                                parentID = sectionToStartEndSegment.get(parentSection).second;
-                                //logger.info("parentID if: " + parentID);
-                            } else {
-                                parentID = sectionToStartEndSegment.get(parentSection).first;
-                                //logger.info("parentID else: " + parentID);
-                            }
-                            neuroMLSegment.parent = parentID;
-                        }
-                    } else {
-                        neuroMLSegment.parent = neuroMLSegment.id - 1;
-                    }
+					//neuroMLSegment.name = segment.getName();
+					//logger.info("name of this segment: " + segment.getName());
+					//neuroMLSegment.id = segId;
+					neuroMLSegment.cable = section.getId();
+					//neuroMLSegment.name = "N" + nn + cableName + sectionId + "_seg_id_" + segmentId;
+					neuroMLSegment.name = segment.getName();
+					if (segment.getName() == null) {
+						neuroMLSegment.name = "N" + nn + cableName + section.getId() + "_seg_id_" + segment.getId();
+					}
+					if (counter == 0) {
+						if (section.getParentalLink() != null && section.getParentalLink().getParental() != null) {
+							Section parentSection = section.getParentalLink().getParental();
+							fractAlongParent = parentSection.getFractAlongParentForChild(section);
+							int parentID = -1;
+							if (fractAlongParent > 0.0f) {
+								parentID = sectionToStartEndSegment.get(parentSection).second;
+								//logger.info("parentID if: " + parentID);
+							} else {
+								parentID = sectionToStartEndSegment.get(parentSection).first;
+								//logger.info("parentID else: " + parentID);
+							}
+							neuroMLSegment.parent = parentID;
+						}
+					} else {
+						neuroMLSegment.parent = neuroMLSegment.id - 1;
+					}
 
-                    if (counter == 0) {
-                        neuroMLSegment.proximal = new Proximal(sstart.x, sstart.y, sstart.z, sradiusstart * 2);
-                    }
-                    neuroMLSegment.distal = new Distal(send.x, send.y, send.z, sradiusend * 2);
-                    neuroMLList.add(neuroMLSegment);
-                    counter++;
-                }
-                int sectionID = section.getId();
-                Cable cable = null;
-                if (fractAlongParent > -1.0f) {
-                    //CableFAP cableFAP = new CableFAP(sectionID, "N" + nn + cableName + sectionID);
-                    CableFAP cableFAP = new CableFAP(sectionID, section.getName());
-                    cableFAP.fractAlongParent = (int) fractAlongParent;
-                    cable = cableFAP;
-                } else {
-                    //cable = new Cable(sectionID, "N" + nn + cableName + sectionID);
-                    cable = new Cable(sectionID, section.getName());
-                }
+					if (counter == 0) {
+						neuroMLSegment.proximal = new Proximal(sstart.x, sstart.y, sstart.z, sradiusstart * 2);
+					}
+					neuroMLSegment.distal = new Distal(send.x, send.y, send.z, sradiusend * 2);
+					neuroMLList.add(neuroMLSegment);
+					counter++;
+				}
+				int sectionID = section.getId();
+				Cable cable = null;
+				if (fractAlongParent > -1.0f) {
+					//CableFAP cableFAP = new CableFAP(sectionID, "N" + nn + cableName + sectionID);
+					CableFAP cableFAP = new CableFAP(sectionID, section.getName());
+					cableFAP.fractAlongParent = (int) fractAlongParent;
+					cable = cableFAP;
+				} else {
+					//cable = new Cable(sectionID, "N" + nn + cableName + sectionID);
+					cable = new Cable(sectionID, section.getName());
+				}
 
-                cables.add(cable);
+				cables.add(cable);
                 //sectionID++;
-                //sectionID = section.getSectionId();
+				//sectionID = section.getSectionId();
             /*// durchlaufe die Segmenten der Section
-                // all segments of a section
-                Section.Iterator secIterator = firstSection.getIterator();
-                while (secIterator.hasNext()) {
-                Section section = secIterator.next();
+				 // all segments of a section
+				 Section.Iterator secIterator = firstSection.getIterator();
+				 while (secIterator.hasNext()) {
+				 Section section = secIterator.next();
 
-                String cableName = "_Section_";
+				 String cableName = "_Section_";
 
-                float typeID = section.getTypeID();
-                if (geometry.isSomaID(typeID)) {
-                cableName = "soma";
-                } else if (geometry.isAxon(typeID)) {
-                cableName = "axon";
-                }
-                else if(geometry.isAxonHillocID(typeID)) {
-                cableName = "_axon_hilloc_";
-                }
-                else if (geometry.isAxonInitialSegmentID(typeID)) {
-                cableName = "axon_initial_segment_group";
-                } else if (geometry.isAxonMyalinizedID(typeID)) {
-                cableName = "axon_myel_group";
-                } else if (geometry.isAxonRanvierID(typeID)) {
-                cableName = "axon_ranvier_group";
-                } else if (geometry.isDendrite(typeID)) {
-                cableName = "dendrite";
-                }*/
+				 float typeID = section.getTypeID();
+				 if (geometry.isSomaID(typeID)) {
+				 cableName = "soma";
+				 } else if (geometry.isAxon(typeID)) {
+				 cableName = "axon";
+				 }
+				 else if(geometry.isAxonHillocID(typeID)) {
+				 cableName = "_axon_hilloc_";
+				 }
+				 else if (geometry.isAxonInitialSegmentID(typeID)) {
+				 cableName = "axon_initial_segment_group";
+				 } else if (geometry.isAxonMyalinizedID(typeID)) {
+				 cableName = "axon_myel_group";
+				 } else if (geometry.isAxonRanvierID(typeID)) {
+				 cableName = "axon_ranvier_group";
+				 } else if (geometry.isDendrite(typeID)) {
+				 cableName = "dendrite";
+				 }*/
 
 
-                /*//float typeID = section.getTypeID();
-                if (geometry.isSomaID(typeID)) {
-                cable.metaGroup = "soma_group";
-                } else if (geometry.isAxon(typeID)) {
-                cable.metaGroup = "axon_group";
-                }*/
-                /*
-                else if(geometry.isAxonHillocID(typeID)) {
-                cable.metaGroup = "axon_hilloc_group";
-                } else if(geometry.isAxonInitialSegmentID(typeID)) {
-                cable.metaGroup = "axon_initial_segment_group" ;
-                } else if(geometry.isAxonMyalinizedID(typeID) ) {
-                cable.metaGroup = "axon_myel_group";
-                } else if(geometry.isAxonRanvierID(typeID)) {
-                cable.metaGroup = "axon_ranvier_group";
-                }
-                 */
+				/*//float typeID = section.getTypeID();
+				 if (geometry.isSomaID(typeID)) {
+				 cable.metaGroup = "soma_group";
+				 } else if (geometry.isAxon(typeID)) {
+				 cable.metaGroup = "axon_group";
+				 }*/
+				/*
+				 else if(geometry.isAxonHillocID(typeID)) {
+				 cable.metaGroup = "axon_hilloc_group";
+				 } else if(geometry.isAxonInitialSegmentID(typeID)) {
+				 cable.metaGroup = "axon_initial_segment_group" ;
+				 } else if(geometry.isAxonMyalinizedID(typeID) ) {
+				 cable.metaGroup = "axon_myel_group";
+				 } else if(geometry.isAxonRanvierID(typeID)) {
+				 cable.metaGroup = "axon_ranvier_group";
+				 }
+				 */
 
-                /*else if (geometry.isDendrite(typeID)) {
-                cable.metaGroup = "dendrite_group";
-                }*/
-
+				/*else if (geometry.isDendrite(typeID)) {
+				 cable.metaGroup = "dendrite_group";
+				 }*/
                 // cables.add(cable);
+				// sectionID++;
+			}
+		}
+		//	return neuroMLList;
+	}
 
-                // sectionID++;
-            }
-        }
-        //	return neuroMLList;
-    }
+	private void writeXMLSynapses(ObjectOutputStream oos, Net net) {
+		// Factor to rise weight of a synapse per micrometer.
+		float wfactor = 0.001f;
+		List<Cons> synapseList = getSynapseList();
+		for (int j = 0; j < synapseList.size(); j++) {
+			Cons synapse = synapseList.get(j);
 
-    /**
-     * Function to write the neural net to a XML file
-     */
-    private void writeXMLNet(ObjectOutputStream oos, Net net) {
-        // get the number of neurons from neural net
-        int nneuron = net.getNumNeurons();
-        String schema = "http://morphml.org/morphml/schema";
+			int typeN1 = -1;
+			int typeN2 = -1;
 
-        NeuroMLWriterTask task = NeuroMLWriterTask.getInstance();
+			if (synapse.getNeuron1() == null) {
+				continue;
+			}
 
-        for (int i = 0; i < nneuron; i++) {
-            Neuron neuron = net.getNeuronList().get(i);
-            NeuroMLCell neuroMLCell = new NeuroMLCell();
-            neuroMLCell.name = "N" + i + "soma";
+			typeN1 = getTypeOfNeuron(synapse.getNeuron1().getIndex());
+			typeN2 = getTypeOfNeuron(synapse.getNeuron2().getIndex());
 
-            //sets soma, dendrite and axon
-            List<Cable> cables = new ArrayList<Cable>();
-            List<NeuroMLSegment> segments = new ArrayList<NeuroMLSegment>();
+			int n_idx = synapse.getNeuron2().getIndex();
 
-            Cellipsoid soma = neuron.getSoma();
-            List<Section> sections = soma.getSections();
+			int c_idx = 0;
+			for (Segment denSeg : synapse.getNeuron2DenSection().getSegments()) {
+				if (denSeg.getId() == synapse.getNeuron2DenSectionSegment().getId()) {
+					break;
+				}
+				c_idx++;
+			}
 
-            if (soma.getSections().isEmpty()) {
-                sections.add(neuron.getSoma().cylindricRepresentant());
-            }
-            // soma first
-            copyToNeuroML(sections, segments, cables, i, "_soma_");
-            sections.clear();
+			int sec_id = synapse.getNeuron2DenSection().getId();
+			float dd = NeuronalTreeStructure.getDendriteSectionData(synapse.getNeuron2DenSection(), c_idx);
+                //float dd = synapse.neuron2.getDendrites().get(d_idx).getdendritesectionData(sec_id, c_idx);
+			//logger.info("dendrite secion data: " + dd);
+			//int n1_idx = synapse.neuron1_idx;
 
-            Axon axon = neuron.getAxon();
-            sections.add(axon.getFirstSection());
-            copyToNeuroML(sections, segments, cables, i, "_axon_");
-            sections.clear();
+			if (synFW != null) {
+				//write functional synapse (NetCon) coordinates in file
+				Point3f sc = synapse.getNeuron1AxSegment().getEnd();
+				synFW.append(sc.x + " " + sc.y + " " + sc.z + "\n");
+				synFW.flush();
+			}
 
-            List<Dendrite> dendritesList = neuron.getDendrites();
-            for (Dendrite dendrite : dendritesList) {
-                sections.add(dendrite.getFirstSection());
-                copyToNeuroML(sections, segments, cables, i, "_dendrite_");
-                sections.clear();
-            }
+			fw.append("\nobjectvar Synapse" + j + "\n"
+				+ "N" + n_idx + "dendrite" + sec_id + " Synapse" + j + " = new Exp2Syn(" + dd + ")" + "\n"
+				+ "Synapse" + j + ".tau1 = 0.2" + "\n" /* ms */
+				+ "Synapse" + j + ".tau2 = 1.7" + "\n" /* ms */
+				+ "Synapse" + j + ".e = 0.0" + "\n" /* reversal potential, mV */
+				+ "objectvar Nc" + j + "\n");
 
-            // add soma, dendrite and axon to XML
-            NeuroMLSegments neuroMLSegments = new NeuroMLSegments(segments, schema);
-            neuroMLCell.setSegments(neuroMLSegments);
-            NeuroMLCables neuroMLCables = new NeuroMLCables(cables, schema);
-            neuroMLCell.setCables(neuroMLCables);
-            try {
-                oos.writeObject(neuroMLCell);
-                oos.flush();
-                //oos.close();
-            } catch (IOException e) {
-                logger.error(e, e);
-            }
-            if (task != null) {
-                float process = (float) (i + 1) / (float) nneuron;
-                task.setMyProgress(process);
-            }
-            //trigger.trigger((i + 1) / (float) nneuron);
-        }
-        if (task != null) {
-            task.setMyProgress(1.0f);
-        }
-    }
+			Section ax_section = synapse.getNeuron1AxSection();
+			assert (ax_section.getLength() > 0.0);
+			int axSegPos = 0;
+			for (Segment axSeg : ax_section.getSegments()) {
+				if (axSeg.getId() == synapse.getNeuron1AxSegment().getId()) {
+					break;
+				}
+				axSegPos++;
+			}
+			float ax_local_position = (ax_section.getLength() * axSegPos) / ax_section.getLength();
+			assert (!Float.isInfinite(ax_local_position));
 
-    public static void exportData(File file, Net net) throws IOException {
-        NeuroMLWriter exportML = new NeuroMLWriter();
-        exportML.initXStream();
-        int level = exportML.getNeuromlLevel();
-        exportML.setXStreamOptions(level);
+			fw.append("N" + synapse.getNeuron1().getIndex() + ax_section.getName() + " Nc" + j
+				+ " = new NetCon(&v(" + ax_local_position + "), Synapse" + j + ", -10.0, 0.5, "
+				+ (1 + wfactor * synapse.getDendriticSomaDistance()) * get_uEPSP_Value(typeN1, typeN2) + ")" + "\n");
+		}
+		if (synFW != null) {
+			synFW.close();
+		}
+		fw.flush();
+	}
 
-        String head = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-        String name = "NeuroML Level " + level + " file exported from NeuGen";
-        String lengthUnits = "micron";
-        String schemaLocation = "";
-        if (level == 1) {
-            schemaLocation = "http://morphml.org/neuroml/schema NeuroML_Level1_v1.7.xsd";
-        } else if (level == 2) {
-            schemaLocation = "http://morphml.org/neuroml/schema NeuroML_Level2_v1.7.xsd";
-        } else if (level == 3) {
-            schemaLocation = "http://morphml.org/networkml/schema../../Schemata/v1.7/Level3/NetworkML_v1.7.xsd";
-        } else {
-        }
+	/**
+	 * Function to write the neural net to a XML file
+	 */
+	private void writeXMLNet(ObjectOutputStream oos, Net net) {
+		// get the number of neurons from neural net
+		int nneuron = net.getNumNeurons();
+		String schema = "http://morphml.org/morphml/schema";
 
-        Neuroml neuroml = new Neuroml();
-        neuroml.setHeader(schemaLocation, name, lengthUnits);
+		NeuroMLWriterTask task = NeuroMLWriterTask.getInstance();
 
-        try {
-            String xml = "xml";
-            String extension = Utils.getExtension(file);
-            if (!xml.equals(extension)) {
-                file = new File(file.getAbsolutePath() + "." + xml);
-            }
+		for (int i = 0; i < nneuron; i++) {
+			Neuron neuron = net.getNeuronList().get(i);
+			NeuroMLCell neuroMLCell = new NeuroMLCell();
+			neuroMLCell.name = "N" + i + "soma";
+
+			//sets soma, dendrite and axon
+			List<Cable> cables = new ArrayList<Cable>();
+			List<NeuroMLSegment> segments = new ArrayList<NeuroMLSegment>();
+
+			Cellipsoid soma = neuron.getSoma();
+			List<Section> sections = soma.getSections();
+
+			if (soma.getSections().isEmpty()) {
+				sections.add(neuron.getSoma().cylindricRepresentant());
+			}
+			// soma first
+			copyToNeuroML(sections, segments, cables, i, "_soma_");
+			sections.clear();
+
+			Axon axon = neuron.getAxon();
+			sections.add(axon.getFirstSection());
+			copyToNeuroML(sections, segments, cables, i, "_axon_");
+			sections.clear();
+
+			List<Dendrite> dendritesList = neuron.getDendrites();
+			for (Dendrite dendrite : dendritesList) {
+				sections.add(dendrite.getFirstSection());
+				copyToNeuroML(sections, segments, cables, i, "_dendrite_");
+				sections.clear();
+			}
+
+			// add soma, dendrite and axon to XML
+			NeuroMLSegments neuroMLSegments = new NeuroMLSegments(segments, schema);
+			neuroMLCell.setSegments(neuroMLSegments);
+			NeuroMLCables neuroMLCables = new NeuroMLCables(cables, schema);
+			neuroMLCell.setCables(neuroMLCables);
+			try {
+				oos.writeObject(neuroMLCell);
+				oos.flush();
+				//oos.close();
+			} catch (IOException e) {
+				logger.error(e, e);
+			}
+			if (task != null) {
+				float process = (float) (i + 1) / (float) nneuron;
+				task.setMyProgress(process);
+			}
+			//trigger.trigger((i + 1) / (float) nneuron);
+		}
+		if (task != null) {
+			task.setMyProgress(1.0f);
+		}
+	}
+
+	public static void exportData(File file, Net net) throws IOException {
+		NeuroMLWriter exportML = new NeuroMLWriter();
+		exportML.initXStream();
+		int level = exportML.getNeuromlLevel();
+		exportML.setXStreamOptions(level);
+
+		String head = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+		String name = "NeuroML Level " + level + " file exported from NeuGen";
+		String lengthUnits = "micron";
+		String schemaLocation = "";
+		if (level == 1) {
+			schemaLocation = "http://morphml.org/neuroml/schema NeuroML_Level1_v1.7.xsd";
+		} else if (level == 2) {
+			schemaLocation = "http://morphml.org/neuroml/schema NeuroML_Level2_v1.7.xsd";
+		} else if (level == 3) {
+			schemaLocation = "http://morphml.org/networkml/schema../../Schemata/v1.7/Level3/NetworkML_v1.7.xsd";
+		} else {
+		}
+
+		Neuroml neuroml = new Neuroml();
+		neuroml.setHeader(schemaLocation, name, lengthUnits);
+
+		try {
+			String xml = "xml";
+			String extension = Utils.getExtension(file);
+			if (!xml.equals(extension)) {
+				file = new File(file.getAbsolutePath() + "." + xml);
+			}
             //trigger.trigger(0.0f);
-            //trigger.trigger("\n write xml file" + "\n");
-            //trigger.trigger(" " + file.getName());
+			//trigger.trigger("\n write xml file" + "\n");
+			//trigger.trigger(" " + file.getName());
 
-            FileWriter writer = new FileWriter(file);
-            writer.write(head);
+			FileWriter writer = new FileWriter(file);
+			writer.write(head);
 
-            PrettyPrintWriter writerP = new PrettyPrintWriter(writer);
-            writerP.startNode("neuroml");
-            writerP.addAttribute("xmlns", neuroml.xmlns);
-            writerP.addAttribute("\n\t\t xmlns:mml", neuroml.mml);
-            writerP.addAttribute("\n\t\t xmlns:meta", neuroml.meta);
-            writerP.addAttribute("\n\t\t xmlns:bio", neuroml.bio);
-            writerP.addAttribute("\n\t\t xmlns:cml", neuroml.cml);
-            writerP.addAttribute("\n\t\t xmlns:xsi", neuroml.xsi);
-            writerP.addAttribute("\n\t\t xsi:schemaLocation", schemaLocation);
-            writerP.addAttribute("\n\t\t name", name);
-            writerP.addAttribute("\n\t\t lengthUnits", lengthUnits);
+			PrettyPrintWriter writerP = new PrettyPrintWriter(writer);
+			writerP.startNode("neuroml");
+			writerP.addAttribute("xmlns", neuroml.xmlns);
+			writerP.addAttribute("\n\t\t xmlns:mml", neuroml.mml);
+			writerP.addAttribute("\n\t\t xmlns:meta", neuroml.meta);
+			writerP.addAttribute("\n\t\t xmlns:bio", neuroml.bio);
+			writerP.addAttribute("\n\t\t xmlns:cml", neuroml.cml);
+			writerP.addAttribute("\n\t\t xmlns:xsi", neuroml.xsi);
+			writerP.addAttribute("\n\t\t xsi:schemaLocation", schemaLocation);
+			writerP.addAttribute("\n\t\t name", name);
+			writerP.addAttribute("\n\t\t lengthUnits", lengthUnits);
 
-            XStream xstreamLoc = getXstream();
-            ObjectOutputStream oos = xstreamLoc.createObjectOutputStream(writerP, "cells");
-            exportML.writeXMLNet(oos, net);
-            writerP.endNode();
-            oos.flush();
-            oos.close();
-        } catch (Exception e) {
-            logger.error(e, e);
-        }
-    }
+			XStream xstreamLoc = getXstream();
+			ObjectOutputStream oos = xstreamLoc.createObjectOutputStream(writerP, "cells");
+			exportML.writeXMLNet(oos, net);
+			writerP.endNode();
+			oos.flush();
+			oos.close();
+		} catch (Exception e) {
+			logger.error(e, e);
+		}
+	}
 }

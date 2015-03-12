@@ -10,4 +10,3 @@ The generated neurons can be exported into a 3D graphic format for visualization
 ![](/resources/synapse.jpg)
 ![](/resources/soma.jpg)
 ![](/resources/neugen.jpg)
-
