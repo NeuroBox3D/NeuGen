@@ -1,0 +1,13 @@
+language: java
+
+jdk:
+- oraclejdk7
+
+env:
+- TERM=dumb
+
+notifications:
+  email:
+    - stephan@syntaktischer-zucker.de
+  on_success: always
+  on_failure: always

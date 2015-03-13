@@ -16,3 +16,15 @@ Current development on devel branch, current stable on master branch.
 ![](/resources/img/synapse.jpg)
 ![](/resources/img/soma.jpg)
 ![](/resources/img/neugen.jpg)
+
+## Development
+### CI
+* [![CI Build Status](https://travis-ci.org/NeuroBox3D/NeuGen.svg?branch=master)](https://travis-ci.org/NeuroBox3D/NeuGen)
+[![CI Build Status](https://travis-ci.org/NeuroBox3D/NeuGen.svg?branch=devel)](https://travis-ci.org/NeuroBox3D/NeuGen)
+[![CI Coverage Status](https://coveralls.io/repos/NeuroBox3D/NeuGen/badge.png)](https://coveralls.io/r/NeuroBox3D/NeuGen)
+
+### Issues
+* [![Stories in Backlog](https://badge.waffle.io/NeuroBox3D/NeuGen.png?label=backlog&title=Backlog)](http://waffle.io/NeuroBox3D/NeuGen)
+[![Stories in Ready](https://badge.waffle.io/NeuroBox3D/NeuGen.png?label=ready&title=Ready)](http://waffle.io/NeuroBox3D/NeuGen)
+[![Stories in In Progress](https://badge.waffle.io/NeuroBox3D/NeuGen.png?label=in progress&title=In Progress)](http://waffle.io/NeuroBox3D/NeuGen)
+[![Stories in Done](https://badge.waffle.io/NeuroBox3D/NeuGen.png?label=done&title=Done)](http://waffle.io/NeuroBox3D/NeuGen)
