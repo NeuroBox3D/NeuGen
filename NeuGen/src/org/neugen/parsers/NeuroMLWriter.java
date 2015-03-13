@@ -762,11 +762,15 @@ public final class NeuroMLWriter {
 			XStream xstreamLoc = getXstream();
 			ObjectOutputStream oos = xstreamLoc.createObjectOutputStream(writerP, "cells");
 			exportML.writeXMLNet(oos, net);
+			
 			if (level < 2) {
 				/**
 				 * @todo proper xml output
 				 */
-				ObjectOutputStream oos2 = xstreamLoc.createObjectOutputStream(new PrettyPrintWriter(new FileWriter(new File(file.getAbsolutePath() + "_synapses." + xml)), "synapses"));
+				XStream xstreamLoc2 = getXstream();
+				PrettyPrintWriter writerP2 = new PrettyPrintWriter(new FileWriter(Utils.getPrefix(file) + "_synapses" + ".xml"));
+				writerP2.startNode("synapses");
+				ObjectOutputStream oos2 = xstreamLoc2.createObjectOutputStream(writerP2, "synapses");
 				exportML.writeXMLSynapses(oos2, net);
 				
 			}
