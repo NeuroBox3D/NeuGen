@@ -63,6 +63,7 @@ import java.util.List;
 import java.util.Map;
 import javax.vecmath.Point3f;
 import org.apache.log4j.Logger;
+import org.apache.log4j.Priority;
 import org.neugen.datastructures.Axon;
 import org.neugen.datastructures.Cellipsoid;
 import org.neugen.datastructures.Cons;
@@ -553,6 +554,9 @@ public final class NeuroMLWriter {
 		float wfactor = 0.001f;
 		List<Cons> synapseList = net.getSynapseList();
 
+		logger.log(Priority.FATAL, "Number of synapses: " + synapseList.size());
+		
+
 		/// validate all synapses to be correct xml
 		ArrayList<NeuroMLSynapse> neuroMLSynapses = new ArrayList<NeuroMLSynapse>();
 		final String schema = "https://github.com/NeuroML/NeuroML2/blob/master/examples/NML2_FullNeuroML.nml";
@@ -561,10 +565,21 @@ public final class NeuroMLWriter {
 		for (int j = 0; j < synapseList.size(); j++) {
 			Cons synapse = synapseList.get(j);
 
-			if (synapse.getNeuron1() == null) {
+			if (synapse.getNeuron1() == null && synapse.getNeuron2() == null) {
 				continue;
 			}
+			
+			/**
+			 * @todo incorporate also unilateral (i. e. nonfunctional synapses!)
+			 * 
+			 */
+			if (synapse.getNeuron1() == null && synapse.getNeuron2() != null) {
+				/// process here
+			}  else if (synapse.getNeuron1() != null && synapse.getNeuron2() == null) {
+				/// process here
+			}
 
+			/// the chunk below is probably not necessary!
 
 			for (Segment denSeg : synapse.getNeuron2DenSection().getSegments()) {
 				if (denSeg.getId() == synapse.getNeuron2DenSectionSegment().getId()) {
@@ -610,19 +625,14 @@ public final class NeuroMLWriter {
 		NeuroMLWriterTask task = NeuroMLWriterTask.getInstance();
 		int i = 0;
 		for (NeuroMLSynapse synapse : neuroMLSynapses) {
+			logger.log(Priority.FATAL, "synapse:" + synapse.toString());
 			try {
 				oos.writeObject(synapse);
 				oos.flush();
 			} catch (IOException e) {
 				logger.error(e, e);
-			} finally {
-				try {
-					oos.close();
-				} catch (IOException ioe) {
-					logger.error(ioe, ioe);
-				}
-			}
-			if (task != null) {
+			} 
+				if (task != null) {
 				float process = ++i / neuroMLSynapses.size();
 				task.setMyProgress(process);
 			}
@@ -752,12 +762,12 @@ public final class NeuroMLWriter {
 			XStream xstreamLoc = getXstream();
 			ObjectOutputStream oos = xstreamLoc.createObjectOutputStream(writerP, "cells");
 			exportML.writeXMLNet(oos, net);
-			if (level > 2) {
+			if (level < 2) {
 				/**
 				 * @todo proper xml output
 				 */
 				ObjectOutputStream oos2 = xstreamLoc.createObjectOutputStream(new PrettyPrintWriter(new FileWriter(new File(file.getAbsolutePath() + "_synapses." + xml)), "synapses"));
-				exportML.writeXMLSynapses(oos, net);
+				exportML.writeXMLSynapses(oos2, net);
 				
 			}
 			writerP.endNode();
