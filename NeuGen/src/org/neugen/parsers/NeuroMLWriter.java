@@ -51,7 +51,8 @@ package org.neugen.parsers;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
-import groovyjarjarantlr.PreservingFileWriter;
+
+//import groovyjarjarantlr.PreservingFileWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
