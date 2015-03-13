@@ -56,10 +56,10 @@ import org.neugen.datastructures.Net;
 import org.neugen.gui.NeuGenView;
 
 /**
- * @note by stephanmg: this needs really to be generalized across 
- * 			all given tasks, also if one task does multiple jobs,
- *                      e. g. write synapses (lvl 3) and network morphology (lvl 1),
- *                      we cannot distinguish this in progress bar, which is rather not flexible
+ * @todo by stephanmg: this needs really to be generalized across all given
+ * tasks, also if one task does multiple jobs, e. g. write synapses (lvl 3) and
+ * network morphology (lvl 1), we cannot distinguish this in progress bar, which
+ * is rather not flexible
  * @author Sergei
  */
 public final class NeuroMLWriterTask extends Task<Void, Void> {
@@ -74,7 +74,7 @@ public final class NeuroMLWriterTask extends Task<Void, Void> {
 		file = f;
 		setInstance(this);
 	}
-	
+
 	/**
 	 * @brief returns the instance with the given progress name
 	 * @author stephanmg
@@ -127,7 +127,7 @@ public final class NeuroMLWriterTask extends Task<Void, Void> {
 	@Override
 	protected void succeeded(Void result) {
 		NeuGenView.getInstance().enableButtons();
-        // Runs on the EDT.  Update the GUI based on
+		// Runs on the EDT.  Update the GUI based on
 		// the result computed by doInBackground().
 	}
 
