@@ -6,6 +6,12 @@ jdk:
 env:
 - TERM=dumb
 
+before_install:
+   - cd NeuGen
+
+script:
+   - ant test
+
 notifications:
   email:
     - stephan@syntaktischer-zucker.de
