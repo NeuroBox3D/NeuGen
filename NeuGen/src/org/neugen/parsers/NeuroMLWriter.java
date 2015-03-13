@@ -76,6 +76,8 @@ import org.neugen.datastructures.Pair;
 import org.neugen.datastructures.Section;
 import org.neugen.datastructures.Segment;
 import org.neugen.parsers.NeuroML.NetworkML.NeuroMLSynapse;
+import org.neugen.parsers.NeuroML.NetworkML.NeuroMLSynapseBilateral;
+import org.neugen.parsers.NeuroML.NetworkML.NeuroMLSynapseUnilateral;
 import org.neugen.utils.Utils;
 
 /**
@@ -545,101 +547,61 @@ public final class NeuroMLWriter {
 	}
 
 	/**
-	 * @brief write the synapses
+	 * @brief write the synapses (unilateral (nf synapses) and bilateral
+	 * (functional synapses))
+	 * @author stephanmg
 	 * @param oos
-	 * @param net 
+	 * @param net
 	 */
 	private void writeXMLSynapses(ObjectOutputStream oos, Net net) {
-		// Factor to rise weight of a synapse per micrometer.
-		float wfactor = 0.001f;
 		List<Cons> synapseList = net.getSynapseList();
 
-		logger.log(Priority.FATAL, "Number of synapses: " + synapseList.size());
-		
+		logger.info("Number of synapses: " + synapseList.size());
 
-		/// validate all synapses to be correct xml
 		ArrayList<NeuroMLSynapse> neuroMLSynapses = new ArrayList<NeuroMLSynapse>();
-		final String schema = "https://github.com/NeuroML/NeuroML2/blob/master/examples/NML2_FullNeuroML.nml";
 
 		/// iterate over all synapses in the network
-		for (int j = 0; j < synapseList.size(); j++) {
-			Cons synapse = synapseList.get(j);
-
+		for (Cons synapse : synapseList) {
 			if (synapse.getNeuron1() == null && synapse.getNeuron2() == null) {
 				continue;
 			}
-			
-			/**
-			 * @todo incorporate also unilateral (i. e. nonfunctional synapses!)
-			 * 
-			 */
+
 			if (synapse.getNeuron1() == null && synapse.getNeuron2() != null) {
-				/// process here
-			}  else if (synapse.getNeuron1() != null && synapse.getNeuron2() == null) {
-				/// process here
+				/// unilateral synapse
+				Point3f injection = synapse.getNeuron2DenSectionSegment().getEnd();
+				neuroMLSynapses.add(new NeuroMLSynapseUnilateral(injection));
+			} else if (synapse.getNeuron1() != null && synapse.getNeuron2() == null) {
+				/// unilateral synapse
+			} else {
+				/// functional/bilateral synapse 
+				Point3f axon_end = synapse.getNeuron1AxSegment().getEnd(); /// Start of synapse
+				Point3f dendrite_start = synapse.getNeuron2DenSectionSegment().getStart(); /// End of synapse
+				neuroMLSynapses.add(new NeuroMLSynapseBilateral(axon_end, dendrite_start));
 			}
-
-			/// the chunk below is probably not necessary!
-
-			for (Segment denSeg : synapse.getNeuron2DenSection().getSegments()) {
-				if (denSeg.getId() == synapse.getNeuron2DenSectionSegment().getId()) {
-					break;
-				}
-			}
-
-			Section ax_section = synapse.getNeuron1AxSection();
-			assert (ax_section.getLength() > 0.0);
-			int axSegPos = 0;
-			for (Segment axSeg : ax_section.getSegments()) {
-				if (axSeg.getId() == synapse.getNeuron1AxSegment().getId()) {
-					break;
-				}
-				axSegPos++;
-			}
-			float ax_local_position = (ax_section.getLength() * axSegPos) / ax_section.getLength();
-			assert (!Float.isInfinite(ax_local_position));
-
-			/*
-			 fw.append("N" + synapse.getNeuron1().getIndex() + ax_section.getName() + " Nc" + j
-			 + " = new NetCon(&v(" + ax_local_position + "), Synapse" + j + ", -10.0, 0.5, "
-			 + (1 + wfactor * synapse.getDendriticSomaDistance()) * get_uEPSP_Value(typeN1, typeN2) + ")" + "\n");
-			 */
-			//write functional synapse (NetCon) coordinates in file -> not netcon anymore, just XML file with coordinates
-			Point3f axon_end = synapse.getNeuron1AxSegment().getEnd(); /// Start of synapse
-			Point3f dendrite_start = synapse.getNeuron2DenSectionSegment().getStart(); /// End of synapse
-
-			/**
-			 * @todo enhance teh NeuroMLSynaspe ctor
-			 */
-			neuroMLSynapses.add(new NeuroMLSynapse(axon_end, dendrite_start));
-			/*StringBuilder sb = new StringBuilder();
-			 sb.append("\nobjectvar Synapse" + j + "\n"
-			 + "N" + n_idx + "dendrite" + sec_id + " Synapse" + j + " = new Exp2Syn(" + dd + ")" + "\n"
-			 + "Synapse" + j + ".tau1 = 0.2" + "\n" // ms
-			 + "Synapse" + j + ".tau2 = 1.7" + "\n" // ms
-			 + "Synapse" + j + ".e = 0.0" + "\n" / mV
-			 + "objectvar Nc" + j + "\n");
-			 */
 		}
 
-		NeuroMLWriterTask task = NeuroMLWriterTask.getInstance();
-		int i = 0;
-		for (NeuroMLSynapse synapse : neuroMLSynapses) {
-			logger.log(Priority.FATAL, "synapse:" + synapse.toString());
-			try {
-				oos.writeObject(synapse);
-				oos.flush();
-			} catch (IOException e) {
-				logger.error(e, e);
-			} 
+		NeuroMLWriterTask task = NeuroMLWriterTask.getInstance("Synapses");
+		task.setMyProgress(0.0f);
+			int i = 0;
+			for (NeuroMLSynapse synapse : neuroMLSynapses) {
+				logger.info("Synapse: " + synapse.toString());
+
+				try {
+					oos.writeObject(synapse);
+					oos.flush();
+				} catch (IOException e) {
+					logger.error(e, e);
+				}
+
 				if (task != null) {
-				float process = ++i / neuroMLSynapses.size();
-				task.setMyProgress(process);
+					i++;
+					logger.info("progress: " + i / (float) neuroMLSynapses.size());
+					task.setMyProgress( i / (float) neuroMLSynapses.size());
+				}
 			}
-		}
-		if (task != null) {
-			task.setMyProgress(1.0f);
-		}
+			if (task != null) {
+				task.setMyProgress(1.0f);
+			}
 	}
 
 	/**
@@ -650,7 +612,7 @@ public final class NeuroMLWriter {
 		int nneuron = net.getNumNeurons();
 		String schema = "http://morphml.org/morphml/schema";
 
-		NeuroMLWriterTask task = NeuroMLWriterTask.getInstance();
+		NeuroMLWriterTask task = NeuroMLWriterTask.getInstance("Neurons");
 
 		for (int i = 0; i < nneuron; i++) {
 			Neuron neuron = net.getNeuronList().get(i);
@@ -707,10 +669,11 @@ public final class NeuroMLWriter {
 	}
 
 	/**
-	 * @brief exports the NeuroML data, i. e. we need also to export the synapses below
+	 * @brief exports the NeuroML data, i. e. we need also to export the
+	 * synapses below
 	 * @param file
 	 * @param net
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public static void exportData(File file, Net net) throws IOException {
 		NeuroMLWriter exportML = new NeuroMLWriter();
@@ -737,14 +700,17 @@ public final class NeuroMLWriter {
 		try {
 			String xml = "xml";
 			String extension = Utils.getExtension(file);
+			File net_output = null;
+			File synapses_output = null;
 			if (!xml.equals(extension)) {
-				file = new File(file.getAbsolutePath() + "." + xml);
+				net_output = new File(file.getAbsolutePath() + "." + xml);
+				synapses_output = new File(file.getAbsoluteFile() + "_synapses." + xml);
 			}
 			//trigger.trigger(0.0f);
 			//trigger.trigger("\n write xml file" + "\n");
 			//trigger.trigger(" " + file.getName());
 
-			FileWriter writer = new FileWriter(file);
+			FileWriter writer = new FileWriter(net_output);
 			writer.write(head);
 
 			PrettyPrintWriter writerP = new PrettyPrintWriter(writer);
@@ -762,17 +728,19 @@ public final class NeuroMLWriter {
 			XStream xstreamLoc = getXstream();
 			ObjectOutputStream oos = xstreamLoc.createObjectOutputStream(writerP, "cells");
 			exportML.writeXMLNet(oos, net);
-			
+
 			if (level < 2) {
 				/**
 				 * @todo proper xml output
 				 */
 				XStream xstreamLoc2 = getXstream();
-				PrettyPrintWriter writerP2 = new PrettyPrintWriter(new FileWriter(Utils.getPrefix(file) + "_synapses" + ".xml"));
-				writerP2.startNode("synapses");
+				FileWriter fw = new FileWriter(synapses_output);
+				fw.write(head);
+				PrettyPrintWriter writerP2 = new PrettyPrintWriter(fw);
 				ObjectOutputStream oos2 = xstreamLoc2.createObjectOutputStream(writerP2, "synapses");
 				exportML.writeXMLSynapses(oos2, net);
-				
+				writerP2.endNode();
+
 			}
 			writerP.endNode();
 			oos.flush();

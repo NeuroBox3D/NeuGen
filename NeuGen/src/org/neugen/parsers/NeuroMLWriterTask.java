@@ -46,7 +46,6 @@
  * Neurocomputing, 70(1-3), pp. 327-343, doi: 10.1016/j.neucom.2006.01.028
  *
  */
-
 package org.neugen.parsers;
 
 import java.io.File;
@@ -57,64 +56,79 @@ import org.neugen.datastructures.Net;
 import org.neugen.gui.NeuGenView;
 
 /**
- *
+ * @note by stephanmg: this needs really to be generalized across 
+ * 			all given tasks, also if one task does multiple jobs,
+ *                      e. g. write synapses (lvl 3) and network morphology (lvl 1),
+ *                      we cannot distinguish this in progress bar, which is rather not flexible
  * @author Sergei
  */
 public final class NeuroMLWriterTask extends Task<Void, Void> {
 
-    private final File file;
-    protected static NeuroMLWriterTask instance;
-    private static final Logger logger = Logger.getLogger(NeuroMLWriterTask.class.getName());
+	private final File file;
+	protected static NeuroMLWriterTask instance;
+	private static final Logger logger = Logger.getLogger(NeuroMLWriterTask.class.getName());
+	private static String name = "";
 
-    public NeuroMLWriterTask(Application app, File f) {
-        super(app);
-        file = f;
-        setInstance(this);
-    }
+	public NeuroMLWriterTask(Application app, File f) {
+		super(app);
+		file = f;
+		setInstance(this);
+	}
+	
+	/**
+	 * @brief returns the instance with the given progress name
+	 * @author stephanmg
+	 * @param name
+	 * @return the value of instance
+	 */
+	@SuppressWarnings("static-access")
+	public static NeuroMLWriterTask getInstance(String name) {
+		instance.name = name;
+		return instance;
+	}
 
-    /**
-     * Get the value of instance
-     *
-     * @return the value of instance
-     */
-    public static NeuroMLWriterTask getInstance() {
-        return instance;
-    }
+	/**
+	 * @brief returns the instance with default progress name
+	 * @author stephanmg
+	 * @return
+	 */
+	public static NeuroMLWriterTask getInstance() {
+		return instance;
+	}
 
-    /**
-     * Set the value of instance
-     *
-     * @param instance new value of instance
-     */
-    public static void setInstance(NeuroMLWriterTask instance) {
-        NeuroMLWriterTask.instance = instance;
-    }
+	/**
+	 * Set the value of instance
+	 *
+	 * @param instance new value of instance
+	 */
+	public static void setInstance(NeuroMLWriterTask instance) {
+		NeuroMLWriterTask.instance = instance;
+	}
 
+	@Override
+	protected Void doInBackground() throws Exception {
+		NeuGenView.getInstance().disableButtons();
+		Net net = NeuGenView.getInstance().getNet();
+		System.err.println("progress_name: " + name);
+		setMessage((!name.isEmpty() ? "Exporting [" + name + "] ... " + file.getName() : "Exporting " + file.getName() + "..."));
+		NeuroMLWriter write = new NeuroMLWriter();
+		write.exportData(file, net);
+		return null;
+	}
 
-    @Override
-    protected Void doInBackground() throws Exception {
-        NeuGenView.getInstance().disableButtons();
-        Net net = NeuGenView.getInstance().getNet();
-        setMessage("Exporting... " + file.getName());
-        NeuroMLWriter write = new NeuroMLWriter();
-        write.exportData(file, net);
-        return null;
-    }
+	public void setMyProgress(float percentage) {
+		if (Float.isInfinite(percentage)) {
+			logger.info("percentage infinite: " + percentage);
+			percentage = 1.0f;
+		}
+		setProgress(percentage);
+	}
 
-    public void setMyProgress(float percentage) {
-        if (Float.isInfinite(percentage)) {
-            logger.info("percentage infinite: " + percentage);
-            percentage = 1.0f;
-        }
-        setProgress(percentage);
-    }
-
-    @Override
-    protected void succeeded(Void result) {
-        NeuGenView.getInstance().enableButtons();
+	@Override
+	protected void succeeded(Void result) {
+		NeuGenView.getInstance().enableButtons();
         // Runs on the EDT.  Update the GUI based on
-        // the result computed by doInBackground().
-    }
-
+		// the result computed by doInBackground().
+	}
 
 }
