@@ -10,7 +10,7 @@ NeuGen 2.0 - git tag v2.0
 Current development on devel branch, current stable on master branch.
 
 ## See Also
-![NeuGen](http://www.neugen.org)
+[NeuGen](http://www.neugen.org)
 
 ## Samples
 ![](/resources/img/synapse.jpg)
