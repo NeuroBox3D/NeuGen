@@ -12,9 +12,6 @@ before_install:
 script:
    - ant test
 
-after_success:
-  - mvn cobertura:cobertura coveralls:report
-
 notifications:
   email:
     - stephan@syntaktischer-zucker.de
