@@ -942,6 +942,9 @@ public final class NetHippocampus extends NetBase implements Serializable, Net {
     }
 
     @Override
+    /**
+     * @todo implement this!
+     */
     public WriteToHoc getHocData() {
         throw new UnsupportedOperationException("Not supported yet.");
     }

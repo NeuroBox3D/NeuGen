@@ -88,20 +88,6 @@ public final class HocWriter {
 	private String voltageFilePostfix;
 	private Trigger trigger;
 
-	/// precision for HOC output
-	private static final String FORMAT = "%.12f";
-
-	/**
-	 * @brief format the string to our precision We need to refrain from
-	 * exponential notation, since some tools, i. e. NEURON, seem not to
-	 * handle exponential notations when importing certain morphologies 
-	 * @author stephanmg
-	 * @param number
-	 */
-	private String format(Number number) {
-		return String.format(FORMAT, number);
-	}
-
 	public HocWriter(Net net, File file) {
 		this.net = net;
 		this.file = file;
@@ -133,12 +119,12 @@ public final class HocWriter {
 		fw.write(data);
 		if (start_end == 0) {
 			Point3f sstart = segment.getStart();
-			fw.write(format(sstart.x) + ", " + format(sstart.y) + ", " + format(sstart.z) + ", ");
+			fw.write(HOCUtil.format(sstart.x) + ", " + HOCUtil.format(sstart.y) + ", " + HOCUtil.format(sstart.z) + ", ");
 			fw.write(segment.getStartRadius() * 2 + ")\n");
 		}
 		if (start_end == 1) {
 			Point3f send = segment.getEnd();
-			fw.write(format(send.x) + ", " + format(send.y) + ", " + format(send.z) + ", ");
+			fw.write(HOCUtil.format(send.x) + ", " + HOCUtil.format(send.y) + ", " + HOCUtil.format(send.z) + ", ");
 			fw.write(segment.getEndRadius() * 2 + ")\n");
 		}
 	}

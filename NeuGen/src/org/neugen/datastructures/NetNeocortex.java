@@ -76,6 +76,8 @@ import org.neugen.datastructures.parameter.NetParam;
 import org.neugen.gui.NeuGenConstants;
 import org.neugen.gui.NeuGenView;
 import org.neugen.gui.Trigger;
+import org.neugen.parsers.HOCUtil;
+import org.neugen.parsers.HocWriter;
 
 /**
  * @author Jens Eberhard
@@ -1014,10 +1016,19 @@ public final class NetNeocortex extends NetBase implements Serializable, Net {
                 }
                 float ax_local_position = (ax_section.getLength() * axSegPos) / ax_section.getLength();
                 assert (!Float.isInfinite(ax_local_position));
+		assert (ax_local_position <= 1.0);
+		
+		/**
+		 * @note if we encounter ax_local_position > 1.0 this is to be a bug, since the ax_local_position
+		 *       specifies relative in a section the position ... this happened to me at least once for now
+		 * 	 (this is also viable when using the corrupted input for import into ugx grid format,
+		 *        then we arrive with long artifacts, i. e. non-physiologically synapses)
+		 * @author stephanmg <stephan@syntaktischer-zucker.de>
+		 */
 
                 fw.append("N" + synapse.getNeuron1().getIndex() + ax_section.getName() + " Nc" + j
                         + " = new NetCon(&v(" + ax_local_position + "), Synapse" + j + ", -10.0, 0.5, "
-                        + (1 + wfactor * synapse.getDendriticSomaDistance()) * get_uEPSP_Value(typeN1, typeN2) + ")" + "\n");
+                        + HOCUtil.format((1 + wfactor * synapse.getDendriticSomaDistance()) * get_uEPSP_Value(typeN1, typeN2)) + ")" + "\n");
             }
             if (synFW != null) {
                 synFW.close();
