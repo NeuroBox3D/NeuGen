@@ -5,9 +5,9 @@ import javax.vecmath.Point3f;
 
 /**
  * @brief NeuroML Level 3, i. e. NetworkML, Synapse: bilateral
- * @author stephan
+ * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
-public final class NeuroMLSynapseBilateral extends NeuroMLSynapse {
+public final class NeuroMLSynapseBilateral implements NeuroMLSynapse {
 	private final Point3f from;
 	private final Point3f to;
 	private final static String TYPE = "Bilateral (functional) Synapse";
@@ -31,6 +31,7 @@ public final class NeuroMLSynapseBilateral extends NeuroMLSynapse {
 		/**
 		 * @todo implement
 		 */
+		final StringBuffer sb = new StringBuffer();
 		sb.append("from: ");
 		sb.append(this.from);
 		sb.append("to: ");
@@ -43,7 +44,7 @@ public final class NeuroMLSynapseBilateral extends NeuroMLSynapse {
 	 * @return 
 	 */
 	@Override
-	protected String getType() {
+	public String getType() {
 		return TYPE;
 	}
 

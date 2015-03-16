@@ -6,9 +6,9 @@ import javax.vecmath.Point3f;
 
 /**
  * @brief NeuroML Level 3, i. e. NetworkML, Synapse: unilateral
- * @author stephan
+ * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
-public final class NeuroMLSynapseUnilateral extends NeuroMLSynapse {
+public final class NeuroMLSynapseUnilateral implements NeuroMLSynapse {
 	private final Point3f injection;
 	private final static String TYPE = "Unilateral (non-functional) Synapse";
 	/**
@@ -27,6 +27,7 @@ public final class NeuroMLSynapseUnilateral extends NeuroMLSynapse {
 		/**
 		 * @todo implement
 		 */
+		final StringBuffer sb = new StringBuffer();
 		sb.append("injection: ");
 		sb.append(this.injection);
 		return sb.toString();
@@ -37,7 +38,7 @@ public final class NeuroMLSynapseUnilateral extends NeuroMLSynapse {
 	 * @return 
 	 */
 	@Override
-	protected String getType() {
+	public String getType() {
 		return TYPE;
 	}
 

@@ -7,15 +7,28 @@
         </file>
     </editor-bookmarks>
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
-    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/1">
-        <file>file:/Users/miho/EigeneApps/NeuGen/NeuGen/src/org/neugen/visual/NeuGenDensityVisualization.java</file>
-        <file>file:/Users/miho/EigeneApps/NeuGen/NeuGen/src/org/neugen/gui/NeuGenApp.java</file>
-        <file>file:/Users/miho/EigeneApps/NeuGen/NeuGen/src/org/neugen/utils/NeuGenLogger.java</file>
-        <file>file:/Users/miho/EigeneApps/NeuGen/NeuGen/src/org/neugen/vrl/plugin/Configurator.java</file>
-        <file>file:/Users/miho/EigeneApps/NeuGen/NeuGen/src/org/neugen/gui/DensityVisualizationTask.java</file>
-        <file>file:/Users/miho/EigeneApps/NeuGen/NeuGen/src/org/neugen/vrl/VRLDensityVisualizationTask.java</file>
-        <file>file:/Users/miho/EigeneApps/NeuGen/NeuGen/src/org/neugen/vrl/VRLDensityVisualization.java</file>
-        <file>file:/Users/miho/EigeneApps/NeuGen/NeuGen/src/org/neugen/vrl/VoxelParams.java</file>
-        <file>file:/Users/miho/EigeneApps/NeuGen/NeuGen/src/org/neugen/vrl/resources/Resources.java</file>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/parsers/NeuroMLWriter.java</file>
+            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/parsers/NeuroMLWriterTask.java</file>
+            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/vrl/resources/NeuGenView.properties</file>
+            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/docs/TODO-Liste.txt</file>
+            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/parsers/OBJReader.java</file>
+            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/parsers/RecursiveInheritance.java</file>
+            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/vrl/VRLDensityVisualization.java</file>
+            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/gui/NeuGenProject.java</file>
+            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/gui/DensityVisualizationConfiguration.java</file>
+            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/gui/NeuGenApp.java</file>
+            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/datastructures/WriteToHoc.java</file>
+            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/datastructures/Net.java</file>
+            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/utils/Utils.java</file>
+            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/datastructures/DendriteSection.java</file>
+            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/gui/resources/NeuGenView.properties</file>
+            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/parsers/HocWriter.java</file>
+            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/datastructures/Cons.java</file>
+            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/gui/NeuGenLibTask.java</file>
+            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/datastructures/NetNeocortex.java</file>
+            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/gui/NeuGenView.java</file>
+        </group>
     </open-files>
 </project-private>

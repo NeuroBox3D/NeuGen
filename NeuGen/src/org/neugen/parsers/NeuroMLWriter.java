@@ -48,11 +48,10 @@
  */
 package org.neugen.parsers;
 
+//import groovyjarjarantlr.PreservingFileWriter;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
-
-//import groovyjarjarantlr.PreservingFileWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -76,6 +75,8 @@ import org.neugen.datastructures.neuron.Neuron;
 import org.neugen.datastructures.Pair;
 import org.neugen.datastructures.Section;
 import org.neugen.datastructures.Segment;
+import org.neugen.parsers.NeuroML.NetworkML.NetworkMLElement;
+import org.neugen.parsers.NeuroML.NetworkML.NeuroMLNetwork;
 import org.neugen.parsers.NeuroML.NetworkML.NeuroMLSynapse;
 import org.neugen.parsers.NeuroML.NetworkML.NeuroMLSynapseBilateral;
 import org.neugen.parsers.NeuroML.NetworkML.NeuroMLSynapseUnilateral;
@@ -397,13 +398,43 @@ public final class NeuroMLWriter {
 		xstream.useAttributeFor(CableFAP.class, "fractAlongParent");
 		xstream.aliasAttribute(Cable.class, "name", "name");
 		xstream.aliasField("meta:group", Cable.class, "metaGroup");
+		
+		if (level < 4) {
+			/**
+			 * do we really need the level output? we could also remove the option here ...
+			 * since in the GUI this option isnt present at all
+			 * @todo set the appropriate tags and attributes, given the NetworkML NeuroML Level 3 XML schema specification
+			 */
+			xstream.alias("UniLateralSynapse", NeuroMLSynapseUnilateral.class);
+			xstream.alias("BiLateralSynapse", NeuroMLSynapseBilateral.class);
+			xstream.useAttributeFor(NeuroMLSynapseBilateral.class, "from");
+			xstream.useAttributeFor(NeuroMLSynapseBilateral.class, "to");
+			xstream.useAttributeFor(NeuroMLSynapseUnilateral.class, "injection");
+		}
 
 	}
 
+	
+	/**
+	 * @brief get the Xstream
+	 * @author stephanmg
+	 * 
+	 * @return 
+	 */
 	public static XStream getXstream() {
 		return xstream;
 	}
 
+	/**
+	 * @brief prepares the XML output for cells output (Level 1)
+	 * @author stephanmg
+	 * 
+	 * @param sections
+	 * @param neuroMLList
+	 * @param cables
+	 * @param nn
+	 * @param cableName 
+	 */
 	private void copyToNeuroML(List<Section> sections, List<NeuroMLSegment> neuroMLList, List<Cable> cables, int nn, String cableName) {
 		Point3f sstart;
 		Point3f send;
@@ -441,12 +472,7 @@ public final class NeuroMLWriter {
 					sradiusend = segment.getEndRadius();
 					NeuroMLSegment neuroMLSegment = new NeuroMLSegment();
 					neuroMLSegment.id = segment.getId();
-					//logger.info("segment id: " + segment.getSegmentId());
-					//neuroMLSegment.name = segment.getName();
-					//logger.info("name of this segment: " + segment.getName());
-					//neuroMLSegment.id = segId;
 					neuroMLSegment.cable = section.getId();
-					//neuroMLSegment.name = "N" + nn + cableName + sectionId + "_seg_id_" + segmentId;
 					neuroMLSegment.name = segment.getName();
 					if (segment.getName() == null) {
 						neuroMLSegment.name = "N" + nn + cableName + section.getId() + "_seg_id_" + segment.getId();
@@ -489,72 +515,26 @@ public final class NeuroMLWriter {
 				}
 
 				cables.add(cable);
-                //sectionID++;
-				//sectionID = section.getSectionId();
-            /*// durchlaufe die Segmenten der Section
-				 // all segments of a section
-				 Section.Iterator secIterator = firstSection.getIterator();
-				 while (secIterator.hasNext()) {
-				 Section section = secIterator.next();
-
-				 String cableName = "_Section_";
-
-				 float typeID = section.getTypeID();
-				 if (geometry.isSomaID(typeID)) {
-				 cableName = "soma";
-				 } else if (geometry.isAxon(typeID)) {
-				 cableName = "axon";
-				 }
-				 else if(geometry.isAxonHillocID(typeID)) {
-				 cableName = "_axon_hilloc_";
-				 }
-				 else if (geometry.isAxonInitialSegmentID(typeID)) {
-				 cableName = "axon_initial_segment_group";
-				 } else if (geometry.isAxonMyalinizedID(typeID)) {
-				 cableName = "axon_myel_group";
-				 } else if (geometry.isAxonRanvierID(typeID)) {
-				 cableName = "axon_ranvier_group";
-				 } else if (geometry.isDendrite(typeID)) {
-				 cableName = "dendrite";
-				 }*/
-
-
-				/*//float typeID = section.getTypeID();
-				 if (geometry.isSomaID(typeID)) {
-				 cable.metaGroup = "soma_group";
-				 } else if (geometry.isAxon(typeID)) {
-				 cable.metaGroup = "axon_group";
-				 }*/
-				/*
-				 else if(geometry.isAxonHillocID(typeID)) {
-				 cable.metaGroup = "axon_hilloc_group";
-				 } else if(geometry.isAxonInitialSegmentID(typeID)) {
-				 cable.metaGroup = "axon_initial_segment_group" ;
-				 } else if(geometry.isAxonMyalinizedID(typeID) ) {
-				 cable.metaGroup = "axon_myel_group";
-				 } else if(geometry.isAxonRanvierID(typeID)) {
-				 cable.metaGroup = "axon_ranvier_group";
-				 }
-				 */
-
-				/*else if (geometry.isDendrite(typeID)) {
-				 cable.metaGroup = "dendrite_group";
-				 }*/
-				// cables.add(cable);
-				// sectionID++;
-			}
+              			}
 		}
-		//	return neuroMLList;
 	}
 
 	/**
 	 * @brief write the synapses (unilateral (nf synapses) and bilateral
 	 * (functional synapses))
 	 * @author stephanmg
+	 * 
 	 * @param oos
 	 * @param net
 	 */
 	private void writeXMLSynapses(ObjectOutputStream oos, Net net) {
+		/**
+		 * @todo build a NetworkMLNetwork, with the NeuroMLSynapse as elements
+		 * within teh NetworkMLNetwork, then we can use teh NetworkML NeuroML Level 3 
+		 * XML schema specification to generate the correct XML output
+		 */
+		@SuppressWarnings("unchecked")
+		NeuroMLNetwork network = new NeuroMLNetwork(3, new ArrayList<NetworkMLElement>());
 		List<Cons> synapseList = net.getSynapseList();
 
 		logger.info("Number of synapses: " + synapseList.size());
@@ -562,6 +542,10 @@ public final class NeuroMLWriter {
 		ArrayList<NeuroMLSynapse> neuroMLSynapses = new ArrayList<NeuroMLSynapse>();
 
 		/// iterate over all synapses in the network
+		/**
+		 * @todo also consider the biophysics of the synapse stored in 
+		 * the synapse objects!
+		 */
 		for (Cons synapse : synapseList) {
 			if (synapse.getNeuron1() == null && synapse.getNeuron2() == null) {
 				continue;
@@ -606,7 +590,11 @@ public final class NeuroMLWriter {
 	}
 
 	/**
-	 * Function to write the neural net to a XML file
+	 * @brief Function to write the neural net to a XML file
+	 * @author stephanmg
+	 * 
+	 * @param oos
+	 * @param net
 	 */
 	private void writeXMLNet(ObjectOutputStream oos, Net net) {
 		// get the number of neurons from neural net
@@ -672,6 +660,8 @@ public final class NeuroMLWriter {
 	/**
 	 * @brief exports the NeuroML data, i. e. we need also to export the
 	 * synapses below
+	 * @author stephanmg
+	 * 
 	 * @param file
 	 * @param net
 	 * @throws IOException
@@ -707,10 +697,6 @@ public final class NeuroMLWriter {
 				net_output = new File(file.getAbsolutePath() + "." + xml);
 				synapses_output = new File(file.getAbsoluteFile() + "_synapses." + xml);
 			}
-			//trigger.trigger(0.0f);
-			//trigger.trigger("\n write xml file" + "\n");
-			//trigger.trigger(" " + file.getName());
-
 			FileWriter writer = new FileWriter(net_output);
 			writer.write(head);
 
@@ -729,23 +715,33 @@ public final class NeuroMLWriter {
 			XStream xstreamLoc = getXstream();
 			ObjectOutputStream oos = xstreamLoc.createObjectOutputStream(writerP, "cells");
 			exportML.writeXMLNet(oos, net);
-
-			if (level < 2) {
-				/**
-				 * @todo proper xml output
-				 */
-				XStream xstreamLoc2 = getXstream();
-				FileWriter fw = new FileWriter(synapses_output);
-				fw.write(head);
-				PrettyPrintWriter writerP2 = new PrettyPrintWriter(fw);
-				ObjectOutputStream oos2 = xstreamLoc2.createObjectOutputStream(writerP2, "synapses");
-				exportML.writeXMLSynapses(oos2, net);
-				writerP2.endNode();
-
-			}
 			writerP.endNode();
+
+			/// output level 3 (Network ML)
+			XStream xstreamLoc2 = getXstream();
+			FileWriter fw = new FileWriter(synapses_output);
+			fw.write(head);
+			PrettyPrintWriter writerP2 = new PrettyPrintWriter(fw);
+			writerP2.startNode("neuroml");
+			writerP2.addAttribute("xmlns", neuroml.xmlns);
+			writerP2.addAttribute("\n\t\t xmlns:mml", neuroml.mml);
+			writerP2.addAttribute("\n\t\t xmlns:meta", neuroml.meta);
+			writerP2.addAttribute("\n\t\t xmlns:bio", neuroml.bio);
+			writerP2.addAttribute("\n\t\t xmlns:cml", neuroml.cml);
+			writerP2.addAttribute("\n\t\t xmlns:xsi", neuroml.xsi);
+			writerP2.addAttribute("\n\t\t xsi:schemaLocation", schemaLocation);
+			writerP2.addAttribute("\n\t\t name", name);
+			writerP2.addAttribute("\n\t\t lengthUnits", lengthUnits);
+			ObjectOutputStream oos2 = xstreamLoc2.createObjectOutputStream(writerP2, "network");
+			exportML.writeXMLSynapses(oos2, net);
+			writerP2.endNode();
+			
+			/// flush all streams and close
 			oos.flush();
 			oos.close();
+			oos2.flush();
+			oos2.close();
+			
 		} catch (Exception e) {
 			logger.error(e, e);
 		}
