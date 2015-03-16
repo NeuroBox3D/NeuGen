@@ -46,9 +46,11 @@
  * Neurocomputing, 70(1-3), pp. 327-343, doi: 10.1016/j.neucom.2006.01.028
  *
  */
+
+/// package's name
 package org.neugen.parsers;
 
-//import groovyjarjarantlr.PreservingFileWriter;
+/// imports
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
@@ -57,20 +59,16 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.vecmath.Point3f;
 import org.apache.log4j.Logger;
-import org.apache.log4j.Priority;
 import org.neugen.datastructures.Axon;
 import org.neugen.datastructures.Cellipsoid;
 import org.neugen.datastructures.Cons;
 import org.neugen.datastructures.Dendrite;
 import org.neugen.datastructures.Net;
-import org.neugen.datastructures.NetBase;
-import org.neugen.datastructures.NeuronalTreeStructure;
 import org.neugen.datastructures.neuron.Neuron;
 import org.neugen.datastructures.Pair;
 import org.neugen.datastructures.Section;
