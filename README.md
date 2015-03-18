@@ -23,6 +23,9 @@ Current development on devel branch, current stable on master branch.
 [![CI Build Status](https://travis-ci.org/NeuroBox3D/NeuGen.svg?branch=devel)](https://travis-ci.org/NeuroBox3D/NeuGen)
 [![CI Coverage Status](https://coveralls.io/repos/NeuroBox3D/NeuGen/badge.png)](https://coveralls.io/r/NeuroBox3D/NeuGen)
 
+### BuildHive
+* [![Build Status](https://buildhive.cloudbees.com/job/NeuroBox3D/job/NeuGen/badge/icon)](https://buildhive.cloudbees.com/job/NeuroBox3D/job/NeuGen/)
+
 ### Issues
 * [![Stories in Backlog](https://badge.waffle.io/NeuroBox3D/NeuGen.png?label=backlog&title=Backlog)](http://waffle.io/NeuroBox3D/NeuGen)
 [![Stories in Ready](https://badge.waffle.io/NeuroBox3D/NeuGen.png?label=ready&title=Ready)](http://waffle.io/NeuroBox3D/NeuGen)
