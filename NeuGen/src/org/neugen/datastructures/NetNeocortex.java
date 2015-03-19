@@ -68,6 +68,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.vecmath.Point3f;
+import javax.vecmath.Vector3f;
 import org.apache.log4j.Logger;
 import org.neugen.datastructures.neuron.NeuronBase;
 import org.neugen.utils.Frand;
@@ -1016,18 +1017,26 @@ public final class NetNeocortex extends NetBase implements Serializable, Net {
                 }
                 float ax_local_position = (ax_section.getLength() * axSegPos) / ax_section.getLength();
                 assert (!Float.isInfinite(ax_local_position));
-		assert (ax_local_position <= 1.0);
 		
+		float ff = NeuronalTreeStructure.getDendriteSectionData(synapse.getNeuron1AxSection(), axSegPos);
+		assert (ff <= 1.0);
 		/**
-		 * @note if we encounter ax_local_position > 1.0 this is to be a bug, since the ax_local_position
-		 *       specifies relative in a section the position ... this happened to me at least once for now
-		 * 	 (this is also viable when using the corrupted input for import into ugx grid format,
-		 *        then we arrive with long artifacts, i. e. non-physiologically synapses)
 		 * @author stephanmg <stephan@syntaktischer-zucker.de>
+		 * @note to use ax_local_position is a bug, since the ax_local_position
+		 *       is not in the range [0,1] - by definition of ax_local_position (cf. above!)
+		 * 
+		 * 	 instead of using ax_local_position, we are required to know the relative position
+		 *       within the given section, where the synaptic connection should end (i. e. end vertex/coordinates),
+		 *       which is by definition the corresponding dendrite to the axon at hands 
+		 *       (see above Exp2Syn output, where teh corresponding axon is used!)
+		 * 
+		 * 	 ff specified the relative location within bounds [0,1] on the given dendrite.
+		 * 
 		 */
 
+		/// was ax_local_position
                 fw.append("N" + synapse.getNeuron1().getIndex() + ax_section.getName() + " Nc" + j
-                        + " = new NetCon(&v(" + ax_local_position + "), Synapse" + j + ", -10.0, 0.5, "
+                        + " = new NetCon(&v(" + ff + "), Synapse" + j + ", -10.0, 0.5, "
                         + HOCUtil.format((1 + wfactor * synapse.getDendriticSomaDistance()) * get_uEPSP_Value(typeN1, typeN2)) + ")" + "\n");
             }
             if (synFW != null) {
