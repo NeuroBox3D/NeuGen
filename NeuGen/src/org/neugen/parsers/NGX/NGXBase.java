@@ -60,6 +60,6 @@ import javax.vecmath.Vector4f;
  */
 public class NGXBase {
 	public String name;
-	public ArrayList<Vector4f> coordinates;
+	public ArrayList<Vector4f> coordinates = new ArrayList<Vector4f>();
 	public int id;
 }

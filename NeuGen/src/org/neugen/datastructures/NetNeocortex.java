@@ -80,6 +80,8 @@ import org.neugen.gui.NeuGenView;
 import org.neugen.gui.Trigger;
 import org.neugen.parsers.HOCUtil;
 import org.neugen.parsers.HocWriter;
+import org.neugen.parsers.NGX.NGXAlphaSynapse;
+import org.neugen.parsers.NGX.NGXExp2Synapse;
 import org.neugen.parsers.NGX.NGXSynapse;
 
 /**
@@ -682,14 +684,71 @@ public final class NetNeocortex extends NetBase implements Serializable, Net {
      */
     @SuppressWarnings("PublicInnerClass")
     public class WriteNGXData implements WriteToNGX {
-		@Override
-		public ArrayList<NGXSynapse> writeExp2Synapses() {
-			throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	@Override
+	public ArrayList<NGXSynapse> writeExp2Synapses() {
+		ArrayList<NGXSynapse> ngxsynapses = new ArrayList<NGXSynapse>();
+		float wfactor = 0.001f;
+		List<Cons> synapseList = getSynapseList();
+		for (int j = 0; j < synapseList.size(); j++) {
+			Cons synapse = synapseList.get(j);
+			int typeN1 = -1;
+			int typeN2 = -1;
+			if (synapse.getNeuron1() == null) {
+				continue;
+			}
+
+                	typeN1 = getTypeOfNeuron(synapse.getNeuron1().getIndex());
+                	typeN2 = getTypeOfNeuron(synapse.getNeuron2().getIndex());
+
+ 	                int n_idx = synapse.getNeuron2().getIndex();
+
+			int c_idx = 0;
+			for (Segment denSeg : synapse.getNeuron2DenSection().getSegments()) {
+			    if (denSeg.getId() == synapse.getNeuron2DenSectionSegment().getId()) {
+				break;
+			    }
+			    c_idx++;
+			}
+
+			int sec_id = synapse.getNeuron2DenSection().getId();
+			float dd = NeuronalTreeStructure.getDendriteSectionData(synapse.getNeuron2DenSection(), c_idx);
+			
+			NGXExp2Synapse ngxsynapse = new NGXExp2Synapse();
+			ngxsynapse.name = "Synapse" + j;
+			ngxsynapse.id = j;
+			ngxsynapse.from = "N" + n_idx + "dendrite" + sec_id;
+			ngxsynapse.from_loc = dd;
+			
+			
+                	Section ax_section = synapse.getNeuron1AxSection();
+                	assert (ax_section.getLength() > 0.0);
+                	int axSegPos = 0;
+                	for (Segment axSeg : ax_section.getSegments()) {
+                    	if (axSeg.getId() == synapse.getNeuron1AxSegment().getId()) {
+                        	break;
+                    	}
+                    		axSegPos++;
+                	}
+		
+			/**
+			 * @todo write also all synapse informations
+			 */
+			float ax_local_position = (ax_section.getLength() * axSegPos) / ax_section.getLength();
+                	assert (!Float.isInfinite(ax_local_position));
+		
+			float ff = NeuronalTreeStructure.getDendriteSectionData(synapse.getNeuron1AxSection(), axSegPos);
+			assert (ff <= 1.0);
+			ngxsynapse.to = "N" + synapse.getNeuron1().getIndex() + ax_section.getName();
+			ngxsynapse.to_loc = ff;
+			ngxsynapses.add(ngxsynapse);
 		}
+		return ngxsynapses;
+	}
 
 		@Override
 		public ArrayList<NGXSynapse> writeAlphaSynapses() {
-			throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+			return new ArrayList<NGXSynapse>();
+			//throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 		}
 	    
     }

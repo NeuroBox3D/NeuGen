@@ -50,6 +50,11 @@
 /// package's name
 package org.neugen.parsers.NGX;
 
+/// imports
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
+import java.util.ArrayList;
+import javax.vecmath.Vector4f;
+
 /**
  * @brief section connection between soma, dendrite and axon
  * @author stephanmg <stephan@syntaktischer-zucker.de>

@@ -51,8 +51,12 @@
 package org.neugen.parsers.NGX;
 
 /// imports
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.log4j.Logger;
@@ -165,6 +169,7 @@ public class NGXWriter {
 		int nsegs = cyl.getSegments().size();
 		Segment segment = cyl.getSegments().get(nsegs - 1);
 		writeSegmentToNGX(ngxsoma, 1, segment);
+		ngxsoma.name = name;
 	}
 
 	/**
@@ -287,8 +292,10 @@ public class NGXWriter {
 				for (Segment segment : section.getSegments()) {
 					writeSegmentToNGX(ngxdend, 0, segment);
 				}
+				
 				Segment segment = section.getSegments().get(nsegs - 1);
 				writeSegmentToNGX(ngxdend, 1, segment);
+				
 				ngxbase.add(ngxdend);
 				++nsections;
 			}
@@ -301,8 +308,6 @@ public class NGXWriter {
 	 * 
 	 * @param neuronNum
 	 * @return list of NGXBase elements 
-	 * 
-	 * @throws IOException 
 	 */
 	public final Pair<ArrayList<NGXBase>, ArrayList<NGXBase>> writeNeuronToNGX(int neuronNum) {
 		int i = neuronNum;
@@ -313,14 +318,12 @@ public class NGXWriter {
 		ArrayList<NGXBase> neuron_connections = new ArrayList<NGXBase>();
 		
 		/// write soma of NEURON i (exactly one soma!)
-		NGXBase ngxbase = new NGXBase();
+		NGXBase ngxbase = new NGXSoma();
 		ngxbase.id = i;
 		writeSomaOfNeuronToNGX(ngxbase, neuron, name);
 		neuron_sections.add(ngxbase);
 		
 		/// write axons of NEURON i (may be more than one axon!)
-		ngxbase = new NGXBase();
-		ngxbase.id = i;
 		ArrayList<NGXBase> ngxbases = new ArrayList<NGXBase>();
 		ArrayList<NGXBase> connections = new ArrayList<NGXBase>();
 		writeAxonOfNeuronToNGX(ngxbases, connections, neuron, i);
@@ -328,8 +331,6 @@ public class NGXWriter {
 		neuron_connections.addAll(connections);
 		
 		/// write dends of NEURON i (may be more than one dend!)
-		ngxbase = new NGXBase();
-		ngxbase.id = i;
 		ngxbases = new ArrayList<NGXBase>();
 		connections = new ArrayList<NGXBase>();
 		writeDendriteOfNeuronToNGX(ngxbases, connections, neuron, i);
@@ -362,11 +363,67 @@ public class NGXWriter {
 		// get alpha synapses
 		ArrayList<NGXSynapse> exp2synapses = net.getNGXData().writeExp2Synapses();
 
+		try {
+			String head = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+			String fileformat = NeuGenConstants.EXTENSION_NGX.toLowerCase();
+			FileWriter writer = new FileWriter(this.file);
+			writer.write(head);
+
+			PrettyPrintWriter writerP = new PrettyPrintWriter(writer);
+			writerP.startNode(fileformat);
+
+			XStream xstream = new XStream();
+			xstream.alias("soma", NGXSoma.class);
+			xstream.alias("dendrite", NGXDend.class);
+			xstream.alias("axon", NGXAxon.class);
+			xstream.alias("pt3d", Vector4f.class);
+			xstream.alias("connection", NGXConnection.class);
+			xstream.alias("AlphaSyn", NGXAlphaSynapse.class);
+			xstream.alias("Exp2Syn", NGXExp2Synapse.class);
 		
-		/**
-		 * @TODO write XML from elements above (sections, connections, alphasynapses and exp2synapses) by xstream probably
-		 */
-		}
+			/**
+		 	* @todo add some aliases, add some attributes maybe
+			*/
+		
+			ObjectOutputStream oos = xstream.createObjectOutputStream(writerP, "sections");
+			for (NGXBase section : sections) {
+				oos.writeObject(section);
+			}
+			writerP.endNode();
+		
+			oos.flush();
+			writerP.flush();
+
+			oos = xstream.createObjectOutputStream(writerP, "connections");
+			for (NGXBase connection : connections) {
+				oos.writeObject(connection);
+			}
+			writerP.endNode();
+			
+			oos.flush();
+			writerP.flush();
+
+			oos = xstream.createObjectOutputStream(writerP, "exp2synapses");
+			for (NGXBase exp2syn : exp2synapses) {
+				oos.writeObject(exp2syn);
+			}
+			writerP.endNode();
+			
+			oos.flush();
+			writerP.flush();
+			
+			writer.write(System.getProperty("line.separator") + "</ngx>");
+			writer.flush();
+			
+			
+			} catch (IOException ioe) {
+				logger.fatal(ioe);
+			}
+		
+			/**
+			 * @TODO write XML from elements above (sections, connections, alphasynapses and exp2synapses) by xstream probably
+			 */
+			}
 
 	public void exportNetToNGX() {
 		String ngx = NeuGenConstants.EXTENSION_NGX;
@@ -383,6 +440,7 @@ public class NGXWriter {
 
 	/**
 	 * @brief main 
+	 * @param args
 	 */
 	public static void main(String args[]) {
 		MorphMLReader netBuilder = new MorphMLReader();

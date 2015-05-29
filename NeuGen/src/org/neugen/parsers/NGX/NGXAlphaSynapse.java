@@ -51,12 +51,9 @@
 package org.neugen.parsers.NGX;
 
 /**
- * @brief Synapse base 
+ * @brief AlphaSynapse
  * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
-public class NGXSynapse extends NGXBase {
-	public String from;
-	public String to;
-	public float from_loc;
-	public float to_loc;
+public class NGXAlphaSynapse extends NGXSynapse {
+
 }

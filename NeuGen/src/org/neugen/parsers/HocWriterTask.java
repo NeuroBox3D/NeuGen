@@ -54,6 +54,7 @@ import org.apache.log4j.Logger;
 import org.jdesktop.application.Task;
 import org.jdesktop.application.Application;
 import org.neugen.datastructures.Net;
+import org.neugen.parsers.NGX.NGXWriter;
 
 /**
  * @author Sergei Wolf
@@ -86,6 +87,11 @@ public final class HocWriterTask extends Task<Void, Void> {
         hocWriter.setVoltageFilePostfix(voltagesPostfix);
         setMessage("Exporting hoc data to... " + file.getName());
         hocWriter.exportNet();
+
+        NGXWriter ngxWriter = new NGXWriter(net, file);
+	logger.info("Exporting NGX data to... " + file.getName());
+        setMessage("Exporting NGX data to... " + file.getName());
+        ngxWriter.exportNetToNGX();
         return null;  // return your result
     }
 
