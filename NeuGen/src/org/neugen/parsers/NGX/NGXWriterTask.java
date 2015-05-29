@@ -46,59 +46,68 @@
  * Neurocomputing, 70(1-3), pp. 327-343, doi: 10.1016/j.neucom.2006.01.028
  *
  */
-package org.neugen.datastructures;
 
-import org.neugen.parsers.NGX.WriteToNGX;
-import org.neugen.datastructures.neuron.Neuron;
-import java.util.List;
-import java.util.Map;
+/// package's name
+package org.neugen.parsers.NGX;
+
+/// imports
+import java.io.File;
+import org.apache.log4j.Logger;
+import org.jdesktop.application.Application;
+import org.jdesktop.application.Task;
+import org.neugen.datastructures.Net;
+import org.neugen.gui.NeuGenView;
+import org.neugen.parsers.HocWriterTask;
 
 /**
- * @author Sergei Wolf
+ * @brief the NGX writer task
+ * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
-public interface Net {
+public final class NGXWriterTask extends Task<Void, Void> {
+    private static final Logger logger = Logger.getLogger(HocWriterTask.class.getName());
+    private final File file;
 
-    public void interconnect();
+    /**
+     * @breif ctor
+     * @param app
+     * @param f 
+     */
+    public NGXWriterTask(Application app, File f) {
+        super(app);
+        file = f;
+    }
 
-    public void generate();
+    /**
+     * @brief show progress bar
+     * @param value
+     * @param min
+     * @param max 
+     */
+    public void setMyProgress(int value, int min, int max) {
+        setProgress(value, min, max);
+    }
 
-    public Map<String, Float> computeAPSN();
+    /**
+     * @brief the actual export 
+     * @return 
+     */
+    @Override
+    @SuppressWarnings("deprecation")
+    protected Void doInBackground() {
+        Net net = NeuGenView.getInstance().getNet();
+        NGXWriter ngxWriter = new NGXWriter(net, file);
+	logger.info("Exporting NGX data to... " + file.getName());
+        setMessage("Exporting NGX data to... " + file.getName());
+        ngxWriter.exportNetToNGX();
+	return null;
+    }
 
-    public int getTypeOfNeuron(int indexOfNeuron);
-
-    public WriteToHoc getHocData();
-    
-    public WriteToNGX getNGXData();
-
-    public int createNonFunSynapses();
-
-    public int getNumSynapse();
-
-    public int getNumNonFunSynapses();
-
-    public long getNumOfSynapses(int presynapticType, int postSynapticType);
-
-    public List<String> getTypeCellNames();
-
-    public List<Neuron> getNeuronList();
-
-    public int[] getCellOffsets();
-
-    public void destroy();
-
-    public int getTotalNumOfAxonalSegments();
-
-    public int getTotalNumOfDenSegments();
-
-    public int getTotalNumOfSomataSegments();
-
-    public List<Cons> getSynapseList();
-
-    public int getNumNeurons();
-
-    public void setTotalNumOfSegments();
-
-    public int getTotalNumOfSegments();
-
-    public Region getRegion();
+    /**
+     * @brief on success
+     * @param result 
+     */
+    @Override
+    protected void succeeded(Void result) {
+    }
 }
+

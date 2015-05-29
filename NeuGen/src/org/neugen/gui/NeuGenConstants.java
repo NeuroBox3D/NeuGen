@@ -111,6 +111,7 @@ public final class NeuGenConstants {
     public static final String EXTENSION_CSV = "csv";
     public static final String EXTENSION_OBJ = "obj";
     public static final String EXTENSION_BG = "bg";
+    public static final String EXTENSION_NGX = "ngx";
     public static final String DESCRIPTION_HOC = "Neuron Files (*.hoc)";
     public static final String DESCRIPTION_NEU = "NeuGen Files (*.neu)";
     public static final String DESCRIPTION_SHOC = "NeuTria Files (*.shoc)";

@@ -48,6 +48,7 @@
  */
 package org.neugen.datastructures;
 
+import org.neugen.parsers.NGX.WriteToNGX;
 import org.neugen.datastructures.neuron.NeuronL5APyramidal;
 import org.neugen.datastructures.neuron.NeuronL5BPyramidal;
 import org.neugen.datastructures.neuron.NeuronStarpyramidal;
@@ -79,6 +80,7 @@ import org.neugen.gui.NeuGenView;
 import org.neugen.gui.Trigger;
 import org.neugen.parsers.HOCUtil;
 import org.neugen.parsers.HocWriter;
+import org.neugen.parsers.NGX.NGXSynapse;
 
 /**
  * @author Jens Eberhard
@@ -512,8 +514,12 @@ public final class NetNeocortex extends NetBase implements Serializable, Net {
                                         if (pAxSeg.get(m).neuron.getIndex() != ii) {
                                             synNumbers[l][c]++;
                                             AxonSegmentData dbRec = pAxSeg.get(m);
-                                            Cons co = new Cons.Builder(dbRec.segment, denSegment).neuron1(dbRec.neuron).neuron1AxSection(dbRec.section).
-                                                    neuron2(neuron).neuron2DenSection(denSection).build();
+					    
+                                            Cons co = new Cons.Builder(dbRec.segment, denSegment)
+						    .neuron1(dbRec.neuron).neuron1AxSection(dbRec.section)
+						    .neuron2(neuron).neuron2DenSection(denSection)
+						    .build();
+					    
                                             calculateSomaticDistance(co);
                                             synapseList.add(co);
                                             denSegment.has_ds_synapse(true);
@@ -662,15 +668,45 @@ public final class NetNeocortex extends NetBase implements Serializable, Net {
         return typeOfNeuron;
     }
 
+    /**
+     * @brief provide NGX data
+     * @return WriteToNGX
+     */
     @Override
+    public WriteToNGX getNGXData() {
+	    return new WriteNGXData();
+    }
+    
+    /**
+     * @brief provide exp2synapses and alphasynapses
+     */
+    @SuppressWarnings("PublicInnerClass")
+    public class WriteNGXData implements WriteToNGX {
+		@Override
+		public ArrayList<NGXSynapse> writeExp2Synapses() {
+			throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		}
+
+		@Override
+		public ArrayList<NGXSynapse> writeAlphaSynapses() {
+			throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		}
+	    
+    }
+    
+
+       
+ @Override
     public WriteToHoc getHocData() {
         return new WriteToHocData();
     }
+
 
     /**
      * 
      * TODO: make a factory class.. to generate data
      */
+    @SuppressWarnings("PublicInnerClass")
     public class WriteToHocData implements WriteToHoc {
 
         /**
@@ -1015,7 +1051,8 @@ public final class NetNeocortex extends NetBase implements Serializable, Net {
                     }
                     axSegPos++;
                 }
-                float ax_local_position = (ax_section.getLength() * axSegPos) / ax_section.getLength();
+		
+		float ax_local_position = (ax_section.getLength() * axSegPos) / ax_section.getLength();
                 assert (!Float.isInfinite(ax_local_position));
 		
 		float ff = NeuronalTreeStructure.getDendriteSectionData(synapse.getNeuron1AxSection(), axSegPos);
@@ -1028,7 +1065,7 @@ public final class NetNeocortex extends NetBase implements Serializable, Net {
 		 * 	 instead of using ax_local_position, we are required to know the relative position
 		 *       within the given section, where the synaptic connection should end (i. e. end vertex/coordinates),
 		 *       which is by definition the corresponding dendrite to the axon at hands 
-		 *       (see above Exp2Syn output, where teh corresponding axon is used!)
+		 *       (see above Exp2Syn output, where the corresponding axon is used!)
 		 * 
 		 * 	 ff specified the relative location within bounds [0,1] on the given dendrite.
 		 * 

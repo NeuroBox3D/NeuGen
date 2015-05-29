@@ -46,59 +46,17 @@
  * Neurocomputing, 70(1-3), pp. 327-343, doi: 10.1016/j.neucom.2006.01.028
  *
  */
-package org.neugen.datastructures;
 
-import org.neugen.parsers.NGX.WriteToNGX;
-import org.neugen.datastructures.neuron.Neuron;
-import java.util.List;
-import java.util.Map;
+/// package's name
+package org.neugen.parsers.NGX;
 
 /**
- * @author Sergei Wolf
+ * @brief section connection between soma, dendrite and axon
+ * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
-public interface Net {
-
-    public void interconnect();
-
-    public void generate();
-
-    public Map<String, Float> computeAPSN();
-
-    public int getTypeOfNeuron(int indexOfNeuron);
-
-    public WriteToHoc getHocData();
-    
-    public WriteToNGX getNGXData();
-
-    public int createNonFunSynapses();
-
-    public int getNumSynapse();
-
-    public int getNumNonFunSynapses();
-
-    public long getNumOfSynapses(int presynapticType, int postSynapticType);
-
-    public List<String> getTypeCellNames();
-
-    public List<Neuron> getNeuronList();
-
-    public int[] getCellOffsets();
-
-    public void destroy();
-
-    public int getTotalNumOfAxonalSegments();
-
-    public int getTotalNumOfDenSegments();
-
-    public int getTotalNumOfSomataSegments();
-
-    public List<Cons> getSynapseList();
-
-    public int getNumNeurons();
-
-    public void setTotalNumOfSegments();
-
-    public int getTotalNumOfSegments();
-
-    public Region getRegion();
+public class NGXConnection extends NGXBase {
+	public String from;
+	public String to;
+	public int from_loc;
+	public int to_loc;
 }

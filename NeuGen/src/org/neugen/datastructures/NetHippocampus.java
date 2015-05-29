@@ -68,6 +68,7 @@ import org.neugen.utils.Frand;
 import org.neugen.gui.NeuGenLibTask;
 import org.neugen.datastructures.parameter.NetParam;
 import org.neugen.gui.Trigger;
+import org.neugen.parsers.NGX.WriteToNGX;
 
 /**
  *
@@ -941,11 +942,18 @@ public final class NetHippocampus extends NetBase implements Serializable, Net {
         return typeOfNeuron;
     }
 
-    @Override
     /**
      * @todo implement this!
      */
+    @Override
     public WriteToHoc getHocData() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    /**
+     * @todo implement this!
+     */
+    public WriteToNGX getNGXData() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }
