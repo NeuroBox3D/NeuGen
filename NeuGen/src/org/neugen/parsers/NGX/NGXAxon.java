@@ -55,5 +55,5 @@ package org.neugen.parsers.NGX;
  * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
 public class NGXAxon extends NGXElem {
-
+	private final int type = NGXTypes.AXON.ordinal();
 }

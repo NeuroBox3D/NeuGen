@@ -55,5 +55,14 @@ package org.neugen.parsers.NGX;
  * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
 public class NGXAlphaSynapse extends NGXSynapse {
-
+	public float gmax;
+	public float onset;
+	public float tau;
+	public float e;
+	public NGXAlphaSynapse() {
+		this.onset = 0;
+		this.tau = 1.7f;
+		this.gmax = 0;
+		this.e = e;
+	}
 }

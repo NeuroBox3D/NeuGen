@@ -55,5 +55,5 @@ package org.neugen.parsers.NGX;
  * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
 public class NGXSoma extends NGXElem {
-
+	private final int type = NGXTypes.SOMA.ordinal();
 }

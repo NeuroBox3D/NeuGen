@@ -196,6 +196,7 @@ public class NGXWriter {
 			int nsegs = section.getSegments().size();
 			
 			String secName = section.getName();
+			section.getSectionType();
 			Section parSec;
 			
 			if (section.getParentalLink() != null) {
@@ -406,6 +407,15 @@ public class NGXWriter {
 			oos = xstream.createObjectOutputStream(writerP, "exp2synapses");
 			for (NGXBase exp2syn : exp2synapses) {
 				oos.writeObject(exp2syn);
+			}
+			writerP.endNode();
+			
+			oos.flush();
+			writerP.flush();
+
+			oos = xstream.createObjectOutputStream(writerP, "alphasynapses");
+			for (NGXBase alphasyn : alphasynapses) {
+				oos.writeObject(alphasyn);
 			}
 			writerP.endNode();
 			

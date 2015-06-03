@@ -51,22 +51,9 @@
 package org.neugen.parsers.NGX;
 
 /**
- * @brief Exp2Synapse
+ *
  * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
-public class NGXExp2Synapse extends NGXSynapse {
-	public float tau1;
-	public float tau2;
-	public float e;
-	public float gmax;
-	public float delay;
-	public float threshold;
-	public NGXExp2Synapse() {
-		this.tau1 = 0.2f;
-		this.tau2 = 1.7f;
-		this.e = 0f;
-		this.threshold = -10f;
-		this.delay = 0.5f;
-		this.gmax = 0f;
-	}
+public enum NGXTypes {
+	DENDRITE, AXON, SOMA, EXP2_SYNAPSE, ALPHA_SYNAPSE;
 }

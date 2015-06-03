@@ -684,6 +684,54 @@ public final class NetNeocortex extends NetBase implements Serializable, Net {
      */
     @SuppressWarnings("PublicInnerClass")
     public class WriteNGXData implements WriteToNGX {
+	 public float get_uEPSP_Value(int typeN1, int typeN2) {
+            float uEPSP = -1.0000f; //unitary EPSP variable for the various neuron type combinations
+
+            //which type combination? -> which uEPSP?
+            if ((typeN1 == NeuronTypes.L4_STELLATE.ordinal())
+                    && (typeN2 == NeuronTypes.L4_STELLATE.ordinal())) {
+                uEPSP = 0.0016f;
+                //cout << "typeN1: L4, typeN2: L4, uEPSP: " << uEPSP << endl;
+            } else if ((typeN1 == NeuronTypes.L4_STELLATE.ordinal())
+                    && (typeN2 == NeuronTypes.L23_PYRAMIDAL.ordinal())) {
+                uEPSP = 0.0007f;
+                //cout << "typeN1: L4, typeN2: L2/3, uEPSP: " << uEPSP << endl;
+            } else if ((typeN1 == NeuronTypes.L4_STELLATE.ordinal())
+                    && (typeN2 == NeuronTypes.L5A_PYRAMIDAL.ordinal())) {
+                uEPSP = 0.0006f;
+                //cout << "typeN1: L4, typeN2: L5A, uEPSP: " << uEPSP << endl;
+            } else if ((typeN1 == NeuronTypes.L23_PYRAMIDAL.ordinal())
+                    && (typeN2 == NeuronTypes.L23_PYRAMIDAL.ordinal())) {
+                uEPSP = 0.0010f;
+                //cout << "typeN1: L2/3, typeN2: L2/3, uEPSP: " << uEPSP << endl;
+            } else if ((typeN1 == NeuronTypes.L23_PYRAMIDAL.ordinal())
+                    && (typeN2 == NeuronTypes.L5A_PYRAMIDAL.ordinal())) {
+                uEPSP = 0.0008f;
+                //cout << "typeN1: L2/3, typeN2: L5A, uEPSP: " << uEPSP << endl;
+            } else if ((typeN1 == NeuronTypes.L23_PYRAMIDAL.ordinal())
+                    && (typeN2 == NeuronTypes.L5B_PYRAMIDAL.ordinal())) {
+                uEPSP = 0.0003f;
+                //cout << "typeN1: L2/3, typeN2: L5B, uEPSP: " << uEPSP << endl;
+            } else if ((typeN1 == NeuronTypes.L5A_PYRAMIDAL.ordinal())
+                    && (typeN2 == NeuronTypes.L5A_PYRAMIDAL.ordinal())) {
+                uEPSP = 0.0020f;
+                //cout << "typeN1: L5A, typeN2: L5A, uEPSP: " << uEPSP << endl;
+            } else if ((typeN1 == NeuronTypes.L5A_PYRAMIDAL.ordinal())
+                    && (typeN2 == NeuronTypes.L23_PYRAMIDAL.ordinal())) {
+                uEPSP = 0.0005f;
+                //cout << "typeN1: L5A, typeN2: L2/3, uEPSP: " << uEPSP << endl;
+            } else if ((typeN1 == NeuronTypes.L5B_PYRAMIDAL.ordinal())
+                    && (typeN2 == NeuronTypes.L5B_PYRAMIDAL.ordinal())) {
+                uEPSP = 0.0013f;
+                //cout << "typeN1: L5B, typeN2: L5B, uEPSP: " << uEPSP << endl;
+            } else {
+                uEPSP = 0.0010f;
+                //cout << "typeN1: " << typeN1 << ", typeN2: " << typeN2 << ", uEPSP: ??? " << uEPSP << endl;
+            }
+            return uEPSP;
+        }	    
+
+	    
 	@Override
 	public ArrayList<NGXSynapse> writeExp2Synapses() {
 		ArrayList<NGXSynapse> ngxsynapses = new ArrayList<NGXSynapse>();
@@ -740,17 +788,75 @@ public final class NetNeocortex extends NetBase implements Serializable, Net {
 			assert (ff <= 1.0);
 			ngxsynapse.to = "N" + synapse.getNeuron1().getIndex() + ax_section.getName();
 			ngxsynapse.to_loc = ff;
+			ngxsynapse.gmax = 1 + wfactor * synapse.getDendriticSomaDistance() * get_uEPSP_Value(typeN1, typeN2);
+			
 			ngxsynapses.add(ngxsynapse);
 		}
 		return ngxsynapses;
 	}
 
-		@Override
-		public ArrayList<NGXSynapse> writeAlphaSynapses() {
-			return new ArrayList<NGXSynapse>();
-			//throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-		}
-	    
+	@Override
+	public ArrayList<NGXSynapse> writeAlphaSynapses() {
+		ArrayList<NGXSynapse> synapses = new ArrayList<NGXSynapse>();
+		synapses.addAll(writeAlphaSynapses(NeuronTypes.L4_STELLATE));
+		synapses.addAll(writeAlphaSynapses(NeuronTypes.L23_PYRAMIDAL));
+		synapses.addAll(writeAlphaSynapses(NeuronTypes.L5B_PYRAMIDAL));
+		return synapses;
+	}
+	
+	public ArrayList<NGXSynapse> writeAlphaSynapses(NeuronTypes neuronType) {
+		ArrayList<NGXSynapse> alphasynapses = new ArrayList<NGXSynapse>();
+            
+			  // Factor to rise weight of a synapse per micrometer.
+	 float wfactor = 0.001f;
+	    for (int j = 0; j < synapseList.size(); j++) {
+			Cons synapse = synapseList.get(j);
+
+			if (synapse.getNeuron1() != null) {
+			    continue;
+			}
+
+			if (neuronType.equals(NeuronTypes.L4_STELLATE)) {
+			    if (synapse.getNeuron2().getIndex() >= getNumL4stellate()) {
+				continue;
+			    }
+			} else if (neuronType.equals(NeuronTypes.L23_PYRAMIDAL)) {
+			    int nNum = getNumL4stellate() + getNumL23pyramidal();
+			    if (synapse.getNeuron2().getIndex() < getNumL4stellate() || synapse.getNeuron2().getIndex() >= nNum) {
+				continue;
+			    }
+			} else if (neuronType.equals(NeuronTypes.L5B_PYRAMIDAL)) {
+			    int nNum = getNumL4stellate() + getNumL23pyramidal() + getNumL5Apyramidal();
+			    int nNum2 = getNumL4stellate() + getNumPyramidal();
+			    if (synapse.getNeuron2().getIndex() < nNum || synapse.getNeuron2().getIndex() > nNum2) {
+				continue;
+			    }
+			} else {
+			    continue;
+			}
+
+                    int n_idx = synapse.getNeuron2().getIndex();
+
+                    int c_idx = 0;
+                    for (Segment denSeg : synapse.getNeuron2DenSection().getSegments()) {
+                        if (denSeg.getId() == synapse.getNeuron2DenSectionSegment().getId()) {
+                            break;
+                        }
+                        c_idx++;
+                    }
+
+                    int sec_id = synapse.getNeuron2DenSection().getId();
+                    float dd = NeuronalTreeStructure.getDendriteSectionData(synapse.getNeuron2DenSection(), c_idx);
+                    //float dd = neuronList.get(n_idx).getDendrites().get(d_idx).getdendritesectionData(sec_id, c_idx);
+
+		    NGXAlphaSynapse alpha = new NGXAlphaSynapse();
+		    alpha.from = "N" + n_idx + "dendrite" + sec_id;
+		    alpha.from_loc = dd;
+		    alpha.gmax = (1 + wfactor * synapse.getDendriticSomaDistance()) * 0.001f;
+		    alphasynapses.add(alpha);
+               	}
+	    return alphasynapses;
+	}
     }
     
 
