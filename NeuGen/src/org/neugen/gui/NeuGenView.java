@@ -1825,6 +1825,8 @@ private void writeNGXMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//
           * Below we SHOULD be able to use correct_params() and then call save() to save
           * the project to the file - however this does not work for some reason...
           * therefore we replace the density val instead directly.
+         * 
+         * @todo get default value from tree, instead using hardcoded 0.25 value!
          */
         
 

@@ -194,6 +194,10 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
  
  public float getNpartsDensity() {
      
+     /**
+      * TODO get default value from tree maybe
+      */
+     
      System.err.println(jTextField1.getText());
      if (jTextField1.getText().isEmpty()) {
          this.density = 0.025f;
@@ -203,8 +207,6 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         return Float.parseFloat(jTextField1.getText());
      }
  }
- 
- 
  
   
  /**
