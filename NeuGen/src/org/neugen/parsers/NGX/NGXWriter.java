@@ -104,6 +104,7 @@ public class NGXWriter {
 		String[] str = hocFileName.split("\\.");
 		hocFileName = str[0];
 		trigger = Trigger.getInstance();
+             
 	}
 
 	public void setNetConEventsFilePostfix(String netConEventsFilePostfix) {

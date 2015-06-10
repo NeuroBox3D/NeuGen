@@ -163,6 +163,7 @@ public final class NeuGenLib implements Serializable {
         for (Map.Entry<String, XMLObject> e : allParam.entrySet()) {
             if (e.getKey().contains(NeuGenConstants.PARAM_FNAME)) {
                 ConfigParserContainer.setParamParser(new ConfigParser(e.getKey(), e.getValue()));
+                System.err.println("*** KEY *** " + e.getKey() + " *** VALUE ***" + e.getValue());
             } else if (e.getKey().contains(NeuGenConstants.INTERNA_FNAME)) {
                 ConfigParserContainer.setInternaParser(new ConfigParser(e.getKey(), e.getValue()));
             }

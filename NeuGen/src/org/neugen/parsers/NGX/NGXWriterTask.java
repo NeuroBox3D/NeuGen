@@ -52,10 +52,16 @@ package org.neugen.parsers.NGX;
 
 /// imports
 import java.io.File;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Map.Entry;
 import org.apache.log4j.Logger;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.Task;
 import org.neugen.datastructures.Net;
+import org.neugen.datastructures.xml.XMLNode;
+import org.neugen.datastructures.xml.XMLObject;
+import org.neugen.gui.NGXDialog;
 import org.neugen.gui.NeuGenView;
 import org.neugen.parsers.HocWriterTask;
 
@@ -95,11 +101,74 @@ public final class NGXWriterTask extends Task<Void, Void> {
     @SuppressWarnings("deprecation")
     protected Void doInBackground() {
         Net net = NeuGenView.getInstance().getNet();
+        
         NGXWriter ngxWriter = new NGXWriter(net, file);
+                
+        NGXDialog dialog = new NGXDialog(NeuGenView.getInstance().getFrame(), true);
+        dialog.setVisible(true);
+        /*
+        //net.destroy();
+        for (Entry<String, XMLObject> entry : NeuGenView.getInstance().getParamTrees().entrySet()) {
+            System.err.println("Key:" + entry.getKey());
+            XMLObject obj = entry.getValue();
+            //if ("net".equals(entry.getKey())) {
+               Enumeration<XMLNode> childs = obj.children();
+            
+               while (childs.hasMoreElements()) {
+                 XMLNode node = childs.nextElement();
+                 System.err.println("Node: " + node.toString());
+                 if ("neuron".equals(node.toString())) {
+                    Enumeration<XMLNode> childs2 = node.children();
+                    while (childs2.hasMoreElements()) {
+                        XMLNode node2 = childs2.nextElement();
+                        if ("axon".equals(node2.toString())) {
+                            Enumeration<XMLNode> childs3 = node2.children();
+                            while (childs3.hasMoreElements()) {
+                                XMLNode child4 = childs3.nextElement();
+                                System.err.println("axon child: " + child4.toString());
+                                if ("gen_0".equals(child4.toString())) {
+                                    Enumeration<XMLNode> childs5 = child4.children();
+                                    
+                                    while (childs5.hasMoreElements()) {
+                                        XMLNode child6 = childs5.nextElement();
+                            
+                                      
+                                        if ("nparts_density".equals(child6.getKey())) {
+                                            System.err.println("child6 (before): " + child6.toString());
+                                            System.err.println("child6's key (before): " + child6.getKey());
+                                            child6.setValue(1);
+                                        
+                                        
+                                            System.err.println("child6 (after): " + child6.toString());
+                                            System.err.println("child6's key (after): " + child6.getKey());
+                                        }
+                                        
+                                    }
+                                }
+                            }
+                        
+                            
+                            
+                            } else if ("dendrite".equals(node2.toString())) {
+                            
+                            } else {
+                            
+                            }
+                        }
+                    }
+                }
+            //}
+             
+           System.err.println("Value: " + entry.getValue());
+        }*/
+        float npartsdens = dialog.getNpartsDensity();
+        
+        //net.generate();
+        
 	logger.info("Exporting NGX data to... " + file.getName());
         setMessage("Exporting NGX data to... " + file.getName());
         ngxWriter.exportNetToNGX();
-	return null;
+        return null;  // return your result
     }
 
     /**

@@ -68,16 +68,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.beans.PropertyChangeListener;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.EventObject;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import java.util.Map.Entry;
 import java.util.Properties;
 import javax.media.j3d.BranchGroup;
 
@@ -93,7 +97,9 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+
 import org.jdesktop.application.Application.ExitListener;
 import org.jdesktop.application.Task;
 import org.neugen.slider.SliderGeneratorTask;
@@ -113,6 +119,7 @@ import org.neugen.parsers.SimpleHocReaderTask;
 import org.neugen.parsers.OBJReader;
 import org.neugen.visual.NeuGenDensityVisualization;
 import org.neugen.gui.VisualizationTask.Visualization;
+import org.neugen.parsers.NGX.NGXWriterTask;
 import org.neugen.parsers.NeuGenVisualWriterTask;
 //import org.neugen.visual.OBJWriter;
 
@@ -287,6 +294,7 @@ public final class NeuGenView extends FrameView implements TreeSaver {
         writeNeuTriaMenuItem = new javax.swing.JMenuItem();
         writeNeuronInfoMenuItem = new javax.swing.JMenuItem();
         writeObjMenuItem = new javax.swing.JMenuItem();
+        writeNGXMenuItem = new javax.swing.JMenuItem();
         fileSeparator3 = new javax.swing.JSeparator();
         movieMenu = new javax.swing.JMenu();
         netMovieItem = new javax.swing.JMenuItem();
@@ -488,6 +496,7 @@ public final class NeuGenView extends FrameView implements TreeSaver {
         exportMenu.setName("exportMenu"); // NOI18N
 
         writeNeuronMenuItem.setAction(actionMap.get("exportData")); // NOI18N
+        writeNeuronMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_H, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         writeNeuronMenuItem.setText(resourceMap.getString("writeNeuronMenuItem.text")); // NOI18N
         writeNeuronMenuItem.setName("writeNeuronMenuItem"); // NOI18N
         writeNeuronMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -546,6 +555,17 @@ public final class NeuGenView extends FrameView implements TreeSaver {
             }
         });
         exportMenu.add(writeObjMenuItem);
+
+        writeNGXMenuItem.setAction(actionMap.get("exportData")); // NOI18N
+        writeNGXMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        writeNGXMenuItem.setText(resourceMap.getString("writeNGXMenuItem.text")); // NOI18N
+        writeNGXMenuItem.setName("writeNGXMenuItem"); // NOI18N
+        writeNGXMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                writeNGXMenuItemActionPerformed(evt);
+            }
+        });
+        exportMenu.add(writeNGXMenuItem);
 
         fileMenu.add(exportMenu);
 
@@ -656,13 +676,13 @@ public final class NeuGenView extends FrameView implements TreeSaver {
             statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, statusPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(statusMessageLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 656, Short.MAX_VALUE)
+                .add(statusMessageLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 710, Short.MAX_VALUE)
                 .add(18, 18, 18)
                 .add(progressBar, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(statusAnimationLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 21, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
-            .add(statusPanelSeparator, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 865, Short.MAX_VALUE)
+            .add(statusPanelSeparator, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 945, Short.MAX_VALUE)
         );
         statusPanelLayout.setVerticalGroup(
             statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -1129,7 +1149,7 @@ public final class NeuGenView extends FrameView implements TreeSaver {
     }//GEN-LAST:event_readWavefrontMenuItemActionPerformed
 
     private void netMovieItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_netMovieItemActionPerformed
-        // TODO add your handling code here:
+         command = evt.getActionCommand();
     }//GEN-LAST:event_netMovieItemActionPerformed
 
     private void densMovieMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_densMovieMenuItemActionPerformed
@@ -1142,6 +1162,10 @@ public final class NeuGenView extends FrameView implements TreeSaver {
     private void readImageSequenceMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_readImageSequenceMenuItemActionPerformed
         command = evt.getActionCommand();
     }//GEN-LAST:event_readImageSequenceMenuItemActionPerformed
+
+private void writeNGXMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_writeNGXMenuItemActionPerformed
+   command = evt.getActionCommand();
+}//GEN-LAST:event_writeNGXMenuItemActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelDialogButton;
@@ -1224,6 +1248,7 @@ public final class NeuGenView extends FrameView implements TreeSaver {
     private javax.swing.JToolBar visualToolBar;
     private javax.swing.JButton visualizeButton;
     private javax.swing.JButton visualizeDensity;
+    private javax.swing.JMenuItem writeNGXMenuItem;
     private javax.swing.JMenuItem writeNeuGenMenuItem;
     private javax.swing.JMenuItem writeNeuTriaMenuItem;
     private javax.swing.JMenuItem writeNeuroMLMenuItem;
@@ -1690,6 +1715,7 @@ public final class NeuGenView extends FrameView implements TreeSaver {
                 writeNeuroMLMenuItem.setEnabled(true);
                 writeNeuronMenuItem.setEnabled(true);
                 writeNeuronInfoMenuItem.setEnabled(true);
+                writeNGXMenuItem.setEnabled(true);
                 exportButton.setEnabled(true);
                 visualizeButton.setEnabled(true);
                 sliderButton.setEnabled(true);
@@ -1735,6 +1761,7 @@ public final class NeuGenView extends FrameView implements TreeSaver {
         writeNeuroMLMenuItem.setEnabled(false);
         writeNeuronMenuItem.setEnabled(false);
         writeNeuronInfoMenuItem.setEnabled(false);
+        writeNGXMenuItem.setEnabled(false);
         exportButton.setEnabled(false);
         sliderButton.setEnabled(false);
         // visualize buttons
@@ -1783,6 +1810,23 @@ public final class NeuGenView extends FrameView implements TreeSaver {
         setParamPath(param.getPath());
         File interna = new File(dirPath + System.getProperty("file.separator") + NeuGenConstants.INTERNA_FNAME);
         setInternaPath(interna.getPath());
+        
+        /// correct params dialog (get density value)
+        NGXDialog dialog = new NGXDialog(NeuGenView.getInstance().getFrame(), true);
+        dialog.setVisible(true);
+        System.err.println("*** Density *** : " + dialog.getNpartsDensity());
+        float density_val = dialog.getNpartsDensity();
+       
+        /// actually correct the parameters in the PARAM file
+        System.out.println("param file: " + param);
+        String content = FileUtils.readFileToString(param);
+        FileUtils.writeStringToFile(param, content.replaceAll("0.25", ""+density_val));
+        /** @todo: why does not saving the projectTree result in a corrected param file?
+          * Below we SHOULD be able to use correct_params() and then call save() to save
+          * the project to the file - however this does not work for some reason...
+          * therefore we replace the density val instead directly.
+         */
+        
 
         Properties paramProper = new Properties();
         Properties internaProper = new Properties();
@@ -1806,10 +1850,16 @@ public final class NeuGenView extends FrameView implements TreeSaver {
             internaProper = paramCom.getComments();
         }
 
+   
+     
         paramTrees = new HashMap<String, XMLObject>();
         paramTrees.put(NeuGenConstants.PARAM, paramRoot);
         paramTrees.put(NeuGenConstants.INTERNA, internaRoot);
-
+        
+        /// actually correct the parameters in the GUI view
+        dialog.correct_params();
+        
+   
         XMLObject top = new XMLObject(projectName, null, XMLObject.class.toString());
         top.add(paramRoot);
         paramRoot.setParent(top);
@@ -1901,13 +1951,18 @@ public final class NeuGenView extends FrameView implements TreeSaver {
         outPrintln("Project type: " + currentProjectType);
         outPrintln("Created on: " + projectProper.getProperty(NeuGenConstants.PROP_DATE_KEY));
         projectTree.setContentChanged(false);
-        NeuGenLib.initParamData(initParamTable(), currentProjectType);
+        NeuGenLib.initParamData(initParamTable(), currentProjectType);   
     }
 
     public Map<String, XMLObject> initParamTable() {
+        
+       /// get params
         XMLObject param = getParamTrees().get(NeuGenConstants.PARAM);
         XMLObject interna = getParamTrees().get(NeuGenConstants.INTERNA);
+        
+       
         Map<String, XMLObject> allParam = new HashMap<String, XMLObject>();
+        
         allParam.put(getParamPath(), param);
         allParam.put(getInternaPath(), interna);
         return allParam;
@@ -2023,8 +2078,11 @@ public final class NeuGenView extends FrameView implements TreeSaver {
         exportFileChooser.setName("exportFileChooser");
         exportFileChooser.resetChoosableFileFilters();
         exportFileChooser.setDialogTitle("Export Data");
+        logger.info("command: " + command + " and getActionCommand: " + writeNGXMenuItem.getActionCommand());
         if (command.equals(writeNeuronMenuItem.getActionCommand())) {
             exportFileChooser.addChoosableFileFilter(new NGFileFilter.NeuronFileFilter());
+        } else if (command.equals(writeNGXMenuItem.getActionCommand())) {
+            exportFileChooser.addChoosableFileFilter(new NGFileFilter.NGXFileFilter());
         } else if (command.equals(writeNeuGenMenuItem.getActionCommand())) {
             exportFileChooser.addChoosableFileFilter(new NGFileFilter.NeuGenVisualFileFilter());
         } else if (command.equals(writeNeuroMLMenuItem.getActionCommand())) {
@@ -2060,8 +2118,13 @@ public final class NeuGenView extends FrameView implements TreeSaver {
                         statusMessageLabel.setText("Exporting " + exportFileChooser.getSelectedFile().getName());
                     }
                 } else if (fileFilter instanceof NGFileFilter.NeuroMLFileFilter) {
+                    logger.info("Writing NGX task now...");
                     if (Utils.testExistingFile(exportFileChooser)) {
                         task = new NeuroMLWriterTask(getApplication(), f);
+                    }
+                } else if (fileFilter instanceof NGFileFilter.NGXFileFilter) {
+                    if (Utils.testExistingFile(exportFileChooser)) {
+                        task = new NGXWriterTask(getApplication(), f);
                     }
                 } else if (fileFilter instanceof NGFileFilter.ObjFileFilter) {
                     if (Utils.testExistingFile(exportFileChooser)) {
@@ -2092,6 +2155,25 @@ public final class NeuGenView extends FrameView implements TreeSaver {
             ((Trigger) task).setTextMessage("Cancelled exporting " + fileName + " due to your wish");
         }
         return task;
+    }
+
+    private class ExportDataTask extends org.jdesktop.application.Task<Object, Void> {
+        ExportDataTask(org.jdesktop.application.Application app) {
+            // Runs on the EDT.  Copy GUI state that
+            // doInBackground() depends on from parameters
+            // to ExportDataTask fields, here.
+            super(app);
+        }
+        @Override protected Object doInBackground() {
+            // Your Task's code here.  This method runs
+            // on a background thread, so don't reference
+            // the Swing GUI from here.
+            return null;  // return your result
+        }
+        @Override protected void succeeded(Object result) {
+            // Runs on the EDT.  Update the GUI based on
+            // the result computed by doInBackground().
+        }
     }
 
     @Action

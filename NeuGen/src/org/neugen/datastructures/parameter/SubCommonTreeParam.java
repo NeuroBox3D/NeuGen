@@ -53,6 +53,8 @@
  */
 package org.neugen.datastructures.parameter;
 
+import org.neugen.gui.NGXDialog;
+import org.neugen.gui.NeuGenView;
 import org.neugen.parsers.ConfigParserContainer;
 
 /**
@@ -83,6 +85,7 @@ public class SubCommonTreeParam extends KeyIdentificable {
         branch_angle = new MinMaxAngle<Float>(ConfigParserContainer.getParamParser(), this, "branch_angle");
         nparts_density = new Parameter<Float>(ConfigParserContainer.getParamParser(), this, "nparts_density");
         nbranch_param = new Parameter<Integer>(ConfigParserContainer.getParamParser(), this, "nbranch_param");
+       
     }
 
     public MinMaxAngle<Float> getBranchAngle() {
@@ -98,7 +101,13 @@ public class SubCommonTreeParam extends KeyIdentificable {
     }
 
     public float getNpartsDensity() {
+       
+       // System.err.println("getNpartsDensity: " + nparts_density.getValue());
+        
+        //return 0.025f;
+	//return 0.0001f; // default was 0.025
         return nparts_density.getValue();
+        //return 0.0001f;
     }
 
     /**
