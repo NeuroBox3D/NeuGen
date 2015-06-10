@@ -50,7 +50,6 @@
 package org.neugen.gui;
 
 import java.util.Enumeration;
-import java.util.Map;
 import java.util.Map.Entry;
 import org.neugen.datastructures.xml.XMLNode;
 import org.neugen.datastructures.xml.XMLObject;
@@ -206,9 +205,13 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
  }
  
  
+ 
+  
+ /**
+  * 
+  * @param paramRoot 
+  */
   public void correct_params(XMLObject paramRoot) {
-    
-           
             XMLObject obj = paramRoot; 
             //if ("net".equals(entry.getKey())) {
                Enumeration<XMLNode> childs = obj.children();
@@ -292,6 +295,9 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
  
  
  
+ /**
+   * 
+   */
  public void correct_params() {
       for (Entry<String, XMLObject> entry : NeuGenView.getInstance().getParamTrees().entrySet()) {
             System.err.println("Key:" + entry.getKey());
@@ -380,6 +386,13 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
  
  
  
+ 
+
+  
+ /**
+  * 
+  * @param child 
+  */
  private void correct_siblings(XMLNode child) {
      Enumeration<XMLNode> childs = child.children(); // only one child called siblings
      XMLNode child2 = childs.nextElement();
