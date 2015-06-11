@@ -31,3 +31,14 @@ Current development on devel branch, current stable on master branch.
 [![Stories in Ready](https://badge.waffle.io/NeuroBox3D/NeuGen.png?label=ready&title=Ready)](http://waffle.io/NeuroBox3D/NeuGen)
 [![Stories in In Progress](https://badge.waffle.io/NeuroBox3D/NeuGen.png?label=in progress&title=In Progress)](http://waffle.io/NeuroBox3D/NeuGen)
 [![Stories in Done](https://badge.waffle.io/NeuroBox3D/NeuGen.png?label=done&title=Done)](http://waffle.io/NeuroBox3D/NeuGen)
+
+## Documentation
+Export .ngx (NeuGen XML) from the GUI by Save Dialog or Ctrl-Shift-N.
+One can pre-coarsen by supplying the (global!) level of detail by 
+a positive number for the n-parts-density textfield when opening a project.
+Also one can specify the cutoff distance for synapse generation by a positive
+number in analogue for the synapse-distance textfield. 
+
+## Important note
+Hippocampal networks cannot be exported by now to any format correctly, since
+either not implemented at all or no synapse export present - see open issues.
