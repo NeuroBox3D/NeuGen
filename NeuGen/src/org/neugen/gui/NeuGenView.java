@@ -1811,23 +1811,11 @@ private void writeNGXMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//
         File interna = new File(dirPath + System.getProperty("file.separator") + NeuGenConstants.INTERNA_FNAME);
         setInternaPath(interna.getPath());
         
-        /// correct params dialog (get density value)
+        /// correct params dialog (get density value for debugging purposes)
         NGXDialog dialog = new NGXDialog(NeuGenView.getInstance().getFrame(), true);
         dialog.setVisible(true);
-        System.err.println("*** Density *** : " + dialog.getNpartsDensity());
-        float density_val = dialog.getNpartsDensity();
-       
-        /// actually correct the parameters in the PARAM file
-        System.out.println("param file: " + param);
-        String content = FileUtils.readFileToString(param);
-        FileUtils.writeStringToFile(param, content.replaceAll("0.25", ""+density_val));
-        /** @todo: why does not saving the projectTree result in a corrected param file?
-          * Below we SHOULD be able to use correct_params() and then call save() to save
-          * the project to the file - however this does not work for some reason...
-          * therefore we replace the density val instead directly.
-         * 
-         * @todo get default value from tree, instead using hardcoded 0.25 value!
-         */
+        logger.info("*** Density *** : " + dialog.getNpartsDensity());
+        logger.info("*** Synapse distance *** : " + dialog.getSynapseDistance());
         
 
         Properties paramProper = new Properties();
@@ -1839,6 +1827,7 @@ private void writeNGXMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//
         projectTree = new XMLTreeView(this);
         projectTree.removeAll();
         projectTree.setName(projectName);
+        
 
         XMLObject paramRoot = loadParam(param, paramRoot = null);
         {
@@ -1858,8 +1847,11 @@ private void writeNGXMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//
         paramTrees.put(NeuGenConstants.PARAM, paramRoot);
         paramTrees.put(NeuGenConstants.INTERNA, internaRoot);
         
-        /// actually correct the parameters in the GUI view
-        dialog.correct_params();
+        /// actually correct the parameters in the GUI view (though, the parameters
+        /// are still stored in the ConfigParser somehow - to be sure we need to 
+        /// save the project below again)
+        //dialog.correct_params();
+        dialog.set_global_parameters();
         
    
         XMLObject top = new XMLObject(projectName, null, XMLObject.class.toString());
@@ -1952,17 +1944,21 @@ private void writeNGXMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//
         currentProjectType = projectProper.getProperty(NeuGenConstants.PROP_PROJECT_NAME_KEY);
         outPrintln("Project type: " + currentProjectType);
         outPrintln("Created on: " + projectProper.getProperty(NeuGenConstants.PROP_DATE_KEY));
+        
+        /// save project with new parameters
+        projectTree.setContentChanged(true); 
+        save();
         projectTree.setContentChanged(false);
-        NeuGenLib.initParamData(initParamTable(), currentProjectType);   
+        
+        NeuGenLib.initParamData(initParamTable(), currentProjectType);  
+       
+    
     }
 
-    public Map<String, XMLObject> initParamTable() {
-        
+    public Map<String, XMLObject> initParamTable() { 
        /// get params
         XMLObject param = getParamTrees().get(NeuGenConstants.PARAM);
         XMLObject interna = getParamTrees().get(NeuGenConstants.INTERNA);
-        
-       
         Map<String, XMLObject> allParam = new HashMap<String, XMLObject>();
         
         allParam.put(getParamPath(), param);

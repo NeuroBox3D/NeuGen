@@ -47,21 +47,28 @@
  *
  */
 
+/// package's name
 package org.neugen.gui;
 
+/// imports
 import java.util.Enumeration;
 import java.util.Map.Entry;
+import javax.swing.JDialog;
 import org.neugen.datastructures.xml.XMLNode;
 import org.neugen.datastructures.xml.XMLObject;
 
 /**
+ * @brief dialog to set global synapse dist and n parts density parameters
+ * @author stephanmg <stephan@syntaktischer-zucker.de>
  *
- * @author stephan
  */
-public class NGXDialog extends javax.swing.JDialog {
+public class NGXDialog extends JDialog {
     public static final int RET_CANCEL = 0;
     public static final int RET_OK = 1;
-    private double density;
+    private float density;
+    private float synapse_distance;
+    private final String DENSITY_IDENTIFIER = "nparts_density";
+    private final String SYNAPSE_DISTANCE_IDENTIFIER = "dist_synapse";
     
     private int returnStatus = RET_CANCEL;
 
@@ -186,35 +193,121 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     doClose(RET_OK);
 }//GEN-LAST:event_jButton1ActionPerformed
 
+/**
+ * 
+ * @param retStatus 
+ */
  private void doClose(int retStatus) {
         returnStatus = retStatus;
         setVisible(false);
         dispose();
     }
  
- public float getNpartsDensity() {
+ /**
+  * 
+  * @return 
+  */
+ public float getSynapseDistance() {
+     String synapse_distance_str = jTextField2.getText();
      
-     /**
-      * TODO get default value from tree maybe
-      */
-     
-     System.err.println(jTextField1.getText());
-     if (jTextField1.getText().isEmpty()) {
-         this.density = 0.025f;
-         return 0.025f; /// default value
+     if (!synapse_distance_str.isEmpty()) {
+         this.synapse_distance = Float.parseFloat(synapse_distance_str);
      } else {
-        this.density = Float.parseFloat(jTextField1.getText());
-        return Float.parseFloat(jTextField1.getText());
+         this.synapse_distance = -1f;
+     }
+     return this.synapse_distance;
+ }
+ 
+ /**
+  * 
+  * @return 
+  */
+ public float getNpartsDensity() {
+     String density_str = jTextField1.getText();
+     
+     if (!density_str.isEmpty()) {
+          this.density = Float.parseFloat(density_str);
+     } else {
+          this.density = -1f;
+     }
+     
+     return this.density;
+ }
+ 
+ 
+ /**
+  * @brief use set_global_gen0_parameter(child, replacement) to enhance 
+  */
+ private void set_global_gen0_parameters() {
+     if (this.density != -1f) {
+         set_global_gen0_parameter(DENSITY_IDENTIFIER, this.density);
      }
  }
  
-  
  /**
   * 
-  * @param paramRoot 
   */
-  public void correct_params(XMLObject paramRoot) {
-            XMLObject obj = paramRoot; 
+ private void set_global_synapse_distance_parameter() {
+     if (this.synapse_distance != -1f) {
+         set_global_synapse_distance_parameter(SYNAPSE_DISTANCE_IDENTIFIER, this.synapse_distance);
+     }
+ }
+ 
+ 
+ /**
+  * 
+  */
+ public void set_global_parameters() {
+     set_global_gen0_parameters();
+     set_global_synapse_distance_parameter();
+ }
+ 
+ /**
+  * 
+  * @param identifier
+  * @param replacement 
+  */
+ private void set_global_synapse_distance_parameter(String identifier, float replacement) {
+      for (Entry<String, XMLObject> entry : NeuGenView.getInstance().getParamTrees().entrySet()) {
+            System.err.println("Key:" + entry.getKey());
+            XMLObject obj = entry.getValue();
+            //if ("net".equals(entry.getKey())) {
+               Enumeration<XMLNode> childs = obj.children();
+            
+               while (childs.hasMoreElements()) {
+                 XMLNode node = childs.nextElement();
+                 System.err.println("Node: " + node.toString());
+                 if ("net".equals(node.toString())) {
+                      Enumeration<XMLNode> childs2 = node.children();
+                    while (childs2.hasMoreElements()) {
+                      
+                        XMLNode node2 = childs2.nextElement();
+                            System.err.println("*** CHILD *** :" +node2 );
+                        if (identifier.equals(node2.getKey())) {
+                            node2.setValue(replacement);
+                       
+                     
+                        }
+                    }
+                     
+                   }
+               }
+      }
+                     
+ }
+ 
+
+ 
+
+ /**
+  * 
+  * @param identifier
+  * @param replacement 
+  */
+ private void set_global_gen0_parameter(String identifier, float replacement) {
+           for (Entry<String, XMLObject> entry : NeuGenView.getInstance().getParamTrees().entrySet()) {
+            System.err.println("Key:" + entry.getKey());
+            XMLObject obj = entry.getValue();
             //if ("net".equals(entry.getKey())) {
                Enumeration<XMLNode> childs = obj.children();
             
@@ -236,9 +329,101 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                                     while (childs5.hasMoreElements()) {
                                         XMLNode child6 = childs5.nextElement();
                             
+                                        if (identifier.equals(child6.getKey())) {
+                                            System.err.println("child6 (before): " + child6.toString());
+                                            System.err.println("child6's key (before): " + child6.getKey());
+                                            child6.setValue(density);
+                                        
+                                        
+                                            System.err.println("child6 (after): " + child6.toString());
+                                            System.err.println("child6's key (after): " + child6.getKey());
+                                        }
+                                        
+                                        if  ("siblings".equals(child6.getKey())) {
+                                            correct_siblings(child6, identifier, replacement);
+                                        }
+                                        
+                                    }
+                                }
+                            }
+                        
+                            
+                            
+                            } else if ("dendrite".equals(node2.toString())) {
+                               
+                             Enumeration<XMLNode> childs3 = node2.children();
+                             while (childs3.hasMoreElements()) {
+                                XMLNode child4 = childs3.nextElement();
+                                System.err.println("axon child: " + child4.toString());
+                                if ("gen_0".equals(child4.toString())) {
+                                    Enumeration<XMLNode> childs5 = child4.children();
+                                    
+                                    while (childs5.hasMoreElements()) {
+                                        XMLNode child6 = childs5.nextElement();
+                            
                                         if ("nparts_density".equals(child6.getKey())) {
                                             System.err.println("child6 (before): " + child6.toString());
                                             System.err.println("child6's key (before): " + child6.getKey());
+                                            child6.setValue(density);
+                                        
+                                        
+                                            System.err.println("child6 (after): " + child6.toString());
+                                            System.err.println("child6's key (after): " + child6.getKey());
+                                        }
+                                        
+                                        if  ("siblings".equals(child6.getKey())) {
+                                            correct_siblings(child6);
+                                        }
+                                        
+                                    }
+                                }
+                            }
+                                
+                            
+                            } else {
+                            
+                            }
+                    }
+                 }
+               }
+         }
+ }
+ 
+     
+ 
+ 
+ /**
+  * 
+  * @param paramRoot 
+  */
+  public void correct_params(XMLObject paramRoot) {
+            XMLObject obj = paramRoot; 
+            //if ("net".equals(entry.getKey())) {
+               Enumeration<XMLNode> childs = obj.children();
+            
+             
+               while (childs.hasMoreElements()) {
+                 XMLNode node = childs.nextElement();
+                 System.err.println("Node: " + node.toString());
+                 if ("neuron".equals(node.toString())) {
+                    Enumeration<XMLNode> childs2 = node.children();
+                    while (childs2.hasMoreElements()) {
+                        XMLNode node2 = childs2.nextElement();
+                        if ("axon".equals(node2.toString())) {
+                            Enumeration<XMLNode> childs3 = node2.children();
+                            while (childs3.hasMoreElements()) {
+                                XMLNode child4 = childs3.nextElement();
+                                System.err.println("axon child: " + child4.toString());
+                                if ("gen_0".equals(child4.toString())) {
+                                    Enumeration<XMLNode> childs5 = child4.children();
+                                    
+                                    while (childs5.hasMoreElements()) {
+                                        XMLNode child6 = childs5.nextElement();
+                            
+                                        if ("nparts_density".equals(child6.getKey())) {
+                                            System.err.println("child6 (before): " + child6.toString());
+                                            System.err.println("child6's key (before): " + child6.getKey());
+                                          
                                             child6.setValue(density);
                                         
                                         
@@ -390,7 +575,27 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
  
  
 
-  
+ private void correct_siblings(XMLNode child, String identifier, float replacement) {
+     Enumeration<XMLNode> childs = child.children(); // only one child called siblings
+     XMLNode child2 = childs.nextElement();
+     Enumeration<XMLNode> childs3 = child2.children();
+     
+     while (childs3.hasMoreElements()) {
+      XMLNode child4 = childs3.nextElement();
+        
+     
+      if (identifier.equals(child4.getKey())) {
+          child4.setValue(replacement);
+          
+      }
+      
+      if  ("siblings".equals(child4.getKey())) {                                 
+         correct_siblings(child4, identifier, replacement);
+      }
+    }
+     
+ } 
+ 
  /**
   * 
   * @param child 
