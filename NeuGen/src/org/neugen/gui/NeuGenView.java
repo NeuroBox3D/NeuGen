@@ -1812,7 +1812,7 @@ private void writeNGXMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//
         setInternaPath(interna.getPath());
         
         /// correct params dialog (get density value for debugging purposes)
-        NGXDialog dialog = new NGXDialog(NeuGenView.getInstance().getFrame(), true);
+        GlobalParameterDialog dialog = new GlobalParameterDialog(NeuGenView.getInstance().getFrame(), true);
         dialog.setVisible(true);
         logger.info("*** Density *** : " + dialog.getNpartsDensity());
         logger.info("*** Synapse distance *** : " + dialog.getSynapseDistance());

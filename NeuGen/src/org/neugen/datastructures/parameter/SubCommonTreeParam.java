@@ -53,7 +53,7 @@
  */
 package org.neugen.datastructures.parameter;
 
-import org.neugen.gui.NGXDialog;
+import org.neugen.gui.GlobalParameterDialog;
 import org.neugen.gui.NeuGenView;
 import org.neugen.parsers.ConfigParserContainer;
 

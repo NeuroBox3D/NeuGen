@@ -51,7 +51,7 @@
 package org.neugen.parsers.NGX;
 
 /**
- *
+ * @brief NGX element types
  * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
 public enum NGXTypes {

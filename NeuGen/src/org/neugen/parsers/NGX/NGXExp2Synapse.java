@@ -61,6 +61,10 @@ public class NGXExp2Synapse extends NGXSynapse {
 	public float gmax;
 	public float delay;
 	public float threshold;
+	
+	/**
+	 * @brief ctor
+	 */
 	public NGXExp2Synapse() {
 		this.tau1 = 0.2f;
 		this.tau2 = 1.7f;

@@ -51,7 +51,7 @@
 package org.neugen.parsers.NGX;
 
 /**
- * @brief Synapse base 
+ * @brief synapse base 
  * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
 public class NGXSynapse extends NGXBase {
