@@ -166,6 +166,7 @@ public final class NeuGenLib implements Serializable {
                 System.err.println("*** KEY *** " + e.getKey() + " *** VALUE ***" + e.getValue());
             } else if (e.getKey().contains(NeuGenConstants.INTERNA_FNAME)) {
                 ConfigParserContainer.setInternaParser(new ConfigParser(e.getKey(), e.getValue()));
+                System.err.println("*** KEY *** " + e.getKey() + " *** VALUE ***" + e.getValue());
             }
         }
 

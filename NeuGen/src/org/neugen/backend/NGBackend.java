@@ -46,6 +46,7 @@
  * Neurocomputing, 70(1-3), pp. 327-343, doi: 10.1016/j.neucom.2006.01.028
  *
  */
+
 /// package's name
 package org.neugen.backend;
 
@@ -75,26 +76,26 @@ import org.neugen.parsers.NeuGenConfigStreamer;
 import org.neugen.utils.Utils;
 
 /**
- * @brief provide some backend utility
+ * @brief provide some backend functionality
  * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
-public final class NGBackendUtility {
-
+public final class NGBackend {
 	/// private members
-	private static final Logger logger = Logger.getLogger(NGBackendUtility.class.getName());
+	private static final Logger logger = Logger.getLogger(NGBackend.class.getName());
 	private static final String ENCODING = "UTF-8";
 	private static final NeuGenLib ngLib = new NeuGenLib();
 	private static final double DIST_SYNAPSE = 1.0;
 	private static final double N_PARTS_DENSITY = 0.01;
 
 	/**
-	 * @brief set NeuGenLib
+	 * @brief default ctor
 	 */
-	public NGBackendUtility() {
+	public NGBackend() {
 	}
 
 	/**
-	 * @brief execute the project
+	 * @brief executes just the project
+	 * 
 	 * @param projectType
 	 */
 	public void execute(String projectType) {
@@ -103,11 +104,12 @@ public final class NGBackendUtility {
 
 	/**
 	 * @brief loads the initial parameters from project directory
+	 * 
 	 * @param file
 	 * @param root
 	 * @return
-	 * @throws Exception
 	 */
+	@SuppressWarnings("CallToPrintStackTrace")
 	private XMLObject loadParam(File file) {
 		XMLObject root = null;
 		try {
@@ -124,6 +126,9 @@ public final class NGBackendUtility {
 
 	/**
 	 * @brief get's the project property
+	 * 
+	 * @param projectPath
+	 * @param projectType
 	 */
 	private Properties getProjectProp(String projectPath, String projectType) {
 		Properties prop = new Properties();
@@ -151,11 +156,12 @@ public final class NGBackendUtility {
 	 *
 	 * @param projectPath
 	 * @param projectType
+	 * @param force
 	 */
-	public void create_project(String projectPath, String projectType) {
+	public void create_project(String projectPath, String projectType, boolean force) {
 		logger.info("project path (project type: " + projectType + "): " + projectPath);
 		File projectDir = new File(projectPath);
-		if (Utils.fileExists(projectDir)) {
+		if (NGBackendUtil.fileExists(projectDir, force)) {
 			if (projectType.equals(NeuGenConstants.HIPPOCAMPUS_PROJECT)) {
 				String sourcePath = NeuGenConstants.CONFIG_DIR + System.getProperty("file.separator") + NeuGenConstants.HIPPOCAMPUS_PROJECT.toLowerCase();
 				File sourceDir = new File(sourcePath);
@@ -209,6 +215,7 @@ public final class NGBackendUtility {
 
 	/**
 	 * @brief saves the INTERNA parameters
+	 * 
 	 * @param currentRoot
 	 * @param projectDirPath
 	 */
@@ -218,6 +225,7 @@ public final class NGBackendUtility {
 
 	/**
 	 * @brief save all params
+	 * 
 	 * @param paramTrees
 	 * @param projectDirPath
 	 */
@@ -257,6 +265,7 @@ public final class NGBackendUtility {
 
 	/**
 	 * @brief init param table
+	 * 
 	 * @param paramTrees
 	 * @param paramPath
 	 * @param internaPath
@@ -273,6 +282,7 @@ public final class NGBackendUtility {
 
 	/**
 	 * @brief init all parameters
+	 * 
 	 * @param dirPath
 	 * @param projectType
 	 */
@@ -293,6 +303,7 @@ public final class NGBackendUtility {
 
 	/**
 	 * @brief generates the net actually
+	 * 
 	 * @param projectType
 	 */
 	public void generate_network(String projectType) {
@@ -303,6 +314,7 @@ public final class NGBackendUtility {
 
 	/**
 	 * @brief exports a network
+	 * 
 	 * @param type
 	 * @param file
 	 */
@@ -319,6 +331,7 @@ public final class NGBackendUtility {
 
 	/**
 	 * @brief modify the project params and set them
+	 * 
 	 * @param paramTrees;
 	 * @param projectDirPath
 	 */
@@ -335,6 +348,7 @@ public final class NGBackendUtility {
 
 	/**
 	 * @brief todo implement
+	 * 
 	 * @param paramTrees
 	 * @param projectDirPath
 	 * @param npartsdensity
@@ -345,6 +359,7 @@ public final class NGBackendUtility {
 
 	/**
 	 * @brief correct synapse dist to custom value
+	 * 
 	 * @param paramTrees
 	 * @param projectDirPath
 	 * @param dist_synapse
@@ -372,13 +387,14 @@ public final class NGBackendUtility {
 		}
 	}
 
+
 	/**
 	 * @brief test
+	 * 
 	 * @param args
 	 */
 	public static void main(String... args) {
-		NGBackendUtility util = new NGBackendUtility();
-		util.create_project("foo", "Neocortex");
+		new NGBackend().create_project("foo", "NeoCortex", false);
 		/**
 		 * @brief todo works - test remaining functionality...
 		 */
