@@ -55,8 +55,65 @@ package org.neugen.parsers.NGX;
  * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
 public class NGXConnection extends NGXBase {
-	public String from;
-	public String to;
-	public int from_loc;
-	public int to_loc;
+	/// private members
+	private String from;
+	private String to;
+	private int from_loc;
+	private int to_loc;
+
+	/**
+	 * @return the from
+	 */
+	public String getFrom() {
+		return from;
+	}
+
+	/**
+	 * @param from the from to set
+	 */
+	public void setFrom(String from) {
+		this.from = from;
+	}
+
+	/**
+	 * @return the to
+	 */
+	public String getTo() {
+		return to;
+	}
+
+	/**
+	 * @param to the to to set
+	 */
+	public void setTo(String to) {
+		this.to = to;
+	}
+
+	/**
+	 * @return the from_loc
+	 */
+	public int getFrom_loc() {
+		return from_loc;
+	}
+
+	/**
+	 * @param from_loc the from_loc to set
+	 */
+	public void setFrom_loc(int from_loc) {
+		this.from_loc = from_loc;
+	}
+
+	/**
+	 * @return the to_loc
+	 */
+	public int getTo_loc() {
+		return to_loc;
+	}
+
+	/**
+	 * @param to_loc the to_loc to set
+	 */
+	public void setTo_loc(int to_loc) {
+		this.to_loc = to_loc;
+	}
 }

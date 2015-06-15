@@ -55,8 +55,65 @@ package org.neugen.parsers.NGX;
  * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
 public class NGXSynapse extends NGXBase {
-	public String from;
-	public String to;
-	public float from_loc;
-	public float to_loc;
+	/// private members
+	private String from;
+	private String to;
+	private float from_loc;
+	private float to_loc;
+
+	/**
+	 * @return the from
+	 */
+	public String getFrom() {
+		return from;
+	}
+
+	/**
+	 * @param from the from to set
+	 */
+	public void setFrom(String from) {
+		this.from = from;
+	}
+
+	/**
+	 * @return the to
+	 */
+	public String getTo() {
+		return to;
+	}
+
+	/**
+	 * @param to the to to set
+	 */
+	public void setTo(String to) {
+		this.to = to;
+	}
+
+	/**
+	 * @return the from_loc
+	 */
+	public float getFrom_loc() {
+		return from_loc;
+	}
+
+	/**
+	 * @param from_loc the from_loc to set
+	 */
+	public void setFrom_loc(float from_loc) {
+		this.from_loc = from_loc;
+	}
+
+	/**
+	 * @return the to_loc
+	 */
+	public float getTo_loc() {
+		return to_loc;
+	}
+
+	/**
+	 * @param to_loc the to_loc to set
+	 */
+	public void setTo_loc(float to_loc) {
+		this.to_loc = to_loc;
+	}
 }

@@ -55,14 +55,75 @@ package org.neugen.parsers.NGX;
  * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
 public class NGXAlphaSynapse extends NGXSynapse {
-	public float gmax;
-	public float onset;
-	public float tau;
-	public float e;
+	/// private members
+	private float gmax;
+	private float onset;
+	private float tau;
+	private float e;
+	
+	/**
+	 * @brief ctor
+	 */
 	public NGXAlphaSynapse() {
 		this.onset = 0;
 		this.tau = 1.7f;
 		this.gmax = 0;
+		this.e = 0;
+	}
+
+	/**
+	 * @return the gmax
+	 */
+	public float getGmax() {
+		return gmax;
+	}
+
+	/**
+	 * @param gmax the gmax to set
+	 */
+	public void setGmax(float gmax) {
+		this.gmax = gmax;
+	}
+
+	/**
+	 * @return the onset
+	 */
+	public float getOnset() {
+		return onset;
+	}
+
+	/**
+	 * @param onset the onset to set
+	 */
+	public void setOnset(float onset) {
+		this.onset = onset;
+	}
+
+	/**
+	 * @return the tau
+	 */
+	public float getTau() {
+		return tau;
+	}
+
+	/**
+	 * @param tau the tau to set
+	 */
+	public void setTau(float tau) {
+		this.tau = tau;
+	}
+
+	/**
+	 * @return the e
+	 */
+	public float getE() {
+		return e;
+	}
+
+	/**
+	 * @param e the e to set
+	 */
+	public void setE(float e) {
 		this.e = e;
 	}
 }

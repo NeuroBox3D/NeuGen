@@ -59,7 +59,52 @@ import javax.vecmath.Vector4f;
  * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
 public class NGXBase {
-	public String name;
-	public ArrayList<Vector4f> coordinates = new ArrayList<Vector4f>();
-	public int id;
+	/// private members
+	private String name;
+	private ArrayList<Vector4f> coordinates = new ArrayList<Vector4f>();
+	private int id;
+
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	/**
+	 * @return the coordinates
+	 */
+	@SuppressWarnings("ReturnOfCollectionOrArrayField")
+	public ArrayList<Vector4f> getCoordinates() {
+		return coordinates;
+	}
+
+	/**
+	 * @param coordinates the coordinates to set
+	 */
+	@SuppressWarnings("AssignmentToCollectionOrArrayFieldFromParameter")
+	public void setCoordinates(ArrayList<Vector4f> coordinates) {
+		this.coordinates = coordinates;
+	}
+
+	/**
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
+	}
 }

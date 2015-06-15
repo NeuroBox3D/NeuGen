@@ -79,24 +79,18 @@ import org.neugen.datastructures.Pair;
  * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
 public class NGXWriter {
-	public NGXWriter() {
-		
-	}
-
+	/// private members
 	private static final Logger logger = Logger.getLogger(NGXWriter.class.getName());
-	private Net net;
+	private final Net net;
 	private File file;
 	private String hocFileName;
-	/**
-	 * The postfix of the name of the file for the NetCon events data.
-	 */
-	private String netConEventsFilePostfix;
-	/**
-	 * The postfix of the name of the file for the voltage data.
-	 */
-	private String voltageFilePostfix;
-	private Trigger trigger;
+	private final Trigger trigger;
 
+	/**
+	 * @brief ctor
+	 * @param net
+	 * @param file 
+	 */
 	public NGXWriter(Net net, File file) {
 		this.net = net;
 		this.file = file;
@@ -105,14 +99,6 @@ public class NGXWriter {
 		hocFileName = str[0];
 		trigger = Trigger.getInstance();
              
-	}
-
-	public void setNetConEventsFilePostfix(String netConEventsFilePostfix) {
-		this.netConEventsFilePostfix = netConEventsFilePostfix;
-	}
-
-	public void setVoltageFilePostfix(String voltageFilePostfix) {
-		this.voltageFilePostfix = voltageFilePostfix;
 	}
 
 	/**
@@ -125,7 +111,7 @@ public class NGXWriter {
 	 */
 	public final void writeSegmentToNGX(NGXBase ngxbase, int start_end, Segment segment) {
 		if (start_end == 0) {
-			ngxbase.coordinates.add(
+			ngxbase.getCoordinates().add(
 				new Vector4f(
 				segment.getStart().x,
 				segment.getStart().y,
@@ -136,7 +122,7 @@ public class NGXWriter {
 		}
 		
 		if (start_end == 1) {
-			ngxbase.coordinates.add(
+			ngxbase.getCoordinates().add(
 				new Vector4f(
 				segment.getEnd().x,
 				segment.getEnd().y,
@@ -170,7 +156,7 @@ public class NGXWriter {
 		int nsegs = cyl.getSegments().size();
 		Segment segment = cyl.getSegments().get(nsegs - 1);
 		writeSegmentToNGX(ngxsoma, 1, segment);
-		ngxsoma.name = name;
+		ngxsoma.setName(name);
 	}
 
 	/**
@@ -210,24 +196,24 @@ public class NGXWriter {
 			NGXConnection ngxconnex = new NGXConnection();
 			//connect N0axon_hillock(0), N0soma(0)
 			if (nsections == 0) {
-				ngxconnex.from = "N" + nn + secName;
-				ngxconnex.from_loc = 0;
-				ngxconnex.to = "N" + nn + "soma";
-				ngxconnex.to_loc = (int) fractAlongParent;
+				ngxconnex.setFrom("N" + nn + secName);
+				ngxconnex.setFrom_loc(0);
+				ngxconnex.setTo("N" + nn + "soma");
+				ngxconnex.setTo_loc((int) fractAlongParent);
 			} //connect N0axon_myel_0000(0), N0axon_000(1)
 			else {
 				String parentSecName = parSec.getName();
-				ngxconnex.from = "N" + nn + secName;
-				ngxconnex.from_loc = 0;
-				ngxconnex.to = "N" + nn + parentSecName;
-				ngxconnex.to_loc = (int) fractAlongParent;
+				ngxconnex.setFrom("N" + nn + secName);
+				ngxconnex.setFrom_loc(0);
+				ngxconnex.setTo("N" + nn + parentSecName);
+				ngxconnex.setTo_loc((int) fractAlongParent);
 			}
 			
 			connections.add(ngxconnex);
 			
 			NGXAxon ngxaxon = new NGXAxon();
-			ngxaxon.name = "N" + nn + secName;
-			ngxaxon.id = nn;
+			ngxaxon.setName("N" + nn + secName);
+			ngxaxon.setId(nn);
 			
 			for (Segment segment : section.getSegments()) {
 				writeSegmentToNGX(ngxaxon, 0, segment);
@@ -275,21 +261,21 @@ public class NGXWriter {
 				NGXConnection ngxconnex = new NGXConnection();
 				
 				if (nsections == 0 || parentSecName.contains("soma")) {
-					ngxconnex.from = "N" + nn + secName;
-					ngxconnex.from_loc = 0;
-					ngxconnex.to = "N" + nn + "soma";
-					ngxconnex.to_loc = (int) fractAlongParent;
+					ngxconnex.setFrom("N" + nn + secName);
+					ngxconnex.setFrom_loc(0);
+					ngxconnex.setTo("N" + nn + "soma");
+					ngxconnex.setTo_loc((int) fractAlongParent);
 				} else {
-					ngxconnex.from = "N" + nn + secName;
-					ngxconnex.from_loc = 0;
-					ngxconnex.to = "N" + nn + parentSecName;
-					ngxconnex.to_loc = (int) fractAlongParent;
+					ngxconnex.setFrom("N" + nn + secName);
+					ngxconnex.setFrom_loc(0);
+					ngxconnex.setTo("N" + nn + parentSecName);
+					ngxconnex.setTo_loc((int) fractAlongParent);
 				}
 				
 				connections.add(ngxconnex);
 				NGXDend ngxdend = new NGXDend();
-				ngxdend.name = "N" + nn + secName;
-				ngxdend.id = nn;
+				ngxdend.setName("N" + nn + secName);
+				ngxdend.setId(nn);
 				
 				for (Segment segment : section.getSegments()) {
 					writeSegmentToNGX(ngxdend, 0, segment);
@@ -321,7 +307,7 @@ public class NGXWriter {
 		
 		/// write soma of NEURON i (exactly one soma!)
 		NGXBase ngxbase = new NGXSoma();
-		ngxbase.id = i;
+		ngxbase.setId(i);
 		writeSomaOfNeuronToNGX(ngxbase, neuron, name);
 		neuron_sections.add(ngxbase);
 		
@@ -431,11 +417,12 @@ public class NGXWriter {
 				logger.fatal(ioe);
 			}
 		
-			/**
-			 * @TODO write XML from elements above (sections, connections, alphasynapses and exp2synapses) by xstream probably
-			 */
-			}
+		}
 
+	/**
+	 * @brief exports the net
+	 * @author stephanmg <stephan@syntaktischer-zucker.de>
+	 */
 	public void exportNetToNGX() {
 		String ngx = NeuGenConstants.EXTENSION_NGX;
 		String extension = Utils.getExtension(file);

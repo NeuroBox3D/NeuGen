@@ -65,6 +65,7 @@ import org.neugen.parsers.HocWriterTask;
  * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
 public final class NGXWriterTask extends Task<Void, Void> {
+    /// private members
     private static final Logger logger = Logger.getLogger(HocWriterTask.class.getName());
     private final File file;
 
