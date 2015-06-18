@@ -380,10 +380,15 @@ public final class NetNeocortex extends NetBase implements Serializable, Net {
      */
     @Override
     public void interconnect() {
-        Trigger trigger = Trigger.getInstance();
-        trigger.outPrintln("interconnect neurons");
-        trigger.outPrintln("interconnect-phase");
-        trigger.outPrintln("interconnect");
+	    System.err.println("WITH_GUI: " + NeuGenConstants.WITH_GUI);
+	if (NeuGenConstants.WITH_GUI) {
+        	Trigger trigger = Trigger.getInstance();
+        	trigger.outPrintln("interconnect neurons");
+        	trigger.outPrintln("interconnect-phase");
+        	trigger.outPrintln("interconnect");
+	} else {
+		System.err.println("without gui!");
+	}
 
         NetParam netParameter = NetParam.getInstance();
         float distSynapse = netParameter.getDistSynapse();
@@ -541,7 +546,10 @@ public final class NetNeocortex extends NetBase implements Serializable, Net {
         if (ngLibTask != null) {
             ngLibTask.setMyProgress(1.0f);
         }
-        trigger.outPrintln("end of interconnect");
+	if (NeuGenConstants.WITH_GUI) {
+		Trigger trigger = Trigger.getInstance();
+        	trigger.outPrintln("end of interconnect");
+	}
     }
 
     public int getNumL23pyramidal() {

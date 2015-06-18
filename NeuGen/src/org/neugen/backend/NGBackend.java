@@ -78,21 +78,36 @@ import org.neugen.utils.Utils;
 /**
  * @brief provide some backend functionality
  * @author stephanmg <stephan@syntaktischer-zucker.de>
+ * 
+ * @note maybe a configuration builder (SettingsBuilder) is a good choice
  */
 public final class NGBackend {
-	/// private members
-	private static final Logger logger = Logger.getLogger(NGBackend.class.getName());
+	/// public static members
+	public static final Logger logger = Logger.getLogger(NGBackend.class.getName());
+	
+	/// private static members
 	private static final String ENCODING = "UTF-8";
 	private static final NeuGenLib ngLib = new NeuGenLib();
 	private static final double DIST_SYNAPSE = 1.0;
 	private static final double N_PARTS_DENSITY = 0.01;
 
+	
 	/**
 	 * @brief default ctor
 	 */
 	public NGBackend() {
+		NeuGenConstants.WITH_GUI = false;
+		
 	}
-
+	
+	/**
+	 * @brief enhanced ctor
+	 * @param with_gui
+	 */
+	public NGBackend(boolean with_gui) {
+		NeuGenConstants.WITH_GUI = with_gui;
+	}
+	
 	/**
 	 * @brief executes just the project
 	 * 
@@ -157,8 +172,9 @@ public final class NGBackend {
 	 * @param projectPath
 	 * @param projectType
 	 * @param force
+	 * @return
 	 */
-	public void create_project(String projectPath, String projectType, boolean force) {
+	public Map<String, XMLObject> create_project(String projectPath, String projectType, boolean force) {
 		logger.info("project path (project type: " + projectType + "): " + projectPath);
 		File projectDir = new File(projectPath);
 		if (NGBackendUtil.fileExists(projectDir, force)) {
@@ -200,7 +216,7 @@ public final class NGBackend {
 			}
 		}
 
-		initProjectParam(projectPath, projectType);
+		return initProjectParam(projectPath, projectType);
 	}
 
 	/**
@@ -307,9 +323,9 @@ public final class NGBackend {
 	 * @param projectType
 	 */
 	public void generate_network(String projectType) {
-		ngLib.getNet().destroy();
-		ngLib.destroy();
 		ngLib.run(projectType);
+		//ngLib.getNet().destroy();
+		//ngLib.destroy();
 	}
 
 	/**
@@ -394,7 +410,11 @@ public final class NGBackend {
 	 * @param args
 	 */
 	public static void main(String... args) {
-		new NGBackend().create_project("foo", "NeoCortex", false);
+		NGBackend back = new NGBackend();
+		Map<String, XMLObject> params = back.create_project("foo", "NeoCortex", false);
+		back.modifyNPartsDensity(params, "foo/Neocortex", 0.1);
+		back.generate_network(NeuGenConstants.NEOCORTEX_PROJECT);
+		back.export_network("NGX", "foo2.ngx");
 		/**
 		 * @brief todo works - test remaining functionality...
 		 */

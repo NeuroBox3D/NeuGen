@@ -65,6 +65,7 @@ import org.neugen.datastructures.Pair;
 import org.neugen.datastructures.Region;
 import org.neugen.datastructures.Section;
 import org.neugen.datastructures.parameter.NeuronParam;
+import org.neugen.gui.NeuGenConstants;
 import org.neugen.gui.Trigger;
 
 /**
@@ -507,8 +508,10 @@ public class NeuronBase extends CellBase implements Serializable, Neuron {
                 + " volume of the neuron: ").append(getVolume()).append(" µm^3\n");
 
 
+	if (NeuGenConstants.WITH_GUI) {
         Trigger trigger = Trigger.getInstance();
         trigger.outPrintln(ret.toString());
+	}
     }
 
     @Override

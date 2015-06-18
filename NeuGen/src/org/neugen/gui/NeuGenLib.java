@@ -58,6 +58,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.neugen.backend.NGBackend;
 import org.neugen.parsers.ConfigParser;
 import org.neugen.parsers.ConfigParserContainer;
 import org.neugen.datastructures.neuron.NeuronCA1Pyramidal;
@@ -189,10 +190,10 @@ public final class NeuGenLib implements Serializable {
             //generate neural net
             timeStart = System.currentTimeMillis();
             net.generate();
-            ngView.outPrintln("End generate net.");
+ //           ngView.outPrintln("End generate net.");
             timeEnd = System.currentTimeMillis();
             diffTime = (float) (timeEnd - timeStart) / (1000f);
-            ngView.outPrintln("Time to generate net: " + diffTime + " seconds.\n");
+         //   ngView.outPrintln("Time to generate net: " + diffTime + " seconds.\n");
 
             runInterconnect(NetNeocortex.cellTypesNumber);
             /*
@@ -252,14 +253,20 @@ public final class NeuGenLib implements Serializable {
             //generate neural net
             timeStart = System.currentTimeMillis();
             net.generate();
-            ngView.outPrintln("End generate net.");
+            //ngView.outPrintln("End generate net.");
             timeEnd = System.currentTimeMillis();
             diffTime = (float) (timeEnd - timeStart) / (1000f);
-            ngView.outPrintln("Time to generate net: " + diffTime + " seconds.\n");
+            //ngView.outPrintln("Time to generate net: " + diffTime + " seconds.\n");
 
             runInterconnect(NetHippocampus.cellTypesNumber);
         }
-        ngView.setNet(net);
+	
+	if (NeuGenConstants.WITH_GUI) {
+ 	       ngView.setNet(net);
+	} else {
+		NGBackend.logger.info("Without GUI!");
+	}
+	
         if (task != null) {
             task.setMyProgress(1.0f);
         }
@@ -267,6 +274,7 @@ public final class NeuGenLib implements Serializable {
     }
 
     private void runInterconnect(int cellTypesNumber) {
+	    System.err.println("Interconnect!");
         long timeStart = 0;
         long timeEnd = 0;
         float diffTime = 0.0f;
@@ -275,7 +283,7 @@ public final class NeuGenLib implements Serializable {
         net.interconnect();
         timeEnd = System.currentTimeMillis();
         diffTime = (float) (timeEnd - timeStart) / (1000f);
-        ngView.outPrintln("Time to interconnect neurons: " + diffTime + " seconds.\n");
+ //       ngView.outPrintln("Time to interconnect neurons: " + diffTime + " seconds.\n");
         System.gc();
         //create synapses
         net.createNonFunSynapses();
@@ -300,7 +308,7 @@ public final class NeuGenLib implements Serializable {
                 }
             }
         }
-        ngView.outPrintln(synMes);
+ //       ngView.outPrintln(synMes);
         Map<String, Float> presynapticConv = net.computeAPSN();
         logger.info("presynapticConv: " + presynapticConv.size());
         String preSynMes = "\n";
@@ -311,6 +319,7 @@ public final class NeuGenLib implements Serializable {
             }
         }
         presynapticConv.clear();
-        ngView.outPrintln(preSynMes);
+	System.out.println(preSynMes);
+        //ngView.outPrintln(preSynMes);
     }
 }

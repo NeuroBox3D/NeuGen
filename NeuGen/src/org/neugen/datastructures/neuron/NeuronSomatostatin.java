@@ -57,6 +57,7 @@ import org.neugen.datastructures.Region;
 import org.neugen.datastructures.parameter.AxonParam;
 import org.neugen.datastructures.parameter.NeuronParam;
 import org.neugen.datastructures.parameter.ParameterConstants;
+import org.neugen.gui.NeuGenConstants;
 import org.neugen.gui.Trigger;
 import org.neugen.utils.Vrand;
 
@@ -126,9 +127,11 @@ public final class NeuronSomatostatin extends NeuronBase implements Serializable
         Param param = getParam();
         String mes = "set for " + getType() + " neuron";
         logger.info(mes);
-        Trigger trigger = Trigger.getInstance();
-        trigger.outPrintln();
-        trigger.outPrintln(mes);
+	if (NeuGenConstants.WITH_GUI) {
+        	Trigger trigger = Trigger.getInstance();
+        	trigger.outPrintln();
+        	trigger.outPrintln(mes);
+	}
 
         
         Point3f somaMid = new Point3f(soma.getMid());

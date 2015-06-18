@@ -72,6 +72,7 @@ import org.neugen.gui.Trigger;
 import org.neugen.parsers.MorphMLReader;
 import org.neugen.utils.Utils;
 import javax.vecmath.Vector4f;
+import org.neugen.backend.NGBackend;
 import org.neugen.datastructures.Pair;
 
 /**
@@ -84,7 +85,7 @@ public class NGXWriter {
 	private final Net net;
 	private File file;
 	private String hocFileName;
-	private final Trigger trigger;
+	private Trigger trigger;
 
 	/**
 	 * @brief ctor
@@ -97,8 +98,9 @@ public class NGXWriter {
 		hocFileName = file.getName();
 		String[] str = hocFileName.split("\\.");
 		hocFileName = str[0];
-		trigger = Trigger.getInstance();
-             
+		if (NeuGenConstants.WITH_GUI) {
+			trigger = Trigger.getInstance();
+		}
 	}
 
 	/**
@@ -431,8 +433,13 @@ public class NGXWriter {
 			file = new File(file.getAbsolutePath() + "." + ngx);
 		} 
 		
-		trigger.outPrintln("Write NGX file for UG");
-		trigger.outPrintln("\t" + hocFileName + "." + ngx);
+		if (NeuGenConstants.WITH_GUI) {
+			trigger.outPrintln("Write NGX file for UG");
+			trigger.outPrintln("\t" + hocFileName + "." + ngx);
+		} else {
+			NGBackend.logger.info("Write NGX file for UG");
+			NGBackend.logger.info("\t" + hocFileName + "." + ngx);
+		}
 		writeNetToNGX();
 	}
 

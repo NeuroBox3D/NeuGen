@@ -67,6 +67,7 @@ import org.neugen.datastructures.neuron.NeuronBase;
 import org.neugen.utils.Frand;
 import org.neugen.gui.NeuGenLibTask;
 import org.neugen.datastructures.parameter.NetParam;
+import org.neugen.gui.NeuGenConstants;
 import org.neugen.gui.Trigger;
 import org.neugen.parsers.NGX.WriteToNGX;
 
@@ -627,10 +628,15 @@ public final class NetHippocampus extends NetBase implements Serializable, Net {
 
     @Override
     public void interconnect() {
-        Trigger trigger = Trigger.getInstance();
-        trigger.outPrintln("interconnect neurons");
-        trigger.outPrintln("interconnect-phase");
-        trigger.outPrintln("interconnect");
+	if (NeuGenConstants.WITH_GUI) {
+		System.err.println("interconnnecting with gui!");
+ 	       Trigger trigger = Trigger.getInstance();
+ 	       trigger.outPrintln("interconnect neurons");
+ 	       trigger.outPrintln("interconnect-phase");
+     	       trigger.outPrintln("interconnect");
+	} else {
+		System.err.println("interconnnecting without gui!");
+	}
 
         NetParam netParameter = NetParam.getInstance();
         float distSynapse = netParameter.getDistSynapse();
@@ -756,7 +762,10 @@ public final class NetHippocampus extends NetBase implements Serializable, Net {
         if (ngLibTask != null) {
             ngLibTask.setMyProgress(1.0f);
         }
-        trigger.outPrintln("end of interconnect");
+	if (NeuGenConstants.WITH_GUI) {
+		Trigger trigger = Trigger.getInstance();
+        	trigger.outPrintln("end of interconnect");
+	}
 
         // CA1 pyramidal
         /*

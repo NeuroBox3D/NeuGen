@@ -126,13 +126,9 @@ public final class NeuGenConstants {
     public static final String DESCRIPTION_SWC = "Cvapp Files (*.swc)";
     public static final String DESCRIPTION_CSV = "CSV Files (*.csv)";
     public static final String DESCRIPTION_NGX = "NGX Files (*.ngx)";
-
-
-
-
-
-
-
+    
+    public static boolean WITH_GUI = true;
+    
     //////////////////////////////////
 
 }

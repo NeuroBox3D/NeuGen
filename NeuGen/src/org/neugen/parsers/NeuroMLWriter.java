@@ -73,6 +73,8 @@ import org.neugen.datastructures.neuron.Neuron;
 import org.neugen.datastructures.Pair;
 import org.neugen.datastructures.Section;
 import org.neugen.datastructures.Segment;
+import org.neugen.gui.NeuGenConstants;
+import org.neugen.gui.Trigger;
 import org.neugen.parsers.NeuroML.NetworkML.NetworkMLElement;
 import org.neugen.parsers.NeuroML.NetworkML.NeuroMLNetwork;
 import org.neugen.parsers.NeuroML.NetworkML.NeuroMLSynapse;
@@ -648,7 +650,7 @@ public final class NeuroMLWriter {
 				float process = (float) (i + 1) / (float) nneuron;
 				task.setMyProgress(process);
 			}
-			//trigger.trigger((i + 1) / (float) nneuron);
+			/// trigger.trigger((i + 1) / (float) nneuron);
 		}
 		if (task != null) {
 			task.setMyProgress(1.0f);

@@ -55,6 +55,7 @@ import java.io.Writer;
 import java.util.List;
 import javax.vecmath.Point3f;
 import org.apache.log4j.Logger;
+import org.neugen.backend.NGBackend;
 import org.neugen.datastructures.Axon;
 import org.neugen.datastructures.Cellipsoid;
 import org.neugen.datastructures.Cons;
@@ -94,7 +95,9 @@ public final class HocWriter {
 		hocFileName = file.getName();
 		String[] str = hocFileName.split("\\.");
 		hocFileName = str[0];
-		trigger = Trigger.getInstance();
+		if (NeuGenConstants.WITH_GUI) {
+			trigger = Trigger.getInstance();
+		}
 	}
 
 	public void setNetConEventsFilePostfix(String netConEventsFilePostfix) {
@@ -299,7 +302,11 @@ public final class HocWriter {
 
 		// write model to file
 		String sm_fname = hocFileName + "model.hoc";
-		trigger.outPrintln("\t" + sm_fname);
+		if (NeuGenConstants.WITH_GUI) {
+			trigger.outPrintln("\t" + sm_fname);
+		} else {
+			NGBackend.logger.info("\t" + sm_fname);
+		}
 		String modelFilePath = file.getParentFile().getPath() + NeuGenConstants.FILE_SEP + sm_fname;
 		fw = new FileWriter(new File(modelFilePath));
 
@@ -369,7 +376,11 @@ public final class HocWriter {
 		}
 		// write synapses to file
 		String c_fname = this.hocFileName + ".syn_coords";
-		trigger.outPrintln("\t" + c_fname);
+		if (NeuGenConstants.WITH_GUI) {
+			trigger.outPrintln("\t" + c_fname);
+		} else {
+			NGBackend.logger.info("\t" + c_fname);
+		}
 		String synapseFilePath = file.getParentFile().getPath() + NeuGenConstants.FILE_SEP + c_fname;
 		Writer synFW = new FileWriter(new File(synapseFilePath));
 
@@ -383,7 +394,12 @@ public final class HocWriter {
 
 		// write model to file
 		String sm_fname = hocFileName + "model.hoc";
+		
+		if (NeuGenConstants.WITH_GUI) {
 		trigger.outPrintln("\t" + sm_fname);
+		} else {
+			NGBackend.logger.info("\t" + sm_fname);
+		}
 		String modelFilePath = file.getParentFile().getPath() + NeuGenConstants.FILE_SEP + sm_fname;
 		fw = new FileWriter(new File(modelFilePath));
 
@@ -490,7 +506,11 @@ public final class HocWriter {
 
 		// write synapses to file
 		String c_fname = this.hocFileName + ".syn_coords";
-		trigger.outPrintln("\t" + c_fname);
+		if (NeuGenConstants.WITH_GUI) {
+			trigger.outPrintln("\t" + c_fname);
+		} else {
+			NGBackend.logger.info("\t" + c_fname);
+		}
 		String synapseFilePath = file.getParentFile().getPath() + NeuGenConstants.FILE_SEP + c_fname;
 		Writer synFW = new FileWriter(new File(synapseFilePath));
 
@@ -505,7 +525,11 @@ public final class HocWriter {
 
 		// write model to file
 		String sm_fname = hocFileName + "model.hoc";
-		trigger.outPrintln("\t" + sm_fname);
+		if (NeuGenConstants.WITH_GUI) {
+			trigger.outPrintln("\t" + sm_fname);
+		} else {
+			NGBackend.logger.info("\t " + sm_fname);
+		}
 		String modelFilePath = file.getParentFile().getPath() + NeuGenConstants.FILE_SEP + sm_fname;
 		fw = new FileWriter(new File(modelFilePath));
 
@@ -580,8 +604,13 @@ public final class HocWriter {
 			voltageFilePostfix = null;
 		}
 		try {
-			trigger.outPrintln("Write hoc file for NEURON");
-			trigger.outPrintln("\t" + hocFileName + ".hoc");
+			if (NeuGenConstants.WITH_GUI) {
+				trigger.outPrintln("Write hoc file for NEURON");
+				trigger.outPrintln("\t" + hocFileName + ".hoc");
+			} else {
+				NGBackend.logger.info("Write hoc file for NEURON");
+				NGBackend.logger.info("\t" + hocFileName + ".hoc");
+			}
 			fw = new FileWriter(file);
 			// (simone) only events
 			if (netConEventsFilePostfix != null && voltageFilePostfix == null) {

@@ -89,23 +89,15 @@ public final class NGBackendUtil {
 	 */
 	public static boolean del(File dir) {
 		if (dir.isDirectory()) {
-			String[] entries = dir.list();
-			for (int i = 0; i < entries.length; i++) {
-				File file = new File(dir.getPath(), entries[i]);
-				del(file);
-			}
-			if (dir.delete()) {
-				return true;
-			} else {
-				return false;
-			}
-		} else {
-			if (dir.delete()) {
-				return true;
-			} else {
-				return false;
+			for (String entry : dir.list()) {
+				del(new File(dir.getPath(), entry));
 			}
 		}
-	}
+		
+		if (dir.delete()) {
+			return true;
+		}
 
+		return false;
+	}
 }

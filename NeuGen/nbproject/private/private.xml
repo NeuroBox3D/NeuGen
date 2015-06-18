@@ -9,13 +9,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/gui/Trigger.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/parsers/NeuroMLWriter.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/parsers/NGX/NGXAxon.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/parsers/SimpleHocWriter.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/parsers/NGX/NGXSoma.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/parsers/RecursiveInheritance.java</file>
-            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/parsers/NeuGenConfigStreamer.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/parsers/HOCUtil.java</file>
+            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/vrl/VCanvas3DType.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/gui/DensityVisualizationConfiguration.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/utils/Utils.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/datastructures/MiniVoxel.java</file>
@@ -23,21 +24,32 @@
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/datastructures/parameter/MinMaxParameter.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/datastructures/parameter/Parameter.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/datastructures/EpsilonDB.java</file>
+            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/gui/NeuGenLib.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/datastructures/NetNeocortex.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/datastructures/Axon.java</file>
+            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/backend/NGBackend.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/gui/NeuGenView.java</file>
+            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/datastructures/neuron/NeuronL4stellate.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/parsers/NeuroMLWriterTask.java</file>
+            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/vrl/VisualizationContext.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/parsers/NGX/NGXSynapse.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/parsers/OBJReader.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/parsers/NGX/NGXWriter.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/gui/DensityDialog.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/gui/NeuGenProject.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/parsers/NGX/NGXBase.java</file>
+            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/gui/XMLTreeView.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/parsers/NGX/NGXTypes.java</file>
+            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/vrl/plugin/Configurator.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/datastructures/Cons.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/datastructures/NetHippocampus.java</file>
+            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/vrl/resources/NeuGenApp.properties</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/gui/NeuGenConstants.java</file>
+            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/datastructures/neuron/NeuronL5Pyramidal.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/parsers/HocWriterTask.java</file>
+            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/datastructures/neuron/NeuronBase.java</file>
+            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/vrl/DensityVisualizationParamsInput.java</file>
+            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/vrl/DensityVisualizationConfigDialog.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/docs/TODO-Liste.txt</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/parsers/NeuroML/NetworkML/NeuroMLSynapseUnilateral.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/parsers/NGX/WriteToNGX.java</file>
@@ -46,20 +58,28 @@
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/datastructures/Net.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/gui/GlobalParameterDialog.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/datastructures/DendriteSection.java</file>
+            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/vrl/resources/Resources.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/parsers/HocWriter.java</file>
+            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/vrl/DensityVisualizationParams.java</file>
+            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/gui/Utils.java</file>
+            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/vrl/resources/images/NG_GUI_COMMENT.jpg</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/gui/NGKeyDialog.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/datastructures/NetBase.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/parsers/NGX/NGXElem.java</file>
+            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/datastructures/neuron/NeuronL23Pyramidal.java</file>
+            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/vrl/resources/HocDialog.properties</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/parsers/NGX/NGXDend.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/datastructures/parameter/SubCommonTreeParam.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/vrl/resources/NeuGenView.properties</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/parsers/NGX/NGXConnection.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/datastructures/NeuronalTreeStructure.java</file>
+            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/backend/NGBackendUtil.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/parsers/NGX/NGXAlphaSynapse.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/datastructures/WriteToHoc.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/datastructures/DataStructureConstants.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/parsers/NGX/NGXExp2Synapse.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/gui/HocDialog.java</file>
+            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/gui/NewSingleton.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/gui/NeuGenLibTask.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/datastructures/parameter/NetParam.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/utils/Frand.java</file>

@@ -57,6 +57,7 @@ import org.neugen.datastructures.Dendrite;
 import org.neugen.datastructures.parameter.AxonParam;
 import org.neugen.datastructures.parameter.NeuronParam;
 import org.neugen.datastructures.parameter.ParameterConstants;
+import org.neugen.gui.NeuGenConstants;
 import org.neugen.utils.Vrand;
 
 /**
@@ -137,9 +138,11 @@ public final class NeuronParvalbumin extends NeuronBase implements Serializable,
 
         String mes = "set for " + getType() + " neuron";
         logger.info(mes);
-        Trigger trigger = Trigger.getInstance();
-        trigger.outPrintln();
-        trigger.outPrintln(mes);
+	if (NeuGenConstants.WITH_GUI) {
+		Trigger trigger = Trigger.getInstance();
+		trigger.outPrintln();
+		trigger.outPrintln(mes);
+	}
 
        
         Point3f somaMid = new Point3f(soma.getMid());

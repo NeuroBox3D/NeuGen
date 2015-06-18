@@ -56,6 +56,7 @@ import org.neugen.datastructures.Dendrite;
 import org.neugen.datastructures.parameter.AxonParam;
 import org.neugen.datastructures.parameter.NeuronParam;
 import org.neugen.datastructures.parameter.ParameterConstants;
+import org.neugen.gui.NeuGenConstants;
 import org.neugen.gui.Trigger;
 import org.neugen.utils.Vrand;
 
@@ -130,9 +131,11 @@ public final class NeuronCalbindin extends NeuronBase implements Serializable, N
     @Override
     public void setNeuron() {
         String mes = "set for " + getType() + " neuron";
-        Trigger trigger = Trigger.getInstance();
-        trigger.outPrintln();
-        trigger.outPrintln(mes);
+	if (NeuGenConstants.WITH_GUI) {
+       	 Trigger trigger = Trigger.getInstance();
+       	 trigger.outPrintln();
+       	 trigger.outPrintln(mes);
+	}
 
 
         Param param = getParam();

@@ -57,6 +57,7 @@ import org.neugen.datastructures.Region;
 import org.neugen.datastructures.parameter.AxonParam;
 import org.neugen.datastructures.parameter.NeuronParam;
 import org.neugen.datastructures.parameter.ParameterConstants;
+import org.neugen.gui.NeuGenConstants;
 import org.neugen.gui.Trigger;
 import org.neugen.utils.Vrand;
 
@@ -128,9 +129,11 @@ public final class NeuronCholecystokinin extends NeuronBase implements Serializa
     public void setNeuron() {
         Param param = getParam();
         String mes = "set for " + getType() + " interneuron";
-        Trigger trigger = Trigger.getInstance();
-        trigger.outPrintln();
-        trigger.outPrintln(mes);
+	if (NeuGenConstants.WITH_GUI) {
+        	Trigger trigger = Trigger.getInstance();
+        	trigger.outPrintln();
+        	trigger.outPrintln(mes);
+	}
         logger.info(mes);
 
         
