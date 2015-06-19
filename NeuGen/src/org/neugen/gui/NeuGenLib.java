@@ -274,7 +274,6 @@ public final class NeuGenLib implements Serializable {
     }
 
     private void runInterconnect(int cellTypesNumber) {
-	    System.err.println("Interconnect!");
         long timeStart = 0;
         long timeEnd = 0;
         float diffTime = 0.0f;

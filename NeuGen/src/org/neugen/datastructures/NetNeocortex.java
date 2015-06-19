@@ -380,14 +380,11 @@ public final class NetNeocortex extends NetBase implements Serializable, Net {
      */
     @Override
     public void interconnect() {
-	    System.err.println("WITH_GUI: " + NeuGenConstants.WITH_GUI);
 	if (NeuGenConstants.WITH_GUI) {
         	Trigger trigger = Trigger.getInstance();
         	trigger.outPrintln("interconnect neurons");
         	trigger.outPrintln("interconnect-phase");
         	trigger.outPrintln("interconnect");
-	} else {
-		System.err.println("without gui!");
 	}
 
         NetParam netParameter = NetParam.getInstance();

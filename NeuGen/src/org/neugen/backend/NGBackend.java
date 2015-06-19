@@ -73,6 +73,7 @@ import org.neugen.gui.NeuGenLib;
 import org.neugen.parsers.DefaultInheritance;
 import org.neugen.parsers.NGX.NGXWriter;
 import org.neugen.parsers.NeuGenConfigStreamer;
+import org.neugen.utils.NeuGenLogger;
 import org.neugen.utils.Utils;
 
 /**
@@ -97,7 +98,7 @@ public final class NGBackend {
 	 */
 	public NGBackend() {
 		NeuGenConstants.WITH_GUI = false;
-		
+		NeuGenLogger.initLogger();
 	}
 	
 	/**
@@ -177,7 +178,7 @@ public final class NGBackend {
 	public Map<String, XMLObject> create_project(String projectPath, String projectType, boolean force) {
 		logger.info("project path (project type: " + projectType + "): " + projectPath);
 		File projectDir = new File(projectPath);
-		if (NGBackendUtil.fileExists(projectDir, force)) {
+		if (!NGBackendUtil.fileExists(projectDir, force)) {
 			if (projectType.equals(NeuGenConstants.HIPPOCAMPUS_PROJECT)) {
 				String sourcePath = NeuGenConstants.CONFIG_DIR + System.getProperty("file.separator") + NeuGenConstants.HIPPOCAMPUS_PROJECT.toLowerCase();
 				File sourceDir = new File(sourcePath);
@@ -213,9 +214,13 @@ public final class NGBackend {
 				} catch (IOException ex) {
 					logger.error(ex);
 				}
+			} else {
+				logger.fatal("Wrong project type specified aborting: " + 
+					projectType + ". Supported project types are " +
+					NeuGenConstants.NEOCORTEX_PROJECT + " and " +
+					NeuGenConstants.HIPPOCAMPUS_PROJECT + ".");
 			}
 		}
-
 		return initProjectParam(projectPath, projectType);
 	}
 
@@ -409,14 +414,20 @@ public final class NGBackend {
 	 * 
 	 * @param args
 	 */
+	@SuppressWarnings("CallToPrintStackTrace")
 	public static void main(String... args) {
-		NGBackend back = new NGBackend();
-		Map<String, XMLObject> params = back.create_project("foo", "NeoCortex", false);
-		back.modifyNPartsDensity(params, "foo/Neocortex", 0.1);
-		back.generate_network(NeuGenConstants.NEOCORTEX_PROJECT);
-		back.export_network("NGX", "foo2.ngx");
 		/**
 		 * @brief todo works - test remaining functionality...
 		 */
+		try {
+			NGBackend back = new NGBackend();
+			Map<String, XMLObject> params = back.create_project("foo24", NeuGenConstants.NEOCORTEX_PROJECT, true);
+			back.modifyNPartsDensity(params, "foo24/Neocortex", 0.1);
+			back.generate_network(NeuGenConstants.NEOCORTEX_PROJECT);
+			back.export_network("NGX", "foo24.ngx");
+		} catch (Exception e) {
+			logger.fatal("Make sure you selected a valid project directory: " + e);
+			e.printStackTrace();
+		}
 	}
 }

@@ -76,8 +76,10 @@ public final class NGBackendUtil {
 		if (file.exists()) {
 			if (force) {
 				del(file);
+				return false;
+			} else {
+				return true;
 			}
-			return true;
 		}
 		return false;
 	}
