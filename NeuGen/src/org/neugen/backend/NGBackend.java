@@ -46,7 +46,6 @@
  * Neurocomputing, 70(1-3), pp. 327-343, doi: 10.1016/j.neucom.2006.01.028
  *
  */
-
 /// package's name
 package org.neugen.backend;
 
@@ -79,20 +78,20 @@ import org.neugen.utils.Utils;
 /**
  * @brief provide some backend functionality
  * @author stephanmg <stephan@syntaktischer-zucker.de>
- * 
+ *
  * @note maybe a configuration builder (SettingsBuilder) is a good choice
  */
 public final class NGBackend {
+
 	/// public static members
 	public static final Logger logger = Logger.getLogger(NGBackend.class.getName());
-	
+
 	/// private static members
 	private static final String ENCODING = "UTF-8";
 	private static final NeuGenLib ngLib = new NeuGenLib();
 	private static final double DIST_SYNAPSE = 1.0;
 	private static final double N_PARTS_DENSITY = 0.01;
 
-	
 	/**
 	 * @brief default ctor
 	 */
@@ -100,7 +99,7 @@ public final class NGBackend {
 		NeuGenConstants.WITH_GUI = false;
 		NeuGenLogger.initLogger();
 	}
-	
+
 	/**
 	 * @brief enhanced ctor
 	 * @param with_gui
@@ -108,10 +107,10 @@ public final class NGBackend {
 	public NGBackend(boolean with_gui) {
 		NeuGenConstants.WITH_GUI = with_gui;
 	}
-	
+
 	/**
 	 * @brief executes just the project
-	 * 
+	 *
 	 * @param projectType
 	 */
 	public void execute(String projectType) {
@@ -120,7 +119,7 @@ public final class NGBackend {
 
 	/**
 	 * @brief loads the initial parameters from project directory
-	 * 
+	 *
 	 * @param file
 	 * @param root
 	 * @return
@@ -142,7 +141,7 @@ public final class NGBackend {
 
 	/**
 	 * @brief get's the project property
-	 * 
+	 *
 	 * @param projectPath
 	 * @param projectType
 	 */
@@ -215,10 +214,10 @@ public final class NGBackend {
 					logger.error(ex);
 				}
 			} else {
-				logger.fatal("Wrong project type specified aborting: " + 
-					projectType + ". Supported project types are " +
-					NeuGenConstants.NEOCORTEX_PROJECT + " and " +
-					NeuGenConstants.HIPPOCAMPUS_PROJECT + ".");
+				logger.fatal("Wrong project type specified aborting: "
+					+ projectType + ". Supported project types are "
+					+ NeuGenConstants.NEOCORTEX_PROJECT + " and "
+					+ NeuGenConstants.HIPPOCAMPUS_PROJECT + ".");
 			}
 		}
 		return initProjectParam(projectPath, projectType);
@@ -236,7 +235,7 @@ public final class NGBackend {
 
 	/**
 	 * @brief saves the INTERNA parameters
-	 * 
+	 *
 	 * @param currentRoot
 	 * @param projectDirPath
 	 */
@@ -246,7 +245,7 @@ public final class NGBackend {
 
 	/**
 	 * @brief save all params
-	 * 
+	 *
 	 * @param paramTrees
 	 * @param projectDirPath
 	 */
@@ -286,7 +285,7 @@ public final class NGBackend {
 
 	/**
 	 * @brief init param table
-	 * 
+	 *
 	 * @param paramTrees
 	 * @param paramPath
 	 * @param internaPath
@@ -303,7 +302,7 @@ public final class NGBackend {
 
 	/**
 	 * @brief init all parameters
-	 * 
+	 *
 	 * @param dirPath
 	 * @param projectType
 	 */
@@ -324,7 +323,7 @@ public final class NGBackend {
 
 	/**
 	 * @brief generates the net actually
-	 * 
+	 *
 	 * @param projectType
 	 */
 	public void generate_network(String projectType) {
@@ -335,7 +334,7 @@ public final class NGBackend {
 
 	/**
 	 * @brief exports a network
-	 * 
+	 *
 	 * @param type
 	 * @param file
 	 */
@@ -352,7 +351,7 @@ public final class NGBackend {
 
 	/**
 	 * @brief modify the project params and set them
-	 * 
+	 *
 	 * @param paramTrees;
 	 * @param projectDirPath
 	 */
@@ -368,19 +367,94 @@ public final class NGBackend {
 	}
 
 	/**
-	 * @brief todo implement
-	 * 
+	 * @brief modifies n parts density
+	 *
 	 * @param paramTrees
 	 * @param projectDirPath
-	 * @param npartsdensity
+	 * @param density
 	 */
-	public void modifyNPartsDensity(Map<String, XMLObject> paramTrees, String projectDirPath, double npartsdensity) {
+	@SuppressWarnings("unchecked")
+	public void modifyNPartsDensity(Map<String, XMLObject> paramTrees, String projectDirPath, double density) {
+		for (Map.Entry<String, XMLObject> entry : paramTrees.entrySet()) {
+			XMLObject obj = entry.getValue();
 
+			Enumeration<XMLNode> childs = obj.children();
+
+			while (childs.hasMoreElements()) {
+				XMLNode node = childs.nextElement();
+				if ("neuron".equals(node.toString())) {
+					Enumeration<XMLNode> childs2 = node.children();
+					while (childs2.hasMoreElements()) {
+						XMLNode node2 = childs2.nextElement();
+						if ("axon".equals(node2.toString())) {
+							Enumeration<XMLNode> childs3 = node2.children();
+							while (childs3.hasMoreElements()) {
+								XMLNode child4 = childs3.nextElement();
+								if ("gen_0".equals(child4.toString())) {
+									Enumeration<XMLNode> childs5 = child4.children();
+
+									while (childs5.hasMoreElements()) {
+										XMLNode child6 = childs5.nextElement();
+
+										if ("nparts_density".equals(child6.getKey())) {
+											System.err.println("child6 (before): " + child6.toString());
+											System.err.println("child6's key (before): " + child6.getKey());
+
+											child6.setValue(density);
+
+											System.err.println("child6 (after): " + child6.toString());
+											System.err.println("child6's key (after): " + child6.getKey());
+										}
+
+										if ("siblings".equals(child6.getKey())) {
+											correct_siblings(child6, "nparts_density", density);
+										}
+
+									}
+								}
+							}
+
+						} else if ("dendrite".equals(node2.toString())) {
+
+							Enumeration<XMLNode> childs3 = node2.children();
+							while (childs3.hasMoreElements()) {
+								XMLNode child4 = childs3.nextElement();
+								System.err.println("axon child: " + child4.toString());
+								if ("gen_0".equals(child4.toString())) {
+									Enumeration<XMLNode> childs5 = child4.children();
+
+									while (childs5.hasMoreElements()) {
+										XMLNode child6 = childs5.nextElement();
+
+										if ("nparts_density".equals(child6.getKey())) {
+											System.err.println("child6 (before): " + child6.toString());
+											System.err.println("child6's key (before): " + child6.getKey());
+											child6.setValue(density);
+
+											System.err.println("child6 (after): " + child6.toString());
+											System.err.println("child6's key (after): " + child6.getKey());
+										}
+
+										if ("siblings".equals(child6.getKey())) {
+											correct_siblings(child6, "nparts_density", density);
+										}
+
+									}
+								}
+							}
+
+						} else {
+
+						}
+					}
+				}
+			}
+		}
 	}
 
 	/**
 	 * @brief correct synapse dist to custom value
-	 * 
+	 *
 	 * @param paramTrees
 	 * @param projectDirPath
 	 * @param dist_synapse
@@ -407,11 +481,67 @@ public final class NGBackend {
 			}
 		}
 	}
+	
+	/**
+	 * @brief modifies some NEURON parameter
+	 * @todo implement
+	 * 
+	 * @param paramTree
+	 * @param projectDirPath
+	 * @param param 
+	 */
+	public void modifyNEURONParameter(Map.Entry<String, XMLObject> paramTree, String projectDirPath, double param) {
+		
+	}
+	
+	/**
+	 * @brief modifies some INTERNA parameter
+	 * @todo implement
+	 * 
+	 * @param paramTree
+	 * @param projectDirPath
+	 * @param param 
+	 */
+	public void modifyINTERNAParameter(Map.Entry<String, XMLObject> paramTree, String projectDirPath, double param) {
+		
+	}
 
+	/**
+	 * @brief replaces content of a given node specified by identifier with
+	 * replacement
+	 * @author stephanmg <stephan@syntaktischer-zucker.de>
+	 *
+	 * @param child
+	 * @param identifier
+	 * @param replacement
+	 */
+	@SuppressWarnings("unchecked")
+	private void correct_siblings(XMLNode child, String identifier, double replacement) {
+		/// only one child called siblings within childs of current XMLNode child
+		Enumeration<XMLNode> childs = child.children();
+		XMLNode sibling = childs.nextElement();
+		Enumeration<XMLNode> childs_of_sibling = sibling.children();
+
+		while (childs_of_sibling.hasMoreElements()) {
+			/// current child of current sibling's child
+			XMLNode current_child = childs_of_sibling.nextElement();
+
+			/// replace node's content
+			if (identifier.equals(current_child.getKey())) {
+				current_child.setValue(replacement);
+			}
+
+			/// more siblings?
+			if ("siblings".equals(current_child.getKey())) {
+				correct_siblings(current_child, identifier, replacement);
+			}
+		}
+
+	}
 
 	/**
 	 * @brief test
-	 * 
+	 *
 	 * @param args
 	 */
 	@SuppressWarnings("CallToPrintStackTrace")
