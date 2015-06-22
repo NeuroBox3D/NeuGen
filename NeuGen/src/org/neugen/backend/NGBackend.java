@@ -57,6 +57,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -174,7 +176,7 @@ public final class NGBackend {
 	 * @param force
 	 * @return
 	 */
-	public Map<String, XMLObject> create_project(String projectPath, String projectType, boolean force) {
+	public Map<String, XMLObject> create_and_open_project(String projectPath, String projectType, boolean force) {
 		logger.info("project path (project type: " + projectType + "): " + projectPath);
 		File projectDir = new File(projectPath);
 		if (!NGBackendUtil.fileExists(projectDir, force)) {
@@ -331,6 +333,29 @@ public final class NGBackend {
 		//ngLib.getNet().destroy();
 		//ngLib.destroy();
 	}
+	
+	/**
+	 * @brief saves and closes project
+	 * @param paramTrees
+	 * @param projectDirPath
+	 */
+	public void save_and_close_project(Map<String, XMLObject> paramTrees, String projectDirPath) {
+		/// save project
+		save(paramTrees, projectDirPath);
+		
+		/**
+		 * @todo how to close savely the project
+		 */
+		
+		/// clear param data and destroy all net components
+		NeuGenLib.clearOldParamData();
+		ngLib.destroy();
+		ngLib.getNet().destroy();
+		
+		/**
+		 * @todo test if this works really
+		 */
+	}
 
 	/**
 	 * @brief exports a network
@@ -481,29 +506,115 @@ public final class NGBackend {
 			}
 		}
 	}
+
 	
 	/**
-	 * @brief modifies some NEURON parameter
-	 * @todo implement
-	 * 
-	 * @param paramTree
+	 * @brief modifies a Neuron and Interna parameter
+	 * @param paramTrees
 	 * @param projectDirPath
-	 * @param param 
+	 * @param param
+	 * @param param2
+	 * @param identifier
+	 * @param identifier2 
 	 */
-	public void modifyNEURONParameter(Map.Entry<String, XMLObject> paramTree, String projectDirPath, double param) {
-		
+	public void modifyAllParameter(Map<String, XMLObject> paramTrees, String projectDirPath, double param, double param2, String identifier, String identifier2) {
+		modifyParameter(paramTrees, projectDirPath, param, identifier, NeuGenConstants.PARAM);
+		modifyParameter(paramTrees, projectDirPath, param2, identifier2, NeuGenConstants.INTERNA);
 	}
 	
 	/**
-	 * @brief modifies some INTERNA parameter
-	 * @todo implement
-	 * 
+	 * @brief modifies a Neuron or Interna parameter
+	 * @param paramTrees
+	 * @param projectDirPath
+	 * @param param
+	 * @param identifier
+	 * @param parameter_domain 
+	 */
+	private void modifyParameter(Map<String, XMLObject> paramTrees, String projectDirPath, double param, String identifier, String parameter_domain) {
+		for (Map.Entry<String, XMLObject> entry : paramTrees.entrySet()) {
+			XMLObject obj = entry.getValue();
+			if (entry.getKey().equals(NeuGenConstants.PARAM)) {
+				modifyParameter(obj, projectDirPath, param, identifier);
+			} else {
+				logger.warn("You did not supply a NeuGen ***" + parameter_domain + "*** tree!");
+			}
+		}
+	}
+	
+	/**
+	 * @brief modify's an Interna parameter
+	 * @param paramTrees
+	 * @param projectDirPath
+	 * @param param
+	 * @param identifier 
+	 */
+	public void modifyInternaParameter(Map<String, XMLObject> paramTrees, String projectDirPath, double param, String identifier) {
+		modifyParameter(paramTrees, projectDirPath, param, identifier, NeuGenConstants.INTERNA);
+	}
+	
+	/**
+	 * @brief modify's a Neuron parameter
+	 * @param paramTrees
+	 * @param projectDirPath
+	 * @param param
+	 * @param identifier 
+	 */
+	public void modifyNeuronParameter(Map<String, XMLObject> paramTrees, String projectDirPath, double param, String identifier) {
+		modifyParameter(paramTrees, projectDirPath, param, identifier, NeuGenConstants.PARAM);
+	}
+	
+	/**
+	 * @brief modifies some NEURON parameter recursively
 	 * @param paramTree
 	 * @param projectDirPath
-	 * @param param 
+	 * @param param
+	 * @param identifier
 	 */
-	public void modifyINTERNAParameter(Map.Entry<String, XMLObject> paramTree, String projectDirPath, double param) {
+	@SuppressWarnings("unchecked")
+	private void modifyParameter(XMLObject paramTree, String projectDirPath, double param, String identifier) {
+		if (!identifier.equals("/")) {
+			logger.warn("Apparently you did not supply a path to a parameter: " + identifier);
+			return;
+		}
+
+		ArrayList<String> pathes = new ArrayList<String>(Arrays.asList(identifier.split("/")));
+		Enumeration<XMLNode> childs = paramTree.children();		
 		
+		while (childs.hasMoreElements()) {
+			XMLNode node = childs.nextElement();
+			if (pathes.get(0).equals(node.getKey())) {
+				modifyParameter_rec(node,
+					param,
+					(ArrayList<String>) pathes.subList(1, pathes.size()-1));
+			} else {
+				logger.warn("Invalid path to parameter specified: " + identifier);
+			}
+		}
+	}
+
+	/**
+	 * @brief modifies some NEURON parameter recursively
+	 * @param root
+	 * @param param
+	 * @param identifier
+	 */
+	@SuppressWarnings("unchecked")
+	private void modifyParameter_rec(XMLNode root, double param, ArrayList<String> identifier) {
+		Enumeration<XMLNode> childs = root.children();
+		while (childs.hasMoreElements()) {
+			XMLNode node = childs.nextElement();
+			if (identifier.get(0).equals(node.getKey())) {
+				if (identifier.size() == 1) {
+					node.setValue(param);
+				} else {
+					modifyParameter_rec(node,
+						param,
+						(ArrayList<String>) identifier.subList(1, identifier.size()-1));
+				}
+			} else {
+				logger.warn("Invalid path to parameter specified: " + identifier);
+			}
+		}
 	}
 
 	/**
@@ -551,10 +662,11 @@ public final class NGBackend {
 		 */
 		try {
 			NGBackend back = new NGBackend();
-			Map<String, XMLObject> params = back.create_project("foo24", NeuGenConstants.NEOCORTEX_PROJECT, true);
+			Map<String, XMLObject> params = back.create_and_open_project("foo24", NeuGenConstants.NEOCORTEX_PROJECT, true);
 			back.modifyNPartsDensity(params, "foo24/Neocortex", 0.1);
 			back.generate_network(NeuGenConstants.NEOCORTEX_PROJECT);
 			back.export_network("NGX", "foo24.ngx");
+			back.save_and_close_project(params, "foo24/");
 		} catch (Exception e) {
 			logger.fatal("Make sure you selected a valid project directory: " + e);
 			e.printStackTrace();

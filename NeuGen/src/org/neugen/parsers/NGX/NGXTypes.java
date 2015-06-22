@@ -54,6 +54,7 @@ package org.neugen.parsers.NGX;
  * @brief NGX element types
  * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
-public enum NGXTypes {
-	DENDRITE, AXON, SOMA, EXP2_SYNAPSE, ALPHA_SYNAPSE;
+public enum NGXTypes { 
+	/// AXON 0, DENDRITE 1, SOMA 2, EXP2_SYNAPSE 3 ...
+	AXON, DENDRITE, SOMA, EXP2_SYNAPSE, ALPHA_SYNAPSE;
 }
