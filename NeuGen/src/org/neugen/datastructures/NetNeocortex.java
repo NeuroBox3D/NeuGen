@@ -769,8 +769,8 @@ public final class NetNeocortex extends NetBase implements Serializable, Net {
 			NGXExp2Synapse ngxsynapse = new NGXExp2Synapse();
 			ngxsynapse.setName("Synapse" + j);
 			ngxsynapse.setId(j);
-			ngxsynapse.setFrom("N" + n_idx + "dendrite" + sec_id);
-			ngxsynapse.setFrom_loc(dd);
+			ngxsynapse.setTo("N" + n_idx + "dendrite" + sec_id);
+			ngxsynapse.setTo_loc(dd);
 			
 			
                 	Section ax_section = synapse.getNeuron1AxSection();
@@ -784,15 +784,15 @@ public final class NetNeocortex extends NetBase implements Serializable, Net {
                 	}
 		
 			/**
-			 * @todo write also all synapse informations
+			 * @todo from and to is interchanged here!
 			 */
 			float ax_local_position = (ax_section.getLength() * axSegPos) / ax_section.getLength();
                 	assert (!Float.isInfinite(ax_local_position));
 		
 			float ff = NeuronalTreeStructure.getDendriteSectionData(synapse.getNeuron1AxSection(), axSegPos);
 			assert (ff <= 1.0);
-			ngxsynapse.setTo("N" + synapse.getNeuron1().getIndex() + ax_section.getName());
-			ngxsynapse.setTo_loc(ff);
+			ngxsynapse.setFrom("N" + synapse.getNeuron1().getIndex() + ax_section.getName());
+			ngxsynapse.setFrom_loc(ff);
 			ngxsynapse.setGmax(1 + wfactor * synapse.getDendriticSomaDistance() * get_uEPSP_Value(typeN1, typeN2));
 			
 			ngxsynapses.add(ngxsynapse);

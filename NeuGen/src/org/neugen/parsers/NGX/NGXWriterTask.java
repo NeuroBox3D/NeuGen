@@ -105,8 +105,8 @@ public final class NGXWriterTask extends Task<Void, Void> {
         Net net = NeuGenView.getInstance().getNet();
         NGXWriter ngxWriter = new NGXWriter(net, file);
                 
-        GlobalParameterDialog dialog = new GlobalParameterDialog(NeuGenView.getInstance().getFrame(), true);
-        dialog.setVisible(true);
+        ///GlobalParameterDialog dialog = new GlobalParameterDialog(NeuGenView.getInstance().getFrame(), true);
+        ///dialog.setVisible(true);
         
 	logger.info("Exporting NGX data to... " + file.getName());
         setMessage("Exporting NGX data to... " + file.getName());
