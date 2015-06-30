@@ -119,8 +119,8 @@ public final class ConfigParser implements Serializable {
     public Object getValue() {
         return value;
     }
-
-    /**
+    
+     /**
      *  Concatenates a vector of strings (@param stringv)
      *  into a single string. Elements of @param stringv are
      *  separated by space in the result string.

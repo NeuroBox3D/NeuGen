@@ -77,9 +77,14 @@ import org.neugen.datastructures.neuron.NeuronParvalbumin;
 import org.neugen.datastructures.neuron.NeuronPyramidal;
 import org.neugen.datastructures.neuron.NeuronSomatostatin;
 import org.neugen.datastructures.neuron.NeuronStarpyramidal;
+import org.neugen.datastructures.parameter.AxonParam;
+import org.neugen.datastructures.parameter.DendriteParam;
+import org.neugen.datastructures.parameter.DendriteParam.ApicalParam;
 import org.neugen.datastructures.xml.XMLObject;
 import org.neugen.datastructures.parameter.NetParam;
 import org.neugen.datastructures.parameter.NeuronParam;
+import org.neugen.datastructures.parameter.NeuronParam.SomaParam;
+import org.neugen.datastructures.parameter.SubCommonTreeParam;
 
 /**
  * @author Alexander Wanner
@@ -107,7 +112,7 @@ public final class NeuGenLib implements Serializable {
     public void destroy() {
         NeuGenLibTask.setInstance(null);
     }
-
+    
     public static void clearOldParamData() {
         NetParam.setInstance(null);
         Region.setInstance(null);
@@ -170,7 +175,6 @@ public final class NeuGenLib implements Serializable {
                 System.err.println("*** KEY *** " + e.getKey() + " *** VALUE ***" + e.getValue());
             }
         }
-
         //NeuronParam.getInstance();
         //Axon.setDrawNumber(new Vrand(nParam.getAxonParam().getSeedValue()));
         //Dendrite.setDrawNumber(new Vrand(nParam.getDendriteParam().getSeedValue()));

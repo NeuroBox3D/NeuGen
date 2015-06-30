@@ -46,61 +46,81 @@
  * Neurocomputing, 70(1-3), pp. 327-343, doi: 10.1016/j.neucom.2006.01.028
  *
  */
-package org.neugen.parsers;
 
-import org.neugen.gui.*;
+/// package's name
+package org.neugen.parsers.TXT;
+
+/// imports
 import java.io.File;
 import org.apache.log4j.Logger;
-import org.jdesktop.application.Task;
 import org.jdesktop.application.Application;
+import org.jdesktop.application.Task;
 import org.neugen.datastructures.Net;
-import org.neugen.parsers.NGX.NGXWriter;
-import org.neugen.parsers.TXT.TXTWriter;
+import org.neugen.gui.NeuGenView;
+import org.neugen.parsers.HocWriterTask;
 
 /**
- * @author Sergei Wolf
+ * @brief the TXT writer task
+ * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
-public final class HocWriterTask extends Task<Void, Void> {
-
-    /** use to log messages */
-    private static Logger logger = Logger.getLogger(HocWriterTask.class.getName());
+public final class TXTWriterTask extends Task<Void, Void> {
+    /// private members
+    private static final Logger logger = Logger.getLogger(HocWriterTask.class.getName());
     private final File file;
 
-    public HocWriterTask(Application app, File f) {
+    /**
+     * @brief ctor
+     * @author stephanmg <stephan@syntaktischer-zucker.de>
+     * 
+     * @param app
+     * @param f 
+     */
+    public TXTWriterTask(Application app, File f) {
         super(app);
         file = f;
     }
 
+    /**
+     * @brief show progress bar
+     * @author stephanmg <stephan@syntaktischer-zucker.de>
+     * 
+     * @param value
+     * @param min
+     * @param max 
+     */
     public void setMyProgress(int value, int min, int max) {
         setProgress(value, min, max);
     }
 
+    /**
+     * @brief the actual export 
+     * @author stephanmg <stephan@syntaktischer-zucker.de>
+     * 
+     * @return 
+     */
     @Override
+    @SuppressWarnings("deprecation")
     protected Void doInBackground() {
         Net net = NeuGenView.getInstance().getNet();
-        HocWriter hocWriter = new HocWriter(net, file);
-
-        HocDialog hocConfigDialog = new HocDialog(NeuGenView.getInstance().getFrame(), true);
-        hocConfigDialog.setVisible(true);
-        String eventPostfix = hocConfigDialog.getEventsTextField().getText();
-        String voltagesPostfix = hocConfigDialog.getVoltagesTextField().getText();
-        hocWriter.setNetConEventsFilePostfix(eventPostfix);
-        hocWriter.setVoltageFilePostfix(voltagesPostfix);
-        setMessage("Exporting hoc data to... " + file.getName());
-        hocWriter.exportNet();
-
- /*       NGXWriter ngxWriter = new NGXWriter(net, file);
-	logger.info("Exporting NGX data to... " + file.getName());
-        setMessage("Exporting NGX data to... " + file.getName());
-        ngxWriter.exportNetToNGX();*/
-	/*
-	TXTWriter writer = new TXTWriter(net, file);
-	writer.exportNetToTXT();
-		*/
-        return null;  // return your result
+        TXTWriter ngxWriter = new TXTWriter(net, file);
+                
+        ///GlobalParameterDialog dialog = new GlobalParameterDialog(NeuGenView.getInstance().getFrame(), true);
+        ///dialog.setVisible(true);
+        
+	logger.info("Exporting TXT data to... " + file.getName());
+        setMessage("Exporting TXT data to... " + file.getName());
+        ngxWriter.exportNetToTXT();
+        return null;  
     }
 
+    /**
+     * @brief on success
+     * @author stephanmg <stephan@syntaktischer-zucker.de>
+     *  
+     * @param result 
+     */
     @Override
     protected void succeeded(Void result) {
     }
 }
+

@@ -68,7 +68,7 @@ public class SubCommonTreeParam extends KeyIdentificable {
     /** angle this subdendrite is brunching from its parent */
     protected final MinMaxAngle<Float> branch_angle;
     /** Nparts per micrometer. */
-    protected final Parameter<Float> nparts_density;
+    protected Parameter<Float> nparts_density;
     /** parameter to scale number of brunches.er. */
     protected final Parameter<Integer> nbranch_param;
     protected final static String LAST_PATH_SUBDENDRITE = ParameterConstants.PATH_SIBLINGS;
@@ -100,14 +100,9 @@ public class SubCommonTreeParam extends KeyIdentificable {
         return nbranch_param.getValue();
     }
 
-    public float getNpartsDensity() {
-       
-       // System.err.println("getNpartsDensity: " + nparts_density.getValue());
-        
-        //return 0.025f;
-	//return 0.0001f; // default was 0.025
+      public float getNpartsDensity() {
+        System.err.println("getNpartsDensity (from within SubCommonTree's getter!): " + nparts_density.getValue());
         return nparts_density.getValue();
-        //return 0.0001f;
     }
 
     /**

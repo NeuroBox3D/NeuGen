@@ -70,6 +70,8 @@ import java.awt.event.MouseAdapter;
 import java.beans.PropertyChangeListener;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -98,6 +100,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
 import org.jdesktop.application.Application.ExitListener;
@@ -105,6 +108,12 @@ import org.jdesktop.application.Task;
 import org.neugen.slider.SliderGeneratorTask;
 import org.neugen.datastructures.Net;
 import org.neugen.datastructures.Region;
+import org.neugen.datastructures.parameter.AxonParam;
+import org.neugen.datastructures.parameter.DendriteParam;
+import org.neugen.datastructures.parameter.NetParam;
+import org.neugen.datastructures.parameter.NeuronParam;
+import org.neugen.datastructures.parameter.SubCommonTreeParam;
+import org.neugen.datastructures.parameter.SubCommonTreeParam.GNSubCommonTreeParam;
 import org.neugen.parsers.DefaultInheritance;
 import org.neugen.parsers.NeuGenConfigStreamer;
 import org.neugen.datastructures.xml.XMLNode;
@@ -1808,6 +1817,9 @@ private void writeNGXMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//
         closeProject();
         File param = new File(dirPath + System.getProperty("file.separator") + NeuGenConstants.PARAM_FNAME);
         setParamPath(param.getPath());
+
+	System.err.println("PARAM: " + param.getAbsolutePath());
+	
         File interna = new File(dirPath + System.getProperty("file.separator") + NeuGenConstants.INTERNA_FNAME);
         setInternaPath(interna.getPath());
         
@@ -1817,7 +1829,11 @@ private void writeNGXMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//
         logger.info("*** Density *** : " + dialog.getNpartsDensity());
         logger.info("*** Synapse distance *** : " + dialog.getSynapseDistance());
         
-
+	/// needs to be corrected before writing since cached within ConfigParserContainer
+	String content = IOUtils.toString(new FileInputStream(param));
+	content = content.replaceAll("<real key=\"nparts_density\">\\d*.\\d*</real>", "<real key=\"nparts_density\">"+ dialog.getNpartsDensity() + "</real>");
+	IOUtils.write(content, new FileOutputStream(param));
+	
         Properties paramProper = new Properties();
         Properties internaProper = new Properties();
         File projectDir = new File(dirPath);
@@ -1850,8 +1866,9 @@ private void writeNGXMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//
         /// actually correct the parameters in the GUI view (though, the parameters
         /// are still stored in the ConfigParser somehow - to be sure we need to 
         /// save the project below again)
-        //dialog.correct_params();
+        ///dialog.correct_params();
         dialog.set_global_parameters();
+
         
    
         XMLObject top = new XMLObject(projectName, null, XMLObject.class.toString());
@@ -1951,8 +1968,6 @@ private void writeNGXMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//
         projectTree.setContentChanged(false);
         
         NeuGenLib.initParamData(initParamTable(), currentProjectType);  
-       
-    
     }
 
     public Map<String, XMLObject> initParamTable() { 

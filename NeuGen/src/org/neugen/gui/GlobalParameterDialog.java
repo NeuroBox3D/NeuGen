@@ -63,17 +63,15 @@ import org.neugen.datastructures.xml.XMLObject;
  * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
 public class GlobalParameterDialog extends JDialog {
-
-	public static final int RET_CANCEL = 0;
-	public static final int RET_OK = 1;
+	/// private static-final members
+	private static final int RET_CANCEL = 0;
+	private static final int RET_OK = 1;
 	private static final long serialVersionUID = 1L;
     	private static final Logger logger = Logger.getLogger(NeuGenView.class.getName());
-	private final String DENSITY_IDENTIFIER = "nparts_density";
-	private final String SYNAPSE_DISTANCE_IDENTIFIER = "dist_synapse";
-	private int returnStatus = RET_CANCEL;
-	private float density;
-	private float synapse_distance;
-     
+	// defaults
+	private static final float DENSITY_DEFAULT = 0.25f;
+	private static final float SYNAPSE_DISTANCE_DEFAULT = 2.5f;
+	/// tooltips
         private final static String TOOLTIP_DENSITY = "A lower value results in " 
                 + "a more sparse compartment structure and a higher value results in "
                 + "a more dense compartment structure, i. e. less or more points are "
@@ -82,8 +80,18 @@ public class GlobalParameterDialog extends JDialog {
                 + "synapses between supported cells types (note: not all cell types can form a "
                 + "synapse!). If the distance between two points describing a potential synapse is "
                 + "above the threshold distance then the potential synapse will be discarded. ";
-                
-           
+	
+	
+	/// private final members
+	private final String DENSITY_IDENTIFIER = "nparts_density";
+	private final String SYNAPSE_DISTANCE_IDENTIFIER = "dist_synapse";
+	
+	
+	/// members
+	private int returnStatus = RET_CANCEL;
+	private float density;
+	private float synapse_distance;
+	
 
 	/**
 	 * @brief creates form for global parameter dialog
@@ -259,8 +267,9 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
 		if (!synapse_distance_str.isEmpty()) {
 			this.synapse_distance = Float.parseFloat(synapse_distance_str);
 		} else {
-			this.synapse_distance = -1f;
+			this.synapse_distance = SYNAPSE_DISTANCE_DEFAULT;
 		}
+
 		return this.synapse_distance;
 	}
 
@@ -274,7 +283,7 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
 		if (!density_str.isEmpty()) {
 			this.density = Float.parseFloat(density_str);
 		} else {
-			this.density = -1f;
+			this.density = DENSITY_DEFAULT;
 		}
 
 		return this.density;
@@ -285,18 +294,14 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
 	 * method body's end)
 	 */
 	private void set_global_gen0_parameters() {
-		if (this.density != -1f) {
-			set_global_gen0_parameter(DENSITY_IDENTIFIER, this.density);
-		}
+		set_global_gen0_parameter(DENSITY_IDENTIFIER, this.density);
 	}
 
 	/**
 	 * @brief set global synapse distance parameter
 	 */
 	private void set_global_synapse_distance_parameter() {
-		if (this.synapse_distance != -1f) {
-			set_global_synapse_distance_parameter(SYNAPSE_DISTANCE_IDENTIFIER, this.synapse_distance);
-		}
+		set_global_synapse_distance_parameter(SYNAPSE_DISTANCE_IDENTIFIER, this.synapse_distance);
 	}
 
 	/**
@@ -494,7 +499,8 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
 
 		/* Create and display the dialog */
 		java.awt.EventQueue.invokeLater(new Runnable() {
-
+	
+			@Override
 			public void run() {
 				GlobalParameterDialog dialog = new GlobalParameterDialog(new javax.swing.JFrame(), true);
 				dialog.addWindowListener(new java.awt.event.WindowAdapter() {
