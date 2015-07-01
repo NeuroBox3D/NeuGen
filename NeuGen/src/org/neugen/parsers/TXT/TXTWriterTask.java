@@ -104,9 +104,6 @@ public final class TXTWriterTask extends Task<Void, Void> {
         Net net = NeuGenView.getInstance().getNet();
         TXTWriter ngxWriter = new TXTWriter(net, file);
                 
-        ///GlobalParameterDialog dialog = new GlobalParameterDialog(NeuGenView.getInstance().getFrame(), true);
-        ///dialog.setVisible(true);
-        
 	logger.info("Exporting TXT data to... " + file.getName());
         setMessage("Exporting TXT data to... " + file.getName());
         ngxWriter.exportNetToTXT();
