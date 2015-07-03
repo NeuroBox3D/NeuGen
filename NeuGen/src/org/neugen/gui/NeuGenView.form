@@ -212,6 +212,9 @@
                     <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
                       <action class="org.neugen.gui.NeuGenView" id="exportData" methodName="exportData"/>
                     </Property>
+                    <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
+                      <KeyStroke key="Shift+Ctrl+X"/>
+                    </Property>
                     <Property name="text" type="java.lang.String" resourceKey="writeNeuroMLMenuItem.text"/>
                     <Property name="name" type="java.lang.String" value="writeNeuroMLMenuItem" noResource="true"/>
                   </Properties>
@@ -223,6 +226,9 @@
                   <Properties>
                     <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
                       <action class="org.neugen.gui.NeuGenView" id="exportData" methodName="exportData"/>
+                    </Property>
+                    <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
+                      <KeyStroke key="Shift+Ctrl+B"/>
                     </Property>
                     <Property name="text" type="java.lang.String" resourceKey="writeNeuGenMenuItem.text"/>
                     <Property name="name" type="java.lang.String" value="writeNeuGenMenuItem" noResource="true"/>
@@ -236,6 +242,9 @@
                     <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
                       <action class="org.neugen.gui.NeuGenView" id="exportData" methodName="exportData"/>
                     </Property>
+                    <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
+                      <KeyStroke key="Shift+Ctrl+S"/>
+                    </Property>
                     <Property name="text" type="java.lang.String" resourceKey="writeNeuTriaMenuItem.text"/>
                     <Property name="name" type="java.lang.String" value="writeNeuTriaMenuItem" noResource="true"/>
                   </Properties>
@@ -248,6 +257,9 @@
                     <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
                       <action class="org.neugen.gui.NeuGenView" id="exportData" methodName="exportData"/>
                     </Property>
+                    <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
+                      <KeyStroke key="Shift+Ctrl+I"/>
+                    </Property>
                     <Property name="text" type="java.lang.String" resourceKey="writeNeuronInfoMenuItem.text"/>
                     <Property name="name" type="java.lang.String" value="writeNeuronInfoMenuItem" noResource="true"/>
                   </Properties>
@@ -259,6 +271,9 @@
                   <Properties>
                     <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
                       <action class="org.neugen.gui.NeuGenView" id="exportData" methodName="exportData"/>
+                    </Property>
+                    <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
+                      <KeyStroke key="Shift+Ctrl+O"/>
                     </Property>
                     <Property name="text" type="java.lang.String" resourceKey="writeObjMenuItem.text"/>
                     <Property name="name" type="java.lang.String" value="writeObjMenuItem" noResource="true"/>
@@ -281,6 +296,18 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="writeNGXMenuItemActionPerformed"/>
                   </Events>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="writeTXTMenuItem">
+                  <Properties>
+                    <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                      <action class="org.neugen.gui.NeuGenView" id="exportData" methodName="exportData"/>
+                    </Property>
+                    <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
+                      <KeyStroke key="Shift+Ctrl+T"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" resourceKey="writeTXTMenuItem.text"/>
+                    <Property name="name" type="java.lang.String" value="writeTXTMenuItem" noResource="true"/>
+                  </Properties>
                 </MenuItem>
               </SubComponents>
             </Menu>

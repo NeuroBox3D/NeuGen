@@ -118,6 +118,7 @@ import org.neugen.parsers.DefaultInheritance;
 import org.neugen.parsers.NeuGenConfigStreamer;
 import org.neugen.datastructures.xml.XMLNode;
 import org.neugen.datastructures.xml.XMLObject;
+import org.neugen.gui.NGFileFilter.TXTFileFilter;
 import org.neugen.help.NeuGenHelp;
 import org.neugen.parsers.CSVWriterTask;
 import org.neugen.parsers.NeuGenReaderTask;
@@ -130,6 +131,7 @@ import org.neugen.visual.NeuGenDensityVisualization;
 import org.neugen.gui.VisualizationTask.Visualization;
 import org.neugen.parsers.NGX.NGXWriterTask;
 import org.neugen.parsers.NeuGenVisualWriterTask;
+import org.neugen.parsers.TXT.TXTWriterTask;
 //import org.neugen.visual.OBJWriter;
 
 /**
@@ -304,6 +306,7 @@ public final class NeuGenView extends FrameView implements TreeSaver {
         writeNeuronInfoMenuItem = new javax.swing.JMenuItem();
         writeObjMenuItem = new javax.swing.JMenuItem();
         writeNGXMenuItem = new javax.swing.JMenuItem();
+        writeTXTMenuItem = new javax.swing.JMenuItem();
         fileSeparator3 = new javax.swing.JSeparator();
         movieMenu = new javax.swing.JMenu();
         netMovieItem = new javax.swing.JMenuItem();
@@ -516,6 +519,7 @@ public final class NeuGenView extends FrameView implements TreeSaver {
         exportMenu.add(writeNeuronMenuItem);
 
         writeNeuroMLMenuItem.setAction(actionMap.get("exportData")); // NOI18N
+        writeNeuroMLMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         writeNeuroMLMenuItem.setText(resourceMap.getString("writeNeuroMLMenuItem.text")); // NOI18N
         writeNeuroMLMenuItem.setName("writeNeuroMLMenuItem"); // NOI18N
         writeNeuroMLMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -526,6 +530,7 @@ public final class NeuGenView extends FrameView implements TreeSaver {
         exportMenu.add(writeNeuroMLMenuItem);
 
         writeNeuGenMenuItem.setAction(actionMap.get("exportData")); // NOI18N
+        writeNeuGenMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_B, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         writeNeuGenMenuItem.setText(resourceMap.getString("writeNeuGenMenuItem.text")); // NOI18N
         writeNeuGenMenuItem.setName("writeNeuGenMenuItem"); // NOI18N
         writeNeuGenMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -536,6 +541,7 @@ public final class NeuGenView extends FrameView implements TreeSaver {
         exportMenu.add(writeNeuGenMenuItem);
 
         writeNeuTriaMenuItem.setAction(actionMap.get("exportData")); // NOI18N
+        writeNeuTriaMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         writeNeuTriaMenuItem.setText(resourceMap.getString("writeNeuTriaMenuItem.text")); // NOI18N
         writeNeuTriaMenuItem.setName("writeNeuTriaMenuItem"); // NOI18N
         writeNeuTriaMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -546,6 +552,7 @@ public final class NeuGenView extends FrameView implements TreeSaver {
         exportMenu.add(writeNeuTriaMenuItem);
 
         writeNeuronInfoMenuItem.setAction(actionMap.get("exportData")); // NOI18N
+        writeNeuronInfoMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         writeNeuronInfoMenuItem.setText(resourceMap.getString("writeNeuronInfoMenuItem.text")); // NOI18N
         writeNeuronInfoMenuItem.setName("writeNeuronInfoMenuItem"); // NOI18N
         writeNeuronInfoMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -556,6 +563,7 @@ public final class NeuGenView extends FrameView implements TreeSaver {
         exportMenu.add(writeNeuronInfoMenuItem);
 
         writeObjMenuItem.setAction(actionMap.get("exportData")); // NOI18N
+        writeObjMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         writeObjMenuItem.setText(resourceMap.getString("writeObjMenuItem.text")); // NOI18N
         writeObjMenuItem.setName("writeObjMenuItem"); // NOI18N
         writeObjMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -575,6 +583,12 @@ public final class NeuGenView extends FrameView implements TreeSaver {
             }
         });
         exportMenu.add(writeNGXMenuItem);
+
+        writeTXTMenuItem.setAction(actionMap.get("exportData")); // NOI18N
+        writeTXTMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        writeTXTMenuItem.setText(resourceMap.getString("writeTXTMenuItem.text")); // NOI18N
+        writeTXTMenuItem.setName("writeTXTMenuItem"); // NOI18N
+        exportMenu.add(writeTXTMenuItem);
 
         fileMenu.add(exportMenu);
 
@@ -1264,6 +1278,7 @@ private void writeNGXMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//
     private javax.swing.JMenuItem writeNeuronInfoMenuItem;
     private javax.swing.JMenuItem writeNeuronMenuItem;
     private javax.swing.JMenuItem writeObjMenuItem;
+    private javax.swing.JMenuItem writeTXTMenuItem;
     // End of variables declaration//GEN-END:variables
 
     /**
@@ -1725,6 +1740,7 @@ private void writeNGXMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//
                 writeNeuronMenuItem.setEnabled(true);
                 writeNeuronInfoMenuItem.setEnabled(true);
                 writeNGXMenuItem.setEnabled(true);
+                writeTXTMenuItem.setEnabled(true);
                 exportButton.setEnabled(true);
                 visualizeButton.setEnabled(true);
                 sliderButton.setEnabled(true);
@@ -1771,6 +1787,7 @@ private void writeNGXMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//
         writeNeuronMenuItem.setEnabled(false);
         writeNeuronInfoMenuItem.setEnabled(false);
         writeNGXMenuItem.setEnabled(false);
+        writeTXTMenuItem.setEnabled(false);
         exportButton.setEnabled(false);
         sliderButton.setEnabled(false);
         // visualize buttons
@@ -2096,6 +2113,8 @@ private void writeNGXMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//
             exportFileChooser.addChoosableFileFilter(new NGFileFilter.NeuronFileFilter());
         } else if (command.equals(writeNGXMenuItem.getActionCommand())) {
             exportFileChooser.addChoosableFileFilter(new NGFileFilter.NGXFileFilter());
+        } else if (command.equals(writeTXTMenuItem.getActionCommand())) {
+            exportFileChooser.addChoosableFileFilter(new TXTFileFilter());
         } else if (command.equals(writeNeuGenMenuItem.getActionCommand())) {
             exportFileChooser.addChoosableFileFilter(new NGFileFilter.NeuGenVisualFileFilter());
         } else if (command.equals(writeNeuroMLMenuItem.getActionCommand())) {
@@ -2131,11 +2150,16 @@ private void writeNGXMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//
                         statusMessageLabel.setText("Exporting " + exportFileChooser.getSelectedFile().getName());
                     }
                 } else if (fileFilter instanceof NGFileFilter.NeuroMLFileFilter) {
-                    logger.info("Writing NGX task now...");
                     if (Utils.testExistingFile(exportFileChooser)) {
                         task = new NeuroMLWriterTask(getApplication(), f);
                     }
+                } else if (fileFilter instanceof NGFileFilter.TXTFileFilter) {
+                    logger.info("Writing TXT task now...");
+                    if (Utils.testExistingFile(exportFileChooser)) {
+                        task = new TXTWriterTask(getApplication(), f);
+                    }
                 } else if (fileFilter instanceof NGFileFilter.NGXFileFilter) {
+                    logger.info("Writing NGX task now...");
                     if (Utils.testExistingFile(exportFileChooser)) {
                         task = new NGXWriterTask(getApplication(), f);
                     }

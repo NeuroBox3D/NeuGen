@@ -59,6 +59,7 @@ import org.apache.log4j.Logger;
 import org.neugen.utils.Frand;
 import org.neugen.datastructures.parameter.NetParam;
 import org.neugen.parsers.NGX.WriteToNGX;
+import org.neugen.parsers.TXT.WriteToTXT;
 
 /**
  * This class contains the construction of a neural net, for
@@ -268,6 +269,12 @@ public class NetBase implements Serializable, Net {
     @Override
     public WriteToNGX getNGXData() {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public WriteToTXT getTXTData() {
+        throw new UnsupportedOperationException("Not supported yet.");
+	    
     }
 
     public class AxonSegmentData {

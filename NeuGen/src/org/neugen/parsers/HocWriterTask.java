@@ -93,9 +93,10 @@ public final class HocWriterTask extends Task<Void, Void> {
 	logger.info("Exporting NGX data to... " + file.getName());
         setMessage("Exporting NGX data to... " + file.getName());
         ngxWriter.exportNetToNGX();*/
-	TXTWriter writer = new TXTWriter(net, file);
+	/*TXTWriter writer = new TXTWriter(net, file);
 	writer.exportNetToTXT();
-        return null;  // return your result
+        return null;  // return your result*/
+	return null;
     }
 
     @Override

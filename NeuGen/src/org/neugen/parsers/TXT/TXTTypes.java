@@ -48,126 +48,13 @@
  */
 
 /// package's name
-package org.neugen.parsers.NGX;
-
-import javax.vecmath.Point3f;
+package org.neugen.parsers.TXT;
 
 /**
- * @brief Exp2Synapse
+ * @brief NGX element types
  * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
-public class NGXExp2Synapse extends NGXSynapse {
-	/// private members
-	private float tau1;
-	private float tau2;
-	private float e;
-	private float gmax;
-	private float delay;
-	private float threshold;
-	private Point3f start;
-	private Point3f ending;
-	
-	/**
-	 * @brief ctor
-	 */
-	public NGXExp2Synapse() {
-		this.tau1 = 0.2f;
-		this.tau2 = 1.7f;
-		this.e = 0f;
-		this.threshold = -10f;
-		this.delay = 0.5f;
-		this.gmax = 0f;
-	}
-
-	/**
-	 * @return the tau1
-	 */
-	public float getTau1() {
-		return tau1;
-	}
-
-	/**
-	 * @param tau1 the tau1 to set
-	 */
-	public void setTau1(float tau1) {
-		this.tau1 = tau1;
-	}
-
-	/**
-	 * @return the tau2
-	 */
-	public float getTau2() {
-		return tau2;
-	}
-
-	/**
-	 * @param tau2 the tau2 to set
-	 */
-	public void setTau2(float tau2) {
-		this.tau2 = tau2;
-	}
-
-	/**
-	 * @return the e
-	 */
-	public float getE() {
-		return e;
-	}
-
-	/**
-	 * @param e the e to set
-	 */
-	public void setE(float e) {
-		this.e = e;
-	}
-
-	/**
-	 * @return the gmax
-	 */
-	public float getGmax() {
-		return gmax;
-	}
-
-	/**
-	 * @param gmax the gmax to set
-	 */
-	public void setGmax(float gmax) {
-		this.gmax = gmax;
-	}
-
-	/**
-	 * @return the delay
-	 */
-	public float getDelay() {
-		return delay;
-	}
-
-	/**
-	 * @param delay the delay to set
-	 */
-	public void setDelay(float delay) {
-		this.delay = delay;
-	}
-
-	/**
-	 * @return the threshold
-	 */
-	public float getThreshold() {
-		return threshold;
-	}
-
-	/**
-	 * @param threshold the threshold to set
-	 */
-	public void setThreshold(float threshold) {
-		this.threshold = threshold;
-	}
-
-	public void set_starting_point(Point3f starting_point) {
-		this.start = starting_point;
-	}
-
-	public void set_ending_point(Point3f ending_point) {
-		this.ending = ending_point;
-	}
+public enum TXTTypes { 
+	/// AXON 0, DENDRITE 1, SOMA 2, EXP2_SYNAPSE 3 ...
+	AXON, DENDRITE, SOMA, EXP2_SYNAPSE, ALPHA_SYNAPSE;
 }

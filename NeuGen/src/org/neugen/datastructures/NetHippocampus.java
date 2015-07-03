@@ -70,6 +70,7 @@ import org.neugen.datastructures.parameter.NetParam;
 import org.neugen.gui.NeuGenConstants;
 import org.neugen.gui.Trigger;
 import org.neugen.parsers.NGX.WriteToNGX;
+import org.neugen.parsers.TXT.WriteToTXT;
 
 /**
  *
@@ -890,6 +891,11 @@ public final class NetHippocampus extends NetBase implements Serializable, Net {
         }
         return ret;
     }
+
+	@Override
+	public WriteToTXT getTXTData() {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
 
     public enum NeuronTypes {
 

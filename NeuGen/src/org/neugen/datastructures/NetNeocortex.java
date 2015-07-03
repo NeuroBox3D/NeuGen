@@ -83,6 +83,9 @@ import org.neugen.parsers.HocWriter;
 import org.neugen.parsers.NGX.NGXAlphaSynapse;
 import org.neugen.parsers.NGX.NGXExp2Synapse;
 import org.neugen.parsers.NGX.NGXSynapse;
+import org.neugen.parsers.TXT.TXTExp2Synapse;
+import org.neugen.parsers.TXT.TXTSynapse;
+import org.neugen.parsers.TXT.WriteToTXT;
 
 /**
  * @author Jens Eberhard
@@ -684,6 +687,218 @@ public final class NetNeocortex extends NetBase implements Serializable, Net {
 	    return new WriteNGXData();
     }
     
+    @Override
+    public WriteToTXT getTXTData() {
+	    return new WriteTXTData();
+    }
+    
+    public class WriteTXTData implements WriteToTXT {
+	     public float get_uEPSP_Value(int typeN1, int typeN2) {
+            float uEPSP = -1.0000f; //unitary EPSP variable for the various neuron type combinations
+
+            //which type combination? -> which uEPSP?
+            if ((typeN1 == NeuronTypes.L4_STELLATE.ordinal())
+                    && (typeN2 == NeuronTypes.L4_STELLATE.ordinal())) {
+                uEPSP = 0.0016f;
+                //cout << "typeN1: L4, typeN2: L4, uEPSP: " << uEPSP << endl;
+            } else if ((typeN1 == NeuronTypes.L4_STELLATE.ordinal())
+                    && (typeN2 == NeuronTypes.L23_PYRAMIDAL.ordinal())) {
+                uEPSP = 0.0007f;
+                //cout << "typeN1: L4, typeN2: L2/3, uEPSP: " << uEPSP << endl;
+            } else if ((typeN1 == NeuronTypes.L4_STELLATE.ordinal())
+                    && (typeN2 == NeuronTypes.L5A_PYRAMIDAL.ordinal())) {
+                uEPSP = 0.0006f;
+                //cout << "typeN1: L4, typeN2: L5A, uEPSP: " << uEPSP << endl;
+            } else if ((typeN1 == NeuronTypes.L23_PYRAMIDAL.ordinal())
+                    && (typeN2 == NeuronTypes.L23_PYRAMIDAL.ordinal())) {
+                uEPSP = 0.0010f;
+                //cout << "typeN1: L2/3, typeN2: L2/3, uEPSP: " << uEPSP << endl;
+            } else if ((typeN1 == NeuronTypes.L23_PYRAMIDAL.ordinal())
+                    && (typeN2 == NeuronTypes.L5A_PYRAMIDAL.ordinal())) {
+                uEPSP = 0.0008f;
+                //cout << "typeN1: L2/3, typeN2: L5A, uEPSP: " << uEPSP << endl;
+            } else if ((typeN1 == NeuronTypes.L23_PYRAMIDAL.ordinal())
+                    && (typeN2 == NeuronTypes.L5B_PYRAMIDAL.ordinal())) {
+                uEPSP = 0.0003f;
+                //cout << "typeN1: L2/3, typeN2: L5B, uEPSP: " << uEPSP << endl;
+            } else if ((typeN1 == NeuronTypes.L5A_PYRAMIDAL.ordinal())
+                    && (typeN2 == NeuronTypes.L5A_PYRAMIDAL.ordinal())) {
+                uEPSP = 0.0020f;
+                //cout << "typeN1: L5A, typeN2: L5A, uEPSP: " << uEPSP << endl;
+            } else if ((typeN1 == NeuronTypes.L5A_PYRAMIDAL.ordinal())
+                    && (typeN2 == NeuronTypes.L23_PYRAMIDAL.ordinal())) {
+                uEPSP = 0.0005f;
+                //cout << "typeN1: L5A, typeN2: L2/3, uEPSP: " << uEPSP << endl;
+            } else if ((typeN1 == NeuronTypes.L5B_PYRAMIDAL.ordinal())
+                    && (typeN2 == NeuronTypes.L5B_PYRAMIDAL.ordinal())) {
+                uEPSP = 0.0013f;
+                //cout << "typeN1: L5B, typeN2: L5B, uEPSP: " << uEPSP << endl;
+            } else {
+                uEPSP = 0.0010f;
+                //cout << "typeN1: " << typeN1 << ", typeN2: " << typeN2 << ", uEPSP: ??? " << uEPSP << endl;
+            }
+            return uEPSP;
+        }	    
+
+	     
+	    
+	@Override
+	public ArrayList<TXTSynapse> writeExp2Synapses() {
+		ArrayList<TXTSynapse> txtsynapses = new ArrayList<TXTSynapse>();
+		float wfactor = 0.001f;
+		List<Cons> synapseList = getSynapseList();
+		for (int j = 0; j < synapseList.size(); j++) {
+			Cons synapse = synapseList.get(j);
+			int typeN1 = -1;
+			int typeN2 = -1;
+			if (synapse.getNeuron1() == null) {
+				continue;
+			}
+
+                	typeN1 = getTypeOfNeuron(synapse.getNeuron1().getIndex());
+                	typeN2 = getTypeOfNeuron(synapse.getNeuron2().getIndex());
+
+ 	                int n_idx = synapse.getNeuron2().getIndex();
+
+			int c_idx = 0;
+			for (Segment denSeg : synapse.getNeuron2DenSection().getSegments()) {
+			    if (denSeg.getId() == synapse.getNeuron2DenSectionSegment().getId()) {
+				break;
+			    }
+			    c_idx++;
+			}
+
+			int sec_id = synapse.getNeuron2DenSection().getId();
+			float dd = NeuronalTreeStructure.getDendriteSectionData(synapse.getNeuron2DenSection(), c_idx);
+
+						TXTExp2Synapse ngxsynapse = new TXTExp2Synapse();
+			Section dend_section = synapse.getNeuron2DenSection();
+			int to_index = (int) (dend_section.getSegments().size() * dd);
+			
+float to_walk2 = dend_section.getLength() * dd;
+float to_walk_on_given_edge_dend = 0;
+			//System.err.println("to_walk: " + to_walk2);
+			int index2 = 0;
+			float walked2 = 0f;
+			for (int i = 0; i < dend_section.getSegments().size()-1; i++) {
+				Point3f p1 = dend_section.getSegments().get(i).getStart();
+				Point3f p2 = dend_section.getSegments().get(i+1).getStart();
+				Vector3f diff = new Vector3f(p1);
+				diff.sub(p2);
+				//System.err.println("diff length: " + diff.length());
+				walked2 += diff.length();
+				if (walked2 >= to_walk2) {
+					index2 = i;
+					to_walk_on_given_edge_dend = (((walked2 - (walked2 - diff.length())) - (walked2 - to_walk2)) / diff.length());
+					System.err.println("to walk on given edge dend:" + to_walk_on_given_edge_dend);
+					break;
+				}
+			}
+			//System.err.println("Index2 i: " + index2);
+			
+			dend_section.getLength();
+		
+
+			ngxsynapse.setTo_point_start(dend_section.getSegments().get(index2).getStart());
+			if (dend_section.getSegments().size() == 1) {
+				ngxsynapse.setTo_point_end(dend_section.getSegments().get((index2)).getEnd());
+			} else {
+				ngxsynapse.setTo_point_end(dend_section.getSegments().get((index2+1)).getStart());
+			}
+			
+			//ngxsynapse.setTo_point_start(dend_section.getSegments().get(0).getStart());
+		//	ngxsynapse.setTo_point_end(dend_section.getSegments().get(0).getEnd());
+			//System.err.println("segments: " + dend_section.getSegments().size());
+			//System.err.println("to start: " + ngxsynapse.getTo_point_start());
+			//System.err.println("to end: " + ngxsynapse.getTo_point_end());
+			//ngxsynapse.setName("Synapse" + j);
+			//ngxsynapse.setId(j);
+			ngxsynapse.setTo("N" + n_idx + "dendrite" + sec_id);
+		//	ngxsynapse.setTo_loc(dd);
+			ngxsynapse.setTo_loc(to_walk_on_given_edge_dend);
+
+                	Section ax_section = synapse.getNeuron1AxSection();
+		
+                	assert (ax_section.getLength() > 0.0);
+                	int axSegPos = 0;
+                	for (Segment axSeg : ax_section.getSegments()) {
+                    	if (axSeg.getId() == synapse.getNeuron1AxSegment().getId()) {
+                        	break;
+                    	}
+                    		axSegPos++;
+                	}
+		
+			/**
+			 * @todo from and to is interchanged here!
+			 */
+			float ax_local_position = (ax_section.getLength() * axSegPos) / ax_section.getLength();
+                	assert (!Float.isInfinite(ax_local_position));
+			
+		
+			float ff = NeuronalTreeStructure.getDendriteSectionData(synapse.getNeuron1AxSection(), axSegPos);
+			assert (ff <= 1.0);
+			//System.err.println("ax_local_pos: " + ax_local_position);
+			//System.err.println("ff: " + ff);
+			int from_index = (int) (ax_section.getSegments().size() * ff);
+			
+			float to_walk = ax_section.getLength() * ff;
+			float to_walk_on_given_edge_axon = 0;
+			//System.err.println("to_walk: " + to_walk);
+			int index = 0;
+			float walked = 0f;
+			for (int i = 0; i < ax_section.getSegments().size()-1; i++) {
+				Point3f p1 = ax_section.getSegments().get(i).getStart();
+				Point3f p2 = ax_section.getSegments().get(i+1).getStart();
+				Vector3f diff = new Vector3f(p1);
+				diff.sub(p2);
+			//	System.err.println("diff length: " + diff.length());
+				walked += diff.length();
+				if (walked >= to_walk) {
+					index = i;
+					to_walk_on_given_edge_axon = (((walked - (walked - diff.length())) - (walked - to_walk)) / diff.length());
+					//to_walk_on_given_edge = (walked - diff.length() - to_walk) / diff.length();
+					System.err.println("to walk on given edge axon:" + to_walk_on_given_edge_axon);
+					break;
+				}
+			}
+			//System.err.println("Index i: " + index);
+			
+			ax_section.getLength();
+			
+			
+			/**
+			 * @TODO validate this to be correct!
+			 */
+			//ngxsynapse.setFrom_point_start(ax_section.getSegments().get(0).getStart());
+			//ngxsynapse.setFrom_point_end(ax_section.getSegments().get(0).getEnd());
+			ngxsynapse.setFrom_point_start(ax_section.getSegments().get(index).getStart());
+			if (ax_section.getSegments().size() == 1) {
+				ngxsynapse.setFrom_point_end(ax_section.getSegments().get((index)).getEnd());
+			} else {
+				ngxsynapse.setFrom_point_end(ax_section.getSegments().get((index+1)).getStart());
+			}
+			/*System.err.println("segments: " + ax_section.getSegments().size());
+			System.err.println("from start: " + ngxsynapse.getFrom_point_start());
+			System.err.println("from end: " + ngxsynapse.getFrom_point_end());*/
+			
+			
+			ngxsynapse.setFrom("N" + synapse.getNeuron1().getIndex() + ax_section.getName());
+			//ngxsynapse.setFrom_loc(ff);
+			ngxsynapse.setFrom_loc(to_walk_on_given_edge_axon);
+			ngxsynapse.setGmax(1 + wfactor * synapse.getDendriticSomaDistance() * get_uEPSP_Value(typeN1, typeN2));
+			
+			txtsynapses.add(ngxsynapse);
+		}
+		return txtsynapses;
+	}
+
+		@Override
+		public ArrayList<TXTSynapse> writeAlphaSynapses() {
+			/// todo
+			return new ArrayList<TXTSynapse>();
+		}
+    }
+    
     /**
      * @brief provide exp2synapses and alphasynapses
      */
@@ -771,9 +986,13 @@ public final class NetNeocortex extends NetBase implements Serializable, Net {
 			ngxsynapse.setId(j);
 			ngxsynapse.setTo("N" + n_idx + "dendrite" + sec_id);
 			ngxsynapse.setTo_loc(dd);
-			
+
+			Section section = synapse.getNeuron2DenSection();
+			ngxsynapse.set_starting_point(section.getSegments().get(0).getStart());
 			
                 	Section ax_section = synapse.getNeuron1AxSection();
+			ngxsynapse.set_ending_point(ax_section.getSegments().get(0).getStart());
+			
                 	assert (ax_section.getLength() > 0.0);
                 	int axSegPos = 0;
                 	for (Segment axSeg : ax_section.getSegments()) {

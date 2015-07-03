@@ -52,6 +52,7 @@ import org.neugen.parsers.NGX.WriteToNGX;
 import org.neugen.datastructures.neuron.Neuron;
 import java.util.List;
 import java.util.Map;
+import org.neugen.parsers.TXT.WriteToTXT;
 
 /**
  * @author Sergei Wolf
@@ -69,6 +70,8 @@ public interface Net {
     public WriteToHoc getHocData();
     
     public WriteToNGX getNGXData();
+    
+    public WriteToTXT getTXTData();
 
     public int createNonFunSynapses();
 

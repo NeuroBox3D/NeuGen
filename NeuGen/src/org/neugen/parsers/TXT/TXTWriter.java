@@ -76,6 +76,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.neugen.backend.NGBackend;
 import org.neugen.datastructures.Pair;
 import org.neugen.parsers.NGX.NGXBase;
+import org.neugen.parsers.NGX.NGXSynapse;
 
 /**
  * @brief TXT writer (NeuGen XML)
@@ -344,6 +345,7 @@ public class TXTWriter {
 	public final void writeNetToTXT() {
 		PrintWriter pw = null;
 		PrintWriter pw2 = null;
+		PrintWriter pw3 = null;
 
 		try {
 			String basefile = FilenameUtils.removeExtension(this.file.getAbsolutePath());
@@ -351,8 +353,10 @@ public class TXTWriter {
 			
 			FileWriter fw = new FileWriter(new File(basefile + "_secs.txt"), true);
 			FileWriter fw2 = new FileWriter(new File(basefile + "_connex.txt"), true);
+			FileWriter fw3 = new FileWriter(new File(basefile + "_synapses.txt"), true);
 			pw = new PrintWriter(fw);
 			pw2 = new PrintWriter(fw2);
+			pw3 = new PrintWriter(fw3);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -402,6 +406,50 @@ public class TXTWriter {
 		
 		if (pw2 != null) {
 			pw2.close();
+		}
+		
+		ArrayList<TXTSynapse> exp2synapses = net.getTXTData().writeExp2Synapses();
+		StringBuilder buffer3 = new StringBuilder();
+		for (TXTSynapse synapse : exp2synapses) {
+			//System.err.println("synapse!");
+			TXTExp2Synapse exp2syn = (TXTExp2Synapse) synapse;
+			buffer3.append(exp2syn.getFrom_point_start().x);
+			buffer3.append(" ");
+			buffer3.append(exp2syn.getFrom_point_start().y);
+			buffer3.append(" ");
+			buffer3.append(exp2syn.getFrom_point_start().z);
+			buffer3.append(" ");
+			buffer3.append(exp2syn.getFrom_point_end().x);
+			buffer3.append(" ");
+			buffer3.append(exp2syn.getFrom_point_end().y);
+			buffer3.append(" ");
+			buffer3.append(exp2syn.getFrom_point_end().z);
+			buffer3.append(" ");
+			
+			buffer3.append(exp2syn.getTo_point_start().x);
+			buffer3.append(" ");
+			buffer3.append(exp2syn.getTo_point_start().y);
+			buffer3.append(" ");
+			buffer3.append(exp2syn.getTo_point_start().z);
+			buffer3.append(" ");
+			buffer3.append(exp2syn.getTo_point_end().x);
+			buffer3.append(" ");
+			buffer3.append(exp2syn.getTo_point_end().y);
+			buffer3.append(" ");
+			buffer3.append(exp2syn.getTo_point_end().z);
+			buffer3.append(" ");
+			buffer3.append(exp2syn.getFrom_loc());
+			buffer3.append(" ");
+			buffer3.append(exp2syn.getTo_loc());
+			buffer3.append(" ");
+			buffer3.append(exp2syn.getSynapseInfo());
+			buffer3.append(" ");
+		}
+		
+		pw3.write(buffer3.toString());
+
+		if (pw3 != null) {
+			pw3.close();
 		}
 	}
 

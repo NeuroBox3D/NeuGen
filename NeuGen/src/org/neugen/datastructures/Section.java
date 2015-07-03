@@ -212,6 +212,7 @@ public class Section implements Serializable {
     public Iterator getIterator() {
         return new Iterator(this);
     }
+    
 
     /**
      * Get relative coordinate of the childs beginning

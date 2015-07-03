@@ -242,6 +242,27 @@ public final class NGFileFilter {
             return NeuGenConstants.DESCRIPTION_NGX;
         }
     }
+    
+      public static final class TXTFileFilter extends FileFilter {
+        @Override
+        public boolean accept(File f) {
+            if (f.isDirectory()) {
+                return true;
+            }
+            
+            String ext = Utils.getExtension(f);
+            if (NeuGenConstants.EXTENSION_TXT.equals(ext)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        
+        @Override
+        public String getDescription() {
+            return NeuGenConstants.DESCRIPTION_TXT;
+        }
+    }
             
            
 
@@ -279,6 +300,8 @@ public final class NGFileFilter {
             return NeuGenConstants.DESCRIPTION_SWC;
         }
     }
+            
+            
 
     public static final class NeuronFileFilter extends FileFilter {
 
