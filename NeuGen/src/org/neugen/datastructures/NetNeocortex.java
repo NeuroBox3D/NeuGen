@@ -800,6 +800,7 @@ float to_walk_on_given_edge_dend = 0;
 		
 
 			ngxsynapse.setTo_point_start(dend_section.getSegments().get(index2).getStart());
+			ngxsynapse.setTo_Index(index2);
 			if (dend_section.getSegments().size() == 1) {
 				ngxsynapse.setTo_point_end(dend_section.getSegments().get((index2)).getEnd());
 			} else {
@@ -872,6 +873,7 @@ float to_walk_on_given_edge_dend = 0;
 			//ngxsynapse.setFrom_point_start(ax_section.getSegments().get(0).getStart());
 			//ngxsynapse.setFrom_point_end(ax_section.getSegments().get(0).getEnd());
 			ngxsynapse.setFrom_point_start(ax_section.getSegments().get(index).getStart());
+			ngxsynapse.setFrom_Index(index);
 			if (ax_section.getSegments().size() == 1) {
 				ngxsynapse.setFrom_point_end(ax_section.getSegments().get((index)).getEnd());
 			} else {

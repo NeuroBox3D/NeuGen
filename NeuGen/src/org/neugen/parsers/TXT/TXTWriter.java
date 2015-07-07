@@ -425,7 +425,6 @@ public class TXTWriter {
 			buffer3.append(" ");
 			buffer3.append(exp2syn.getFrom_point_end().z);
 			buffer3.append(" ");
-			
 			buffer3.append(exp2syn.getTo_point_start().x);
 			buffer3.append(" ");
 			buffer3.append(exp2syn.getTo_point_start().y);
@@ -444,6 +443,15 @@ public class TXTWriter {
 			buffer3.append(" ");
 			buffer3.append(exp2syn.getSynapseInfo());
 			buffer3.append(" ");
+			buffer3.append(exp2syn.getFrom());
+			buffer3.append(" ");
+			buffer3.append(exp2syn.getTo());
+			buffer3.append(" ");
+			buffer3.append(exp2syn.getFrom_Index());
+			buffer3.append(" ");
+			buffer3.append(exp2syn.getTo_Index());
+			buffer3.append(" ");
+			
 		}
 		
 		pw3.write(buffer3.toString());
