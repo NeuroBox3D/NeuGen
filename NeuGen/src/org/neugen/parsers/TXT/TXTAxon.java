@@ -14,6 +14,11 @@ package org.neugen.parsers.TXT;
  * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
 public class TXTAxon extends TXTBase {
+	private static final int TYPE = TXTTypes.AXON.ordinal();
 	private String name;
 	private int nn;
+	
+	public int getType() {
+		return TYPE;
+	}
 }

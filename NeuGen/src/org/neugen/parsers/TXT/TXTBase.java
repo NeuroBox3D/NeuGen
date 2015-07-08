@@ -20,6 +20,7 @@ public class TXTBase {
 	private String name;
 	private ArrayList<Vector4f> coordinates = new ArrayList<Vector4f>();
 	private int id;
+	private static final int TYPE = TXTTypes.UNDEFINED.ordinal();
 
 	public String getName() {
 		return name;
@@ -43,5 +44,9 @@ public class TXTBase {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	public int getType() {
+		return TYPE;
 	}
 }

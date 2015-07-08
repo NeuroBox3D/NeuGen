@@ -125,7 +125,7 @@ public final class NeuGenConstants {
     public static final String DESCRIPTION_OBJ = "Wavefront Files (*.obj)";
     public static final String DESCRIPTION_SWC = "Cvapp Files (*.swc)";
     public static final String DESCRIPTION_CSV = "CSV Files (*.csv)";
-    public static final String DESCRIPTION_NGX = "NGX Files (*.nAgx)";
+    public static final String DESCRIPTION_NGX = "NGX Files (*.ngx)";
     public static final String DESCRIPTION_TXT = "TXT Files (*.txt)";
     
     public static boolean WITH_GUI = true;

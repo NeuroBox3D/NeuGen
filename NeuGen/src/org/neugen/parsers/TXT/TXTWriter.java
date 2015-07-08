@@ -346,6 +346,7 @@ public class TXTWriter {
 		PrintWriter pw = null;
 		PrintWriter pw2 = null;
 		PrintWriter pw3 = null;
+		PrintWriter pw4 = null;
 
 		try {
 			String basefile = FilenameUtils.removeExtension(this.file.getAbsolutePath());
@@ -354,9 +355,11 @@ public class TXTWriter {
 			FileWriter fw = new FileWriter(new File(basefile + "_secs.txt"), true);
 			FileWriter fw2 = new FileWriter(new File(basefile + "_connex.txt"), true);
 			FileWriter fw3 = new FileWriter(new File(basefile + "_synapses.txt"), true);
+			FileWriter fw4 = new FileWriter(new File(basefile + "_synapses2.txt"), true);
 			pw = new PrintWriter(fw);
 			pw2 = new PrintWriter(fw2);
 			pw3 = new PrintWriter(fw3);
+			pw4 = new PrintWriter(fw4);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -371,6 +374,8 @@ public class TXTWriter {
 				buffer.append(base.getName());
 				buffer.append(" ");
 				buffer.append(base.getCoordinates().size());
+				buffer.append(" ");
+				buffer.append(base.getType());
 				buffer.append(" ");
 				for (Vector4f vec : base.getCoordinates()) {
 					buffer.append(vec.x);
@@ -451,14 +456,66 @@ public class TXTWriter {
 			buffer3.append(" ");
 			buffer3.append(exp2syn.getTo_Index());
 			buffer3.append(" ");
-			
 		}
 		
 		pw3.write(buffer3.toString());
+		
 
+		StringBuilder buffer4 = new StringBuilder();
+		ArrayList<TXTSynapse> alphasynapses = net.getTXTData().writeAlphaSynapses();
+		for (TXTSynapse synapse : alphasynapses) {
+			TXTAlphaSynapse alphasyn = (TXTAlphaSynapse) synapse;
+			buffer4.append(alphasyn.getFrom_point_start().x);
+			buffer4.append(" ");
+			buffer4.append(alphasyn.getFrom_point_start().y);
+			buffer4.append(" ");
+			buffer4.append(alphasyn.getFrom_point_start().z);
+			buffer4.append(" ");
+			buffer4.append(alphasyn.getFrom_point_end().x);
+			buffer4.append(" ");
+			buffer4.append(alphasyn.getFrom_point_end().y);
+			buffer4.append(" ");
+			buffer4.append(alphasyn.getFrom_point_end().z);
+			buffer4.append(" ");
+			buffer4.append(alphasyn.getTo_point_start().x);
+			buffer4.append(" ");
+			buffer4.append(alphasyn.getTo_point_start().y);
+			buffer4.append(" ");
+			buffer4.append(alphasyn.getTo_point_start().z);
+			buffer4.append(" ");
+			buffer4.append(alphasyn.getTo_point_end().x);
+			buffer4.append(" ");
+			buffer4.append(alphasyn.getTo_point_end().y);
+			buffer4.append(" ");
+			buffer4.append(alphasyn.getTo_point_end().z);
+			buffer4.append(" ");
+			buffer4.append(alphasyn.getFrom_loc());
+			buffer4.append(" ");
+			buffer4.append(alphasyn.getTo_loc());
+			buffer4.append(" ");
+			buffer4.append(alphasyn.getSynapseInfo());
+			buffer4.append(" ");
+			buffer4.append(alphasyn.getFrom());
+			buffer4.append(" ");
+			buffer4.append(alphasyn.getTo());
+			buffer4.append(" ");
+			buffer4.append(alphasyn.getFrom_Index());
+			buffer4.append(" ");
+			buffer4.append(alphasyn.getTo_Index());
+			buffer4.append(" ");
+		}
+		
+		pw3.write(buffer4.toString());
+		
 		if (pw3 != null) {
 			pw3.close();
 		}
+
+
+		if (pw4 != null) {
+			pw4.close();
+		}
+
 	}
 
 	/**

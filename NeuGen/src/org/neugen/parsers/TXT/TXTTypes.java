@@ -55,6 +55,10 @@ package org.neugen.parsers.TXT;
  * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
 public enum TXTTypes { 
-	/// AXON 0, DENDRITE 1, SOMA 2, EXP2_SYNAPSE 3 ...
-	AXON, DENDRITE, SOMA, EXP2_SYNAPSE, ALPHA_SYNAPSE;
+	AXON, 
+	DENDRITE, 
+	SOMA, 
+	EXP2_SYNAPSE, 
+	ALPHA_SYNAPSE, 
+	UNDEFINED;
 }

@@ -83,6 +83,7 @@ import org.neugen.parsers.HocWriter;
 import org.neugen.parsers.NGX.NGXAlphaSynapse;
 import org.neugen.parsers.NGX.NGXExp2Synapse;
 import org.neugen.parsers.NGX.NGXSynapse;
+import org.neugen.parsers.TXT.TXTAlphaSynapse;
 import org.neugen.parsers.TXT.TXTExp2Synapse;
 import org.neugen.parsers.TXT.TXTSynapse;
 import org.neugen.parsers.TXT.WriteToTXT;
@@ -896,10 +897,108 @@ float to_walk_on_given_edge_dend = 0;
 
 		@Override
 		public ArrayList<TXTSynapse> writeAlphaSynapses() {
-			/// todo
-			return new ArrayList<TXTSynapse>();
+			ArrayList<TXTSynapse> synapses = new ArrayList<TXTSynapse>();
+			synapses.addAll(writeAlphaSynapses(NeuronTypes.L4_STELLATE));
+			synapses.addAll(writeAlphaSynapses(NeuronTypes.L23_PYRAMIDAL));
+			synapses.addAll(writeAlphaSynapses(NeuronTypes.L5B_PYRAMIDAL));
+			return synapses;
 		}
+		
+		/**
+		 * @brief 
+		 * @param neuronType
+		 * @return 
+		 */
+	public ArrayList<TXTSynapse> writeAlphaSynapses(NeuronTypes neuronType) {
+		ArrayList<TXTSynapse> alphasynapses = new ArrayList<TXTSynapse>();
+            
+			  // Factor to rise weight of a synapse per micrometer.
+	 float wfactor = 0.001f;
+	    for (int j = 0; j < synapseList.size(); j++) {
+			Cons synapse = synapseList.get(j);
+
+			if (synapse.getNeuron1() != null) {
+			    continue;
+			}
+
+			if (neuronType.equals(NeuronTypes.L4_STELLATE)) {
+			    if (synapse.getNeuron2().getIndex() >= getNumL4stellate()) {
+				continue;
+			    }
+			} else if (neuronType.equals(NeuronTypes.L23_PYRAMIDAL)) {
+			    int nNum = getNumL4stellate() + getNumL23pyramidal();
+			    if (synapse.getNeuron2().getIndex() < getNumL4stellate() || synapse.getNeuron2().getIndex() >= nNum) {
+				continue;
+			    }
+			} else if (neuronType.equals(NeuronTypes.L5B_PYRAMIDAL)) {
+			    int nNum = getNumL4stellate() + getNumL23pyramidal() + getNumL5Apyramidal();
+			    int nNum2 = getNumL4stellate() + getNumPyramidal();
+			    if (synapse.getNeuron2().getIndex() < nNum || synapse.getNeuron2().getIndex() > nNum2) {
+				continue;
+			    }
+			} else {
+			    continue;
+			}
+
+                    int n_idx = synapse.getNeuron2().getIndex();
+
+                    int c_idx = 0;
+                    for (Segment denSeg : synapse.getNeuron2DenSection().getSegments()) {
+                        if (denSeg.getId() == synapse.getNeuron2DenSectionSegment().getId()) {
+                            break;
+                        }
+                        c_idx++;
+                    }
+
+                    int sec_id = synapse.getNeuron2DenSection().getId();
+                    float dd = NeuronalTreeStructure.getDendriteSectionData(synapse.getNeuron2DenSection(), c_idx);
+                    //float dd = neuronList.get(n_idx).getDendrites().get(d_idx).getdendritesectionData(sec_id, c_idx);
+		    
+		    Section ax_section = synapse.getNeuron2DenSection();
+		    float to_walk = ax_section.getLength() * dd;
+		    float to_walk_on_given_edge_axon = 0;
+			int index = 0;
+			float walked = 0f;
+			for (int i = 0; i < ax_section.getSegments().size()-1; i++) {
+				Point3f p1 = ax_section.getSegments().get(i).getStart();
+				Point3f p2 = ax_section.getSegments().get(i+1).getStart();
+				Vector3f diff = new Vector3f(p1);
+				diff.sub(p2);
+				walked += diff.length();
+				if (walked >= to_walk) {
+					index = i;
+					to_walk_on_given_edge_axon = (((walked - (walked - diff.length())) - (walked - to_walk)) / diff.length());
+					System.err.println("to walk on given edge axon:" + to_walk_on_given_edge_axon);
+					break;
+				}
+			}
+			
+			
+		    	TXTAlphaSynapse alpha = new TXTAlphaSynapse();
+			alpha.setFrom_point_start(ax_section.getSegments().get(index).getStart());
+			alpha.setTo_point_start(ax_section.getSegments().get(index).getStart());
+			alpha.setFrom_Index(index);
+			alpha.setTo_Index(index);
+			if (ax_section.getSegments().size() == 1) {
+				alpha.setFrom_point_end(ax_section.getSegments().get((index)).getEnd());
+				alpha.setTo_point_end(ax_section.getSegments().get((index)).getEnd());
+			} else {
+				alpha.setFrom_point_end(ax_section.getSegments().get((index+1)).getStart());
+				alpha.setTo_point_end(ax_section.getSegments().get((index+1)).getStart());
+			}
+
+		    alpha.setFrom("N" + n_idx + "dendrite" + sec_id);
+		    alpha.setTo("N" + n_idx + "dendrite" + sec_id);
+		    alpha.setFrom_loc(to_walk_on_given_edge_axon);
+		    alpha.setTo_loc(to_walk_on_given_edge_axon);
+		    alpha.setGmax((1 + wfactor * synapse.getDendriticSomaDistance()) * 0.001f);
+		    alphasynapses.add(alpha);
+               	}
+	    return alphasynapses;
+	}
     }
+		
+    
     
     /**
      * @brief provide exp2synapses and alphasynapses

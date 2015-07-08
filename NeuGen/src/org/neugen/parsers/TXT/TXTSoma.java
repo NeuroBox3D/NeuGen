@@ -14,8 +14,13 @@ package org.neugen.parsers.TXT;
  * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
 public class TXTSoma extends TXTBase {
+	private static final int TYPE = TXTTypes.SOMA.ordinal();
 
 	public TXTSoma() {
+	}
+	
+	public int getType() {
+		return TYPE;
 	}
 
 }

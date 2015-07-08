@@ -14,6 +14,7 @@ package org.neugen.parsers.TXT;
  * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
 public class TXTDend extends TXTBase {
+	private static final int TYPE = TXTTypes.DENDRITE.ordinal();
 	private String name;
 	private int nn;
 
@@ -32,4 +33,9 @@ public class TXTDend extends TXTBase {
 	public void setId(int nn) {
 		this.nn = nn;
 	}
+	
+	public int getType() {
+		return TYPE;
+	}
+	
 }
