@@ -53,12 +53,15 @@ package org.neugen.parsers.TXT;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import org.apache.log4j.Logger;
 import org.neugen.datastructures.Axon;
 import org.neugen.datastructures.Cellipsoid;
@@ -72,6 +75,10 @@ import org.neugen.gui.Trigger;
 import org.neugen.parsers.MorphMLReader;
 import org.neugen.utils.Utils;
 import javax.vecmath.Vector4f;
+import org.apache.commons.compress.compressors.CompressorException;
+import org.apache.commons.compress.compressors.CompressorOutputStream;
+import org.apache.commons.compress.compressors.CompressorStreamFactory;
+import org.apache.commons.compress.compressors.bzip2.BZip2CompressorOutputStream;
 import org.apache.commons.io.FilenameUtils;
 import org.neugen.backend.NGBackend;
 import org.neugen.datastructures.Pair;
@@ -85,7 +92,6 @@ import org.neugen.parsers.NGX.NGXSynapse;
 public class TXTWriter {
 
 	/// private members
-
 	private static final Logger logger = Logger.getLogger(TXTWriter.class.getName());
 	private final Net net;
 	private File file;
@@ -201,21 +207,21 @@ public class TXTWriter {
 
 			float fractAlongParent = parSec.getFractAlongParentForChild(section);
 			TXTConnection ngxconnex = new TXTConnection();
-			 //connect N0axon_hillock(0), N0soma(0)
-			 if (nsections == 0) {
-			 ngxconnex.setFrom("N" + nn + secName);
-			 ngxconnex.setFrom_loc(0);
-			 ngxconnex.setTo("N" + nn + "soma");
-			 ngxconnex.setTo_loc((int) fractAlongParent);
-			 } //connect N0axon_myel_0000(0), N0axon_000(1)
-			 else {
-			 String parentSecName = parSec.getName();
-			 ngxconnex.setFrom("N" + nn + secName);
-			 ngxconnex.setFrom_loc(0);
-			 ngxconnex.setTo("N" + nn + parentSecName);
-			 ngxconnex.setTo_loc((int) fractAlongParent);
-			 }
-			
+			//connect N0axon_hillock(0), N0soma(0)
+			if (nsections == 0) {
+				ngxconnex.setFrom("N" + nn + secName);
+				ngxconnex.setFrom_loc(0);
+				ngxconnex.setTo("N" + nn + "soma");
+				ngxconnex.setTo_loc((int) fractAlongParent);
+			} //connect N0axon_myel_0000(0), N0axon_000(1)
+			else {
+				String parentSecName = parSec.getName();
+				ngxconnex.setFrom("N" + nn + secName);
+				ngxconnex.setFrom_loc(0);
+				ngxconnex.setTo("N" + nn + parentSecName);
+				ngxconnex.setTo_loc((int) fractAlongParent);
+			}
+
 			connections.add(ngxconnex);
 
 			TXTAxon ngxaxon = new TXTAxon();
@@ -263,22 +269,22 @@ public class TXTWriter {
 					parSec = neuron.getSoma().getCylindricRepresentant();
 				}
 
-				 float fractAlongParent = parSec.getFractAlongParentForChild(section);
-				 String parentSecName = parSec.getName();
-				 TXTConnection ngxconnex = new TXTConnection();
-				
-				 if (nsections == 0 || parentSecName.contains("soma")) {
-				 ngxconnex.setFrom("N" + nn + secName);
-				 ngxconnex.setFrom_loc(0);
-				 ngxconnex.setTo("N" + nn + "soma");
-				 ngxconnex.setTo_loc((int) fractAlongParent);
-				 } else {
-				 ngxconnex.setFrom("N" + nn + secName);
-				 ngxconnex.setFrom_loc(0);
-				 ngxconnex.setTo("N" + nn + parentSecName);
-				 ngxconnex.setTo_loc((int) fractAlongParent);
-				 }
-				
+				float fractAlongParent = parSec.getFractAlongParentForChild(section);
+				String parentSecName = parSec.getName();
+				TXTConnection ngxconnex = new TXTConnection();
+
+				if (nsections == 0 || parentSecName.contains("soma")) {
+					ngxconnex.setFrom("N" + nn + secName);
+					ngxconnex.setFrom_loc(0);
+					ngxconnex.setTo("N" + nn + "soma");
+					ngxconnex.setTo_loc((int) fractAlongParent);
+				} else {
+					ngxconnex.setFrom("N" + nn + secName);
+					ngxconnex.setFrom_loc(0);
+					ngxconnex.setTo("N" + nn + parentSecName);
+					ngxconnex.setTo_loc((int) fractAlongParent);
+				}
+
 				connections.add(ngxconnex);
 				TXTDend ngxdend = new TXTDend();
 				ngxdend.setName("N" + nn + secName);
@@ -331,7 +337,6 @@ public class TXTWriter {
 		writeDendriteOfNeuronToTXT(ngxbases, connections, neuron, i);
 		neuron_connex.addAll(connections);
 		neuron_sections.addAll(ngxbases);
-		
 
 		/// return all sections of NEURON i
 		return new Pair<ArrayList<TXTBase>, ArrayList<TXTBase>>(neuron_sections, neuron_connex);
@@ -351,19 +356,20 @@ public class TXTWriter {
 		try {
 			String basefile = FilenameUtils.removeExtension(this.file.getAbsolutePath());
 			System.err.println(basefile);
-			
+
 			FileWriter fw = new FileWriter(new File(basefile + "_secs.txt"), true);
 			FileWriter fw2 = new FileWriter(new File(basefile + "_connex.txt"), true);
 			FileWriter fw3 = new FileWriter(new File(basefile + "_synapses.txt"), true);
 			FileWriter fw4 = new FileWriter(new File(basefile + "_synapses2.txt"), true);
-			pw = new PrintWriter(fw);
+
+			pw = new PrintWriter((fw));
 			pw2 = new PrintWriter(fw2);
 			pw3 = new PrintWriter(fw3);
 			pw4 = new PrintWriter(fw4);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		List<Neuron> neuronList = net.getNeuronList();
 		int nneuron = neuronList.size();
 		for (int i = 0; i < nneuron; i++) {
@@ -404,19 +410,18 @@ public class TXTWriter {
 			}
 			pw2.write(buffer2.toString());
 		}
-		
+
 		if (pw != null) {
 			pw.close();
 		}
-		
+
 		if (pw2 != null) {
 			pw2.close();
 		}
-		
+
 		ArrayList<TXTSynapse> exp2synapses = net.getTXTData().writeExp2Synapses();
 		StringBuilder buffer3 = new StringBuilder();
 		for (TXTSynapse synapse : exp2synapses) {
-			//System.err.println("synapse!");
 			TXTExp2Synapse exp2syn = (TXTExp2Synapse) synapse;
 			buffer3.append(exp2syn.getFrom_point_start().x);
 			buffer3.append(" ");
@@ -457,72 +462,123 @@ public class TXTWriter {
 			buffer3.append(exp2syn.getTo_Index());
 			buffer3.append(" ");
 		}
-		
-		pw3.write(buffer3.toString());
-		
 
-		StringBuilder buffer4 = new StringBuilder();
+		pw3.write(buffer3.toString());
+
 		ArrayList<TXTSynapse> alphasynapses = net.getTXTData().writeAlphaSynapses();
 		for (TXTSynapse synapse : alphasynapses) {
 			TXTAlphaSynapse alphasyn = (TXTAlphaSynapse) synapse;
-			buffer4.append(alphasyn.getFrom_point_start().x);
-			buffer4.append(" ");
-			buffer4.append(alphasyn.getFrom_point_start().y);
-			buffer4.append(" ");
-			buffer4.append(alphasyn.getFrom_point_start().z);
-			buffer4.append(" ");
-			buffer4.append(alphasyn.getFrom_point_end().x);
-			buffer4.append(" ");
-			buffer4.append(alphasyn.getFrom_point_end().y);
-			buffer4.append(" ");
-			buffer4.append(alphasyn.getFrom_point_end().z);
-			buffer4.append(" ");
-			buffer4.append(alphasyn.getTo_point_start().x);
-			buffer4.append(" ");
-			buffer4.append(alphasyn.getTo_point_start().y);
-			buffer4.append(" ");
-			buffer4.append(alphasyn.getTo_point_start().z);
-			buffer4.append(" ");
-			buffer4.append(alphasyn.getTo_point_end().x);
-			buffer4.append(" ");
-			buffer4.append(alphasyn.getTo_point_end().y);
-			buffer4.append(" ");
-			buffer4.append(alphasyn.getTo_point_end().z);
-			buffer4.append(" ");
-			buffer4.append(alphasyn.getFrom_loc());
-			buffer4.append(" ");
-			buffer4.append(alphasyn.getTo_loc());
-			buffer4.append(" ");
-			buffer4.append(alphasyn.getSynapseInfo());
-			buffer4.append(" ");
-			buffer4.append(alphasyn.getFrom());
-			buffer4.append(" ");
-			buffer4.append(alphasyn.getTo());
-			buffer4.append(" ");
-			buffer4.append(alphasyn.getFrom_Index());
-			buffer4.append(" ");
-			buffer4.append(alphasyn.getTo_Index());
-			buffer4.append(" ");
+			buffer3.append(alphasyn.getFrom_point_start().x);
+			buffer3.append(" ");
+			buffer3.append(alphasyn.getFrom_point_start().y);
+			buffer3.append(" ");
+			buffer3.append(alphasyn.getFrom_point_start().z);
+			buffer3.append(" ");
+			buffer3.append(alphasyn.getFrom_point_end().x);
+			buffer3.append(" ");
+			buffer3.append(alphasyn.getFrom_point_end().y);
+			buffer3.append(" ");
+			buffer3.append(alphasyn.getFrom_point_end().z);
+			buffer3.append(" ");
+			buffer3.append(alphasyn.getTo_point_start().x);
+			buffer3.append(" ");
+			buffer3.append(alphasyn.getTo_point_start().y);
+			buffer3.append(" ");
+			buffer3.append(alphasyn.getTo_point_start().z);
+			buffer3.append(" ");
+			buffer3.append(alphasyn.getTo_point_end().x);
+			buffer3.append(" ");
+			buffer3.append(alphasyn.getTo_point_end().y);
+			buffer3.append(" ");
+			buffer3.append(alphasyn.getTo_point_end().z);
+			buffer3.append(" ");
+			buffer3.append(alphasyn.getFrom_loc());
+			buffer3.append(" ");
+			buffer3.append(alphasyn.getTo_loc());
+			buffer3.append(" ");
+			buffer3.append(alphasyn.getSynapseInfo());
+			buffer3.append(" ");
+			buffer3.append(alphasyn.getFrom());
+			buffer3.append(" ");
+			buffer3.append(alphasyn.getTo());
+			buffer3.append(" ");
+			buffer3.append(alphasyn.getFrom_Index());
+			buffer3.append(" ");
+			buffer3.append(alphasyn.getTo_Index());
+			buffer3.append(" ");
 		}
-		
-		pw3.write(buffer4.toString());
-		
+
+		pw3.write(buffer3.toString());
+
 		if (pw3 != null) {
 			pw3.close();
 		}
 
-
 		if (pw4 != null) {
 			pw4.close();
 		}
-
 	}
 
 	/**
-	 * @brief exports the net
+	 * @brief @param compress
+	 */
+	public void exportNetToTXT(boolean compress) {
+		if (!compress) {
+			exportNetToTXT();
+		} else {
+			exportNetToTXTCompressed(NeuGenConstants.DEFAULT_COMPRESSION_METHOD);
+		}
+	}
+	
+	/**
+	 * @brief 
+	 * @param compress
+	 * @param method 
+	 */
+	public void exportNetToTXT(boolean compress, String method) {
+		if (!compress) {
+			exportNetToTXT();
+		} else {
+			exportNetToTXTCompressed(method);
+		}
+	}
+
+	/**
+	 * @brief exports the net with compression
+	 * @author stephanmg <stephan@syntaktischer-zucker.de>
+	 * 
+	 * @param method
+	 */
+	private void exportNetToTXTCompressed(String method) {
+		String compression = method;
+		if (method.isEmpty()) {
+			compression  = NeuGenConstants.DEFAULT_COMPRESSION_METHOD;
+		}
+		
+		
+		String ngx = NeuGenConstants.EXTENSION_TXT;
+		String extension = Utils.getExtension(file);
+
+		if (!ngx.equals(extension)) {
+			file = new File(file.getAbsolutePath() + "." + ngx);
+		}
+
+		if (NeuGenConstants.WITH_GUI) {
+			trigger.outPrintln("Write TXT file for UG");
+			trigger.outPrintln("\t" + hocFileName + "." + ngx);
+		} else {
+			NGBackend.logger.info("Write TXT file for UG");
+			NGBackend.logger.info("\t" + hocFileName + "." + ngx);
+		}
+		
+		writeNetToTXTCompressed(compression);
+	}
+
+	/**
+	 * @brief exports the net without compression
 	 * @author stephanmg <stephan@syntaktischer-zucker.de>
 	 */
-	public void exportNetToTXT() {
+	private void exportNetToTXT() {
 		String ngx = NeuGenConstants.EXTENSION_TXT;
 		String extension = Utils.getExtension(file);
 
@@ -555,5 +611,35 @@ public class TXTWriter {
 
 		TXTWriter ngxwriter = new TXTWriter(net, file);
 		ngxwriter.exportNetToTXT();
+	}
+
+	/**
+	 * @brief todo implement
+	 * @param method
+	 */
+	private void writeNetToTXTCompressed(String method) {
+		try {
+			FileOutputStream bzip2 = null;
+			String basefile = FilenameUtils.removeExtension(this.file.getAbsolutePath());
+			bzip2 = new FileOutputStream(new File(basefile + "_test.bz2"));
+			StringBuffer buffer3 = new StringBuffer();
+			try {
+				CompressorOutputStream gzippedOut = new CompressorStreamFactory()
+					.createCompressorOutputStream(method, bzip2);
+
+				try {
+					gzippedOut.write(buffer3.toString().getBytes());
+					gzippedOut.close();
+				} catch (IOException ex) {
+					java.util.logging.Logger.getLogger(TXTWriter.class.getName()).log(Level.SEVERE, null, ex);
+				}
+			} catch (CompressorException ex) {
+				java.util.logging.Logger.getLogger(TXTWriter.class.getName()).log(Level.SEVERE, null, ex);
+			}
+
+		} catch (FileNotFoundException ex) {
+			java.util.logging.Logger.getLogger(TXTWriter.class.getName()).log(Level.SEVERE, null, ex);
+		}
+
 	}
 }

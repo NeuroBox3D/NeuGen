@@ -67,6 +67,7 @@ public final class TXTWriterTask extends Task<Void, Void> {
     /// private members
     private static final Logger logger = Logger.getLogger(HocWriterTask.class.getName());
     private final File file;
+    private final WriteCompressedDialog dialog;
 
     /**
      * @brief ctor
@@ -78,6 +79,9 @@ public final class TXTWriterTask extends Task<Void, Void> {
     public TXTWriterTask(Application app, File f) {
         super(app);
         file = f;
+	
+	dialog = new WriteCompressedDialog(NeuGenView.getInstance().getFrame(), true);
+	dialog.setVisible(true);
     }
 
     /**
@@ -90,6 +94,7 @@ public final class TXTWriterTask extends Task<Void, Void> {
      */
     public void setMyProgress(int value, int min, int max) {
         setProgress(value, min, max);
+	
     }
 
     /**
@@ -102,11 +107,22 @@ public final class TXTWriterTask extends Task<Void, Void> {
     @SuppressWarnings("deprecation")
     protected Void doInBackground() {
         Net net = NeuGenView.getInstance().getNet();
-        TXTWriter ngxWriter = new TXTWriter(net, file);
+        TXTWriter txtWriter = new TXTWriter(net, file);
+	
+	boolean compression = dialog.getCompress();
                 
 	logger.info("Exporting TXT data to... " + file.getName());
         setMessage("Exporting TXT data to... " + file.getName());
-        ngxWriter.exportNetToTXT();
+	
+	logger.info("Compression: " + compression);
+	setMessage("Compression: " + compression);
+        txtWriter.exportNetToTXT(compression);
+
+	String method = dialog.getMethod();
+
+	if (dialog.getBoth() && compression) {
+		txtWriter.exportNetToTXT(false, method);
+	}
         return null;  
     }
 

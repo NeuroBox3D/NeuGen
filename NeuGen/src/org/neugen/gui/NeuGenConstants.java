@@ -130,6 +130,8 @@ public final class NeuGenConstants {
     
     public static boolean WITH_GUI = true;
     
+    public static final String DEFAULT_COMPRESSION_METHOD = "bzip2";
+    
     //////////////////////////////////
   
 
