@@ -46,23 +46,20 @@
  * Neurocomputing, 70(1-3), pp. 327-343, doi: 10.1016/j.neucom.2006.01.028
  *
  */
+
 /// package's name
 package org.neugen.parsers.TXT;
 
 /// imports
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
-import org.apache.log4j.Logger;
 import org.neugen.datastructures.Axon;
 import org.neugen.datastructures.Cellipsoid;
 import org.neugen.datastructures.Dendrite;
@@ -78,25 +75,23 @@ import javax.vecmath.Vector4f;
 import org.apache.commons.compress.compressors.CompressorException;
 import org.apache.commons.compress.compressors.CompressorOutputStream;
 import org.apache.commons.compress.compressors.CompressorStreamFactory;
-import org.apache.commons.compress.compressors.bzip2.BZip2CompressorOutputStream;
 import org.apache.commons.io.FilenameUtils;
 import org.neugen.backend.NGBackend;
 import org.neugen.datastructures.Pair;
-import org.neugen.parsers.NGX.NGXBase;
-import org.neugen.parsers.NGX.NGXSynapse;
 
 /**
  * @brief TXT writer (NeuGen XML)
  * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
 public class TXTWriter {
-
 	/// private members
-	private static final Logger logger = Logger.getLogger(TXTWriter.class.getName());
 	private final Net net;
 	private File file;
 	private String hocFileName;
 	private Trigger trigger;
+	private String compressMethod = NeuGenConstants.DEFAULT_COMPRESSION_METHOD;
+	private boolean compressed;
+	private boolean uncompressed;
 
 	/**
 	 * @brief ctor
@@ -348,10 +343,15 @@ public class TXTWriter {
 	 */
 	@SuppressWarnings("CallToPrintStackTrace")
 	public final void writeNetToTXT() {
+		/// compressed output
+		CompressorOutputStream cos = null;
+		CompressorOutputStream cos2 = null;
+		CompressorOutputStream cos3 = null;
+		
+		/// uncompressed output
 		PrintWriter pw = null;
 		PrintWriter pw2 = null;
 		PrintWriter pw3 = null;
-		PrintWriter pw4 = null;
 
 		try {
 			String basefile = FilenameUtils.removeExtension(this.file.getAbsolutePath());
@@ -360,14 +360,23 @@ public class TXTWriter {
 			FileWriter fw = new FileWriter(new File(basefile + "_secs.txt"), true);
 			FileWriter fw2 = new FileWriter(new File(basefile + "_connex.txt"), true);
 			FileWriter fw3 = new FileWriter(new File(basefile + "_synapses.txt"), true);
-			FileWriter fw4 = new FileWriter(new File(basefile + "_synapses2.txt"), true);
-
-			pw = new PrintWriter((fw));
+			
+			pw = new PrintWriter(fw);
 			pw2 = new PrintWriter(fw2);
 			pw3 = new PrintWriter(fw3);
-			pw4 = new PrintWriter(fw4);
-		} catch (IOException e) {
-			e.printStackTrace();
+			
+			FileOutputStream fos = new FileOutputStream(new File(basefile + "_secs.txt.bz2"));
+			FileOutputStream fos2 = new FileOutputStream(new File(basefile + "_connex.txt.bz2"));
+			FileOutputStream fos3 = new FileOutputStream(new File(basefile + "_synapses.txt.bz2"));
+			
+			cos  = new CompressorStreamFactory().createCompressorOutputStream(this.compressMethod, fos);
+			cos2 = new CompressorStreamFactory().createCompressorOutputStream(this.compressMethod, fos2);
+			cos3 = new CompressorStreamFactory().createCompressorOutputStream(this.compressMethod, fos3);
+
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		} catch (CompressorException ce) {
+			ce.printStackTrace();
 		}
 
 		List<Neuron> neuronList = net.getNeuronList();
@@ -395,7 +404,17 @@ public class TXTWriter {
 				}
 				buffer.append(" ");
 			}
-			pw.write(buffer.toString());
+			if (uncompressed) {
+				pw.write(buffer.toString());
+			}
+			
+			if (compressed) {
+				try {
+					cos.write(buffer.toString().getBytes());
+				} catch (IOException ex) {
+					java.util.logging.Logger.getLogger(TXTWriter.class.getName()).log(Level.SEVERE, null, ex);
+				}
+			}
 
 			for (TXTBase base : sections.second) {
 				TXTConnection connex = (TXTConnection) base;
@@ -408,15 +427,43 @@ public class TXTWriter {
 				buffer2.append(connex.getTo_loc());
 				buffer2.append(" ");
 			}
-			pw2.write(buffer2.toString());
+			
+			if (uncompressed) {
+				pw2.write(buffer2.toString());
+			}
+			if (compressed) {
+				try {
+					cos2.write(buffer2.toString().getBytes());
+				} catch (IOException ex) {
+					java.util.logging.Logger.getLogger(TXTWriter.class.getName()).log(Level.SEVERE, null, ex);
+				}
+			}
 		}
 
 		if (pw != null) {
 			pw.close();
 		}
+		
+		if (compressed) {
+			if (cos != null) {
+				try {
+					cos.close();
+				} catch (IOException ex) {
+					java.util.logging.Logger.getLogger(TXTWriter.class.getName()).log(Level.SEVERE, null, ex);
+				}
+			}
+		}
 
 		if (pw2 != null) {
 			pw2.close();
+		}
+		
+		if (cos2 != null) {
+			try {
+				cos2.close();
+			} catch (IOException ex) {
+				java.util.logging.Logger.getLogger(TXTWriter.class.getName()).log(Level.SEVERE, null, ex);
+			}
 		}
 
 		ArrayList<TXTSynapse> exp2synapses = net.getTXTData().writeExp2Synapses();
@@ -463,7 +510,18 @@ public class TXTWriter {
 			buffer3.append(" ");
 		}
 
-		pw3.write(buffer3.toString());
+		if (uncompressed) {
+			pw3.write(buffer3.toString());
+		}
+		
+		if (compressed) {
+			try {
+				cos3.write(buffer3.toString().getBytes());
+			} catch (IOException ex) {
+				java.util.logging.Logger.getLogger(TXTWriter.class.getName()).log(Level.SEVERE, null, ex);
+			}
+		}
+		
 
 		ArrayList<TXTSynapse> alphasynapses = net.getTXTData().writeAlphaSynapses();
 		for (TXTSynapse synapse : alphasynapses) {
@@ -508,14 +566,28 @@ public class TXTWriter {
 			buffer3.append(" ");
 		}
 
-		pw3.write(buffer3.toString());
-
+		if (uncompressed) {
+			pw3.write(buffer3.toString());
+		}
+		
 		if (pw3 != null) {
 			pw3.close();
 		}
-
-		if (pw4 != null) {
-			pw4.close();
+		
+		if (compressed) {
+			try {
+			cos3.write(buffer3.toString().getBytes());
+			} catch (IOException ex) {
+				java.util.logging.Logger.getLogger(TXTWriter.class.getName()).log(Level.SEVERE, null, ex);
+			} finally {
+				if (cos3 != null) {
+					try {
+						cos3.close();
+					} catch (IOException ex) {
+						java.util.logging.Logger.getLogger(TXTWriter.class.getName()).log(Level.SEVERE, null, ex);
+					}
+				}
+			}
 		}
 	}
 
@@ -578,7 +650,7 @@ public class TXTWriter {
 	 * @brief exports the net without compression
 	 * @author stephanmg <stephan@syntaktischer-zucker.de>
 	 */
-	private void exportNetToTXT() {
+	public void exportNetToTXT() {
 		String ngx = NeuGenConstants.EXTENSION_TXT;
 		String extension = Utils.getExtension(file);
 
@@ -641,5 +713,29 @@ public class TXTWriter {
 			java.util.logging.Logger.getLogger(TXTWriter.class.getName()).log(Level.SEVERE, null, ex);
 		}
 
+	}
+
+	/**
+	 * @brief set compression method
+	 * @param method 
+	 */
+	void setCompressionMethod(String method) {
+		this.compressMethod = method;
+	}
+	
+	/**
+	 * @brief set compress 
+	 * @param compress 
+	 */
+	void setCompressed(boolean compress) {
+		this.compressed = compress;
+	}
+
+	/**
+	 * @brief set to compress and not compressed write
+	 * @param uncompressed
+	 */
+	void setUncompressed(boolean uncompressed) {
+		this.uncompressed = uncompressed;
 	}
 }

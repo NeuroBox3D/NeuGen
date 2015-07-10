@@ -1,3 +1,52 @@
+/* 
+ * Copyright (c) 2005–2012 Goethe Center for Scientific Computing - Simulation and Modelling (G-CSC Frankfurt)
+ * Copyright (c) 2012-2015 Goethe Center for Scientific Computing - Computational Neuroscience (G-CSC Frankfurt)
+ * 
+ * This file is part of NeuGen.
+ *
+ * NeuGen is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * as published by the Free Software Foundation.
+ * 
+ * see: http://opensource.org/licenses/LGPL-3.0
+ *      file://path/to/NeuGen/LICENSE
+ *
+ * NeuGen is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * This version of NeuGen includes copyright notice and attribution requirements.
+ * According to the LGPL this information must be displayed even if you modify
+ * the source code of NeuGen. The copyright statement/attribution may not be removed.
+ *
+ * Attribution Requirements:
+ *
+ * If you create derived work you must do the following regarding copyright
+ * notice and author attribution.
+ *
+ * Add an additional notice, stating that you modified NeuGen. In addition
+ * you must cite the publications listed below. A suitable notice might read
+ * "NeuGen source code modified by YourName 2012".
+ * 
+ * Note, that these requirements are in full accordance with the LGPL v3
+ * (see 7. Additional Terms, b).
+ *
+ * Publications:
+ *
+ * S. Wolf, S. Grein, G. Queisser. NeuGen 2.0 -
+ * Employing NeuGen 2.0 to automatically generate realistic
+ * morphologies of hippocapal neurons and neural networks in 3D.
+ * Neuroinformatics, 2013, 11(2), pp. 137-148, doi: 10.1007/s12021-012-9170-1
+ *
+ *
+ * J. P. Eberhard, A. Wanner, G. Wittum. NeuGen -
+ * A tool for the generation of realistic morphology 
+ * of cortical neurons and neural networks in 3D.
+ * Neurocomputing, 70(1-3), pp. 327-343, doi: 10.1016/j.neucom.2006.01.028
+ *
+ */
+
 /// package's name
 package org.neugen.parsers.TXT;
 
@@ -12,23 +61,20 @@ import org.jdesktop.application.Action;
 public class WriteCompressedDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
-	private boolean compress = false;
-	private boolean both = false;
+	private boolean compressed = false;
+	private boolean uncompressed = false;
 
 	/**
 	 * Creates new form WriteCompressedDialog
 	 */
 	/**
 	 * @brief @param parent
-	 * @param modalA
+	 * @param modal
          * 
          * 
 	 */
 	public WriteCompressedDialog(java.awt.Frame parent, boolean modal) {
-		super(parent, modal);
-                        
-                        
-
+		super(parent, modal);   
 		initComponents();
 	}
 
@@ -49,6 +95,7 @@ public class WriteCompressedDialog extends JDialog {
         jSeparator2 = new javax.swing.JSeparator();
         jComboBox1 = new javax.swing.JComboBox();
         jCheckBox2 = new javax.swing.JCheckBox();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setName("Form"); // NOI18N
@@ -78,6 +125,10 @@ public class WriteCompressedDialog extends JDialog {
 
         jCheckBox2.setText(bundle.getString("WriteCompressedDialog.jCheckBox2.text")); // NOI18N
         jCheckBox2.setName("jCheckBox2"); // NOI18N
+        jCheckBox2.setSelected(true);
+
+        jLabel2.setText(bundle.getString("WriteCompressedDialog.jLabel2.text")); // NOI18N
+        jLabel2.setName("jLabel2"); // NOI18N
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -94,18 +145,20 @@ public class WriteCompressedDialog extends JDialog {
                         .add(jButton2))
                     .add(layout.createSequentialGroup()
                         .add(30, 30, 30)
-                        .add(jSeparator1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE))
+                        .add(jSeparator1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE))
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                         .add(30, 30, 30)
-                        .add(jSeparator2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE))
+                        .add(jSeparator2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE))
                     .add(layout.createSequentialGroup()
                         .add(61, 61, 61)
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(jCheckBox2)
                             .add(layout.createSequentialGroup()
                                 .add(jCheckBox1)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                                .add(jComboBox1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))))
+                                .add(33, 33, 33)
+                                .add(jComboBox1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                        .add(jLabel2)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -115,12 +168,17 @@ public class WriteCompressedDialog extends JDialog {
                 .add(jLabel1)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(jSeparator1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 10, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jCheckBox1)
-                    .add(jComboBox1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jCheckBox2)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(layout.createSequentialGroup()
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                            .add(jCheckBox1)
+                            .add(jComboBox1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jCheckBox2))
+                    .add(layout.createSequentialGroup()
+                        .add(28, 28, 28)
+                        .add(jLabel2)))
                 .add(15, 15, 15)
                 .add(jSeparator2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 10, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .add(4, 4, 4)
@@ -132,8 +190,8 @@ public class WriteCompressedDialog extends JDialog {
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel());
         jComboBox1.addItem("BZIP2");
+        jComboBox1.addItem("TAR");
         jComboBox1.addItem("ZIP");
-        jComboBox1.addItem("XZ");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -194,16 +252,16 @@ public class WriteCompressedDialog extends JDialog {
 	 * @brief get compress
 	 * @return
 	 */
-	public boolean getCompress() {
-		return this.compress;
+	public boolean getCompressed() {
+		return this.compressed;
 	}
 
 	/**
 	 * @brief get both
 	 * @return
 	 */
-	public boolean getBoth() {
-		return this.both;
+	public boolean getUncompressed() {
+		return this.uncompressed;
 	}
 
 	/**
@@ -227,11 +285,13 @@ public class WriteCompressedDialog extends JDialog {
 	 */
 	@Action
 	public void write() {
-		this.compress = jCheckBox1.isSelected();
-		this.both = jCheckBox2.isSelected();
+		this.compressed = jCheckBox1.isSelected();
+		this.uncompressed = jCheckBox2.isSelected();
 		close();
 
 	}
+
+   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -240,6 +300,7 @@ public class WriteCompressedDialog extends JDialog {
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     // End of variables declaration//GEN-END:variables

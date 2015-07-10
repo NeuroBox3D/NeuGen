@@ -51,7 +51,7 @@
 package org.neugen.parsers.TXT;
 
 /**
- * @brief NGX element types
+ * @brief TXT element types
  * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
 public enum TXTTypes { 

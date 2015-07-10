@@ -109,20 +109,23 @@ public final class TXTWriterTask extends Task<Void, Void> {
         Net net = NeuGenView.getInstance().getNet();
         TXTWriter txtWriter = new TXTWriter(net, file);
 	
-	boolean compression = dialog.getCompress();
-                
 	logger.info("Exporting TXT data to... " + file.getName());
         setMessage("Exporting TXT data to... " + file.getName());
 	
-	logger.info("Compression: " + compression);
-	setMessage("Compression: " + compression);
-        txtWriter.exportNetToTXT(compression);
+	boolean uncompressed = dialog.getUncompressed();
+	boolean compressed = dialog.getCompressed();
 
-	String method = dialog.getMethod();
-
-	if (dialog.getBoth() && compression) {
-		txtWriter.exportNetToTXT(false, method);
+	/// Write only network if compressed or uncompressed chosen
+	if ( ! (uncompressed && compressed) ) {
+		logger.info("Neither compressed nor uncompressed write selected. Aborting...");
+		setMessage("Neither compressed nor uncompressed write selected. Aborting...");
+	} else {
+		txtWriter.setCompressionMethod(dialog.getMethod());
+		txtWriter.setCompressed(dialog.getCompressed());
+		txtWriter.setUncompressed(dialog.getUncompressed());
+		txtWriter.exportNetToTXT();
 	}
+	
         return null;  
     }
 
