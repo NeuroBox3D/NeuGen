@@ -51,8 +51,6 @@ package org.neugen.gui;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.Key;
@@ -60,6 +58,7 @@ import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
 import javax.crypto.spec.SecretKeySpec;
+import org.apache.commons.codec.binary.Base64;
 
 /**
  *
@@ -70,35 +69,34 @@ public class KeyGenerator {
     private static String externLocalKey = "neuroKey";
     private static String internLocalKey = "01234567";
 
-    public static String getInternCodedKey(String newPass) throws Exception {
+    public String getInternCodedKey(String newPass) throws Exception {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         encode(newPass.getBytes(), out, internLocalKey);
-        newPass = new BASE64Encoder().encode(out.toByteArray());
-        return newPass;
+	
+	return Base64.encodeBase64String(out.toByteArray());
     }
 
-    public static String getExternCodedKey(String newPass) throws Exception {
+    public String getExternCodedKey(String newPass) throws Exception {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         encode(newPass.getBytes(), out, externLocalKey);
-        newPass = new BASE64Encoder().encode(out.toByteArray());
-        return newPass;
+	return Base64.encodeBase64String(out.toByteArray());
     }
 
-    public static String getInternDecodedKey(String codedPass) throws IOException, Exception {
-        byte[] decode = new BASE64Decoder().decodeBuffer(codedPass);
+    public String getInternDecodedKey(String codedPass) throws IOException, Exception {
+        byte[] decode = Base64.decodeBase64(codedPass);
         InputStream is = new ByteArrayInputStream(decode);
         String decodedLK = new String(decode(is, internLocalKey)).trim();
         return decodedLK;
     }
 
-    public static String getExternDecodedKey(String codedPass) throws IOException, Exception {
-        byte[] decode = new BASE64Decoder().decodeBuffer(codedPass);
+    public String getExternDecodedKey(String codedPass) throws IOException, Exception {
+        byte[] decode = Base64.decodeBase64(codedPass);
         InputStream is = new ByteArrayInputStream(decode);
         String decodedLK = new String(decode(is, externLocalKey)).trim();
         return decodedLK;
     }
 
-    public static void encode(byte[] bytes, OutputStream out, String pass) throws Exception {
+    public void encode(byte[] bytes, OutputStream out, String pass) throws Exception {
         Cipher c = Cipher.getInstance("DES");
         Key k = new SecretKeySpec(pass.getBytes(), "DES");
         c.init(Cipher.ENCRYPT_MODE, k);
@@ -108,7 +106,7 @@ public class KeyGenerator {
         cos.close();
     }
 
-    public static byte[] decode(InputStream is, String pass) throws Exception {
+    public byte[] decode(InputStream is, String pass) throws Exception {
         Cipher c = Cipher.getInstance("DES");
         Key k = new SecretKeySpec(pass.getBytes(), "DES");
         c.init(Cipher.DECRYPT_MODE, k);
@@ -129,25 +127,25 @@ public class KeyGenerator {
      * @param pass 8 stellig (01234567)
      * @return toEncode
      */
-    public static String getEncodedString(String toEncode, String pass) throws Exception {
+    public String getEncodedString(String toEncode, String pass) throws Exception {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         encode(toEncode.getBytes(), out, pass);
-        toEncode = new BASE64Encoder().encode(out.toByteArray());
-        return toEncode;
+	return Base64.encodeBase64String(out.toByteArray());
     }
 
     public static void main(final String[] args) throws Exception {
+	    KeyGenerator kg = new KeyGenerator();
         String newPass = "new pass ...";
 
-        String externCoded = getExternCodedKey(newPass);
+        String externCoded = kg.getExternCodedKey(newPass);
         System.out.println("save this code to lk file: " + externCoded);
 
-        String decodedExternCode = getExternDecodedKey(externCoded);
+        String decodedExternCode = kg.getExternDecodedKey(externCoded);
         System.out.println("this is the key: " + decodedExternCode);
 
-        String internCoded = getInternCodedKey(newPass);
+        String internCoded = kg.getInternCodedKey(newPass);
         System.out.println("save this code in NeuGenApp: " + internCoded);
-        String decodedInternCode = getInternDecodedKey(internCoded);
+        String decodedInternCode = kg.getInternDecodedKey(internCoded);
         System.out.println("this is the key: " + decodedInternCode);
     }
 }

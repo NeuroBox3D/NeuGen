@@ -46,13 +46,10 @@
  * Neurocomputing, 70(1-3), pp. 327-343, doi: 10.1016/j.neucom.2006.01.028
  *
  */
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package org.neugen.vrl.plugin;
 
-import com.sun.j3d.exp.swing.JCanvas3D;
+
 import eu.mihosoft.vrl.io.IOUtil;
 import eu.mihosoft.vrl.system.InitPluginAPI;
 import eu.mihosoft.vrl.system.PluginAPI;
@@ -60,7 +57,7 @@ import eu.mihosoft.vrl.system.PluginDependency;
 import eu.mihosoft.vrl.system.PluginIdentifier;
 import eu.mihosoft.vrl.system.VPluginAPI;
 import eu.mihosoft.vrl.system.VPluginConfigurator;
-import eu.mihosoft.vrl.visual.ActionDelelator;
+import eu.mihosoft.vrl.visual.ActionDelegator;
 import eu.mihosoft.vrl.visual.VAction;
 import java.awt.event.ActionEvent;
 import java.io.File;
@@ -101,7 +98,7 @@ public class Configurator extends VPluginConfigurator{
             public void actionPerformed(ActionEvent e, Object owner) {
                 NeuGenApp.main(logPropFile, new String[]{});
             }
-        }, ActionDelelator.TOOL_MENU);
+        }, ActionDelegator.TOOL_MENU);
         
         
         vapi.addTypeRepresentation(VCanvas3DType.class);

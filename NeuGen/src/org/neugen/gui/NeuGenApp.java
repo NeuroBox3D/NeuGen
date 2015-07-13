@@ -135,13 +135,14 @@ public final class NeuGenApp extends SingleFrameApplication {
         boolean lkFound = false;
         //generated code: KeyGenerator.getInternCodedKey..(newPass)
         String encodedCode = "T0zBdfTmwauvn/7+QaOuaaSJgenjJ1+/";
-        String decodedLK = KeyGenerator.getInternDecodedKey(encodedCode);
+	KeyGenerator kg = new KeyGenerator();
+        String decodedLK = kg.getInternDecodedKey(encodedCode);
 
         if (lkf.exists()) {
             try {
                 BufferedReader lkReader = new BufferedReader(new FileReader(lkf));
                 String licenseString = lkReader.readLine();
-                licenseString = KeyGenerator.getExternDecodedKey(licenseString);
+                licenseString = kg.getExternDecodedKey(licenseString);
                 if (licenseString != null && licenseString.equals(decodedLK)) {
                     lkFound = true;
                 }
@@ -178,7 +179,7 @@ public final class NeuGenApp extends SingleFrameApplication {
                     }
                 } while (!licenseKey.equals(decodedLK));
                 FileWriter fw = new FileWriter(".lk");
-                String codeToWrite = KeyGenerator.getExternCodedKey(decodedLK);
+                String codeToWrite = kg.getExternCodedKey(decodedLK);
                 fw.write(codeToWrite);
                 fw.close();
             } catch (IOException e) {
