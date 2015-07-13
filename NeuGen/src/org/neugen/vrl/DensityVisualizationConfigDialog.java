@@ -856,7 +856,7 @@ public final class DensityVisualizationConfigDialog extends JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(20, 5, 20, 5);
         jPanelCOlorsOfVisualization.add(jLabelBackGroundColor, gridBagConstraints);
-        jComboBoxBackgroundColor.setModel(new DefaultComboBoxModel<String>(new String[]{"black", "white"}));
+        jComboBoxBackgroundColor.setModel(new DefaultComboBoxModel(new String[]{"black", "white"}));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 8;

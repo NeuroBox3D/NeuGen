@@ -92,6 +92,7 @@ public class TXTWriter {
 	private String compressMethod = NeuGenConstants.DEFAULT_COMPRESSION_METHOD;
 	private boolean compressed;
 	private boolean uncompressed;
+        private FileExistsDialog fed;
 
 	/**
 	 * @brief ctor
@@ -355,11 +356,26 @@ public class TXTWriter {
 
 		try {
 			String basefile = FilenameUtils.removeExtension(this.file.getAbsolutePath());
+                        String[] subfiles = { "secs.txt", "connex.txt", "synapses.txt" };
 			System.err.println(basefile);
 
 			FileWriter fw = new FileWriter(new File(basefile + "_secs.txt"), true);
 			FileWriter fw2 = new FileWriter(new File(basefile + "_connex.txt"), true);
 			FileWriter fw3 = new FileWriter(new File(basefile + "_synapses.txt"), true);
+                        
+                        for (String s : subfiles) {
+                            File f = new File(basefile + "_" + s);
+                            if (f.exists() && !f.isDirectory()) {
+                                fed.setVisible(true);
+                                if (!fed.getStatus()) {
+                                    return;
+                                }
+                                break;
+                            }
+                        }
+                
+           
+                       
 			
 			pw = new PrintWriter(fw);
 			pw2 = new PrintWriter(fw2);
@@ -738,4 +754,8 @@ public class TXTWriter {
 	void setUncompressed(boolean uncompressed) {
 		this.uncompressed = uncompressed;
 	}
+
+    void setFileExistsDialog(FileExistsDialog fileExistsDialog) {
+       this.fed = fileExistsDialog;
+    }
 }

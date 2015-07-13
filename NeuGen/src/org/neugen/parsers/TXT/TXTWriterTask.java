@@ -123,6 +123,7 @@ public final class TXTWriterTask extends Task<Void, Void> {
 		txtWriter.setCompressionMethod(dialog.getMethod());
 		txtWriter.setCompressed(dialog.getCompressed());
 		txtWriter.setUncompressed(dialog.getUncompressed());
+                txtWriter.setFileExistsDialog(new FileExistsDialog(NeuGenView.getInstance().getFrame(), true));
 		txtWriter.exportNetToTXT();
 	}
 	

@@ -477,7 +477,7 @@ public final class DensityVisualizationConfiguration extends JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 20, 5);
         jPanelValuesOfVisualization.add(jLabelNumberOfValues, gridBagConstraints);
-        jComboBoxNumberOfValues.setModel(new DefaultComboBoxModel<String>(new String[]{"4", "3", "2", "1"}));
+        jComboBoxNumberOfValues.setModel(new DefaultComboBoxModel(new String[]{"4", "3", "2", "1"}));
         jComboBoxNumberOfValues.addActionListener(new java.awt.event.ActionListener() {
 
             @Override
