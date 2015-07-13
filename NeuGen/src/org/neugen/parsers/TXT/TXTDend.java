@@ -58,46 +58,6 @@ public class TXTDend extends TXTBase {
 	/// type
 	private static final int TYPE = TXTTypes.DENDRITE.ordinal();
 	
-	/// private members
-	private String name;
-	private int nn;
-
-	/**
-	 * @brief get name of compartment
-	 * @return
-	 */
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * @brief set name of compartment
-	 * @param name 
-	 */
-	@Override
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	/**
-	 * @brief get id
-	 * @return 
-	 */
-	@Override
-	public int getId() {
-		return nn;
-	}
-
-	/**
-	 * @brief set id
-	 * @param nn 
-	 */
-	@Override
-	public void setId(int nn) {
-		this.nn = nn;
-	}
-	
 	/**
 	 * @brief get type
 	 * @return

@@ -116,7 +116,7 @@ public final class TXTWriterTask extends Task<Void, Void> {
 	boolean compressed = dialog.getCompressed();
 
 	/// Write only network if compressed or uncompressed chosen
-	if ( ! (uncompressed && compressed) ) {
+	if ( ! (uncompressed || compressed) ) {
 		logger.info("Neither compressed nor uncompressed write selected. Aborting...");
 		setMessage("Neither compressed nor uncompressed write selected. Aborting...");
 	} else {

@@ -46,7 +46,6 @@
  * Neurocomputing, 70(1-3), pp. 327-343, doi: 10.1016/j.neucom.2006.01.028
  *
  */
-
 /// package's name
 package org.neugen.parsers.TXT;
 
@@ -55,34 +54,15 @@ package org.neugen.parsers.TXT;
  * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
 public class TXTAxon extends TXTBase {
+	/// type
 	private static final int TYPE = TXTTypes.AXON.ordinal();
-	private String name;
-	private int nn;
-	
+
 	/**
 	 * @brief get type
-	 * @return 
+	 * @return
 	 */
 	@Override
 	public int getType() {
 		return TYPE;
-	}
-	
-	/**
-	 * @brief get name of compartment
-	 * @return
-	 */
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * @brief get id
-	 * @return 
-	 */
-	@Override
-	public int getId() {
-		return nn;
 	}
 }

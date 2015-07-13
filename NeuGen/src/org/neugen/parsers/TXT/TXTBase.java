@@ -55,15 +55,15 @@ import java.util.ArrayList;
 import javax.vecmath.Vector4f;
 
 /**
- * @brief TXTBase
+ * @brief abstract TXTBase
  * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
-public class TXTBase {
+public abstract class TXTBase {
 	/// type
 	private static final int TYPE = TXTTypes.UNDEFINED.ordinal();
 	
 	/// private members
-	private String name;
+	private String name = "Undefined - Type: " + TYPE;
 	private ArrayList<Vector4f> coordinates = new ArrayList<Vector4f>();
 	private int id;
 
@@ -76,12 +76,29 @@ public class TXTBase {
 	}
 
 	/**
+	 * @brief set name
+	 * @param name
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}   
+
+	/**
 	 * @brief get coordinates
 	 * @return 
 	 */
 	@SuppressWarnings("ReturnOfCollectionOrArrayField")
 	public ArrayList<Vector4f> getCoordinates() {
 		return coordinates;
+	}
+	
+	/**
+	 * @brief set coordinates
+	 * @param coordinates
+	 */
+	@SuppressWarnings("AssignmentToCollectionOrArrayFieldFromParameter")
+	public void setCoordinates(ArrayList<Vector4f> coordinates) {
+		this.coordinates = coordinates;
 	}
 
 	/**
@@ -90,23 +107,6 @@ public class TXTBase {
 	 */
 	public int getId() {
 		return id;
-	}
-
-	/**
-	 * @brief set name
-	 * @param name 
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	/**
-	 * @brief set coordinates
-	 * @param coordinates 
-	 */
-	@SuppressWarnings("AssignmentToCollectionOrArrayFieldFromParameter")
-	public void setCoordinates(ArrayList<Vector4f> coordinates) {
-		this.coordinates = coordinates;
 	}
 
 	/**
