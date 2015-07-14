@@ -356,34 +356,39 @@ public class TXTWriter {
 
 		try {
 			String basefile = FilenameUtils.removeExtension(this.file.getAbsolutePath());
+			String extension = NeuGenConstants.getExtension(this.compressMethod);
                         String[] subfiles = { "secs.txt", "connex.txt", "synapses.txt" };
 			System.err.println(basefile);
-
-			FileWriter fw = new FileWriter(new File(basefile + "_secs.txt"), true);
-			FileWriter fw2 = new FileWriter(new File(basefile + "_connex.txt"), true);
-			FileWriter fw3 = new FileWriter(new File(basefile + "_synapses.txt"), true);
-                        
+			
+			/// check if a files are present
                         for (String s : subfiles) {
                             File f = new File(basefile + "_" + s);
                             if (f.exists() && !f.isDirectory()) {
                                 fed.setVisible(true);
                                 if (!fed.getStatus()) {
-                                    return;
+					return;
                                 }
                                 break;
                             }
                         }
-                
-           
-                       
-			
+
+			/// empties all the files to be sure
+                        for (String s : subfiles) {
+				new PrintWriter(new File(basefile + "_" + s)).write("");
+				new PrintWriter(new File(basefile + "_" + s + "." + extension)).write("");
+			}
+
+			FileWriter fw = new FileWriter(new File(basefile + "_secs.txt"), true);
+			FileWriter fw2 = new FileWriter(new File(basefile + "_connex.txt"), true);
+			FileWriter fw3 = new FileWriter(new File(basefile + "_synapses.txt"), true);
+                        
 			pw = new PrintWriter(fw);
 			pw2 = new PrintWriter(fw2);
 			pw3 = new PrintWriter(fw3);
 			
-			FileOutputStream fos = new FileOutputStream(new File(basefile + "_secs.txt.bz2"));
-			FileOutputStream fos2 = new FileOutputStream(new File(basefile + "_connex.txt.bz2"));
-			FileOutputStream fos3 = new FileOutputStream(new File(basefile + "_synapses.txt.bz2"));
+			FileOutputStream fos = new FileOutputStream(new File(basefile + "_secs.txt." + extension));
+			FileOutputStream fos2 = new FileOutputStream(new File(basefile + "_connex.txt." + extension));
+			FileOutputStream fos3 = new FileOutputStream(new File(basefile + "_synapses.txt." + extension));
 			
 			cos  = new CompressorStreamFactory().createCompressorOutputStream(this.compressMethod, fos);
 			cos2 = new CompressorStreamFactory().createCompressorOutputStream(this.compressMethod, fos2);
