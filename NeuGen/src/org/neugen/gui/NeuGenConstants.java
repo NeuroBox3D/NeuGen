@@ -151,7 +151,7 @@ public final class NeuGenConstants {
 	 * @return
 	 */
 	public static String getExtension(String compressMethod) {
-		return mappingMethodToExtension.get(compressMethod);
+		return mappingMethodToExtension.get(compressMethod.toLowerCase());
 	}
 
 }
