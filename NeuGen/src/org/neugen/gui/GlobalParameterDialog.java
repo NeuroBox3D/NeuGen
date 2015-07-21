@@ -123,6 +123,7 @@ public class GlobalParameterDialog extends JDialog {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setName("Form"); // NOI18N
@@ -170,6 +171,9 @@ public class GlobalParameterDialog extends JDialog {
         jLabel6.setText(resourceMap.getString("jLabel6.text")); // NOI18N
         jLabel6.setName("jLabel6"); // NOI18N
 
+        jLabel7.setText(resourceMap.getString("jLabel7.text")); // NOI18N
+        jLabel7.setName("jLabel7"); // NOI18N
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -187,17 +191,18 @@ public class GlobalParameterDialog extends JDialog {
                                         .add(jLabel1)))
                                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                                     .add(layout.createSequentialGroup()
+                                        .add(111, 111, 111)
+                                        .add(jButton2))
+                                    .add(layout.createSequentialGroup()
                                         .add(28, 28, 28)
-                                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                                            .add(jTextField2)
-                                            .add(jTextField1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE))
+                                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
+                                            .add(org.jdesktop.layout.GroupLayout.LEADING, jLabel7, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .add(org.jdesktop.layout.GroupLayout.LEADING, jTextField2)
+                                            .add(org.jdesktop.layout.GroupLayout.LEADING, jTextField1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE))
                                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 27, Short.MAX_VALUE)
                                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
                                             .add(jLabel6)
-                                            .add(jLabel5)))
-                                    .add(layout.createSequentialGroup()
-                                        .add(111, 111, 111)
-                                        .add(jButton2))))
+                                            .add(jLabel5)))))
                             .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
                                 .add(jLabel3)
                                 .add(jSeparator1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 343, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))))
@@ -213,7 +218,9 @@ public class GlobalParameterDialog extends JDialog {
                 .add(jLabel3)
                 .add(1, 1, 1)
                 .add(jSeparator1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .add(41, 41, 41)
+                .add(18, 18, 18)
+                .add(jLabel7)
+                .add(7, 7, 7)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jLabel1)
                     .add(jTextField1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
@@ -232,8 +239,13 @@ public class GlobalParameterDialog extends JDialog {
                 .add(49, 49, 49))
         );
 
+        jTextField1.getDocument().addDocumentListener(new DensityWarningDocumentListener(this.jLabel7));
         jLabel5.setToolTipText("<html><p style=\"text-align: justify\" width=\"400\">" +TOOLTIP_DENSITY+"</p></html>");
         jLabel6.setToolTipText("<html><p style=\"text-align: justify\" width=\"400\">" +TOOLTIP_DIST_SYNAPSE+"</p></html>");
+        jLabel7.setText("");
+        jLabel7.setVisible(true);
+        jLabel7.setSize(87, 16);
+        jLabel7.setVisible(true);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -524,6 +536,7 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
