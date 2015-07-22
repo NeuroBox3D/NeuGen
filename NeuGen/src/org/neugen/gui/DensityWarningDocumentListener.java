@@ -65,21 +65,22 @@ import javax.swing.text.Document;
  * almost identical (double vertices) and this does not suit our needs in
  * subsequent grid generation and simulation
  * @author stephanmg <stephan@syntaktischer-zucker.de>
+ * @see javax.swing.event.DocumentListener
  */
 public final class DensityWarningDocumentListener implements DocumentListener {
 	/// private final members
 	private final JLabel warningLabel;
 	
-        /// private final static members
-        private final static Float maxDensity = 0.5f;
-        private final static String warningMessage = "Density way too high";
-        private final static String warningMessageTooltip = "For large scale-networks " 
+        /// private static final members
+        private static final Float maxDensity = 0.5f;
+        private static final String warningMessage = "Density way too high";
+        private static final String warningMessageTooltip = "For large scale-networks " 
                 + "a density below " + maxDensity + " is recommended to avoid double "
 		+ "vertices. You can go on with the given density, however we expect a "
 		+ "slower grid generation in the end.";
-        private final static String warningMessageTooltipPrefix = 
+        private static final String warningMessageTooltipPrefix = 
                 "<html><p style=\"text-align: justify\" width=\"400\">"; 
-        private final static String warningMessageTooltipPostfix = "</p></html>";
+        private static final String warningMessageTooltipPostfix = "</p></html>";
                        
                                                                    
 	/**

@@ -888,8 +888,7 @@ float to_walk_on_given_edge_dend = 0;
 			ngxsynapse.setFrom("N" + synapse.getNeuron1().getIndex() + ax_section.getName());
 			//ngxsynapse.setFrom_loc(ff);
 			ngxsynapse.setFrom_loc(to_walk_on_given_edge_axon);
-			ngxsynapse.setGmax(1 + wfactor * synapse.getDendriticSomaDistance() * get_uEPSP_Value(typeN1, typeN2));
-			
+			ngxsynapse.setGmax((1 + wfactor * synapse.getDendriticSomaDistance()) * get_uEPSP_Value(typeN1, typeN2));
 			txtsynapses.add(ngxsynapse);
 		}
 		return txtsynapses;
@@ -1113,8 +1112,8 @@ float to_walk_on_given_edge_dend = 0;
 			assert (ff <= 1.0);
 			ngxsynapse.setFrom("N" + synapse.getNeuron1().getIndex() + ax_section.getName());
 			ngxsynapse.setFrom_loc(ff);
-			ngxsynapse.setGmax(1 + wfactor * synapse.getDendriticSomaDistance() * get_uEPSP_Value(typeN1, typeN2));
-			
+			ngxsynapse.setGmax((1 + wfactor * synapse.getDendriticSomaDistance()) * get_uEPSP_Value(typeN1, typeN2));
+
 			ngxsynapses.add(ngxsynapse);
 		}
 		return ngxsynapses;
