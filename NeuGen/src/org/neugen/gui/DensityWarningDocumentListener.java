@@ -114,7 +114,9 @@ public final class DensityWarningDocumentListener implements DocumentListener {
                              this.warningLabel.setVisible(false);
                         }
 		} catch (BadLocationException ex) {
-			Logger.getLogger(DensityWarningDocumentListener.class.getName()).log(Level.SEVERE, null, ex);
+                        this.warningLabel.setVisible(false);
+		} catch (NumberFormatException nfe) {
+                        this.warningLabel.setVisible(false);
 		}
 	}
 
