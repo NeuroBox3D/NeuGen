@@ -11,6 +11,7 @@ Current development on devel branch, current stable on master branch.
 
 ## See Also
 [NeuGen](http://www.neugen.org)
+[NeuroBox3D](http://www.neurobox.eu)
 
 ## Samples
 ![](/resources/img/synapse.jpg)
