@@ -372,10 +372,12 @@ public class TXTWriter {
                             }
                         }
 
-			/// empties all the files to be sure
-                        for (String s : subfiles) {
-				new PrintWriter(new File(basefile + "_" + s)).write("");
-				new PrintWriter(new File(basefile + "_" + s + "." + extension)).write("");
+			if (compressed) {
+				/// empties all the files to be sure
+                        	for (String s : subfiles) {
+					new PrintWriter(new File(basefile + "_" + s)).write("");
+					new PrintWriter(new File(basefile + "_" + s + "." + extension)).write("");
+				}
 			}
 
 			FileWriter fw = new FileWriter(new File(basefile + "_secs.txt"), true);
@@ -385,14 +387,18 @@ public class TXTWriter {
 			pw = new PrintWriter(fw);
 			pw2 = new PrintWriter(fw2);
 			pw3 = new PrintWriter(fw3);
+                        
+                        /// otherwise files may be created (i. e. the compressed files empty!)
+                        if (compressed) {
 			
-			FileOutputStream fos = new FileOutputStream(new File(basefile + "_secs.txt." + extension));
-			FileOutputStream fos2 = new FileOutputStream(new File(basefile + "_connex.txt." + extension));
-			FileOutputStream fos3 = new FileOutputStream(new File(basefile + "_synapses.txt." + extension));
+                            FileOutputStream fos = new FileOutputStream(new File(basefile + "_secs.txt." + extension));
+                            FileOutputStream fos2 = new FileOutputStream(new File(basefile + "_connex.txt." + extension));
+                            FileOutputStream fos3 = new FileOutputStream(new File(basefile + "_synapses.txt." + extension));
 			
-			cos  = new CompressorStreamFactory().createCompressorOutputStream(this.compressMethod, fos);
-			cos2 = new CompressorStreamFactory().createCompressorOutputStream(this.compressMethod, fos2);
-			cos3 = new CompressorStreamFactory().createCompressorOutputStream(this.compressMethod, fos3);
+                            cos  = new CompressorStreamFactory().createCompressorOutputStream(this.compressMethod, fos);
+                            cos2 = new CompressorStreamFactory().createCompressorOutputStream(this.compressMethod, fos2);
+                            cos3 = new CompressorStreamFactory().createCompressorOutputStream(this.compressMethod, fos3);
+                        }
 
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
