@@ -46,12 +46,11 @@
  * Neurocomputing, 70(1-3), pp. 327-343, doi: 10.1016/j.neucom.2006.01.028
  *
  */
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
+/// package's name
 package org.neugen.vrl;
 
+/// imports
 import eu.mihosoft.vrl.annotation.ComponentInfo;
 import eu.mihosoft.vrl.annotation.ObjectInfo;
 import eu.mihosoft.vrl.annotation.OutputInfo;
@@ -60,7 +59,6 @@ import eu.mihosoft.vrl.annotation.ParamInfo;
 import java.awt.Color;
 import java.io.Serializable;
 import javax.vecmath.Color3f;
-import org.neugen.datastructures.VolumeOfVoxels;
 
 /**
  *

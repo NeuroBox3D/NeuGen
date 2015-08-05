@@ -45,4 +45,5 @@ number in analogue for the synapse-distance textfield.
 either not implemented at all or no synapse export present - see open issues.
 2. If you want to run the final NeuGen.jar from command line by ```java -classpath NeuGen.jar org.neugen.gui.NeuGenApp```
 from a given directory make sure, that the relative path ```config/``` exists, from the directory you are invoking the
-startup command.
+startup command (better use the script ```run.sh```!).
+3. To increase heap memory, use ```-Xmx``` in run options in netbeans or set ```MAX_HEAP_MEMORY```in ```run.sh```.
