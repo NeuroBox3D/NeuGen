@@ -337,8 +337,8 @@ public final class NGBackend {
 	 */
 	public void generate_network(String projectType) {
 		ngLib.run(projectType);
-		//ngLib.getNet().destroy();
-		//ngLib.destroy();
+		/// ngLib.getNet().destroy();
+		/// ngLib.destroy();
 	}
 	
 	/**
@@ -350,17 +350,14 @@ public final class NGBackend {
 		save(paramTrees, projectDirPath);
 		
 		/**
-		 * @todo how to close savely the project?
+		 * @todo how to close savely the project? save above does not work,
+		 * since tightly tied to the GUI...
 		 */
 		
 		/// clear param data and destroy all net components
 		NeuGenLib.clearOldParamData();
 		ngLib.destroy();
 		ngLib.getNet().destroy();
-		
-		/**
-		 * @todo test if this works really
-		 */
 	}
 
 	/**

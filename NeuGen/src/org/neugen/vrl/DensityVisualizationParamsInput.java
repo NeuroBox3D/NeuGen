@@ -68,7 +68,7 @@ import javax.vecmath.Color3f;
 @ObjectInfo(name = "Density Input Params")
 public class DensityVisualizationParamsInput implements Serializable {
 
-    private static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
     private static final String CUBES = "Cubes";
     private static final String CONVEX_HULL = "Convex Hull";
     private static final String DEVIDED_CONVEX_HULL = "Divided Convex Hull";
