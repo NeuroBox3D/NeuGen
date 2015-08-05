@@ -51,10 +51,10 @@
  * Created on 21.08.2009, 11:16:20
  *
  */
+/// package's name
 package org.neugen.datastructures.parameter;
 
-import org.neugen.gui.GlobalParameterDialog;
-import org.neugen.gui.NeuGenView;
+/// imports
 import org.neugen.parsers.ConfigParserContainer;
 
 /**
@@ -100,8 +100,13 @@ public class SubCommonTreeParam extends KeyIdentificable {
         return nbranch_param.getValue();
     }
 
+    /**
+     * @brief get n parts density
+     * @return 
+     */
       public float getNpartsDensity() {
-        System.err.println("getNpartsDensity (from within SubCommonTree's getter!): " + nparts_density.getValue());
+	 /// debug
+        /// System.err.println("getNpartsDensity (from within SubCommonTree's getter!): " + nparts_density.getValue());
         return nparts_density.getValue();
     }
 
@@ -115,15 +120,17 @@ public class SubCommonTreeParam extends KeyIdentificable {
     }
 
     /**
-     * Set the value of sibling
-     *
-     * @param sibling new value of sibling
+     * @brief Set the value of sibling
+     * @param siblings new value of sibling
      */
     public void setSiblings(SubCommonTreeParam siblings) {
         this.siblings = siblings;
     }
 
-    /** Returns true exactly if all container parameter are valid. */
+    /**
+     * @brief  Returns true exactly if all container parameter are valid.
+     * @return 
+     */
     public boolean isValid() {
         return len_param.isValid()
                 && branch_angle.isValid()
@@ -134,7 +141,6 @@ public class SubCommonTreeParam extends KeyIdentificable {
 
     /** 
      * Returns string representation of the sub tree parameter.
-     * 
      * @return string representation of the sub tree parameter.
      */
     @Override

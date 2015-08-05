@@ -169,7 +169,7 @@ public final class NGAboutBox extends javax.swing.JDialog {
                     .add(homepageLabel))
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(layout.createSequentialGroup()
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 9, Short.MAX_VALUE)
                         .add(vendorLabel)
                         .add(49, 49, 49))
                     .add(layout.createSequentialGroup()

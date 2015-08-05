@@ -266,6 +266,9 @@ public final class NeuGenView extends FrameView implements TreeSaver {
         });
         outPrintln(NeuGenConstants.VERSION);
         outPrintln(NeuGenConstants.COPYRIGHT);
+        outPrintln("If you use this software for your publications please cite the following two references: ");
+        outPrintln(NeuGenConstants.CITE);
+        outPrintln(NeuGenConstants.CONTACT);
         outPrintln(Utils.getMemoryStatus());
     }
 

@@ -199,7 +199,7 @@ public class GlobalParameterDialog extends JDialog {
                                             .add(org.jdesktop.layout.GroupLayout.LEADING, jLabel7, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                             .add(org.jdesktop.layout.GroupLayout.LEADING, jTextField2)
                                             .add(org.jdesktop.layout.GroupLayout.LEADING, jTextField1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE))
-                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 27, Short.MAX_VALUE)
+                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 12, Short.MAX_VALUE)
                                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
                                             .add(jLabel6)
                                             .add(jLabel5)))))
@@ -239,7 +239,7 @@ public class GlobalParameterDialog extends JDialog {
                 .add(49, 49, 49))
         );
 
-        jTextField1.getDocument().addDocumentListener(new DensityWarningDocumentListener(this.jLabel7));
+        jTextField1.getDocument().addDocumentListener(new org.neugen.gui.DensityWarningDocumentListener(this.jLabel7));
         jLabel5.setToolTipText("<html><p style=\"text-align: justify\" width=\"400\">" +TOOLTIP_DENSITY+"</p></html>");
         jLabel6.setToolTipText("<html><p style=\"text-align: justify\" width=\"400\">" +TOOLTIP_DIST_SYNAPSE+"</p></html>");
         jLabel7.setText("");
