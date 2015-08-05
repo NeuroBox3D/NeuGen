@@ -264,7 +264,14 @@ public final class NGBackend {
 	 * @param param
 	 */
 	private void save(XMLNode currentRoot, String projectDirPath, String param) {
-		logger.info(currentRoot.getLeafCount());
+		logger.info("leaf count: " + currentRoot.getLeafCount());
+		
+		/**
+		 * @todo brief: tied to GUI! 
+		 * workaround: 1) alter parameters in project file before generating the net
+		 *             2) generate net 
+		 * 	       3) save the file in a gui-independent way
+		 */
 		XMLObject rootCopy = XMLObject.getCopyXMLObject(XMLObject.convert(currentRoot));
 		DefaultInheritance.reverseProcess(rootCopy);
 		NeuGenConfigStreamer streamer = new NeuGenConfigStreamer(projectDirPath);
@@ -340,11 +347,10 @@ public final class NGBackend {
 	 * @param projectDirPath
 	 */
 	public void save_and_close_project(Map<String, XMLObject> paramTrees, String projectDirPath) {
-		/// save project
 		save(paramTrees, projectDirPath);
 		
 		/**
-		 * @todo how to close savely the project
+		 * @todo how to close savely the project?
 		 */
 		
 		/// clear param data and destroy all net components

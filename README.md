@@ -41,5 +41,8 @@ Also one can specify the cutoff distance for synapse generation by a positive
 number in analogue for the synapse-distance textfield. 
 
 ## Important note
-Hippocampal networks cannot be exported by now to any format correctly, since
+1. Hippocampal networks cannot be exported by now to any format correctly, since
 either not implemented at all or no synapse export present - see open issues.
+2. If you want to run the final NeuGen.jar from command line by ```java -classpath NeuGen.jar org.neugen.gui.NeuGenApp```
+from a given directory make sure, that the relative path ```config/``` exists, from the directory you are invoking the
+startup command.
