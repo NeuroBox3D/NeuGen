@@ -8,12 +8,15 @@
 <!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
 <!-- in the project's Project Properties dialog box.-->
 <project name="NeuGenJava" default="default" basedir=".">
+    <!-- main settings -->
     <description>Builds, tests, and runs the project NeuGen.</description>
 
+     <!-- imports -->
     <import file="nbproject/build-impl.xml"/>
     <import file="nbproject/profiler-build-impl.xml"/>
     <import file="nbproject/profiler-build-impl.xml"/>    
 
+    <!-- variables -->
     <property name="lib.dir" value="libs/" />
     <property name="dist.lib.dir" value="dist/"/>
     <property name="mainclass" value="org.neugen.gui.NeuGenApp"/>
@@ -47,81 +50,19 @@
 
     (Targets beginning with '-' are not intended to be called on their own.)
 
-    Example of inserting an obfuscator after compilation could look like this:
-
-        <target name="-post-compile">
-            <obfuscate>
-                <fileset dir="${build.classes.dir}"/>
-            </obfuscate>
-        </target>
-
-    For list of available properties check the imported 
-    nbproject/build-impl.xml file. 
-
-
     Another way to customize the build is by overriding existing main targets.
     The targets of interest are: 
 
-      -init-macrodef-javac:     defines macro for javac compilation
-      -init-macrodef-junit:     defines macro for junit execution
-      -init-macrodef-debug:     defines macro for class debugging
-      -init-macrodef-java:      defines macro for class execution
-      -do-jar-with-manifest:    JAR building (if you are using a manifest)
-      -do-jar-without-manifest: JAR building (if you are not using a manifest)
-      run:                      execution of project 
-      -javadoc-build:           Javadoc generation
-      test-report:              JUnit report generation
-
-    An example of overriding the target for project execution could look like this:
-
-        <target name="run" depends="NeuGenJava-impl.jar">
-            <exec dir="bin" executable="launcher.exe">
-                <arg file="${dist.jar}"/>
-            </exec>
-        </target>
-
-    Notice that the overridden target depends on the jar target and not only on 
-    the compile target as the regular run target does. Again, for a list of available 
-    properties which you can use, check the target you are overriding in the
-    nbproject/build-impl.xml file. 
-
-    -->
-
-<!--    <target name= "-post-jar" description="copy java3d lib and log4j-3.properties to dist">
-         copy java3d lib for linux 64 bit to new dir 
-        <copy todir="dist/lib/j3d-1_5_2-linux-amd64">
-            <fileset dir="libs/j3d/j3d-1_5_2-linux-amd64"></fileset>
-        </copy>
-         copy java3d lib for linux 32 bit to new dir 
-        <copy todir="dist/lib/j3d-1_5_2-linux-i586">
-            <fileset dir="libs/j3d/j3d-1_5_2-linux-i586"></fileset>
-        </copy>
-         copy java3d lib for win 64 bit to new dir.. 
-        <copy todir="dist/lib/j3d-1_5_2-windows-amd64">
-            <fileset dir="libs/j3d/j3d-1_5_2-windows-amd64"></fileset>
-        </copy>
-         copy j3d lib for win 32 
-        <copy todir="dist/lib/j3d-1_5_2-windows-i586">
-            <fileset dir="libs/j3d/j3d-1_5_2-windows-i586"></fileset>
-        </copy>
-
-         copy j3d lib for macosx 
-        <copy todir="dist/lib/j3d-1_5_2-macosx">
-            <fileset dir="libs/j3d/j3d-1_5_2-macosx"></fileset>
-        </copy>
-
-        <copy todir="dist/config">
-            <fileset dir="config"></fileset>
-        </copy>
-
-	    <copy file="log4j-3.properties" todir="dist"></copy>
-	    <copy file="libs/license/LICENSE-Java3D-v1_5_2.txt" todir="dist/lib"></copy>
-	    <copy file="docs/LICENSE-NeuGen-v1_7_1.txt" todir="dist"></copy>
-	    <copy file="libs/license/log4j-LICENSE" todir="dist/lib"></copy>
-	    <copy file="libs/license/xpp3-license.txt" todir="dist/lib"></copy>
-	    <copy file="libs/license/xstream-LICENSE.txt" todir="dist/lib"></copy>
-	    <copy file="libs/license/looks-LICENSE.txt" todir="dist/lib"></copy>
-	</target>-->
+	  -init-macrodef-javac:     defines macro for javac compilation
+	  -init-macrodef-junit:     defines macro for junit execution
+	  -init-macrodef-debug:     defines macro for class debugging
+	  -init-macrodef-java:      defines macro for class execution
+	  -do-jar-with-manifest:    JAR building (if you are using a manifest)
+	  -do-jar-without-manifest: JAR building (if you are not using a manifest)
+	  run:                      execution of project 
+	  -javadoc-build:           Javadoc generation
+	  test-report:              JUnit report generation
+	-->
 
 	<!-- copy all dependencies in one jar (TODO add release target=win, mac or linux) -->
 	<target name="copy-dependencies">
@@ -159,6 +100,7 @@
 	</target>
 
 	<!-- bundles the app for osx -->
+	<!-- see http://docs.oracle.com/javase/7/docs/technotes/guides/jweb/packagingAppsForMac.html -->
 	<taskdef name="bundleapp"
 		 classname="com.oracle.appbundler.AppBundlerTask"   
 		 classpath="libs/appbundler-1.0.jar" />
@@ -182,18 +124,16 @@
 			file="${icon.dir}/neugen.icns"
 			tofile="${dist.lib.dir}/NeuGen.app/Contents/Resources/GenericApp.icns"
 			overwrite="true"/>
-
-		<!-- bundle to pkg for osx -->
-		<!--
-		<exec executable="projectbuild" os="Mac OS X"> 
-			<arg value="\-\-component ${rls.name} /Applications ${release.name}-${release-version}.pkg">
-		<exec> 
-		-->
-		
 	</target>
-	<!-- after bounding call productbuild to build an installer: see http://centerkey.com/mac/java/ 
-	and see also http://docs.oracle.com/javase/7/docs/technotes/guides/jweb/packagingAppsForMac.html -->
 
+	<!-- bundle jar to pkg installer for osx -->
+	<!-- see http://centerkey.com/mac/java/  -->
+	<target name="pkg-NeuGen" depends="bundle-NeuGen">
+		<exec executable="projectbuild" os="Mac OS X"> 
+			<arg value="--component ${rls.dir}/NeuGen.app /Applications ${release.name}-${release-version}.pkg">
+				<exec> 
+	</target>
+		
 	<!-- post-jar task -->
 	<target name="-post-jar">
 		<!-- add additional resources directory -->
