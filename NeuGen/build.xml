@@ -9,11 +9,24 @@
 <!-- in the project's Project Properties dialog box.-->
 <project name="NeuGenJava" default="default" basedir=".">
     <description>Builds, tests, and runs the project NeuGen.</description>
+
     <import file="nbproject/build-impl.xml"/>
     <import file="nbproject/profiler-build-impl.xml"/>
+    <import file="nbproject/profiler-build-impl.xml"/>    
 
-    <import file="nbproject/profiler-build-impl.xml"/>    <!--
+    <property name="lib.dir" value="libs/" />
+    <property name="dist.lib.dir" value="dist/"/>
+    <property name="mainclass" value="org.neugen.gui.NeuGenApp"/>
+    <property name="release.version" value="2.0"/>
+    <property name="release.name" value="NeuGen"/>
+    <property name="rls.dir" value="releases/${release.version}/"/>
+    <property name="icon.dir" value="icon/"/>
+    <property name="deploy.dir" value="deploy"/>
+    <property name="rls.name" value="${release.name} ${release.version}"/>
+    <property name="rls.helper.dir" value="rls/"/>
+    <property name="resources.dir" value = "src/org/neugen/resources/"/>
 
+    <!--
     There exist several targets which are by default empty and which can be 
     used for execution of your tasks. These targets are usually executed 
     before and after some main targets. They are: 
@@ -101,70 +114,144 @@
             <fileset dir="config"></fileset>
         </copy>
 
-        <copy file="log4j-3.properties" todir="dist"></copy>
-        <copy file="libs/license/LICENSE-Java3D-v1_5_2.txt" todir="dist/lib"></copy>
-        <copy file="docs/LICENSE-NeuGen-v1_7_1.txt" todir="dist"></copy>
-        <copy file="libs/license/log4j-LICENSE" todir="dist/lib"></copy>
-        <copy file="libs/license/xpp3-license.txt" todir="dist/lib"></copy>
-        <copy file="libs/license/xstream-LICENSE.txt" todir="dist/lib"></copy>
-        <copy file="libs/license/looks-LICENSE.txt" todir="dist/lib"></copy>
-    </target>-->
-    
-    
-       <target name="-post-jar">
+	    <copy file="log4j-3.properties" todir="dist"></copy>
+	    <copy file="libs/license/LICENSE-Java3D-v1_5_2.txt" todir="dist/lib"></copy>
+	    <copy file="docs/LICENSE-NeuGen-v1_7_1.txt" todir="dist"></copy>
+	    <copy file="libs/license/log4j-LICENSE" todir="dist/lib"></copy>
+	    <copy file="libs/license/xpp3-license.txt" todir="dist/lib"></copy>
+	    <copy file="libs/license/xstream-LICENSE.txt" todir="dist/lib"></copy>
+	    <copy file="libs/license/looks-LICENSE.txt" todir="dist/lib"></copy>
+	</target>-->
 
-<!-- Change the value of this property to be the name of your JAR,
-minus the .jar extension. It should not have spaces.
-<property name="store.jar.name" value="MyJarName"/>
--->
-        <property name="store.jar.name" value="${application.title}"/>
+	<!-- copy all dependencies in one jar (TODO add release target=win, mac or linux) -->
+	<target name="copy-dependencies">
+		<mkdir dir="${dist.lib.dir}" />
+		<jar jarfile="${dist.lib.dir}/dependencies-all.jar">
+			<zipgroupfileset dir="${lib.dir}">
+				<include name="**/*.jar" />
+			</zipgroupfileset>
+		</jar>
+	</target>
 
+	<!-- creates a fat jar with mainclass $mainclass and exclude all other main classes -->
+	<target name="release" depends="clean, compile, copy-dependencies">
+		<jar destfile="${dist.lib.dir}/NeuGen.jar" basedir="build/classes/">
+			<manifest>
+				<attribute name="Main-Class" value="$mainclass$" />
+			</manifest>
+			<zipfileset src="${dist.lib.dir}/dependencies-all.jar" 
+				    excludes="META-INF/*.SF" />
+			<fileset dir="${resources.dir}" />
+		</jar>
 
-<!-- don't edit below this line -->
+		<mkdir dir="${rls.dir}" />
+		<copy 
+			file="${dist.lib.dir}/NeuGen.jar"
+			todir="${rls.dir}/"/>
 
-        <property name="store.dir" value="dist-single"/>
-        <property name="store.jar" value="${store.dir}/${store.jar.name}.jar"/>
+		<copy todir="${rls.dir}">
+			<fileset dir="${rls.helper.dir}"/>
+		</copy>
 
-        <echo message="Packaging ${application.title} into a single JAR at ${store.jar}"/>
+		<mkdir dir="${deploy.dir}" />
+		<zip destfile="${deploy.dir}/${rls.name}.zip" basedir="${rls.dir}" />
 
-        <delete dir="${store.dir}"/>
-        <mkdir dir="${store.dir}"/>
+	</target>
 
-        <jar destfile="${store.dir}/temp_final.jar" filesetmanifest="skip">
-            <zipgroupfileset dir="dist"
-                includes="*.jar"
-                excludes="VRL.jar"/>
-            <zipgroupfileset dir="dist/lib"
-                includes="*.jar"
-                excludes="VRL.jar"/>
+	<!-- bundles the app for osx -->
+	<taskdef name="bundleapp"
+		 classname="com.oracle.appbundler.AppBundlerTask"   
+		 classpath="libs/appbundler-1.0.jar" />
 
-            <manifest>
-                <attribute name="Main-Class" value="${main.class}"/>
-            </manifest>
-        </jar>
+	<!-- TODO: probably we should use $JAVA_HOME below, not hardcoded path! -->
+	<property environment="env" />
+ 
+	<target name="bundle-NeuGen">
+		<bundleapp outputdirectory="dist"
+			   name="NeuGen"
+			   displayname="NeuGen"
+			   identifier="NeuGen"
+			   mainclassname="org.neugen.gui.NeuGenApp">
+			<runtime dir="/Library/Java/JavaVirtualMachines/jdk1.7.0_55.jdk/Contents/Home/" />
+			<classpath file="${rls.dir}/NeuGen.jar" />
+		</bundleapp>
 
-        <zip destfile="${store.jar}">
-            <zipfileset src="${store.dir}/temp_final.jar"
-            excludes="META-INF/*.SF, META-INF/*.DSA, META-INF/*.RSA"/>
-        </zip>
+		<!-- add icon -->
+		<echo message="copy icon" />
+		<copy 
+			file="${icon.dir}/neugen.icns"
+			tofile="${dist.lib.dir}/NeuGen.app/Contents/Resources/GenericApp.icns"
+			overwrite="true"/>
 
-        <delete file="${store.dir}/temp_final.jar"/>
+		<!-- bundle to pkg for osx -->
+		<!--
+		<exec executable="projectbuild" os="Mac OS X"> 
+			<arg value="\-\-component ${rls.name} /Applications ${release.name}-${release-version}.pkg">
+		<exec> 
+		-->
+		
+	</target>
+	<!-- after bounding call productbuild to build an installer: see http://centerkey.com/mac/java/ 
+	and see also http://docs.oracle.com/javase/7/docs/technotes/guides/jweb/packagingAppsForMac.html -->
 
-        <!--Copy VRL.jar to dist and delete lib folder-->
-        <copy todir="dist">
-            <fileset dir="dist-single" includes="**/*"/>
-        </copy>
+	<!-- post-jar task -->
+	<target name="-post-jar">
+		<!-- add additional resources directory -->
+		<jar destfile="dist/NeuGen.jar" update="true">
+			<fileset dir="${resources.dir}">
+				<include name="**/*"/>
+			</fileset>
+		</jar>
+		<!-- Change the value of this property to be the name of your JAR,
+		minus the .jar extension. It should not have spaces.
+		<property name="store.jar.name" value="MyJarName"/>
+		-->
+		<property name="store.jar.name" value="${application.title}"/>
 
-        <delete dir="dist-single"/>
-        <delete dir="dist/lib"/>
-    </target>
+		<!-- don't edit below this line -->
+		<property name="store.dir" value="dist-single"/>
+		<property name="store.jar" value="${store.dir}/${store.jar.name}.jar"/>
 
-<target name="installVRLPlugin">
-        <!-- Copy final jar to studio plugin folder -->
-        <property file="build.properties"/>
-        <echo message="Copying ${dist.jar} to ${vrl.dir}/plugin-updates"/>
-        <copy 
-        file="${dist.jar}" 
-        todir="${vrl.dir}/plugin-updates"/>
-</target>
+		<echo message="Packaging ${application.title} into a single JAR at ${store.jar}"/>
+
+		<delete dir="${store.dir}"/>
+		<mkdir dir="${store.dir}"/>
+
+		<jar destfile="${store.dir}/temp_final.jar" filesetmanifest="skip">
+			<zipgroupfileset dir="dist"
+					 includes="*.jar"
+					 excludes="VRL.jar"/>
+			<zipgroupfileset dir="dist/lib"
+					 includes="*.jar"
+					 excludes="VRL.jar"/>
+
+			<manifest>
+				<attribute name="Main-Class" value="${main.class}"/>
+			</manifest>
+		</jar>
+
+		<zip destfile="${store.jar}">
+			<zipfileset src="${store.dir}/temp_final.jar"
+				    excludes="META-INF/*.SF, META-INF/*.DSA, META-INF/*.RSA"/>
+		</zip>
+
+		<delete file="${store.dir}/temp_final.jar"/>
+
+		<!--Copy VRL.jar to dist and delete lib folder-->
+		<copy todir="dist">
+			<fileset dir="dist-single" includes="**/*"/>
+		</copy>
+
+		<delete dir="dist-single"/>
+		<delete dir="dist/lib"/>
+	</target>
+
+	<!-- install VRL plugin target -->
+	<target name="installVRLPlugin">
+		<property file="build.properties"/>
+		<echo message="Copying ${dist.jar} to ${vrl.dir}/plugin-updates"/>
+		<copy 
+			file="${dist.jar}" 
+			todir="${vrl.dir}/plugin-updates"/>
+	</target>
 </project>

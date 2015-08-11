@@ -115,11 +115,11 @@ public final class NeuGenConstants {
     //folders
     public static final String CONFIG_DIR = "config";
     public static final String FILE_SEP = System.getProperty("file.separator");
-    public static final String J3D_WIN_64 = "j3d-1_5_2-windows-amd64";
+ /*   public static final String J3D_WIN_64 = "j3d-1_5_2-windows-amd64";
     public static final String J3D_WIN_32 = "j3d-1_5_2-windows-i586";
     public static final String J3D_LIN_64 = "j3d-1_5_2-linux-amd64";
     public static final String J3D_LIN_32 = "j3d-1_5_2-linux-i586";
-    public static final String J3D_MACOSX = "j3d-1_5_2-macosx";
+    public static final String J3D_MACOSX = "j3d-1_5_2-macosx";*/
     public static final String J3D_ERROR_MESSAGE = "There seems to be no java3d installed in your java runtime environment,"
             + "which you need to use the 3D visualization with NeuGen.";
     //file filters

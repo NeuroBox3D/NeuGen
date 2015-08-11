@@ -57,6 +57,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -64,6 +65,11 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.neugen.datastructures.Net;
 import org.neugen.datastructures.Region;
@@ -71,6 +77,7 @@ import org.neugen.datastructures.xml.XMLNode;
 import org.neugen.datastructures.xml.XMLObject;
 import org.neugen.gui.NeuGenConstants;
 import org.neugen.gui.NeuGenLib;
+import org.neugen.gui.NeuGenProject;
 import org.neugen.parsers.DefaultInheritance;
 import org.neugen.parsers.NGX.NGXWriter;
 import org.neugen.parsers.NeuGenConfigStreamer;
@@ -176,9 +183,64 @@ public final class NGBackend {
 	 * @param force
 	 * @return
 	 */
+	@SuppressWarnings("NestedAssignment")
 	public Map<String, XMLObject> create_and_open_project(String projectPath, String projectType, boolean force) {
 		logger.info("project path (project type: " + projectType + "): " + projectPath);
 		File projectDir = new File(projectPath);
+		if (!NGBackendUtil.fileExists(projectDir, force)) {
+			URL inputUrl = getClass().getResource("/org/neugen/gui/resources/" + projectType.toLowerCase() + ".zip");
+			File dest = new File(projectPath + System.getProperty("file.separator") + projectType.toLowerCase() + ".zip");
+			try {
+				FileUtils.copyURLToFile(inputUrl, dest);
+			} catch (IOException ex) {
+				java.util.logging.Logger.getLogger(NeuGenProject.class.getName()).log(Level.SEVERE, null, ex);
+			}
+
+			ZipInputStream zis = null;
+			try {
+
+				zis = new ZipInputStream(new FileInputStream(projectDir + System.getProperty("file.separator") + projectType.toLowerCase() + ".zip"));
+				ZipEntry entry;
+
+				while ((entry = zis.getNextEntry()) != null) {
+
+					File entryFile = new File(projectDir + System.getProperty("file.separator") + entry.getName());
+					if (entry.isDirectory()) {
+
+						if (entryFile.exists()) {
+						} else {
+							entryFile.mkdirs();
+						}
+
+					} else {
+						if (entryFile.getParentFile() != null && !entryFile.getParentFile().exists()) {
+							entryFile.getParentFile().mkdirs();
+						}
+
+						if (!entryFile.exists()) {
+							entryFile.createNewFile();
+						}
+
+						OutputStream os = null;
+						try {
+							os = new FileOutputStream(entryFile);
+							IOUtils.copy(zis, os);
+						} finally {
+							IOUtils.closeQuietly(os);
+						}
+					}
+				}
+			} catch (FileNotFoundException ex) {
+				java.util.logging.Logger.getLogger(NeuGenProject.class.getName()).log(Level.SEVERE, null, ex);
+			} catch (IOException ex) {
+				java.util.logging.Logger.getLogger(NeuGenProject.class.getName()).log(Level.SEVERE, null, ex);
+			} finally {
+				IOUtils.closeQuietly(zis);
+			}
+		}
+
+
+		
 		if (!NGBackendUtil.fileExists(projectDir, force)) {
 			if (projectType.equals(NeuGenConstants.HIPPOCAMPUS_PROJECT)) {
 				String sourcePath = NeuGenConstants.CONFIG_DIR + System.getProperty("file.separator") + NeuGenConstants.HIPPOCAMPUS_PROJECT.toLowerCase();
