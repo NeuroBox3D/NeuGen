@@ -16,3 +16,8 @@ hs_err_pid*
 *hoc
 *txt
 *xml
+
+# releases
+releases/
+rls/
+deploy/
