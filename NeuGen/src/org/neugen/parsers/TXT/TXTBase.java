@@ -59,8 +59,9 @@ import javax.vecmath.Vector4f;
  * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
 public abstract class TXTBase {
-	/// type
+	/// type (axon, soma, dend, exp2syn or alphasyn or undefined)
 	private static final int TYPE = TXTTypes.UNDEFINED.ordinal();
+	private int cell_type = 0;
 	
 	/// private members
 	private String name = "Undefined - Type: " + TYPE;
@@ -123,5 +124,21 @@ public abstract class TXTBase {
 	 */
 	public int getType() {
 		return TYPE;
+	}
+	
+	/**
+	 * @brief get cell type
+	 * @return 
+	 */
+	public int getCellType() {
+		return cell_type;
+	}
+
+	/**
+	 * @brief set cell type
+	 * @param cell_type 
+	 */
+	public void setCellType(int cell_type) {
+		this.cell_type = cell_type;
 	}
 }

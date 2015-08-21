@@ -63,6 +63,7 @@ public class WriteCompressedDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private boolean compressed = false;
 	private boolean uncompressed = false;
+        private boolean withCellType = false;
 
 	/**
 	 * Creates new form WriteCompressedDialog
@@ -92,10 +93,12 @@ public class WriteCompressedDialog extends JDialog {
         jButton2 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
-        jSeparator2 = new javax.swing.JSeparator();
         jComboBox1 = new javax.swing.JComboBox();
         jCheckBox2 = new javax.swing.JCheckBox();
         jLabel2 = new javax.swing.JLabel();
+        jCheckBox3 = new javax.swing.JCheckBox();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setName("Form"); // NOI18N
@@ -118,8 +121,6 @@ public class WriteCompressedDialog extends JDialog {
 
         jSeparator1.setName("jSeparator1"); // NOI18N
 
-        jSeparator2.setName("jSeparator2"); // NOI18N
-
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jComboBox1.setName("jComboBox1"); // NOI18N
 
@@ -130,6 +131,15 @@ public class WriteCompressedDialog extends JDialog {
         jLabel2.setText(bundle.getString("WriteCompressedDialog.jLabel2.text")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N
 
+        jCheckBox3.setText(bundle.getString("WriteCompressedDialog.jCheckBox3.text")); // NOI18N
+        jCheckBox3.setName("jCheckBox3"); // NOI18N
+
+        jLabel3.setText(bundle.getString("WriteCompressedDialog.jLabel3.text")); // NOI18N
+        jLabel3.setName("jLabel3"); // NOI18N
+
+        jLabel4.setText(bundle.getString("WriteCompressedDialog.jLabel4.text")); // NOI18N
+        jLabel4.setName("jLabel4"); // NOI18N
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -138,27 +148,39 @@ public class WriteCompressedDialog extends JDialog {
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(layout.createSequentialGroup()
                         .addContainerGap()
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                            .add(jButton1)
-                            .add(jLabel1))
+                        .add(jLabel1))
+                    .add(layout.createSequentialGroup()
+                        .add(30, 30, 30)
+                        .add(jSeparator1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE))
+                    .add(layout.createSequentialGroup()
+                        .add(146, 146, 146)
+                        .add(jButton1)
                         .add(31, 31, 31)
-                        .add(jButton2))
+                        .add(jButton2)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 35, Short.MAX_VALUE))
                     .add(layout.createSequentialGroup()
-                        .add(30, 30, 30)
-                        .add(jSeparator1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE))
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                        .add(30, 30, 30)
-                        .add(jSeparator2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE))
-                    .add(layout.createSequentialGroup()
-                        .add(61, 61, 61)
+                        .addContainerGap()
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(jCheckBox2)
                             .add(layout.createSequentialGroup()
-                                .add(jCheckBox1)
-                                .add(33, 33, 33)
-                                .add(jComboBox1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                        .add(jLabel2)))
+                                .add(41, 41, 41)
+                                .add(jCheckBox3))
+                            .add(layout.createSequentialGroup()
+                                .add(jLabel4)
+                                .add(9, 9, 9))))
+                    .add(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(layout.createSequentialGroup()
+                                .add(41, 41, 41)
+                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                    .add(jCheckBox2)
+                                    .add(layout.createSequentialGroup()
+                                        .add(jCheckBox1)
+                                        .add(33, 33, 33)
+                                        .add(jComboBox1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                                .add(jLabel2))
+                            .add(jLabel3))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -168,9 +190,11 @@ public class WriteCompressedDialog extends JDialog {
                 .add(jLabel1)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(jSeparator1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 10, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(29, 29, 29)
+                .add(jLabel3)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(layout.createSequentialGroup()
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                             .add(jCheckBox1)
                             .add(jComboBox1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
@@ -179,13 +203,15 @@ public class WriteCompressedDialog extends JDialog {
                     .add(layout.createSequentialGroup()
                         .add(28, 28, 28)
                         .add(jLabel2)))
-                .add(15, 15, 15)
-                .add(jSeparator2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 10, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .add(4, 4, 4)
+                .add(30, 30, 30)
+                .add(jLabel4)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jCheckBox3)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 11, Short.MAX_VALUE)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jButton1)
                     .add(jButton2))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel());
@@ -263,6 +289,13 @@ public class WriteCompressedDialog extends JDialog {
 	public boolean getUncompressed() {
 		return this.uncompressed;
 	}
+        
+        /**
+         * @brief get cell type
+         */
+        public boolean getWithCellType() {
+            return this.withCellType;
+        }
 
 	/**
 	 * @brief close
@@ -287,8 +320,8 @@ public class WriteCompressedDialog extends JDialog {
 	public void write() {
 		this.compressed = jCheckBox1.isSelected();
 		this.uncompressed = jCheckBox2.isSelected();
+                this.withCellType = jCheckBox3.isSelected();
 		close();
-
 	}
 
    
@@ -298,10 +331,12 @@ public class WriteCompressedDialog extends JDialog {
     private javax.swing.JButton jButton2;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
+    private javax.swing.JCheckBox jCheckBox3;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JSeparator jSeparator2;
     // End of variables declaration//GEN-END:variables
 }

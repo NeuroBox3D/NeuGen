@@ -66,5 +66,4 @@ public class TXTDend extends TXTBase {
 	public int getType() {
 		return TYPE;
 	}
-	
 }

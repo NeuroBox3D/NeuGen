@@ -116,6 +116,9 @@
 			   mainclassname="${mainclass}">
 			<runtime dir="/Library/Java/JavaVirtualMachines/jdk1.7.0_55.jdk/Contents/Home/" />
 			<classpath file="${rls.dir}/NeuGen.jar" />
+			<option value="-Djava.ext.dirs=/Applications/NeuGen.app/Contents/Java/"/>
+
+			 <option value="-Xmx2048M"/> <!-- allows for network generation up to 1000 cells -->
 		</bundleapp>
 
 		<!-- add icon -->
@@ -135,6 +138,9 @@
 		<copy 
 				file="${dist.dir}/${release.name}-${release-version}.pkg"
 				todir="installers/osx/"/>
+		<exec executable="codesign" os="Mac OS X">
+			<arg value="-s 'Developer ID Application: StephanGrein dist/NeuGenApp.app'"/>
+		</exec>
 	</target>
 		
 	<!-- post-jar task -->
@@ -197,4 +203,16 @@
 			file="${dist.jar}" 
 			todir="${vrl.dir}/plugin-updates"/>
 	</target>
+
+	<!-- javadoc task without warnings for JDK >= 8 just uncomment below -->
+	<!--
+ 	<target name="javadoc" depends="compile" description="generate documentation">
+		<javadoc packagenames="com.google.*"
+        		 destdir="build/docs/javadoc"
+ 	                 maxmemory="1024M"
+                         classpathref="javadoc.classpath"
+ 	                 additionalparam="-Xdoclint:none>
+		<fileset dir="${src.dir}" defaultexcludes="yes">
+  	</target>
+	-->
 </project>

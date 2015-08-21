@@ -79,7 +79,6 @@ import org.neugen.gui.NeuGenConstants;
 import org.neugen.gui.NeuGenView;
 import org.neugen.gui.Trigger;
 import org.neugen.parsers.HOCUtil;
-import org.neugen.parsers.HocWriter;
 import org.neugen.parsers.NGX.NGXAlphaSynapse;
 import org.neugen.parsers.NGX.NGXExp2Synapse;
 import org.neugen.parsers.NGX.NGXSynapse;
@@ -635,8 +634,12 @@ public final class NetNeocortex extends NetBase implements Serializable, Net {
 	}
 
 	/**
-	 * Function to get the type of a neuron from its index in neuron_list,
+	 * @brief function to get the type of a neuron from its index in neuron_list,
 	 * 1=L2/3, 2=L4, 3=L5A, 4=L5B, 5=star (simone)
+	 * 
+	 * NB (stephan): cell types are stored implicite by their position in an Arraylist,
+	 * e. g. 0 - 10 is L5APyramidal, 20-50 is NL4Stellate, etc. 
+	 * @param indexOfNeuron index of a given neuron
 	 */
 	@Override
 	public int getTypeOfNeuron(int indexOfNeuron) {

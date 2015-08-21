@@ -60,6 +60,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.neugen.datastructures.Axon;
 import org.neugen.datastructures.Cellipsoid;
 import org.neugen.datastructures.Dendrite;
@@ -78,6 +79,7 @@ import org.apache.commons.compress.compressors.CompressorStreamFactory;
 import org.apache.commons.io.FilenameUtils;
 import org.neugen.backend.NGBackend;
 import org.neugen.datastructures.Pair;
+import org.neugen.gui.NeuGenView;
 
 /**
  * @brief TXT writer (NeuGen XML)
@@ -92,6 +94,7 @@ public class TXTWriter {
 	private String compressMethod = NeuGenConstants.DEFAULT_COMPRESSION_METHOD;
 	private boolean compressed;
 	private boolean uncompressed;
+	private boolean withCellType;
         private FileExistsDialog fed;
 
 	/**
@@ -166,6 +169,7 @@ public class TXTWriter {
 		Segment segment = cyl.getSegments().get(nsegs - 1);
 		writeSegmentToTXT(ngxsoma, 1, segment);
 		ngxsoma.setName(name);
+		ngxsoma.setCellType(net.getTypeOfNeuron(neuron.getIndex()));
 	}
 
 	/**
@@ -223,6 +227,7 @@ public class TXTWriter {
 			TXTAxon ngxaxon = new TXTAxon();
 			ngxaxon.setName("N" + nn + secName);
 			ngxaxon.setId(nn);
+			ngxaxon.setCellType(net.getTypeOfNeuron(neuron.getIndex()));
 
 			for (Segment segment : section.getSegments()) {
 				writeSegmentToTXT(ngxaxon, 0, segment);
@@ -233,7 +238,6 @@ public class TXTWriter {
 
 			ngxbase.add(ngxaxon);
 			++nsections;
-
 		}
 	}
 
@@ -285,7 +289,8 @@ public class TXTWriter {
 				TXTDend ngxdend = new TXTDend();
 				ngxdend.setName("N" + nn + secName);
 				ngxdend.setId(nn);
-
+				ngxdend.setCellType(net.getTypeOfNeuron(neuron.getIndex()));
+				
 				for (Segment segment : section.getSegments()) {
 					writeSegmentToTXT(ngxdend, 0, segment);
 				}
@@ -317,6 +322,7 @@ public class TXTWriter {
 		/// write soma of NEURON i (exactly one soma!)
 		TXTBase ngxbase = new TXTSoma();
 		ngxbase.setId(i);
+		ngxbase.setCellType(net.getTypeOfNeuron(neuron.getIndex()));
 		writeSomaOfNeuronToTXT(ngxbase, neuron, name);
 		neuron_sections.add(ngxbase);
 
@@ -348,16 +354,18 @@ public class TXTWriter {
 		CompressorOutputStream cos = null;
 		CompressorOutputStream cos2 = null;
 		CompressorOutputStream cos3 = null;
+		CompressorOutputStream cos4 = null;
 		
 		/// uncompressed output
 		PrintWriter pw = null;
 		PrintWriter pw2 = null;
 		PrintWriter pw3 = null;
+		PrintWriter pw4 = null;
 
 		try {
 			String basefile = FilenameUtils.removeExtension(this.file.getAbsolutePath());
 			String extension = NeuGenConstants.getExtension(this.compressMethod);
-                        String[] subfiles = { "secs.txt", "connex.txt", "synapses.txt" };
+                        String[] subfiles = { "secs.txt", "connex.txt", "synapses.txt", "identifier.txt" };
 			System.err.println(basefile);
 			
 			/// check if a files are present
@@ -372,10 +380,10 @@ public class TXTWriter {
                             }
                         }
 
-			if (compressed) {
-				/// empties all the files to be sure
-                        	for (String s : subfiles) {
-					new PrintWriter(new File(basefile + "_" + s)).write("");
+			/// empties all the files to be sure
+                       	for (String s : subfiles) {
+				new PrintWriter(new File(basefile + "_" + s)).write("");
+				if (compressed) {
 					new PrintWriter(new File(basefile + "_" + s + "." + extension)).write("");
 				}
 			}
@@ -383,10 +391,12 @@ public class TXTWriter {
 			FileWriter fw = new FileWriter(new File(basefile + "_secs.txt"), true);
 			FileWriter fw2 = new FileWriter(new File(basefile + "_connex.txt"), true);
 			FileWriter fw3 = new FileWriter(new File(basefile + "_synapses.txt"), true);
+			FileWriter fw4 = new FileWriter(new File(basefile + "_identifier.txt"), true);
                         
 			pw = new PrintWriter(fw);
 			pw2 = new PrintWriter(fw2);
 			pw3 = new PrintWriter(fw3);
+			pw4 = new PrintWriter(fw4);
                         
                         /// otherwise files may be created (i. e. the compressed files empty!)
                         if (compressed) {
@@ -394,10 +404,11 @@ public class TXTWriter {
                             FileOutputStream fos = new FileOutputStream(new File(basefile + "_secs.txt." + extension));
                             FileOutputStream fos2 = new FileOutputStream(new File(basefile + "_connex.txt." + extension));
                             FileOutputStream fos3 = new FileOutputStream(new File(basefile + "_synapses.txt." + extension));
-			
+                            FileOutputStream fos4 = new FileOutputStream(new File(basefile + "_identifier.txt." + extension));
                             cos  = new CompressorStreamFactory().createCompressorOutputStream(this.compressMethod, fos);
                             cos2 = new CompressorStreamFactory().createCompressorOutputStream(this.compressMethod, fos2);
                             cos3 = new CompressorStreamFactory().createCompressorOutputStream(this.compressMethod, fos3);
+                            cos4 = new CompressorStreamFactory().createCompressorOutputStream(this.compressMethod, fos4);
                         }
 
 		} catch (IOException ioe) {
@@ -419,6 +430,10 @@ public class TXTWriter {
 				buffer.append(" ");
 				buffer.append(base.getType());
 				buffer.append(" ");
+				if (withCellType) {
+					buffer.append(base.getCellType());
+					buffer.append(" ");
+				}
 				for (Vector4f vec : base.getCoordinates()) {
 					buffer.append(vec.x);
 					buffer.append(" ");
@@ -603,7 +618,7 @@ public class TXTWriter {
 		
 		if (compressed) {
 			try {
-			cos3.write(buffer3.toString().getBytes());
+				cos3.write(buffer3.toString().getBytes());
 			} catch (IOException ex) {
 				java.util.logging.Logger.getLogger(TXTWriter.class.getName()).log(Level.SEVERE, null, ex);
 			} finally {
@@ -613,6 +628,26 @@ public class TXTWriter {
 					} catch (IOException ex) {
 						java.util.logging.Logger.getLogger(TXTWriter.class.getName()).log(Level.SEVERE, null, ex);
 					}
+				}
+			}
+		}
+		
+		String configString = NeuGenView.getInstance().getCurrentProjectType() + System.getProperty("line.separator") + withCellType;
+		pw4.write(configString);
+
+		if (pw4 != null) {
+			pw4.close();
+		}
+		
+		if (compressed) {
+			try {
+				cos4.write(configString.getBytes());
+			} catch (IOException ex) {
+				Logger.getLogger(TXTWriter.class.getName()).log(Level.SEVERE, null, ex);
+				try {
+					cos4.close();
+				} catch (IOException ex1) {
+					Logger.getLogger(TXTWriter.class.getName()).log(Level.SEVERE, null, ex1);
 				}
 			}
 		}
@@ -766,7 +801,20 @@ public class TXTWriter {
 		this.uncompressed = uncompressed;
 	}
 
-    void setFileExistsDialog(FileExistsDialog fileExistsDialog) {
-       this.fed = fileExistsDialog;
-    }
+	
+	/**
+	 * @brief set with cell type
+	 * @param withCellType 
+	 */
+	void setWithCellType(boolean withCellType) {
+		this.withCellType = withCellType;
+	}
+
+	/**
+	 * @brief sets the file exits helper dialog
+	 * @param fileExistsDialog 
+	 */
+        void setFileExistsDialog(FileExistsDialog fileExistsDialog) {
+       		this.fed = fileExistsDialog;
+    	}
 }
