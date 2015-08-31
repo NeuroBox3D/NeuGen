@@ -84,6 +84,13 @@ import org.neugen.gui.NeuGenView;
 /**
  * @brief TXT writer (NeuGen XML)
  * @author stephanmg <stephan@syntaktischer-zucker.de>
+ * @todo getTXTData collects all data from the 3d representation and creates
+ *       instances of Axon, Dendrite, Soma, Connection and Synapses for export.
+ * 	 thus the memory footprint may be increased (especially in very large
+ *       networks >= 50,000 cells) - which is not necessary. thus, write fully
+ * 	 incrementally the networks by passing getTXTDendriteData() and
+ *       getTXTExp2Synapses() for instance a PrintWriter instance, and write
+ *       directly, instead of creating instances of TXTAxon or TXTExp2Synapse.
  */
 public class TXTWriter {
 	/// private members
@@ -417,12 +424,18 @@ public class TXTWriter {
 			ce.printStackTrace();
 		}
 
+		/// get all neurons and count them
 		List<Neuron> neuronList = net.getNeuronList();
 		int nneuron = neuronList.size();
+		/// loop over each neuron, then get dendrites and axons and 
+		/// write them incrementally also write the connections
 		for (int i = 0; i < nneuron; i++) {
 			Pair<ArrayList<TXTBase>, ArrayList<TXTBase>> sections = writeNeuronToTXT(i);
 			StringBuilder buffer = new StringBuilder();
 			StringBuilder buffer2 = new StringBuilder();
+			/////////////////////////////////
+			/// sections
+			/////////////////////////////////
 			for (TXTBase base : sections.first) {
 				buffer.append(base.getName());
 				buffer.append(" ");
@@ -446,6 +459,7 @@ public class TXTWriter {
 				}
 				buffer.append(" ");
 			}
+			
 			if (uncompressed) {
 				pw.write(buffer.toString());
 			}
@@ -458,6 +472,9 @@ public class TXTWriter {
 				}
 			}
 
+			/////////////////////////////////
+			/// connections
+			/////////////////////////////////
 			for (TXTBase base : sections.second) {
 				TXTConnection connex = (TXTConnection) base;
 				buffer2.append(connex.getFrom());
@@ -468,20 +485,21 @@ public class TXTWriter {
 				buffer2.append(" ");
 				buffer2.append(connex.getTo_loc());
 				buffer2.append(" ");
-			}
-			
-			if (uncompressed) {
-				pw2.write(buffer2.toString());
-			}
-			if (compressed) {
-				try {
-					cos2.write(buffer2.toString().getBytes());
-				} catch (IOException ex) {
-					java.util.logging.Logger.getLogger(TXTWriter.class.getName()).log(Level.SEVERE, null, ex);
+				if (uncompressed) {
+					pw2.write(buffer2.toString());
 				}
+			
+				if (compressed) {
+					try {
+						cos2.write(buffer2.toString().getBytes());
+					} catch (IOException ex) {
+						java.util.logging.Logger.getLogger(TXTWriter.class.getName()).log(Level.SEVERE, null, ex);
+					}
+				}
+				buffer2.setLength(0);
 			}
 		}
-
+			
 		if (pw != null) {
 			pw.close();
 		}
@@ -508,8 +526,12 @@ public class TXTWriter {
 			}
 		}
 
-		ArrayList<TXTSynapse> exp2synapses = net.getTXTData().writeExp2Synapses();
 		StringBuilder buffer3 = new StringBuilder();
+		
+		/////////////////////////////////
+		/// bi-exponential synapses
+		/////////////////////////////////
+		ArrayList<TXTSynapse> exp2synapses = net.getTXTData().writeExp2Synapses();
 		for (TXTSynapse synapse : exp2synapses) {
 			TXTExp2Synapse exp2syn = (TXTExp2Synapse) synapse;
 			buffer3.append(exp2syn.getFrom_point_start().x);
@@ -550,21 +572,24 @@ public class TXTWriter {
 			buffer3.append(" ");
 			buffer3.append(exp2syn.getTo_Index());
 			buffer3.append(" ");
-		}
-
-		if (uncompressed) {
-			pw3.write(buffer3.toString());
-		}
-		
-		if (compressed) {
-			try {
-				cos3.write(buffer3.toString().getBytes());
-			} catch (IOException ex) {
-				java.util.logging.Logger.getLogger(TXTWriter.class.getName()).log(Level.SEVERE, null, ex);
+			
+			if (uncompressed) {
+				pw3.write(buffer3.toString());
 			}
-		}
 		
+			if (compressed) {
+				try {
+					cos3.write(buffer3.toString().getBytes());
+				} catch (IOException ex) {
+					java.util.logging.Logger.getLogger(TXTWriter.class.getName()).log(Level.SEVERE, null, ex);
+				}
+			}
+			buffer3.setLength(0);
+		}
 
+		/////////////////////////////////
+		/// alpha synapses
+		/////////////////////////////////
 		ArrayList<TXTSynapse> alphasynapses = net.getTXTData().writeAlphaSynapses();
 		for (TXTSynapse synapse : alphasynapses) {
 			TXTAlphaSynapse alphasyn = (TXTAlphaSynapse) synapse;
@@ -606,32 +631,37 @@ public class TXTWriter {
 			buffer3.append(" ");
 			buffer3.append(alphasyn.getTo_Index());
 			buffer3.append(" ");
+			
+			if (uncompressed) {
+				pw3.write(buffer3.toString());
+			}
+			
+			if (compressed) {
+				try {
+					cos3.write(buffer3.toString().getBytes());
+				} catch (IOException ex) {
+					java.util.logging.Logger.getLogger(TXTWriter.class.getName()).log(Level.SEVERE, null, ex);
+				}
+			}
+			
+			buffer3.setLength(0);
 		}
-
-		if (uncompressed) {
-			pw3.write(buffer3.toString());
-		}
-		
+	
 		if (pw3 != null) {
 			pw3.close();
 		}
-		
-		if (compressed) {
+
+		if (cos3 != null) {
 			try {
-				cos3.write(buffer3.toString().getBytes());
+				cos3.close();
 			} catch (IOException ex) {
 				java.util.logging.Logger.getLogger(TXTWriter.class.getName()).log(Level.SEVERE, null, ex);
-			} finally {
-				if (cos3 != null) {
-					try {
-						cos3.close();
-					} catch (IOException ex) {
-						java.util.logging.Logger.getLogger(TXTWriter.class.getName()).log(Level.SEVERE, null, ex);
-					}
-				}
 			}
 		}
 		
+		/////////////////////////////////
+		/// write config string
+		/////////////////////////////////
 		String configString = NeuGenView.getInstance().getCurrentProjectType() + System.getProperty("line.separator") + withCellType;
 		pw4.write(configString);
 
