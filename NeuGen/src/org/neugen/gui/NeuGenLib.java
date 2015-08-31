@@ -77,14 +77,9 @@ import org.neugen.datastructures.neuron.NeuronParvalbumin;
 import org.neugen.datastructures.neuron.NeuronPyramidal;
 import org.neugen.datastructures.neuron.NeuronSomatostatin;
 import org.neugen.datastructures.neuron.NeuronStarpyramidal;
-import org.neugen.datastructures.parameter.AxonParam;
-import org.neugen.datastructures.parameter.DendriteParam;
-import org.neugen.datastructures.parameter.DendriteParam.ApicalParam;
 import org.neugen.datastructures.xml.XMLObject;
 import org.neugen.datastructures.parameter.NetParam;
 import org.neugen.datastructures.parameter.NeuronParam;
-import org.neugen.datastructures.parameter.NeuronParam.SomaParam;
-import org.neugen.datastructures.parameter.SubCommonTreeParam;
 
 /**
  * @author Alexander Wanner

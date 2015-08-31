@@ -52,7 +52,6 @@ package org.neugen.parsers.TXT;
 
 /// imports
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -79,6 +78,7 @@ import org.apache.commons.compress.compressors.CompressorStreamFactory;
 import org.apache.commons.io.FilenameUtils;
 import org.neugen.backend.NGBackend;
 import org.neugen.datastructures.Pair;
+import org.neugen.gui.NeuGenLibTask;
 import org.neugen.gui.NeuGenView;
 
 /**
@@ -93,8 +93,11 @@ import org.neugen.gui.NeuGenView;
  *       directly, instead of creating instances of TXTAxon or TXTExp2Synapse.
  */
 public class TXTWriter {
-	/// private members
+	/// private final members
 	private final Net net;
+	private final NeuGenLibTask ngLibTask = NeuGenLibTask.getInstance();
+	
+	/// private members
 	private File file;
 	private String hocFileName;
 	private Trigger trigger;
@@ -498,7 +501,14 @@ public class TXTWriter {
 				}
 				buffer2.setLength(0);
 			}
+			
 		}
+		
+		/// connections and sections done
+		if (this.ngLibTask != null) {
+			this.ngLibTask.setMyProgress(1f/3f); 
+		}	
+		
 			
 		if (pw != null) {
 			pw.close();
@@ -587,6 +597,7 @@ public class TXTWriter {
 			buffer3.setLength(0);
 		}
 
+
 		/////////////////////////////////
 		/// alpha synapses
 		/////////////////////////////////
@@ -646,6 +657,12 @@ public class TXTWriter {
 			
 			buffer3.setLength(0);
 		}
+			
+		
+		/// synapses done
+		if (this.ngLibTask != null) {
+			this.ngLibTask.setMyProgress(2f/3f); 
+		}	
 	
 		if (pw3 != null) {
 			pw3.close();
@@ -681,65 +698,29 @@ public class TXTWriter {
 				}
 			}
 		}
+		
+		/// all done
+		if (this.ngLibTask != null) {
+			this.ngLibTask.setMyProgress(3f/3f); 
+		}	
 	}
 
-	/**
-	 * @brief @param compress
-	 */
-	public void exportNetToTXT(boolean compress) {
-		if (!compress) {
-			exportNetToTXT();
-		} else {
-			exportNetToTXTCompressed(NeuGenConstants.DEFAULT_COMPRESSION_METHOD);
-		}
-	}
-	
 	/**
 	 * @brief 
 	 * @param compress
 	 * @param method 
 	 */
 	public void exportNetToTXT(boolean compress, String method) {
-		if (!compress) {
-			exportNetToTXT();
-		} else {
-			exportNetToTXTCompressed(method);
-		}
+		this.compressed = compress;
+		this.compressMethod = method;
+		exportNetToTXT();
 	}
 
-	/**
-	 * @brief exports the net with compression
-	 * @author stephanmg <stephan@syntaktischer-zucker.de>
-	 * 
-	 * @param method
-	 */
-	private void exportNetToTXTCompressed(String method) {
-		String compression = method;
-		if (method.isEmpty()) {
-			compression  = NeuGenConstants.DEFAULT_COMPRESSION_METHOD;
-		}
-		
-		
-		String ngx = NeuGenConstants.EXTENSION_TXT;
-		String extension = Utils.getExtension(file);
-
-		if (!ngx.equals(extension)) {
-			file = new File(file.getAbsolutePath() + "." + ngx);
-		}
-
-		if (NeuGenConstants.WITH_GUI) {
-			trigger.outPrintln("Write TXT file for UG");
-			trigger.outPrintln("\t" + hocFileName + "." + ngx);
-		} else {
-			NGBackend.logger.info("Write TXT file for UG");
-			NGBackend.logger.info("\t" + hocFileName + "." + ngx);
-		}
-		
-		writeNetToTXTCompressed(compression);
-	}
 
 	/**
 	 * @brief exports the net without compression
+	 * Depending on the compression parameter supplied a JDialog
+	 * we also export the net with a given compression
 	 * @author stephanmg <stephan@syntaktischer-zucker.de>
 	 */
 	public void exportNetToTXT() {
@@ -758,53 +739,6 @@ public class TXTWriter {
 			NGBackend.logger.info("\t" + hocFileName + "." + ngx);
 		}
 		writeNetToTXT();
-	}
-
-	/**
-	 * @brief main
-	 * @param args
-	 */
-	public static void main(String args[]) {
-		MorphMLReader netBuilder = new MorphMLReader();
-		String fname = "bal.xml";
-		netBuilder.runMorphMLReader(fname);
-		Net net = netBuilder.getNet();
-
-		System.out.println("Size of the neural net: " + net.getNeuronList().size());
-		File file = new File("MyData.hoc");
-
-		TXTWriter ngxwriter = new TXTWriter(net, file);
-		ngxwriter.exportNetToTXT();
-	}
-
-	/**
-	 * @brief todo implement
-	 * @param method
-	 */
-	private void writeNetToTXTCompressed(String method) {
-		try {
-			FileOutputStream bzip2 = null;
-			String basefile = FilenameUtils.removeExtension(this.file.getAbsolutePath());
-			bzip2 = new FileOutputStream(new File(basefile + "_test.bz2"));
-			StringBuffer buffer3 = new StringBuffer();
-			try {
-				CompressorOutputStream gzippedOut = new CompressorStreamFactory()
-					.createCompressorOutputStream(method, bzip2);
-
-				try {
-					gzippedOut.write(buffer3.toString().getBytes());
-					gzippedOut.close();
-				} catch (IOException ex) {
-					java.util.logging.Logger.getLogger(TXTWriter.class.getName()).log(Level.SEVERE, null, ex);
-				}
-			} catch (CompressorException ex) {
-				java.util.logging.Logger.getLogger(TXTWriter.class.getName()).log(Level.SEVERE, null, ex);
-			}
-
-		} catch (FileNotFoundException ex) {
-			java.util.logging.Logger.getLogger(TXTWriter.class.getName()).log(Level.SEVERE, null, ex);
-		}
-
 	}
 
 	/**
@@ -847,4 +781,23 @@ public class TXTWriter {
         void setFileExistsDialog(FileExistsDialog fileExistsDialog) {
        		this.fed = fileExistsDialog;
     	}
+	
+	/**
+	 * @brief main
+	 * @param args
+	 */
+	public static void main(String args[]) {
+		MorphMLReader netBuilder = new MorphMLReader();
+		String fname = "bal.xml";
+		netBuilder.runMorphMLReader(fname);
+		Net net = netBuilder.getNet();
+
+		System.out.println("Size of the neural net: " + net.getNeuronList().size());
+		File file = new File("MyData.hoc");
+
+		TXTWriter ngxwriter = new TXTWriter(net, file);
+		ngxwriter.exportNetToTXT();
+	}
+
+
 }

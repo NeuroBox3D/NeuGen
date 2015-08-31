@@ -109,9 +109,8 @@ public final class TXTWriterTask extends Task<Void, Void> {
         Net net = NeuGenView.getInstance().getNet();
         TXTWriter txtWriter = new TXTWriter(net, file);
 	
-	
-	logger.info("Exporting TXT data to... " + file.getName());
-        setMessage("Exporting TXT data to... " + file.getName());
+	logger.info("Exporting TXT data to file: " + file.getName());
+        setMessage("Exporting TXT data to file: " + file.getName());
 	
 	boolean uncompressed = dialog.getUncompressed();
 	boolean compressed = dialog.getCompressed();
