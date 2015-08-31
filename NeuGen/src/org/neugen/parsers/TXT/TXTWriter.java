@@ -78,7 +78,6 @@ import org.apache.commons.compress.compressors.CompressorStreamFactory;
 import org.apache.commons.io.FilenameUtils;
 import org.neugen.backend.NGBackend;
 import org.neugen.datastructures.Pair;
-import org.neugen.gui.NeuGenLibTask;
 import org.neugen.gui.NeuGenView;
 
 /**
@@ -95,7 +94,7 @@ import org.neugen.gui.NeuGenView;
 public class TXTWriter {
 	/// private final members
 	private final Net net;
-	private final NeuGenLibTask ngLibTask = NeuGenLibTask.getInstance();
+	private final TXTWriterTask txtWriterTask = TXTWriterTask.getInstance();
 	
 	/// private members
 	private File file;
@@ -360,6 +359,10 @@ public class TXTWriter {
 	 */
 	@SuppressWarnings("CallToPrintStackTrace")
 	public final void writeNetToTXT() {
+		if (this.txtWriterTask != null) {
+			this.txtWriterTask.setMyProgress(0.00f);
+		}	
+	
 		/// compressed output
 		CompressorOutputStream cos = null;
 		CompressorOutputStream cos2 = null;
@@ -426,6 +429,10 @@ public class TXTWriter {
 		} catch (CompressorException ce) {
 			ce.printStackTrace();
 		}
+		
+		if (this.txtWriterTask != null) {
+			this.txtWriterTask.setMyProgress(0.25f);
+		}	
 
 		/// get all neurons and count them
 		List<Neuron> neuronList = net.getNeuronList();
@@ -504,12 +511,6 @@ public class TXTWriter {
 			
 		}
 		
-		/// connections and sections done
-		if (this.ngLibTask != null) {
-			this.ngLibTask.setMyProgress(1f/3f); 
-		}	
-		
-			
 		if (pw != null) {
 			pw.close();
 		}
@@ -535,6 +536,11 @@ public class TXTWriter {
 				java.util.logging.Logger.getLogger(TXTWriter.class.getName()).log(Level.SEVERE, null, ex);
 			}
 		}
+		
+		/// sections and connections done
+		if (this.txtWriterTask != null) {
+			this.txtWriterTask.setMyProgress(0.50f);
+		}	
 
 		StringBuilder buffer3 = new StringBuilder();
 		
@@ -660,8 +666,8 @@ public class TXTWriter {
 			
 		
 		/// synapses done
-		if (this.ngLibTask != null) {
-			this.ngLibTask.setMyProgress(2f/3f); 
+		if (this.txtWriterTask != null) {
+			this.txtWriterTask.setMyProgress(0.75f); 
 		}	
 	
 		if (pw3 != null) {
@@ -700,8 +706,8 @@ public class TXTWriter {
 		}
 		
 		/// all done
-		if (this.ngLibTask != null) {
-			this.ngLibTask.setMyProgress(3f/3f); 
+		if (this.txtWriterTask != null) {
+			this.txtWriterTask.setMyProgress(1.0f); 
 		}	
 	}
 

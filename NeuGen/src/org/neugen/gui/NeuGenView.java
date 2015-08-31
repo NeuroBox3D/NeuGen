@@ -46,8 +46,11 @@
  * Neurocomputing, 70(1-3), pp. 327-343, doi: 10.1016/j.neucom.2006.01.028
  *
  */
+
+/// package's name
 package org.neugen.gui;
 
+/// imports
 import com.sun.j3d.loaders.Scene;
 import org.neugen.gui.DensityVisualizationTask.Density;
 import org.neugen.utils.Utils;
@@ -68,25 +71,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.beans.PropertyChangeListener;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.EventObject;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
-import java.util.Map.Entry;
 import java.util.Properties;
-import javax.media.j3d.BranchGroup;
-
 import javax.swing.Timer;
 import javax.swing.Icon;
 import javax.swing.JButton;
@@ -94,31 +90,22 @@ import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.tree.DefaultTreeCellRenderer;
-
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
-
 import org.jdesktop.application.Application.ExitListener;
 import org.jdesktop.application.Task;
 import org.neugen.slider.SliderGeneratorTask;
 import org.neugen.datastructures.Net;
 import org.neugen.datastructures.Region;
-import org.neugen.datastructures.parameter.AxonParam;
-import org.neugen.datastructures.parameter.DendriteParam;
-import org.neugen.datastructures.parameter.NetParam;
-import org.neugen.datastructures.parameter.NeuronParam;
-import org.neugen.datastructures.parameter.SubCommonTreeParam;
-import org.neugen.datastructures.parameter.SubCommonTreeParam.GNSubCommonTreeParam;
 import org.neugen.parsers.DefaultInheritance;
 import org.neugen.parsers.NeuGenConfigStreamer;
 import org.neugen.datastructures.xml.XMLNode;
 import org.neugen.datastructures.xml.XMLObject;
-import org.neugen.gui.NGFileFilter.TXTFileFilter;
 import org.neugen.help.NeuGenHelp;
 import org.neugen.parsers.CSVWriterTask;
 import org.neugen.parsers.NeuGenReaderTask;
@@ -177,7 +164,15 @@ public final class NeuGenView extends FrameView implements TreeSaver {
     private File imageStackFile;
     private boolean imageSequence;
     private Scene scene;
-
+    
+    /**
+     * @brief get progress bar
+     * @return 
+     */
+    public JProgressBar getProgressBar() {
+	    return this.progressBar;
+    }
+    
     public Visualization getVisual() {
         return visual;
     }
@@ -2170,6 +2165,7 @@ private void writeTXTMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//
                     logger.info("Writing TXT task now...");
                     if (Utils.testExistingFile(exportFileChooser)) {
                         task = new TXTWriterTask(getApplication(), f);
+		        TXTWriterTask.setInstance((TXTWriterTask) task);
                     }
                 } else if (fileFilter instanceof NGFileFilter.NGXFileFilter) {
                     logger.info("Writing NGX task now...");

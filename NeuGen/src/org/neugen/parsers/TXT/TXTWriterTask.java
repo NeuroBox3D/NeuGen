@@ -64,10 +64,31 @@ import org.neugen.parsers.HocWriterTask;
  * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
 public final class TXTWriterTask extends Task<Void, Void> {
-    /// private members
+    /// private static final members
     private static final Logger logger = Logger.getLogger(HocWriterTask.class.getName());
+    
+    /// private static members
+    private static TXTWriterTask instance;
+
+    /// private final members
     private final File file;
     private final WriteCompressedDialog dialog;
+ 
+    /**
+     * @brief set task
+     * @param task 
+     */
+    public static void setInstance(TXTWriterTask task) {
+	    instance = task;
+    }
+    
+    /**
+     * @brief get task
+     * @return
+     */
+    public static TXTWriterTask getInstance() {
+	    return instance;
+    }
 
     /**
      * @brief ctor
@@ -79,7 +100,6 @@ public final class TXTWriterTask extends Task<Void, Void> {
     public TXTWriterTask(Application app, File f) {
         super(app);
         file = f;
-	
 	dialog = new WriteCompressedDialog(NeuGenView.getInstance().getFrame(), true);
 	dialog.setVisible(true);
     }
@@ -94,7 +114,20 @@ public final class TXTWriterTask extends Task<Void, Void> {
      */
     public void setMyProgress(int value, int min, int max) {
         setProgress(value, min, max);
-	
+    }
+    
+    /**
+     * @brief sets progress
+     * @author stephanmg <stephan@syntaktischer-zucker.de>
+     * 
+     * @param percentage
+     */
+    public void setMyProgress(float percentage) {
+	if (Float.isInfinite(percentage)) {
+            logger.info("percentage infinite: " + percentage);
+	    setProgress(1.0f);
+        }
+        setProgress(percentage);
     }
 
     /**
