@@ -60,6 +60,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -68,8 +69,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
 import javax.vecmath.Point3f;
 import javax.vecmath.Vector3f;
+import org.apache.commons.compress.compressors.CompressorOutputStream;
 import org.apache.log4j.Logger;
 import org.neugen.datastructures.neuron.NeuronBase;
 import org.neugen.utils.Frand;
@@ -762,17 +765,17 @@ public final class NetNeocortex extends NetBase implements Serializable, Net {
 
 		/**
 		 * @brief 
-		 * @return 
+		 * @param cos
+		 * @param pw
+		 *  
 		 */
 		@Override
-		public ArrayList<TXTSynapse> writeExp2Synapses() {
-			ArrayList<TXTSynapse> txtsynapses = new ArrayList<TXTSynapse>();
+		public void writeExp2Synapses(CompressorOutputStream cos, PrintWriter pw) {
+			StringBuilder sb = new StringBuilder();
 			float wfactor = 0.001f;
 			List<Cons> synapseList = getSynapseList();
 			for (int j = 0; j < synapseList.size(); j++) {
 				Cons synapse = synapseList.get(j);
-				int typeN1 = -1;
-				int typeN2 = -1;
 				if (synapse.getNeuron1() == null) {
 					continue;
 				}
@@ -793,7 +796,7 @@ public final class NetNeocortex extends NetBase implements Serializable, Net {
 				int sec_id = synapse.getNeuron2DenSection().getId();
 				float dd = NeuronalTreeStructure.getDendriteSectionData(synapse.getNeuron2DenSection(), c_idx);
 
-				TXTExp2Synapse ngxsynapse = new TXTExp2Synapse();
+				TXTExp2Synapse exp2syn = new TXTExp2Synapse();
 				Section dend_section = synapse.getNeuron2DenSection();
 				/// debug
 				/// int to_index = (int) (dend_section.getSegments().size() * dd);
@@ -825,12 +828,12 @@ public final class NetNeocortex extends NetBase implements Serializable, Net {
 
 				dend_section.getLength();
 
-				ngxsynapse.setTo_point_start(dend_section.getSegments().get(index2).getStart());
-				ngxsynapse.setTo_Index(index2);
+				exp2syn.setTo_point_start(dend_section.getSegments().get(index2).getStart());
+				exp2syn.setTo_Index(index2);
 				if (dend_section.getSegments().size() == 1) {
-					ngxsynapse.setTo_point_end(dend_section.getSegments().get((index2)).getEnd());
+					exp2syn.setTo_point_end(dend_section.getSegments().get((index2)).getEnd());
 				} else {
-					ngxsynapse.setTo_point_end(dend_section.getSegments().get((index2 + 1)).getStart());
+					exp2syn.setTo_point_end(dend_section.getSegments().get((index2 + 1)).getStart());
 				}
 
 				/// debug
@@ -841,10 +844,10 @@ public final class NetNeocortex extends NetBase implements Serializable, Net {
 				/// System.err.println("to end: " + ngxsynapse.getTo_point_end());
 				/// ngxsynapse.setName("Synapse" + j);
 				/// ngxsynapse.setId(j);
-				ngxsynapse.setTo("N" + n_idx + "dendrite" + sec_id);
+				exp2syn.setTo("N" + n_idx + "dendrite" + sec_id);
 				/// debug
 				/// ngxsynapse.setTo_loc(dd);
-				ngxsynapse.setTo_loc(to_walk_on_given_edge_dend);
+				exp2syn.setTo_loc(to_walk_on_given_edge_dend);
 
 				Section ax_section = synapse.getNeuron1AxSection();
 
@@ -901,48 +904,97 @@ public final class NetNeocortex extends NetBase implements Serializable, Net {
 				/// debug
 				/// ngxsynapse.setFrom_point_start(ax_section.getSegments().get(0).getStart());
 				/// ngxsynapse.setFrom_point_end(ax_section.getSegments().get(0).getEnd());
-				ngxsynapse.setFrom_point_start(ax_section.getSegments().get(index).getStart());
-				ngxsynapse.setFrom_Index(index);
+				exp2syn.setFrom_point_start(ax_section.getSegments().get(index).getStart());
+				exp2syn.setFrom_Index(index);
 				if (ax_section.getSegments().size() == 1) {
-					ngxsynapse.setFrom_point_end(ax_section.getSegments().get((index)).getEnd());
+					exp2syn.setFrom_point_end(ax_section.getSegments().get((index)).getEnd());
 				} else {
-					ngxsynapse.setFrom_point_end(ax_section.getSegments().get((index + 1)).getStart());
+					exp2syn.setFrom_point_end(ax_section.getSegments().get((index + 1)).getStart());
 				}
 				/// debug
 				/// System.err.println("segments: " + ax_section.getSegments().size());
 				/// System.err.println("from start: " + ngxsynapse.getFrom_point_start());
 				/// System.err.println("from end: " + ngxsynapse.getFrom_point_end());
 
-				ngxsynapse.setFrom("N" + synapse.getNeuron1().getIndex() + ax_section.getName());
+				exp2syn.setFrom("N" + synapse.getNeuron1().getIndex() + ax_section.getName());
 				//ngxsynapse.setFrom_loc(ff);
-				ngxsynapse.setFrom_loc(to_walk_on_given_edge_axon);
-				ngxsynapse.setGmax((1 + wfactor * synapse.getDendriticSomaDistance()) * get_uEPSP_Value(typeN1, typeN2));
-				txtsynapses.add(ngxsynapse);
+				exp2syn.setFrom_loc(to_walk_on_given_edge_axon);
+				exp2syn.setGmax((1 + wfactor * synapse.getDendriticSomaDistance()) * get_uEPSP_Value(typeN1, typeN2));
+				sb.append(exp2syn.getFrom_point_start().x);
+				sb.append(" ");
+				sb.append(exp2syn.getFrom_point_start().y);
+				sb.append(" ");
+				sb.append(exp2syn.getFrom_point_start().z);
+				sb.append(" ");
+				sb.append(exp2syn.getFrom_point_end().x);
+				sb.append(" ");
+				sb.append(exp2syn.getFrom_point_end().y);
+				sb.append(" ");
+				sb.append(exp2syn.getFrom_point_end().z);
+				sb.append(" ");
+				sb.append(exp2syn.getTo_point_start().x);
+				sb.append(" ");
+				sb.append(exp2syn.getTo_point_start().y);
+				sb.append(" ");
+				sb.append(exp2syn.getTo_point_start().z);
+				sb.append(" ");
+				sb.append(exp2syn.getTo_point_end().x);
+				sb.append(" ");
+				sb.append(exp2syn.getTo_point_end().y);
+				sb.append(" ");
+				sb.append(exp2syn.getTo_point_end().z);
+				sb.append(" ");
+				sb.append(exp2syn.getFrom_loc());
+				sb.append(" ");
+				sb.append(exp2syn.getTo_loc());
+				sb.append(" ");
+				sb.append(exp2syn.getSynapseInfo());
+				sb.append(" ");
+				sb.append(exp2syn.getFrom());
+				sb.append(" ");
+				sb.append(exp2syn.getTo());
+				sb.append(" ");
+				sb.append(exp2syn.getFrom_Index());
+				sb.append(" ");
+				sb.append(exp2syn.getTo_Index());
+				sb.append(" ");
+				
+				if (pw != null) {
+					pw.write(sb.toString());
+				}
+			
+				if (cos != null) {
+					try {
+						cos.write(sb.toString().getBytes());
+					} catch (IOException ex) {
+						java.util.logging.Logger.getLogger(NetNeocortex.class.getName()).log(Level.SEVERE, null, ex);
+					}
+				}
+				sb.setLength(0);
 			}
-			return txtsynapses;
 		}
 
 		/**
 		 * @brief
-		 * @return 
+		 * @param cos
+		 * @param pw
 		 */
 		@Override
-		public ArrayList<TXTSynapse> writeAlphaSynapses() {
-			ArrayList<TXTSynapse> synapses = new ArrayList<TXTSynapse>();
-			synapses.addAll(writeAlphaSynapses(NeuronTypes.L4_STELLATE));
-			synapses.addAll(writeAlphaSynapses(NeuronTypes.L23_PYRAMIDAL));
-			synapses.addAll(writeAlphaSynapses(NeuronTypes.L5B_PYRAMIDAL));
-			return synapses;
+		public void writeAlphaSynapses(CompressorOutputStream cos, PrintWriter pw) {
+			writeAlphaSynapses(NeuronTypes.L4_STELLATE, cos, pw);
+			writeAlphaSynapses(NeuronTypes.L23_PYRAMIDAL, cos, pw);
+			writeAlphaSynapses(NeuronTypes.L5B_PYRAMIDAL, cos, pw);
 		}
 
 		/**
 		 * @brief 
 		 * @param neuronType
-		 * @return
+		 * @param cos
+		 * @param pw
+		 * 
 		 */
-		public ArrayList<TXTSynapse> writeAlphaSynapses(NeuronTypes neuronType) {
-			ArrayList<TXTSynapse> alphasynapses = new ArrayList<TXTSynapse>();
-
+		public void writeAlphaSynapses(NeuronTypes neuronType, CompressorOutputStream cos, PrintWriter pw) {
+			StringBuilder sb = new StringBuilder();
 			// Factor to rise weight of a synapse per micrometer.
 			float wfactor = 0.001f;
 			for (int j = 0; j < synapseList.size(); j++) {
@@ -1029,9 +1081,61 @@ public final class NetNeocortex extends NetBase implements Serializable, Net {
 				alpha.setFrom_loc(to_walk_on_given_edge_axon);
 				alpha.setTo_loc(to_walk_on_given_edge_axon);
 				alpha.setGmax((1 + wfactor * synapse.getDendriticSomaDistance()) * 0.001f);
-				alphasynapses.add(alpha);
+				
+				/// write one alpha synapse
+				sb.append(alpha.getFrom_point_start().x);
+				sb.append(" ");
+				sb.append(alpha.getFrom_point_start().y);
+				sb.append(" ");
+				sb.append(alpha.getFrom_point_start().z);
+				sb.append(" ");
+				sb.append(alpha.getFrom_point_end().x);
+				sb.append(" ");
+				sb.append(alpha.getFrom_point_end().y);
+				sb.append(" ");
+				sb.append(alpha.getFrom_point_end().z);
+				sb.append(" ");
+				sb.append(alpha.getTo_point_start().x);
+				sb.append(" ");
+				sb.append(alpha.getTo_point_start().y);
+				sb.append(" ");
+				sb.append(alpha.getTo_point_start().z);
+				sb.append(" ");
+				sb.append(alpha.getTo_point_end().x);
+				sb.append(" ");
+				sb.append(alpha.getTo_point_end().y);
+				sb.append(" ");
+				sb.append(alpha.getTo_point_end().z);
+				sb.append(" ");
+				sb.append(alpha.getFrom_loc());
+				sb.append(" ");
+				sb.append(alpha.getTo_loc());
+				sb.append(" ");
+				sb.append(alpha.getSynapseInfo());
+				sb.append(" ");
+				sb.append(alpha.getFrom());
+				sb.append(" ");
+				sb.append(alpha.getTo());
+				sb.append(" ");
+				sb.append(alpha.getFrom_Index());
+				sb.append(" ");
+				sb.append(alpha.getTo_Index());
+				sb.append(" ");
+				
+				if (pw != null) {
+					pw.write(sb.toString());
+				}
+				
+				if (cos != null) {
+					try {
+						cos.write(sb.toString().getBytes());
+					} catch (IOException ex) {
+						java.util.logging.Logger.getLogger(NetNeocortex.class.getName()).log(Level.SEVERE, null, ex);
+					}
+				}
+				
+				sb.setLength(0);
 			}
-			return alphasynapses;
 		}
 	}
 
@@ -1174,6 +1278,7 @@ public final class NetNeocortex extends NetBase implements Serializable, Net {
 
 		/**
 		 * @brief
+		 * @param neuronType
 		 * @return
 		 */
 		public ArrayList<NGXSynapse> writeAlphaSynapses(NeuronTypes neuronType) {

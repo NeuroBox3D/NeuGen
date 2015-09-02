@@ -99,7 +99,7 @@ public class TXTAlphaSynapse extends TXTSynapse {
 	 * @brief get from index
 	 * @return 
 	 */
-	int getFrom_Index() {
+	public int getFrom_Index() {
 		return this.from_index;
 	}
 
@@ -107,7 +107,7 @@ public class TXTAlphaSynapse extends TXTSynapse {
 	 * @brief get to index
 	 * @return 
 	 */
-	int getTo_Index() {
+	public int getTo_Index() {
 		return this.to_index;
 	}
 

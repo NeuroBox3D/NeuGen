@@ -413,7 +413,6 @@ public class TXTWriter {
                         
                         /// otherwise files may be created (i. e. the compressed files empty!)
                         if (compressed) {
-			
                             FileOutputStream fos = new FileOutputStream(new File(basefile + "_secs.txt." + extension));
                             FileOutputStream fos2 = new FileOutputStream(new File(basefile + "_connex.txt." + extension));
                             FileOutputStream fos3 = new FileOutputStream(new File(basefile + "_synapses.txt." + extension));
@@ -541,130 +540,17 @@ public class TXTWriter {
 		if (this.txtWriterTask != null) {
 			this.txtWriterTask.setMyProgress(0.50f);
 		}	
-
-		StringBuilder buffer3 = new StringBuilder();
 		
 		/////////////////////////////////
 		/// bi-exponential synapses
 		/////////////////////////////////
-		ArrayList<TXTSynapse> exp2synapses = net.getTXTData().writeExp2Synapses();
-		for (TXTSynapse synapse : exp2synapses) {
-			TXTExp2Synapse exp2syn = (TXTExp2Synapse) synapse;
-			buffer3.append(exp2syn.getFrom_point_start().x);
-			buffer3.append(" ");
-			buffer3.append(exp2syn.getFrom_point_start().y);
-			buffer3.append(" ");
-			buffer3.append(exp2syn.getFrom_point_start().z);
-			buffer3.append(" ");
-			buffer3.append(exp2syn.getFrom_point_end().x);
-			buffer3.append(" ");
-			buffer3.append(exp2syn.getFrom_point_end().y);
-			buffer3.append(" ");
-			buffer3.append(exp2syn.getFrom_point_end().z);
-			buffer3.append(" ");
-			buffer3.append(exp2syn.getTo_point_start().x);
-			buffer3.append(" ");
-			buffer3.append(exp2syn.getTo_point_start().y);
-			buffer3.append(" ");
-			buffer3.append(exp2syn.getTo_point_start().z);
-			buffer3.append(" ");
-			buffer3.append(exp2syn.getTo_point_end().x);
-			buffer3.append(" ");
-			buffer3.append(exp2syn.getTo_point_end().y);
-			buffer3.append(" ");
-			buffer3.append(exp2syn.getTo_point_end().z);
-			buffer3.append(" ");
-			buffer3.append(exp2syn.getFrom_loc());
-			buffer3.append(" ");
-			buffer3.append(exp2syn.getTo_loc());
-			buffer3.append(" ");
-			buffer3.append(exp2syn.getSynapseInfo());
-			buffer3.append(" ");
-			buffer3.append(exp2syn.getFrom());
-			buffer3.append(" ");
-			buffer3.append(exp2syn.getTo());
-			buffer3.append(" ");
-			buffer3.append(exp2syn.getFrom_Index());
-			buffer3.append(" ");
-			buffer3.append(exp2syn.getTo_Index());
-			buffer3.append(" ");
-			
-			if (uncompressed) {
-				pw3.write(buffer3.toString());
-			}
+		net.getTXTData().writeExp2Synapses(cos3, pw3);
 		
-			if (compressed) {
-				try {
-					cos3.write(buffer3.toString().getBytes());
-				} catch (IOException ex) {
-					java.util.logging.Logger.getLogger(TXTWriter.class.getName()).log(Level.SEVERE, null, ex);
-				}
-			}
-			buffer3.setLength(0);
-		}
-
-
 		/////////////////////////////////
 		/// alpha synapses
 		/////////////////////////////////
-		ArrayList<TXTSynapse> alphasynapses = net.getTXTData().writeAlphaSynapses();
-		for (TXTSynapse synapse : alphasynapses) {
-			TXTAlphaSynapse alphasyn = (TXTAlphaSynapse) synapse;
-			buffer3.append(alphasyn.getFrom_point_start().x);
-			buffer3.append(" ");
-			buffer3.append(alphasyn.getFrom_point_start().y);
-			buffer3.append(" ");
-			buffer3.append(alphasyn.getFrom_point_start().z);
-			buffer3.append(" ");
-			buffer3.append(alphasyn.getFrom_point_end().x);
-			buffer3.append(" ");
-			buffer3.append(alphasyn.getFrom_point_end().y);
-			buffer3.append(" ");
-			buffer3.append(alphasyn.getFrom_point_end().z);
-			buffer3.append(" ");
-			buffer3.append(alphasyn.getTo_point_start().x);
-			buffer3.append(" ");
-			buffer3.append(alphasyn.getTo_point_start().y);
-			buffer3.append(" ");
-			buffer3.append(alphasyn.getTo_point_start().z);
-			buffer3.append(" ");
-			buffer3.append(alphasyn.getTo_point_end().x);
-			buffer3.append(" ");
-			buffer3.append(alphasyn.getTo_point_end().y);
-			buffer3.append(" ");
-			buffer3.append(alphasyn.getTo_point_end().z);
-			buffer3.append(" ");
-			buffer3.append(alphasyn.getFrom_loc());
-			buffer3.append(" ");
-			buffer3.append(alphasyn.getTo_loc());
-			buffer3.append(" ");
-			buffer3.append(alphasyn.getSynapseInfo());
-			buffer3.append(" ");
-			buffer3.append(alphasyn.getFrom());
-			buffer3.append(" ");
-			buffer3.append(alphasyn.getTo());
-			buffer3.append(" ");
-			buffer3.append(alphasyn.getFrom_Index());
-			buffer3.append(" ");
-			buffer3.append(alphasyn.getTo_Index());
-			buffer3.append(" ");
-			
-			if (uncompressed) {
-				pw3.write(buffer3.toString());
-			}
-			
-			if (compressed) {
-				try {
-					cos3.write(buffer3.toString().getBytes());
-				} catch (IOException ex) {
-					java.util.logging.Logger.getLogger(TXTWriter.class.getName()).log(Level.SEVERE, null, ex);
-				}
-			}
-			
-			buffer3.setLength(0);
-		}
-			
-		
+		net.getTXTData().writeAlphaSynapses(cos3, pw3);
+				
 		/// synapses done
 		if (this.txtWriterTask != null) {
 			this.txtWriterTask.setMyProgress(0.75f); 
@@ -683,7 +569,7 @@ public class TXTWriter {
 		}
 		
 		/////////////////////////////////
-		/// write config string
+		/// configuration string
 		/////////////////////////////////
 		String configString = NeuGenView.getInstance().getCurrentProjectType() + System.getProperty("line.separator") + withCellType;
 		pw4.write(configString);

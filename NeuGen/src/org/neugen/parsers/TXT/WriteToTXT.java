@@ -51,13 +51,14 @@
 package org.neugen.parsers.TXT;
 
 /// imports
-import java.util.ArrayList;
+import java.io.PrintWriter;
+import org.apache.commons.compress.compressors.CompressorOutputStream;
 
 /**
  * @brief WriteToTxt interface
  * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
 public interface WriteToTXT {
- 	public ArrayList<TXTSynapse> writeExp2Synapses();
-        public ArrayList<TXTSynapse> writeAlphaSynapses();
+ 	public void writeExp2Synapses(CompressorOutputStream cos, PrintWriter pw);
+        public void writeAlphaSynapses(CompressorOutputStream cos, PrintWriter pw);
 }
