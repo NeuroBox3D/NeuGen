@@ -776,6 +776,8 @@ public final class NetNeocortex extends NetBase implements Serializable, Net {
 			List<Cons> synapseList = getSynapseList();
 			for (int j = 0; j < synapseList.size(); j++) {
 				Cons synapse = synapseList.get(j);
+				int typeN1 = -1;
+				int typeN2 = -1;
 				if (synapse.getNeuron1() == null) {
 					continue;
 				}
