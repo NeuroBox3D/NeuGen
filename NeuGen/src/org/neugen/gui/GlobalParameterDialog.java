@@ -68,9 +68,11 @@ public class GlobalParameterDialog extends JDialog {
 	private static final int RET_OK = 1;
 	private static final long serialVersionUID = 1L;
     	private static final Logger logger = Logger.getLogger(NeuGenView.class.getName());
+        
 	// defaults
 	private static final float DENSITY_DEFAULT = 0.25f;
 	private static final float SYNAPSE_DISTANCE_DEFAULT = 2.5f;
+        
 	/// tooltips
         private final static String TOOLTIP_DENSITY = "A lower value results in " 
                 + "a more sparse compartment structure and a higher value results in "
@@ -80,19 +82,24 @@ public class GlobalParameterDialog extends JDialog {
                 + "synapses between supported cells types (note: not all cell types can form a "
                 + "synapse!). If the distance between two points describing a potential synapse is "
                 + "above the threshold distance then the potential synapse will be discarded. ";
+        private final static String TOOLTIP_SECTION_LENGTH = "A lower value results in "
+                + "a more dense compartment structure and a higher value results in "
+                + "a more sparse compartment structure, i. e. more or less points are "
+                + "utilized for each compartment respectively. (Note: section-length "
+                + "parameter is overriden by the nparts-density parameter if the latter"
+                + "parameter is not set!";
 	
 	
 	/// private final members
 	private final String DENSITY_IDENTIFIER = "nparts_density";
 	private final String SYNAPSE_DISTANCE_IDENTIFIER = "dist_synapse";
-	
+  
 	
 	/// members
 	private int returnStatus = RET_CANCEL;
 	private float density;
 	private float synapse_distance;
-	
-
+        
 	/**
 	 * @brief creates form for global parameter dialog
 	 * @param parent
@@ -124,6 +131,9 @@ public class GlobalParameterDialog extends JDialog {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jTextField3 = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setName("Form"); // NOI18N
@@ -174,47 +184,66 @@ public class GlobalParameterDialog extends JDialog {
         jLabel7.setText(resourceMap.getString("jLabel7.text")); // NOI18N
         jLabel7.setName("jLabel7"); // NOI18N
 
+        jLabel8.setText(resourceMap.getString("jLabel8.text")); // NOI18N
+        jLabel8.setName("jLabel8"); // NOI18N
+
+        jTextField3.setText(resourceMap.getString("jTextField3.text")); // NOI18N
+        jTextField3.setName("jTextField3"); // NOI18N
+        jTextField3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField3ActionPerformed(evt);
+            }
+        });
+
+        jLabel9.setText(resourceMap.getString("jLabel9.text")); // NOI18N
+        jLabel9.setName("jLabel9"); // NOI18N
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
+                .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(layout.createSequentialGroup()
-                        .add(28, 28, 28)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 52, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(layout.createSequentialGroup()
-                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                                    .add(jButton1)
-                                    .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                        .add(jLabel2)
-                                        .add(jLabel1)))
-                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                    .add(layout.createSequentialGroup()
-                                        .add(111, 111, 111)
-                                        .add(jButton2))
-                                    .add(layout.createSequentialGroup()
-                                        .add(28, 28, 28)
-                                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
-                                            .add(org.jdesktop.layout.GroupLayout.LEADING, jLabel7, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .add(org.jdesktop.layout.GroupLayout.LEADING, jTextField2)
-                                            .add(org.jdesktop.layout.GroupLayout.LEADING, jTextField1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE))
-                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 12, Short.MAX_VALUE)
-                                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                                            .add(jLabel6)
-                                            .add(jLabel5)))))
-                            .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                                .add(jLabel3)
-                                .add(jSeparator1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 343, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))))
-                    .add(layout.createSequentialGroup()
-                        .add(74, 74, 74)
-                        .add(jLabel4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 336, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                                .add(jButton1)
+                                .add(111, 111, 111)
+                                .add(jButton2))
+                            .add(jLabel4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 336, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                        .add(30, 30, 30))
+                    .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                            .add(jLabel3)
+                            .add(jSeparator1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 343, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                        .add(layout.createSequentialGroup()
+                            .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                .add(jLabel2)
+                                .add(jLabel1)
+                                .add(jLabel8))
+                            .add(28, 28, 28)
+                            .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                                .add(jTextField3)
+                                .add(jLabel7, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .add(jTextField2)
+                                .add(jTextField1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 131, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                            .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                .add(layout.createSequentialGroup()
+                                    .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 26, Short.MAX_VALUE)
+                                    .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                                        .add(jLabel6)
+                                        .add(jLabel9)))
+                                .add(layout.createSequentialGroup()
+                                    .add(18, 18, 18)
+                                    .add(jLabel5))))))
+                .add(39, 39, 39))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(21, Short.MAX_VALUE)
+            .add(layout.createSequentialGroup()
+                .addContainerGap()
                 .add(jLabel3)
                 .add(1, 1, 1)
                 .add(jSeparator1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
@@ -230,13 +259,18 @@ public class GlobalParameterDialog extends JDialog {
                     .add(jLabel2)
                     .add(jTextField2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jLabel6))
-                .add(18, 18, 18)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel8)
+                    .add(jTextField3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jLabel9))
+                .add(17, 17, 17)
                 .add(jLabel4)
                 .add(23, 23, 23)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jButton1)
                     .add(jButton2))
-                .add(49, 49, 49))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTextField1.getDocument().addDocumentListener(new org.neugen.gui.DensityWarningDocumentListener(this.jLabel7));
@@ -246,6 +280,8 @@ public class GlobalParameterDialog extends JDialog {
         jLabel7.setVisible(true);
         jLabel7.setSize(87, 16);
         jLabel7.setVisible(true);
+        jTextField3.getDocument().addDocumentListener(new org.neugen.gui.SectionLengthWarningDocumentListener(this.jLabel7));
+        jLabel9.setToolTipText("<html><p style=\"text-align: justify\" width=\"400\">" +TOOLTIP_SECTION_LENGTH+"</p></html>");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -257,6 +293,10 @@ private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
 private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 	doClose(RET_OK);
 }//GEN-LAST:event_jButton1ActionPerformed
+
+private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
+
+}//GEN-LAST:event_jTextField3ActionPerformed
 
 	/**
 	 * @brief indicates OK or CANCEL status
@@ -295,7 +335,12 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
 		if (!density_str.isEmpty()) {
 			this.density = Float.parseFloat(density_str);
 		} else {
-			this.density = DENSITY_DEFAULT;
+                        String section_str = jTextField3.getText();
+                        if (!section_str.isEmpty()) {
+                            this.density = 1.0f / Float.parseFloat(section_str);
+                        } else {
+                            this.density = DENSITY_DEFAULT;
+                        }
 		}
 
 		return this.density;
@@ -537,8 +582,11 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField jTextField3;
     // End of variables declaration//GEN-END:variables
 }
