@@ -69,6 +69,7 @@ import org.neugen.datastructures.Cellipsoid;
 import org.neugen.datastructures.Cons;
 import org.neugen.datastructures.Dendrite;
 import org.neugen.datastructures.Net;
+import org.neugen.datastructures.NeuronalTreeStructure;
 import org.neugen.datastructures.neuron.Neuron;
 import org.neugen.datastructures.Pair;
 import org.neugen.datastructures.Section;
@@ -578,6 +579,7 @@ public final class NeuroMLWriter {
 		 * @todo also consider the biophysics of the synapse stored in 
 		 * the synapse objects!
 		 */
+		int counter = 0;
 		for (Cons synapse : synapseList) {
 			if (synapse.getNeuron1() == null && synapse.getNeuron2() == null) {
 				continue;
@@ -586,15 +588,61 @@ public final class NeuroMLWriter {
 			if (synapse.getNeuron1() == null && synapse.getNeuron2() != null) {
 				/// unilateral synapse
 				Point3f injection = synapse.getNeuron2DenSectionSegment().getEnd();
-				Section sec = synapse.getNeuron2DenSection();
-				neuroMLSynapses.add(new NeuroMLSynapseUnilateral(injection));
+				NeuroMLSynapseUnilateral neuromlSynapse = new NeuroMLSynapseUnilateral(injection);
+				neuromlSynapse.setPre_cell_id(synapse.getNeuron2().getIndex());
+				neuromlSynapse.setPre_segment_id(synapse.getNeuron2DenSectionSegment().getId());
+				
+				int c_idx = 0;
+				for (Segment denSeg : synapse.getNeuron2DenSection().getSegments()) {
+					if (denSeg.getId() == synapse.getNeuron2DenSectionSegment().getId()) {
+						break;
+					}
+					c_idx++;
+				}
+
+				float dd = NeuronalTreeStructure.getDendriteSectionData(synapse.getNeuron2DenSection(), c_idx);
+				neuromlSynapse.setPre_fraction_along(dd);
+				neuromlSynapse.setId(counter);
+				counter++;
+				neuroMLSynapses.add(neuromlSynapse);
 			} else if (synapse.getNeuron1() != null && synapse.getNeuron2() == null) {
 				/// unilateral synapse
-			} else {
+			} else if (synapse.getNeuron1() != null && synapse.getNeuron2() != null) {
 				/// functional/bilateral synapse 
 				Point3f axon_end = synapse.getNeuron1AxSegment().getEnd(); /// Start of synapse
 				Point3f dendrite_start = synapse.getNeuron2DenSectionSegment().getStart(); /// End of synapse
-				neuroMLSynapses.add(new NeuroMLSynapseBilateral(axon_end, dendrite_start));
+				
+				int c_idx = 0;
+				for (Segment denSeg : synapse.getNeuron2DenSection().getSegments()) {
+					if (denSeg.getId() == synapse.getNeuron2DenSectionSegment().getId()) {
+						break;
+					}
+					c_idx++;
+				}
+
+				float dd = NeuronalTreeStructure.getDendriteSectionData(synapse.getNeuron2DenSection(), c_idx);
+				
+				Section ax_section = synapse.getNeuron1AxSection();
+				assert (ax_section.getLength() > 0.0);
+				int axSegPos = 0;
+				for (Segment axSeg : ax_section.getSegments()) {
+					if (axSeg.getId() == synapse.getNeuron1AxSegment().getId()) {
+						break;
+					}
+					axSegPos++;
+				}
+
+				float ff = NeuronalTreeStructure.getDendriteSectionData(synapse.getNeuron1AxSection(), axSegPos);
+				NeuroMLSynapseBilateral neuromlSynapse = new NeuroMLSynapseBilateral(axon_end, dendrite_start);
+				neuromlSynapse.setPre_cell_id(synapse.getNeuron2().getIndex());
+				neuromlSynapse.setPre_segment_id(synapse.getNeuron2DenSectionSegment().getId());
+				neuromlSynapse.setPost_cell_id(synapse.getNeuron1().getIndex());
+				neuromlSynapse.setPost_segment_id(synapse.getNeuron1AxSegment().getId());
+				neuromlSynapse.setPre_fraction_along(dd);
+				neuromlSynapse.setPost_fraction_along(ff);
+				neuromlSynapse.setId(counter);
+				counter++;
+				neuroMLSynapses.add(neuromlSynapse);
 			}
 		}
 
@@ -792,7 +840,7 @@ public final class NeuroMLWriter {
 			writerP2.addAttribute("\n\t\t xsi:schemaLocation", schemaLocation);
 			writerP2.addAttribute("\n\t\t name", name);
 			writerP2.addAttribute("\n\t\t lengthUnits", lengthUnits);
-			exportML.writeXMLCells(oos2, net);
+			///exportML.writeXMLCells(oos2, net);
 			exportML.writeXMLSynapses(oos2, net);
 			///writerP2.endNode();
 			

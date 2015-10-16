@@ -50,8 +50,6 @@
 /// package's name
 package org.neugen.parsers.NeuroML.NetworkML;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-
 /**
  * @brief NeuroML Level 3, i. e. NetworkML
  * @author stephanmg <stephan@syntaktischer-zucker.de>

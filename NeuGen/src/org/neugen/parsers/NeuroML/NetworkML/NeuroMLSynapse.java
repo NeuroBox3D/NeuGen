@@ -55,5 +55,4 @@ package org.neugen.parsers.NeuroML.NetworkML;
  * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
 public interface NeuroMLSynapse extends NetworkMLElement {
-	
 }
