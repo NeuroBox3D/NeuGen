@@ -73,12 +73,14 @@ import org.neugen.datastructures.neuron.Neuron;
 import org.neugen.datastructures.Pair;
 import org.neugen.datastructures.Section;
 import org.neugen.datastructures.Segment;
-import org.neugen.gui.NeuGenConstants;
-import org.neugen.gui.Trigger;
 import org.neugen.parsers.NeuroML.NetworkML.NetworkMLElement;
+import org.neugen.parsers.NeuroML.NetworkML.NeuroMLConnections;
 import org.neugen.parsers.NeuroML.NetworkML.NeuroMLNetwork;
+import org.neugen.parsers.NeuroML.NetworkML.NeuroMLProjection;
+import org.neugen.parsers.NeuroML.NetworkML.NeuroMLProjections;
 import org.neugen.parsers.NeuroML.NetworkML.NeuroMLSynapse;
 import org.neugen.parsers.NeuroML.NetworkML.NeuroMLSynapseBilateral;
+import org.neugen.parsers.NeuroML.NetworkML.NeuroMLSynapseProperty;
 import org.neugen.parsers.NeuroML.NetworkML.NeuroMLSynapseUnilateral;
 import org.neugen.utils.Utils;
 
@@ -398,6 +400,11 @@ public final class NeuroMLWriter {
 		xstream.useAttributeFor(CableFAP.class, "fractAlongParent");
 		xstream.aliasAttribute(Cable.class, "name", "name");
 		xstream.aliasField("meta:group", Cable.class, "metaGroup");
+
+		xstream.aliasField("connections", NeuroMLProjection.class, "connections");
+		xstream.addImplicitCollection(NeuroMLConnections.class, "elements");
+		
+		xstream.autodetectAnnotations(true);
 		
 		if (level < 4) {
 			/**
@@ -405,8 +412,22 @@ public final class NeuroMLWriter {
 			 * since in the GUI this option isnt present at all
 			 * @todo set the appropriate tags and attributes, given the NetworkML NeuroML Level 3 XML schema specification
 			 */
-			xstream.alias("UniLateralSynapse", NeuroMLSynapseUnilateral.class);
-			xstream.alias("BiLateralSynapse", NeuroMLSynapseBilateral.class);
+			///xstream.alias("UniLateralSynapse", NeuroMLSynapseUnilateral.class);
+			///xstream.alias("BiLateralSynapse", NeuroMLSynapseBilateral.class);
+			String[] attributes = new String[]{ "id", "pre_cell_id", "pre_segment_id", "pre_fraction_along",  
+						      "post_cell_id", "post_segment_id", "post_fraction_along" };
+			
+			String[] attributes2 = new String[]{ "id", "pre_cell_id", "pre_segment_id", "pre_fraction_along"};
+			
+			for (String attribute : attributes) {
+				xstream.useAttributeFor(NeuroMLSynapseBilateral.class, attribute);
+			}
+			
+			for (String attribute2 : attributes2) {
+				xstream.useAttributeFor(NeuroMLSynapseUnilateral.class, attribute2);
+			}
+			
+			xstream.useAttributeFor(NeuroMLSynapseBilateral.class);
 			xstream.useAttributeFor(NeuroMLSynapseBilateral.class, "from");
 			xstream.useAttributeFor(NeuroMLSynapseBilateral.class, "to");
 			xstream.useAttributeFor(NeuroMLSynapseUnilateral.class, "injection");
@@ -520,9 +541,20 @@ public final class NeuroMLWriter {
 	}
 
 	/**
+	 * @brief write for level 3 of NeuroML 
+	 * @todo write for level 3 of NeuroML (aka NetworkML)
+	 */
+	private void writeXMLCells(ObjectOutputStream oos, Net net) {
+		/// ...
+	}
+	
+	/**
 	 * @brief write the synapses (unilateral (nf synapses) and bilateral
 	 * (functional synapses))
 	 * @author stephanmg
+	 * @see https://www.neuroml.org/NeuroMLValidator/Transform.jsp?localFile=NeuroMLFiles/Schemata/v1.8.1/Level3/NetworkML_v1.8.1.xsd&xslFile=NeuroMLFiles/Schemata/XSD_Readable.xsl
+	 * @see https://www.neuroml.org/examples - CompleteNetwork XML source
+	 * 
 	 * 
 	 * @param oos
 	 * @param net
@@ -554,6 +586,7 @@ public final class NeuroMLWriter {
 			if (synapse.getNeuron1() == null && synapse.getNeuron2() != null) {
 				/// unilateral synapse
 				Point3f injection = synapse.getNeuron2DenSectionSegment().getEnd();
+				Section sec = synapse.getNeuron2DenSection();
 				neuroMLSynapses.add(new NeuroMLSynapseUnilateral(injection));
 			} else if (synapse.getNeuron1() != null && synapse.getNeuron2() == null) {
 				/// unilateral synapse
@@ -566,24 +599,38 @@ public final class NeuroMLWriter {
 		}
 
 		NeuroMLWriterTask task = NeuroMLWriterTask.getInstance("Synapses");
+		NeuroMLProjections projections = new NeuroMLProjections();
+		ArrayList<NeuroMLProjection> projection = new ArrayList<NeuroMLProjection>();
+		NeuroMLConnections current_connections = new NeuroMLConnections();
+		NeuroMLProjection current_projection = new NeuroMLProjection();
+		
+		ArrayList<NetworkMLElement> elements = new ArrayList<NetworkMLElement>();
 		task.setMyProgress(0.0f);
 			int i = 0;
 			for (NeuroMLSynapse synapse : neuroMLSynapses) {
 				logger.info("Synapse: " + synapse.toString());
-
-				try {
-					oos.writeObject(synapse);
-					oos.flush();
-				} catch (IOException e) {
-					logger.error(e, e);
-				}
-
-				if (task != null) {
-					i++;
-					logger.info("progress: " + i / (float) neuroMLSynapses.size());
-					task.setMyProgress( i / (float) neuroMLSynapses.size());
-				}
+				elements.add(synapse);
 			}
+			
+			current_connections.setElements(elements);
+			current_connections.setSize(elements.size());
+			current_projection.setConnections(current_connections);
+			projection.add(current_projection);
+			projections.setProjection(projection);
+
+			try {
+				oos.writeObject(projections);
+				oos.flush();
+			} catch (IOException e) {
+					logger.error(e, e);
+			}
+
+			if (task != null) {
+				i++;
+				logger.info("progress: " + i / (float) neuroMLSynapses.size());
+				task.setMyProgress( i / (float) neuroMLSynapses.size());
+			}
+			
 			if (task != null) {
 				task.setMyProgress(1.0f);
 			}
@@ -722,7 +769,20 @@ public final class NeuroMLWriter {
 			FileWriter fw = new FileWriter(synapses_output);
 			fw.write(head);
 			PrettyPrintWriter writerP2 = new PrettyPrintWriter(fw);
-			writerP2.startNode("neuroml");
+			///writerP2.startNode("neuroml");
+			xstreamLoc2.addImplicitCollection(NeuroMLProjections.class, "projection");
+			xstreamLoc2.useAttributeFor(NeuroMLProjection.class, "name");
+			xstreamLoc2.useAttributeFor(NeuroMLProjection.class, "source");
+			xstreamLoc2.useAttributeFor(NeuroMLProjection.class, "target");
+			xstreamLoc2.useAttributeFor(NeuroMLSynapseProperty.class, "type");
+			xstreamLoc2.useAttributeFor(NeuroMLSynapseProperty.class, "weight");
+			xstreamLoc2.useAttributeFor(NeuroMLSynapseProperty.class, "internal_delay");
+			xstreamLoc2.useAttributeFor(NeuroMLSynapseProperty.class, "threshold");
+			xstreamLoc2.useAttributeFor(NeuroMLConnections.class, "size");
+			xstreamLoc2.useAttributeFor(NeuroMLProjections.class, "xmlns");
+			xstreamLoc2.useAttributeFor(NeuroMLProjections.class, "units");
+			
+			ObjectOutputStream oos2 = xstreamLoc2.createObjectOutputStream(writerP2, "neuroml");
 			writerP2.addAttribute("xmlns", neuroml.xmlns);
 			writerP2.addAttribute("\n\t\t xmlns:mml", neuroml.mml);
 			writerP2.addAttribute("\n\t\t xmlns:meta", neuroml.meta);
@@ -732,9 +792,9 @@ public final class NeuroMLWriter {
 			writerP2.addAttribute("\n\t\t xsi:schemaLocation", schemaLocation);
 			writerP2.addAttribute("\n\t\t name", name);
 			writerP2.addAttribute("\n\t\t lengthUnits", lengthUnits);
-			ObjectOutputStream oos2 = xstreamLoc2.createObjectOutputStream(writerP2, "network");
+			exportML.writeXMLCells(oos2, net);
 			exportML.writeXMLSynapses(oos2, net);
-			writerP2.endNode();
+			///writerP2.endNode();
 			
 			/// flush all streams and close
 			oos.flush();

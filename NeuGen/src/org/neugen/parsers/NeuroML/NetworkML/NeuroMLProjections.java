@@ -50,29 +50,44 @@
 /// package's name
 package org.neugen.parsers.NeuroML.NetworkML;
 
+/// imports
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamConverter;
+import java.util.ArrayList;
+
 /**
- * @brief validate the element
+ *
  * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
-public final class NetworkMLValidationUtility {
-	private static final String NETWORK_ML_SCHEMA = "https://github.com/NeuroML/NeuroML2/blob/master/examples/NML2_FullNeuroML.nml";
 
-	/**
-	 * @brief ctor
-	 */
-	private NetworkMLValidationUtility() {
-		
+@XStreamAlias("projections")
+public class NeuroMLProjections {
+	private ArrayList<NeuroMLProjection> projection;
+
+	public ArrayList<NeuroMLProjection> getProjection() {
+		return projection;
+	}
+
+	public void setProjection(ArrayList<NeuroMLProjection> projection) {
+		this.projection = projection;
 	}
 	
-	/**
-	 * @brief
-	 * @param element
-	 * @return 
-	 */
-	public static boolean validate(NetworkMLElement element) {
-		/**
-		 * @todo validate the element
-		 */
-		return false;
+	private String units = "Phsyiological Units";
+	private String xmlns = "http://morphml.org/networkml/schema";
+
+	public String getUnits() {
+		return units;
+	}
+
+	public void setUnits(String units) {
+		this.units = units;
+	}
+
+	public String getXmlns() {
+		return xmlns;
+	}
+
+	public void setXmlns(String xmlns) {
+		this.xmlns = xmlns;
 	}
 }

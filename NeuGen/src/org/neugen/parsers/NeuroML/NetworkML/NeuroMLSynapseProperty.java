@@ -50,29 +50,25 @@
 /// package's name
 package org.neugen.parsers.NeuroML.NetworkML;
 
+/// imports
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+
 /**
- * @brief validate the element
+ *
  * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
-public final class NetworkMLValidationUtility {
-	private static final String NETWORK_ML_SCHEMA = "https://github.com/NeuroML/NeuroML2/blob/master/examples/NML2_FullNeuroML.nml";
+@XStreamAlias("properties")
+public class NeuroMLSynapseProperty {
+	private float internal_delay;
+	private float weight;
+	private String type;
+	private float threshold;
 
-	/**
-	 * @brief ctor
-	 */
-	private NetworkMLValidationUtility() {
-		
+	public NeuroMLSynapseProperty() {
+		internal_delay = 0;
+		weight = 0;
+		type = "EMPTY";
+		threshold = 0;
 	}
-	
-	/**
-	 * @brief
-	 * @param element
-	 * @return 
-	 */
-	public static boolean validate(NetworkMLElement element) {
-		/**
-		 * @todo validate the element
-		 */
-		return false;
-	}
+
 }

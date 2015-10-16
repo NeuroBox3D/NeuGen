@@ -50,29 +50,62 @@
 /// package's name
 package org.neugen.parsers.NeuroML.NetworkML;
 
+/// imports
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+
 /**
- * @brief validate the element
+ *
  * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
-public final class NetworkMLValidationUtility {
-	private static final String NETWORK_ML_SCHEMA = "https://github.com/NeuroML/NeuroML2/blob/master/examples/NML2_FullNeuroML.nml";
+@XStreamAlias("projection")
+public class NeuroMLProjection {
+	/// nodes
+	private NeuroMLSynapseProperty global_property;
 
-	/**
-	 * @brief ctor
-	 */
-	private NetworkMLValidationUtility() {
-		
+	public NeuroMLSynapseProperty getGlobal_property() {
+		return global_property;
+	}
+
+	public void setGlobal_property(NeuroMLSynapseProperty global_property) {
+		this.global_property = global_property;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getSource() {
+		return source;
+	}
+
+	public void setSource(String source) {
+		this.source = source;
+	}
+
+	public String getTarget() {
+		return target;
+	}
+
+	public void setTarget(String target) {
+		this.target = target;
 	}
 	
-	/**
-	 * @brief
-	 * @param element
-	 * @return 
-	 */
-	public static boolean validate(NetworkMLElement element) {
-		/**
-		 * @todo validate the element
-		 */
-		return false;
+	public NeuroMLConnections getConnections() {
+		return connections;
 	}
+
+	public void setConnections(NeuroMLConnections connections) {
+		this.connections = connections;
+	}
+	
+	private NeuroMLConnections connections;
+
+	/// attributes
+	private String name;
+	private String source;
+	private String target;
 }
