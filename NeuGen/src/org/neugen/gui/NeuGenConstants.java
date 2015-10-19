@@ -94,7 +94,7 @@ public final class NeuGenConstants {
     public static final String CONTACT = "In case of any questions please see first the documentation on http://neugen.org" + NL +
             "then feel free to contact grein@gcsc.uni-frankfurt.de if your problem could not be solved." + NL
             + "For recent fixes, enhancements or discussions see https://github.com/NeuroBox3D/NeuGen." + NL;
-    public static final String VERSION = "NeuGen Version 2.0 ";
+    public static final String VERSION = "NeuGen 2.0 ";
     public static final String NEOCORTEX_PROJECT = "Neocortex";
     public static final String HIPPOCAMPUS_PROJECT = "Hippocampus";
     public static final String NEOCOREX_DESCRIPTION = "Creates a new project that generates cells of neocortex.";

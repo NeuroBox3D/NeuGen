@@ -55,14 +55,18 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.vecmath.Point3f;
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.neugen.datastructures.Axon;
 import org.neugen.datastructures.Cellipsoid;
@@ -74,9 +78,11 @@ import org.neugen.datastructures.neuron.Neuron;
 import org.neugen.datastructures.Pair;
 import org.neugen.datastructures.Section;
 import org.neugen.datastructures.Segment;
+import static org.neugen.gui.NeuGenConstants.VERSION;
+import org.neugen.gui.NeuGenView;
+import org.neugen.gui.NeuroMLLevelSelector;
 import org.neugen.parsers.NeuroML.NetworkML.NetworkMLElement;
 import org.neugen.parsers.NeuroML.NetworkML.NeuroMLConnections;
-import org.neugen.parsers.NeuroML.NetworkML.NeuroMLNetwork;
 import org.neugen.parsers.NeuroML.NetworkML.NeuroMLProjection;
 import org.neugen.parsers.NeuroML.NetworkML.NeuroMLProjections;
 import org.neugen.parsers.NeuroML.NetworkML.NeuroMLSynapse;
@@ -89,6 +95,7 @@ import org.neugen.utils.Utils;
  *
  * @author Alexander Wanner
  * @author Sergei Wolf
+ * @author Stephan Grein <stephan@syntaktischer-zucker.de>
  */
 final class Neuroml {
 
@@ -331,90 +338,102 @@ public final class NeuroMLWriter {
 	}
 
 	/**
-	 * Function to get neuroml output options
+	 * @brief set the xstream options to allow for NeuroML Level 1, 2 and 3 output
+	 * @todo XML header for Level 1, 2 and 3 is different from the universal neuroml header!
 	 *
 	 * @return xstream object with output options for xml format
 	 */
 	private void setXStreamOptions(int level) {
-		// aliases for class names
-		xstream.alias("segment", NeuroMLSegment.class);
-		xstream.alias("segments", NeuroMLSegments.class);
-		xstream.addImplicitCollection(NeuroMLSegments.class, "segments");
-		xstream.alias("proximal", Proximal.class);
-		xstream.alias("distal", Distal.class);
-		xstream.alias("cell", NeuroMLCell.class);
-		xstream.alias("morphml", Neuroml.class);
-		xstream.alias("cable", NeuroMLCables.class);
-		xstream.addImplicitCollection(NeuroMLCables.class, "cables");
-		xstream.alias("cable", Cable.class);
-		xstream.alias("cable", CableFAP.class);
+		///////////////////////////////////////////////
+		/// MorphML (Level 1)
+		///////////////////////////////////////////////
+		if (level >= 1) {
+			// aliases for class names
+			xstream.alias("segment", NeuroMLSegment.class);
+			xstream.alias("segments", NeuroMLSegments.class);
+			xstream.addImplicitCollection(NeuroMLSegments.class, "segments");
+			xstream.alias("proximal", Proximal.class);
+			xstream.alias("distal", Distal.class);
+			xstream.alias("cell", NeuroMLCell.class);
+			xstream.alias("morphml", Neuroml.class);
+			xstream.alias("cable", NeuroMLCables.class);
+			xstream.addImplicitCollection(NeuroMLCables.class, "cables");
+			xstream.alias("cable", Cable.class);
+			xstream.alias("cable", CableFAP.class);
 
-		// aliases for variables
-		xstream.aliasAttribute(Neuroml.class, "mml", "\n\txmlns:mml");
-		xstream.aliasAttribute(Neuroml.class, "meta", "\n\txmlns:meta");
-		xstream.aliasAttribute(Neuroml.class, "xsi", "\n\txmlns:xsi");
-		xstream.aliasAttribute(Neuroml.class, "bio", "\n\txmlns:bio");
-		xstream.aliasAttribute(Neuroml.class, "cml", "\n\txmlns:cml");
-		xstream.aliasAttribute(Neuroml.class, "schemaLocation", "\n\txsi:schemaLocation");
-		xstream.aliasAttribute(Neuroml.class, "name", "\n\tname");
-		xstream.aliasAttribute(Neuroml.class, "lengthUnits", "\n\tlengthUnits");
+			// aliases for variables
+			xstream.aliasAttribute(Neuroml.class, "mml", "\n\txmlns:mml");
+			xstream.aliasAttribute(Neuroml.class, "meta", "\n\txmlns:meta");
+			xstream.aliasAttribute(Neuroml.class, "xsi", "\n\txmlns:xsi");
+			xstream.aliasAttribute(Neuroml.class, "bio", "\n\txmlns:bio");
+			xstream.aliasAttribute(Neuroml.class, "cml", "\n\txmlns:cml");
+			xstream.aliasAttribute(Neuroml.class, "schemaLocation", "\n\txsi:schemaLocation");
+			xstream.aliasAttribute(Neuroml.class, "name", "\n\tname");
+			xstream.aliasAttribute(Neuroml.class, "lengthUnits", "\n\tlengthUnits");
 
-		/*
-		 if(level == 1) {
-		 xstream.omitField(Neuroml.class, "bio");
-		 xstream.omitField(Neuroml.class, "cml");
-		 }
-		 */
-		// set the Neuroml memeber variables as na XML attribute
-		xstream.useAttributeFor(Neuroml.class, "xmlns");
-		xstream.useAttributeFor(Neuroml.class, "mml");
-		xstream.useAttributeFor(Neuroml.class, "meta");
-		xstream.useAttributeFor(Neuroml.class, "bio");
-		xstream.useAttributeFor(Neuroml.class, "cml");
-		xstream.useAttributeFor(Neuroml.class, "xsi");
-		xstream.useAttributeFor(Neuroml.class, "schemaLocation");
-		xstream.useAttributeFor(Neuroml.class, "name");
-		xstream.useAttributeFor(Neuroml.class, "lengthUnits");
-
-		//set the NeuroML member variables as an XML attribute
-		xstream.useAttributeFor(NeuroMLSegment.class, "id");
-		xstream.useAttributeFor(NeuroMLSegment.class, "cable");
-		xstream.useAttributeFor(NeuroMLSegment.class, "parent");
-		xstream.useAttributeFor(NeuroMLSegment.class, "name");
-
-		xstream.useAttributeFor(NeuroMLSegments.class, "xmlns");
-
-		//set the Proximal member variables as an XML attribute
-		xstream.useAttributeFor(Proximal.class, "x");
-		xstream.useAttributeFor(Proximal.class, "y");
-		xstream.useAttributeFor(Proximal.class, "z");
-		xstream.useAttributeFor(Proximal.class, "diameter");
-		//set the Distal member variables as an XML attribute
-		xstream.useAttributeFor(Distal.class, "x");
-		xstream.useAttributeFor(Distal.class, "y");
-		xstream.useAttributeFor(Distal.class, "z");
-		xstream.useAttributeFor(Distal.class, "diameter");
-		xstream.useAttributeFor(NeuroMLCell.class, "name");
-
-		xstream.useAttributeFor(NeuroMLCables.class, "xmlns");
-		xstream.useAttributeFor(Cable.class, "id");
-		xstream.useAttributeFor(CableFAP.class, "fractAlongParent");
-		xstream.aliasAttribute(Cable.class, "name", "name");
-		xstream.aliasField("meta:group", Cable.class, "metaGroup");
-
-		xstream.aliasField("connections", NeuroMLProjection.class, "connections");
-		xstream.addImplicitCollection(NeuroMLConnections.class, "elements");
-		
-		xstream.autodetectAnnotations(true);
-		
-		if (level < 4) {
-			/**
-			 * do we really need the level output? we could also remove the option here ...
-			 * since in the GUI this option isnt present at all
-			 * @todo set the appropriate tags and attributes, given the NetworkML NeuroML Level 3 XML schema specification
+			/*
+			 if(level == 1) {
+			 xstream.omitField(Neuroml.class, "bio");
+			 xstream.omitField(Neuroml.class, "cml");
+			 }
 			 */
-			///xstream.alias("UniLateralSynapse", NeuroMLSynapseUnilateral.class);
-			///xstream.alias("BiLateralSynapse", NeuroMLSynapseBilateral.class);
+			// set the Neuroml memeber variables as na XML attribute
+			xstream.useAttributeFor(Neuroml.class, "xmlns");
+			xstream.useAttributeFor(Neuroml.class, "mml");
+			xstream.useAttributeFor(Neuroml.class, "meta");
+			xstream.useAttributeFor(Neuroml.class, "bio");
+			xstream.useAttributeFor(Neuroml.class, "cml");
+			xstream.useAttributeFor(Neuroml.class, "xsi");
+			xstream.useAttributeFor(Neuroml.class, "schemaLocation");
+			xstream.useAttributeFor(Neuroml.class, "name");
+			xstream.useAttributeFor(Neuroml.class, "lengthUnits");
+
+			//set the NeuroML member variables as an XML attribute
+			xstream.useAttributeFor(NeuroMLSegment.class, "id");
+			xstream.useAttributeFor(NeuroMLSegment.class, "cable");
+			xstream.useAttributeFor(NeuroMLSegment.class, "parent");
+			xstream.useAttributeFor(NeuroMLSegment.class, "name");
+
+			xstream.useAttributeFor(NeuroMLSegments.class, "xmlns");
+
+			//set the Proximal member variables as an XML attribute
+			xstream.useAttributeFor(Proximal.class, "x");
+			xstream.useAttributeFor(Proximal.class, "y");
+			xstream.useAttributeFor(Proximal.class, "z");
+			xstream.useAttributeFor(Proximal.class, "diameter");
+			//set the Distal member variables as an XML attribute
+			xstream.useAttributeFor(Distal.class, "x");
+			xstream.useAttributeFor(Distal.class, "y");
+			xstream.useAttributeFor(Distal.class, "z");
+			xstream.useAttributeFor(Distal.class, "diameter");
+			xstream.useAttributeFor(NeuroMLCell.class, "name");
+
+			xstream.useAttributeFor(NeuroMLCables.class, "xmlns");
+			xstream.useAttributeFor(Cable.class, "id");
+			xstream.useAttributeFor(CableFAP.class, "fractAlongParent");
+			xstream.aliasAttribute(Cable.class, "name", "name");
+			xstream.aliasField("meta:group", Cable.class, "metaGroup");
+
+			xstream.aliasField("connections", NeuroMLProjection.class, "connections");
+			xstream.addImplicitCollection(NeuroMLConnections.class, "elements");
+			
+			xstream.autodetectAnnotations(true);
+		}
+			
+
+		///////////////////////////////////////////////
+		/// NetworkML (Level 2)
+		///////////////////////////////////////////////
+		if (level >= 2) {
+			/**
+			 * @brief todo add xstream features for ChannelML
+			 */
+		}
+		
+		///////////////////////////////////////////////
+		/// NetworkML (Level 3)
+		///////////////////////////////////////////////
+		if (level >= 3) {
 			String[] attributes = new String[]{ "id", "pre_cell_id", "pre_segment_id", "pre_fraction_along",  
 						      "post_cell_id", "post_segment_id", "post_fraction_along" };
 			
@@ -433,7 +452,6 @@ public final class NeuroMLWriter {
 			xstream.useAttributeFor(NeuroMLSynapseBilateral.class, "to");
 			xstream.useAttributeFor(NeuroMLSynapseUnilateral.class, "injection");
 		}
-
 	}
 
 	
@@ -543,31 +561,22 @@ public final class NeuroMLWriter {
 
 	/**
 	 * @brief write for level 3 of NeuroML 
-	 * @todo write for level 3 of NeuroML (aka NetworkML)
 	 */
 	private void writeXMLCells(ObjectOutputStream oos, Net net) {
-		/// ...
+		writeXMLNet(oos, net);
 	}
 	
 	/**
-	 * @brief write the synapses (unilateral (nf synapses) and bilateral
-	 * (functional synapses))
+	 * @brief write the synapses to xml
 	 * @author stephanmg
-	 * @see https://www.neuroml.org/NeuroMLValidator/Transform.jsp?localFile=NeuroMLFiles/Schemata/v1.8.1/Level3/NetworkML_v1.8.1.xsd&xslFile=NeuroMLFiles/Schemata/XSD_Readable.xsl
-	 * @see https://www.neuroml.org/examples - CompleteNetwork XML source
 	 * 
+	 * @todo add biophysics of synapses for Level 3 output
 	 * 
 	 * @param oos
 	 * @param net
 	 */
 	private void writeXMLSynapses(ObjectOutputStream oos, Net net) {
-		/**
-		 * @todo build a NetworkMLNetwork, with the NeuroMLSynapse as elements
-		 * within teh NetworkMLNetwork, then we can use teh NetworkML NeuroML Level 3 
-		 * XML schema specification to generate the correct XML output
-		 */
 		@SuppressWarnings("unchecked")
-		NeuroMLNetwork network = new NeuroMLNetwork(3, new ArrayList<NetworkMLElement>());
 		List<Cons> synapseList = net.getSynapseList();
 
 		logger.info("Number of synapses: " + synapseList.size());
@@ -575,10 +584,6 @@ public final class NeuroMLWriter {
 		ArrayList<NeuroMLSynapse> neuroMLSynapses = new ArrayList<NeuroMLSynapse>();
 
 		/// iterate over all synapses in the network
-		/**
-		 * @todo also consider the biophysics of the synapse stored in 
-		 * the synapse objects!
-		 */
 		int counter = 0;
 		for (Cons synapse : synapseList) {
 			if (synapse.getNeuron1() == null && synapse.getNeuron2() == null) {
@@ -753,105 +758,184 @@ public final class NeuroMLWriter {
 	}
 
 	/**
-	 * @brief exports the NeuroML data, i. e. we need also to export the
-	 * synapses below
-	 * @author stephanmg
+	 * @brief exports the NeuroML data, i. e. level 1, 2 or 3
+	 * @author stephanmg <stephan@syntaktischer-zucker.de>
 	 * 
 	 * @param file
 	 * @param net
 	 * @throws IOException
 	 */
 	public static void exportData(File file, Net net) throws IOException {
-		NeuroMLWriter exportML = new NeuroMLWriter();
-		exportML.initXStream();
-		int level = exportML.getNeuromlLevel();
-		exportML.setXStreamOptions(level);
+		/// get the NeuroML level choser dialog
+		NeuroMLLevelSelector choser = new NeuroMLLevelSelector(NeuGenView.getInstance().getFrame(), true);
+		choser.setVisible(true);
+		System.err.println("LEVELS: " + Arrays.toString(choser.getNeuroMLLevels()));
+		
+		/// for each specified level we export
+		for (int level : choser.getNeuroMLLevels()) {
+			NeuroMLWriter exportML = new NeuroMLWriter();
+			exportML.setNeuromlLevel(level);
+			exportML.initXStream();
+			exportML.setXStreamOptions(level);
 
-		String head = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-		String name = "NeuroML Level " + level + " file exported from NeuGen";
-		String lengthUnits = "micron";
-		String schemaLocation = "";
-		if (level == 1) {
-			schemaLocation = "http://morphml.org/neuroml/schema NeuroML_Level1_v1.7.xsd";
-		} else if (level == 2) {
-			schemaLocation = "http://morphml.org/neuroml/schema NeuroML_Level2_v1.7.xsd";
-		} else if (level == 3) {
-			schemaLocation = "http://morphml.org/networkml/schema../../Schemata/v1.7/Level3/NetworkML_v1.7.xsd";
-		} else {
-		}
-
-		Neuroml neuroml = new Neuroml();
-		neuroml.setHeader(schemaLocation, name, lengthUnits);
-
-		try {
-			String xml = "xml";
-			String extension = Utils.getExtension(file);
-			File net_output = null;
-			File synapses_output = null;
-			if (!xml.equals(extension)) {
-				net_output = new File(file.getAbsolutePath() + "." + xml);
-				synapses_output = new File(file.getAbsoluteFile() + "_synapses." + xml);
+			String head = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+			String name = "NeuroML Level " + level + " file exported from " + VERSION;
+			String lengthUnits = "micron";
+			String schemaLocation = "";
+			if (level == 1) {
+				schemaLocation = "http://morphml.org/neuroml/schema NeuroML_Level1_v1.7.xsd";
+			} else if (level == 2) {
+				schemaLocation = "http://morphml.org/neuroml/schema NeuroML_Level2_v1.7.xsd";
+			} else if (level == 3) {
+				schemaLocation = "http://morphml.org/networkml/schema../../Schemata/v1.7/Level3/NetworkML_v1.7.xsd";
+			} else {
 			}
-			FileWriter writer = new FileWriter(net_output);
-			writer.write(head);
 
-			PrettyPrintWriter writerP = new PrettyPrintWriter(writer);
-			writerP.startNode("neuroml");
-			writerP.addAttribute("xmlns", neuroml.xmlns);
-			writerP.addAttribute("\n\t\t xmlns:mml", neuroml.mml);
-			writerP.addAttribute("\n\t\t xmlns:meta", neuroml.meta);
-			writerP.addAttribute("\n\t\t xmlns:bio", neuroml.bio);
-			writerP.addAttribute("\n\t\t xmlns:cml", neuroml.cml);
-			writerP.addAttribute("\n\t\t xmlns:xsi", neuroml.xsi);
-			writerP.addAttribute("\n\t\t xsi:schemaLocation", schemaLocation);
-			writerP.addAttribute("\n\t\t name", name);
-			writerP.addAttribute("\n\t\t lengthUnits", lengthUnits);
+			Neuroml neuroml = new Neuroml();
+			neuroml.setHeader(schemaLocation, name, lengthUnits);
 
-			XStream xstreamLoc = getXstream();
-			ObjectOutputStream oos = xstreamLoc.createObjectOutputStream(writerP, "cells");
-			exportML.writeXMLNet(oos, net);
-			writerP.endNode();
+			try {
+				/// prepare fiels
+				String xml = "xml";
+				String extension = Utils.getExtension(file);
+				File net_output = null; /// Level 1 output file
+				File biophysics_output = null; /// Level 2 output file
+				File synapses_output = null; /// Level 3 output file
+				
+				if (!xml.equals(extension)) {
+					net_output = new File(file.getAbsolutePath() + "_NeuroML_Level1" + "." + xml);
+					biophysics_output = new File(file.getAbsoluteFile() + "_NeuroML_Level2" + "." + xml);
+					synapses_output = new File(file.getAbsoluteFile() + "_NeuroML_Level3" + "." + xml);
+				}
+				
+				
+				/// output level 1 (MorphML)
+				if (level == 1) {
+					FileWriter writer = new FileWriter(net_output);
+					writer.write(head);
 
-			/// output level 3 (Network ML)
-			XStream xstreamLoc2 = getXstream();
-			FileWriter fw = new FileWriter(synapses_output);
-			fw.write(head);
-			PrettyPrintWriter writerP2 = new PrettyPrintWriter(fw);
-			///writerP2.startNode("neuroml");
-			xstreamLoc2.addImplicitCollection(NeuroMLProjections.class, "projection");
-			xstreamLoc2.useAttributeFor(NeuroMLProjection.class, "name");
-			xstreamLoc2.useAttributeFor(NeuroMLProjection.class, "source");
-			xstreamLoc2.useAttributeFor(NeuroMLProjection.class, "target");
-			xstreamLoc2.useAttributeFor(NeuroMLSynapseProperty.class, "type");
-			xstreamLoc2.useAttributeFor(NeuroMLSynapseProperty.class, "weight");
-			xstreamLoc2.useAttributeFor(NeuroMLSynapseProperty.class, "internal_delay");
-			xstreamLoc2.useAttributeFor(NeuroMLSynapseProperty.class, "threshold");
-			xstreamLoc2.useAttributeFor(NeuroMLConnections.class, "size");
-			xstreamLoc2.useAttributeFor(NeuroMLProjections.class, "xmlns");
-			xstreamLoc2.useAttributeFor(NeuroMLProjections.class, "units");
-			
-			ObjectOutputStream oos2 = xstreamLoc2.createObjectOutputStream(writerP2, "neuroml");
-			writerP2.addAttribute("xmlns", neuroml.xmlns);
-			writerP2.addAttribute("\n\t\t xmlns:mml", neuroml.mml);
-			writerP2.addAttribute("\n\t\t xmlns:meta", neuroml.meta);
-			writerP2.addAttribute("\n\t\t xmlns:bio", neuroml.bio);
-			writerP2.addAttribute("\n\t\t xmlns:cml", neuroml.cml);
-			writerP2.addAttribute("\n\t\t xmlns:xsi", neuroml.xsi);
-			writerP2.addAttribute("\n\t\t xsi:schemaLocation", schemaLocation);
-			writerP2.addAttribute("\n\t\t name", name);
-			writerP2.addAttribute("\n\t\t lengthUnits", lengthUnits);
-			///exportML.writeXMLCells(oos2, net);
-			exportML.writeXMLSynapses(oos2, net);
-			///writerP2.endNode();
-			
-			/// flush all streams and close
-			oos.flush();
-			oos.close();
-			oos2.flush();
-			oos2.close();
-			
-		} catch (Exception e) {
-			logger.error(e, e);
+					PrettyPrintWriter writerP = new PrettyPrintWriter(writer);
+					writerP.startNode("morphml");
+					writerP.addAttribute("xmlns", neuroml.xmlns);
+					writerP.addAttribute("\n\t\t xmlns:mml", neuroml.mml);
+					writerP.addAttribute("\n\t\t xmlns:meta", neuroml.meta);
+					writerP.addAttribute("\n\t\t xmlns:bio", neuroml.bio);
+					writerP.addAttribute("\n\t\t xmlns:cml", neuroml.cml);
+					writerP.addAttribute("\n\t\t xmlns:xsi", neuroml.xsi);
+					writerP.addAttribute("\n\t\t xsi:schemaLocation", schemaLocation);
+					writerP.addAttribute("\n\t\t name", name);
+					writerP.addAttribute("\n\t\t lengthUnits", lengthUnits);
+
+					XStream xstreamLoc = getXstream();
+					ObjectOutputStream oos = xstreamLoc.createObjectOutputStream(writerP, "cells");
+					exportML.writeXMLNet(oos, net);
+					writerP.endNode();
+					
+					oos.flush();
+					oos.close();
+				}
+				
+				/// output level 2 (ChannelML)
+				if (level == 2) {	
+					XStream xstreamLoc3 = getXstream();
+					FileWriter fw3 = new FileWriter(biophysics_output);
+					fw3.write(head);
+					PrettyPrintWriter writerP3 = new PrettyPrintWriter(fw3);
+					ObjectOutputStream oos3 = xstreamLoc3.createObjectOutputStream(writerP3, "channelml");
+						
+					writerP3.addAttribute("xmlns", neuroml.xmlns);
+					writerP3.addAttribute("\n\t\t xmlns:mml", neuroml.mml);
+					writerP3.addAttribute("\n\t\t xmlns:meta", neuroml.meta);
+					writerP3.addAttribute("\n\t\t xmlns:bio", neuroml.bio);
+					writerP3.addAttribute("\n\t\t xmlns:cml", neuroml.cml);
+					writerP3.addAttribute("\n\t\t xmlns:xsi", neuroml.xsi);
+					writerP3.addAttribute("\n\t\t xsi:schemaLocation", schemaLocation);
+					writerP3.addAttribute("\n\t\t name", name);
+					writerP3.addAttribute("\n\t\t lengthUnits", lengthUnits);
+					
+					writerP3.startNode("cells");
+					exportML.writeXMLCells(oos3, net);
+					writerP3.endNode();
+					
+					/// writerP3.startNode("channels");
+					exportML.writeXMLChannels(oos3, net);
+					/// writerP3.endNode()
+					
+					oos3.flush();
+					oos3.close();
+				}
+
+				/// output level 3 (NetworkML)
+				if (level == 3) {
+					XStream xstreamLoc2 = getXstream();
+					FileWriter fw = new FileWriter(synapses_output);
+					fw.write(head);
+					PrettyPrintWriter writerP2 = new PrettyPrintWriter(fw);
+					///writerP2.startNode("neuroml");
+					xstreamLoc2.addImplicitCollection(NeuroMLProjections.class, "projection");
+					xstreamLoc2.useAttributeFor(NeuroMLProjection.class, "name");
+					xstreamLoc2.useAttributeFor(NeuroMLProjection.class, "source");
+					xstreamLoc2.useAttributeFor(NeuroMLProjection.class, "target");
+					xstreamLoc2.useAttributeFor(NeuroMLSynapseProperty.class, "type");
+					xstreamLoc2.useAttributeFor(NeuroMLSynapseProperty.class, "weight");
+					xstreamLoc2.useAttributeFor(NeuroMLSynapseProperty.class, "internal_delay");
+					xstreamLoc2.useAttributeFor(NeuroMLSynapseProperty.class, "threshold");
+					xstreamLoc2.useAttributeFor(NeuroMLConnections.class, "size");
+					xstreamLoc2.useAttributeFor(NeuroMLProjections.class, "xmlns");
+					xstreamLoc2.useAttributeFor(NeuroMLProjections.class, "units");
+					
+					ObjectOutputStream oos2 = xstreamLoc2.createObjectOutputStream(writerP2, "networkml");
+					writerP2.addAttribute("xmlns", neuroml.xmlns);
+					writerP2.addAttribute("\n\t\t xmlns:mml", neuroml.mml);
+					writerP2.addAttribute("\n\t\t xmlns:meta", neuroml.meta);
+					writerP2.addAttribute("\n\t\t xmlns:bio", neuroml.bio);
+					writerP2.addAttribute("\n\t\t xmlns:cml", neuroml.cml);
+					writerP2.addAttribute("\n\t\t xmlns:xsi", neuroml.xsi);
+					writerP2.addAttribute("\n\t\t xsi:schemaLocation", schemaLocation);
+					writerP2.addAttribute("\n\t\t name", name);
+					writerP2.addAttribute("\n\t\t lengthUnits", lengthUnits);
+					
+					writerP2.startNode("cells");
+					exportML.writeXMLCells(oos2, net);
+					writerP2.endNode();
+					
+					/// writerP2.startNode("channels");
+					exportML.writeXMLChannels(oos2, net);
+					/// writerP2.endNode();
+					
+					exportML.writeXMLSynapses(oos2, net);
+					
+					oos2.flush();
+					oos2.close();
+
+					/**
+					 * @note 
+					 * remove duplicated underscores from synapses.xml
+					 * note however that this is not the best option
+					 * better would be: use new xstream version and use XmLFriendlyReplacer
+					 * however: if we upgrade xstream some serialization is broken,
+					 * this needs to be investigated in the future since it could
+					 * garble up the output, if values contain also underscores
+					 * not just nodes or attribute names...
+					 */
+					String content = IOUtils.toString(new FileInputStream(synapses_output));
+					content = content.replaceAll("__", "_");
+					IOUtils.write(content, new FileOutputStream(synapses_output)); 
+				}
+			} catch (Exception e) {
+				logger.error(e, e);
+			}
 		}
+	}
+
+	/**
+	 * @brief writes level 2 of NeuroML, i. e. ChannelML
+	 * 
+	 * @todo implement ChannelML (Level 2)
+	 * 
+	 * @param oos
+	 * @param net 
+	 */
+	private void writeXMLChannels(ObjectOutputStream oos, Net net) {
 	}
 }
