@@ -339,7 +339,6 @@ public final class NeuroMLWriter {
 
 	/**
 	 * @brief set the xstream options to allow for NeuroML Level 1, 2 and 3 output
-	 * @todo XML header for Level 1, 2 and 3 is different from the universal neuroml header!
 	 *
 	 * @return xstream object with output options for xml format
 	 */
