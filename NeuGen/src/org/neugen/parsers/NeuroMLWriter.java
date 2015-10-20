@@ -96,6 +96,9 @@ import org.neugen.utils.Utils;
  * @author Alexander Wanner
  * @author Sergei Wolf
  * @author Stephan Grein <stephan@syntaktischer-zucker.de>
+ * @todo some NeuroML features are not implemented, see below todo annotations
+ * @brief NeuroML writer, exports level 1, 2 or 3 
+ * @see https://www.neuroml.org/examples
  */
 final class Neuroml {
 

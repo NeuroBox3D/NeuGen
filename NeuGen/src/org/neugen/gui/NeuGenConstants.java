@@ -56,6 +56,7 @@ import java.util.HashMap;
 
 /**
  * @author stephanmg <stephan@syntaktischer-zucker.de>
+ * 
  * and Sergei Wolf
  */
 public final class NeuGenConstants {
@@ -82,9 +83,10 @@ public final class NeuGenConstants {
     public static final String PROP_DATE_KEY = "date";
     public static final String COPYRIGHT = "by Jens P. Eberhard and Alexander Wanner \n\u00a9 2011 Goethe-Universität Frankfurt am Main | Steinbeis-Transferzentrum für Technische Simulation" + NL
             + "and by Sergei Wolf and Stephan Grein \n\u00a9 2012-2015 Goethe Center for Scientific Computing - Computational Neuroscience (G-CSC Frankfurt)" + NL + NL;
+    public static final String VERSION = "NeuGen 2.0";
     public static final String CITE =
-              "1) S. Wolf, S. Grein, G. Queisser. NeuGen 2.0 -" + NL
-            + "Employing NeuGen 2.0 to automatically generate realistic" + NL
+              "1) S. Wolf, S. Grein, G. Queisser. " + VERSION + " -" + NL
+            + "Employing " + VERSION + " to automatically generate realistic" + NL
             + "morphologies of hippocapal neurons and neural networks in 3D." + NL
             + "Neuroinformatics, 2013, 11(2), pp. 137-148, doi: 10.1007/s12021-012-9170-1" + NL + NL
             + "2) J. P. Eberhard, A. Wanner, G. Wittum. NeuGen -" + NL
@@ -94,7 +96,6 @@ public final class NeuGenConstants {
     public static final String CONTACT = "In case of any questions please see first the documentation on http://neugen.org" + NL +
             "then feel free to contact grein@gcsc.uni-frankfurt.de if your problem could not be solved." + NL
             + "For recent fixes, enhancements or discussions see https://github.com/NeuroBox3D/NeuGen." + NL;
-    public static final String VERSION = "NeuGen 2.0 ";
     public static final String NEOCORTEX_PROJECT = "Neocortex";
     public static final String HIPPOCAMPUS_PROJECT = "Hippocampus";
     public static final String NEOCOREX_DESCRIPTION = "Creates a new project that generates cells of neocortex.";
