@@ -72,7 +72,7 @@ public class NeuroMLProjections {
 		this.projection = projection;
 	}
 	
-	private String units = "Phsyiological Units";
+	private String units = "Physiological Units";
 	private String xmlns = "http://morphml.org/networkml/schema";
 
 	public String getUnits() {

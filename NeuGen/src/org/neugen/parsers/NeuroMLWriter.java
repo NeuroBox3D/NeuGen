@@ -83,6 +83,10 @@ import org.neugen.gui.NeuGenView;
 import org.neugen.gui.NeuroMLLevelSelector;
 import org.neugen.parsers.NeuroML.NetworkML.NetworkMLElement;
 import org.neugen.parsers.NeuroML.NetworkML.NeuroMLConnections;
+import org.neugen.parsers.NeuroML.NetworkML.NeuroMLInstance;
+import org.neugen.parsers.NeuroML.NetworkML.NeuroMLInstances;
+import org.neugen.parsers.NeuroML.NetworkML.NeuroMLPopulation;
+import org.neugen.parsers.NeuroML.NetworkML.NeuroMLPopulations;
 import org.neugen.parsers.NeuroML.NetworkML.NeuroMLProjection;
 import org.neugen.parsers.NeuroML.NetworkML.NeuroMLProjections;
 import org.neugen.parsers.NeuroML.NetworkML.NeuroMLSynapse;
@@ -123,8 +127,8 @@ final class Neuroml {
 	 *
 	 */
 	public void setHeader(String schemaLocation, String name, String lengthUnits) {
-		xmlns = "http://morphml.org/morphml/schema";
-		mml = "http://morphml.org/morphml/schema";
+		xmlns = "http://morphml.org/neuroml/schema";
+		mml = "http://morphml.org/neuroml/schema";
 		bio = "http://morphml.org/biophysics/schema";
 		cml = "http://morphml.org/channelml/schema";
 		meta = "http://morphml.org/metadata/schema";
@@ -313,6 +317,7 @@ final class CableFAP extends Cable {
 }
 
 public final class NeuroMLWriter {
+	private final static String NEUROML_SPECIFICATION = "v1.8.1";
 
 	private static final long serialVersionUID = 1L;
 
@@ -704,11 +709,32 @@ public final class NeuroMLWriter {
 		String schema = "http://morphml.org/morphml/schema";
 
 		NeuroMLWriterTask task = NeuroMLWriterTask.getInstance("Neurons");
+		NeuroMLPopulations populations = new NeuroMLPopulations();
+		NeuroMLPopulation population = new NeuroMLPopulation();
+		ArrayList<NeuroMLPopulation> population_all = new ArrayList<NeuroMLPopulation>();
 
 		for (int i = 0; i < nneuron; i++) {
 			Neuron neuron = net.getNeuronList().get(i);
 			NeuroMLCell neuroMLCell = new NeuroMLCell();
 			neuroMLCell.name = "N" + i + "soma";
+		
+			/**
+			 * @todo implement populations (set coordinates correctly
+			 *       and names
+			 */
+			population.setName("name");
+			population.setCell_type("cell_type");
+			NeuroMLInstances instances = new NeuroMLInstances();
+			NeuroMLInstance instance = new NeuroMLInstance();
+			ArrayList<NeuroMLInstance> all_instance = new ArrayList<NeuroMLInstance>();
+			instance.setId(i);
+			instance.setX(0);
+			instance.setY(0);
+			instance.setZ(0);
+			all_instance.add(instance);
+			instances.setInstances(all_instance);
+			population.setInstances(instances);
+			population_all.add(population);
 
 			//sets soma, dendrite and axon
 			List<Cable> cables = new ArrayList<Cable>();
@@ -757,10 +783,39 @@ public final class NeuroMLWriter {
 		if (task != null) {
 			task.setMyProgress(1.0f);
 		}
+		
+		populations.setPopulation(population_all);
+		
+		/**
+		 * @todo write populations
+		 */
 	}
 
 	/**
 	 * @brief exports the NeuroML data, i. e. level 1, 2 or 3
+	 * 
+	 * Note that the NeuroML export is specification 1.8.1 (the most recent
+	 * NeuroML specification is not supported for now since in the beta stage
+	 * and the 1.8.1 specification is the most used version still - could 
+	 * enhance the exporter for NeuroML specification 2 in future here).
+	 * 
+	 * Note however, that we export in an compatible manner:
+	 * Exporting Level 1 to NeuroML Level 1 (not to the feature locked MorphML)
+	 * Exporting Level 2 to NeuroML Level 2 (not to the feature locked ChannelML)
+	 * Exporting Level 3 to NeuroML Level 3 (not to the feature locked NetworkML)
+	 * 
+	 * This means, that in a Level 3 export for instance we may use elements
+	 * from Level 2 and Level 1 in addition.
+	 * 
+	 * If we export Level 2 we can use elements from Level 1 in addition.
+	 * 
+	 * If we export Level 1 we can ue only elements from Level 1.
+	 * 
+	 * Contrary, if we would export to MorphML, ChannelML or NetworkML
+	 * we are feature locked for the elements we can use in the XML to
+	 * the MorphML, ChannelML and NetworkML specification.
+	 * 
+	 * @see xsd schmema specifications at https://neuroml.org/specifications
 	 * @author stephanmg <stephan@syntaktischer-zucker.de>
 	 * 
 	 * @param file
@@ -781,15 +836,15 @@ public final class NeuroMLWriter {
 			exportML.setXStreamOptions(level);
 
 			String head = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-			String name = "NeuroML Level " + level + " file exported from " + VERSION;
+			String name = "NeuroML Level " + level + "(" + NEUROML_SPECIFICATION + ") file exported from " + VERSION;
 			String lengthUnits = "micron";
 			String schemaLocation = "";
 			if (level == 1) {
-				schemaLocation = "http://morphml.org/neuroml/schema NeuroML_Level1_v1.7.xsd";
+				schemaLocation = "https://neuroml.org/NeuroMLValidator/NeuroMLFiles/Schemata/v1.8.1/Level1/NeuroML_Level1_v1.8.1.xsd";
 			} else if (level == 2) {
-				schemaLocation = "http://morphml.org/neuroml/schema NeuroML_Level2_v1.7.xsd";
+				schemaLocation = "https://neuroml.org/NeuroMLValidator/NeuroMLFiles/Schemata/v1.8.1/Level2/NeuroML_Level2_v1.8.1.xsd";
 			} else if (level == 3) {
-				schemaLocation = "http://morphml.org/networkml/schema../../Schemata/v1.7/Level3/NetworkML_v1.7.xsd";
+				schemaLocation = "https://neuroml.org/NeuroMLValidator/NeuroMLFiles/Schemata/v1.8.1/Level3/NeuroML_Level3_v1.8.1.xsd";
 			} else {
 			}
 
@@ -817,7 +872,7 @@ public final class NeuroMLWriter {
 					writer.write(head);
 
 					PrettyPrintWriter writerP = new PrettyPrintWriter(writer);
-					writerP.startNode("morphml");
+					writerP.startNode("neuroml");
 					writerP.addAttribute("xmlns", neuroml.xmlns);
 					writerP.addAttribute("\n\t\t xmlns:mml", neuroml.mml);
 					writerP.addAttribute("\n\t\t xmlns:meta", neuroml.meta);
@@ -843,7 +898,7 @@ public final class NeuroMLWriter {
 					FileWriter fw3 = new FileWriter(biophysics_output);
 					fw3.write(head);
 					PrettyPrintWriter writerP3 = new PrettyPrintWriter(fw3);
-					ObjectOutputStream oos3 = xstreamLoc3.createObjectOutputStream(writerP3, "channelml");
+					ObjectOutputStream oos3 = xstreamLoc3.createObjectOutputStream(writerP3, "neuroml");
 						
 					writerP3.addAttribute("xmlns", neuroml.xmlns);
 					writerP3.addAttribute("\n\t\t xmlns:mml", neuroml.mml);
@@ -886,7 +941,7 @@ public final class NeuroMLWriter {
 					xstreamLoc2.useAttributeFor(NeuroMLProjections.class, "xmlns");
 					xstreamLoc2.useAttributeFor(NeuroMLProjections.class, "units");
 					
-					ObjectOutputStream oos2 = xstreamLoc2.createObjectOutputStream(writerP2, "networkml");
+					ObjectOutputStream oos2 = xstreamLoc2.createObjectOutputStream(writerP2, "neuroml");
 					writerP2.addAttribute("xmlns", neuroml.xmlns);
 					writerP2.addAttribute("\n\t\t xmlns:mml", neuroml.mml);
 					writerP2.addAttribute("\n\t\t xmlns:meta", neuroml.meta);

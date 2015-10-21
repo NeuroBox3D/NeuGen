@@ -71,6 +71,16 @@ public final class NeuroMLSynapseUnilateral implements NeuroMLSynapse {
 	private int pre_segment_id;
 	private float pre_fraction_along;
 
+	private NeuroMLSynapseProperty properties = new NeuroMLSynapseProperty();
+
+	public NeuroMLSynapseProperty getProperties() {
+		return properties;
+	}
+
+	public void setProperties(NeuroMLSynapseProperty properties) {
+		this.properties = properties;
+	}
+
 	public int getId() {
 		return id;
 	}

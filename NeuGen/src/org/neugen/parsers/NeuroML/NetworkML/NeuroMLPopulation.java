@@ -50,25 +50,14 @@
 /// package's name
 package org.neugen.parsers.NeuroML.NetworkML;
 
-/// imports
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-
 /**
- *
+ * @brief NeuroMLPopulation element
  * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
-@XStreamAlias("projection")
-public class NeuroMLProjection {
-	/// nodes
-	private NeuroMLSynapseProperty global_property;
-
-	public NeuroMLSynapseProperty getGlobal_property() {
-		return global_property;
-	}
-
-	public void setGlobal_property(NeuroMLSynapseProperty global_property) {
-		this.global_property = global_property;
-	}
+public class NeuroMLPopulation {
+	private String name;
+	private String cell_type;
+	private NeuroMLInstances instances;
 
 	public String getName() {
 		return name;
@@ -78,35 +67,19 @@ public class NeuroMLProjection {
 		this.name = name;
 	}
 
-	public String getSource() {
-		return source;
+	public String getCell_type() {
+		return cell_type;
 	}
 
-	public void setSource(String source) {
-		this.source = source;
+	public void setCell_type(String cell_type) {
+		this.cell_type = cell_type;
 	}
 
-	public String getTarget() {
-		return target;
+	public NeuroMLInstances getInstances() {
+		return instances;
 	}
 
-	public void setTarget(String target) {
-		this.target = target;
+	public void setInstances(NeuroMLInstances instances) {
+		this.instances = instances;
 	}
-	
-	public NeuroMLConnections getConnections() {
-		return connections;
-	}
-
-	public void setConnections(NeuroMLConnections connections) {
-		this.connections = connections;
-	}
-	
-	private NeuroMLSynapseProperty synapse_props = new NeuroMLSynapseProperty();
-	private NeuroMLConnections connections;
-
-	/// attributes
-	private String name = "";
-	private String source;
-	private String target;
 }

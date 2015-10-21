@@ -76,7 +76,7 @@ public final class NeuroMLSynapseBilateral implements NeuroMLSynapse {
 	private int post_segment_id;
 	private float post_fraction_along;
 
-	private NeuroMLSynapseProperty property = new NeuroMLSynapseProperty();
+	private NeuroMLSynapseProperty properties = new NeuroMLSynapseProperty();
 
 	public int getId() {
 		return id;
@@ -135,11 +135,11 @@ public final class NeuroMLSynapseBilateral implements NeuroMLSynapse {
 	}
 
 	public NeuroMLSynapseProperty getProperty() {
-		return property;
+		return properties;
 	}
 
-	public void setProperty(NeuroMLSynapseProperty property) {
-		this.property = property;
+	public void setProperty(NeuroMLSynapseProperty properties) {
+		this.properties = properties;
 	}
 
 	/**
