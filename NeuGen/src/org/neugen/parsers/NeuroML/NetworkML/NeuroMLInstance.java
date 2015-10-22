@@ -50,10 +50,14 @@
 /// package's name
 package org.neugen.parsers.NeuroML.NetworkML;
 
+/// imports
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+
 /**
  * @brief NeuroMLInstance element
  * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
+@XStreamAlias("instance")
 public class NeuroMLInstance {
 	private int id;
 	private double x;

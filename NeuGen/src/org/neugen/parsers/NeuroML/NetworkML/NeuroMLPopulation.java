@@ -50,10 +50,14 @@
 /// package's name
 package org.neugen.parsers.NeuroML.NetworkML;
 
+/// imports
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+
 /**
  * @brief NeuroMLPopulation element
  * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
+@XStreamAlias("population")
 public class NeuroMLPopulation {
 	private String name;
 	private String cell_type;

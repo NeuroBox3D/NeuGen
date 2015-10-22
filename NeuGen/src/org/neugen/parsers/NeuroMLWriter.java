@@ -100,7 +100,8 @@ import org.neugen.utils.Utils;
  * @author Alexander Wanner
  * @author Sergei Wolf
  * @author Stephan Grein <stephan@syntaktischer-zucker.de>
- * @todo some NeuroML features are not implemented, see below todo annotations
+ * 
+ * @note some NeuroML features are not implemented, see below todo annotations
  * @brief NeuroML writer, exports level 1, 2 or 3 
  * @see https://www.neuroml.org/examples
  */
@@ -458,6 +459,19 @@ public final class NeuroMLWriter {
 			xstream.useAttributeFor(NeuroMLSynapseBilateral.class, "from");
 			xstream.useAttributeFor(NeuroMLSynapseBilateral.class, "to");
 			xstream.useAttributeFor(NeuroMLSynapseUnilateral.class, "injection");
+
+			xstream.useAttributeFor(NeuroMLPopulations.class, "xmlns");
+			xstream.addImplicitCollection(NeuroMLPopulations.class, "population");
+			xstream.addImplicitCollection(NeuroMLInstances.class, "instances");
+			xstream.useAttributeFor(NeuroMLInstances.class, "size");
+			xstream.useAttributeFor(NeuroMLPopulation.class, "name");
+			xstream.useAttributeFor(NeuroMLPopulation.class, "cell_type");
+			
+
+			xstream.useAttributeFor(NeuroMLInstance.class, "id");
+			xstream.useAttributeFor(NeuroMLInstance.class, "x");
+			xstream.useAttributeFor(NeuroMLInstance.class, "y");
+			xstream.useAttributeFor(NeuroMLInstance.class, "z");
 		}
 	}
 
@@ -709,33 +723,12 @@ public final class NeuroMLWriter {
 		String schema = "http://morphml.org/morphml/schema";
 
 		NeuroMLWriterTask task = NeuroMLWriterTask.getInstance("Neurons");
-		NeuroMLPopulations populations = new NeuroMLPopulations();
-		NeuroMLPopulation population = new NeuroMLPopulation();
-		ArrayList<NeuroMLPopulation> population_all = new ArrayList<NeuroMLPopulation>();
 
 		for (int i = 0; i < nneuron; i++) {
 			Neuron neuron = net.getNeuronList().get(i);
 			NeuroMLCell neuroMLCell = new NeuroMLCell();
 			neuroMLCell.name = "N" + i + "soma";
 		
-			/**
-			 * @todo implement populations (set coordinates correctly
-			 *       and names
-			 */
-			population.setName("name");
-			population.setCell_type("cell_type");
-			NeuroMLInstances instances = new NeuroMLInstances();
-			NeuroMLInstance instance = new NeuroMLInstance();
-			ArrayList<NeuroMLInstance> all_instance = new ArrayList<NeuroMLInstance>();
-			instance.setId(i);
-			instance.setX(0);
-			instance.setY(0);
-			instance.setZ(0);
-			all_instance.add(instance);
-			instances.setInstances(all_instance);
-			population.setInstances(instances);
-			population_all.add(population);
-
 			//sets soma, dendrite and axon
 			List<Cable> cables = new ArrayList<Cable>();
 			List<NeuroMLSegment> segments = new ArrayList<NeuroMLSegment>();
@@ -746,6 +739,7 @@ public final class NeuroMLWriter {
 			if (soma.getSections().isEmpty()) {
 				sections.add(neuron.getSoma().cylindricRepresentant());
 			}
+			
 			// soma first
 			copyToNeuroML(sections, segments, cables, i, "_soma_");
 			sections.clear();
@@ -783,12 +777,84 @@ public final class NeuroMLWriter {
 		if (task != null) {
 			task.setMyProgress(1.0f);
 		}
+	}
+	
+
+	/**
+	 * @brief write the populations element
+	 * @author stephanmg <stephan@syntaktischer-zucker.de>
+	 * 
+	 * @todo cleanup and validation of Level 3 output
+	 * @param oos
+	 * @param net 
+	 */
+	private void writeXMLPopulations(ObjectOutputStream oos, Net net) {
+		// get the number of neurons from neural net
+		int nneuron = net.getNumNeurons();
+
+		NeuroMLWriterTask task = NeuroMLWriterTask.getInstance("Neurons");
+		NeuroMLPopulations populations = new NeuroMLPopulations();
+		NeuroMLPopulation population = new NeuroMLPopulation();
+		ArrayList<NeuroMLPopulation> population_all = new ArrayList<NeuroMLPopulation>();
+		NeuroMLInstances instances = new NeuroMLInstances();
+		instances.setSize(nneuron);
+		ArrayList<NeuroMLInstance> all_instance = new ArrayList<NeuroMLInstance>();
+
+		for (int i = 0; i < nneuron; i++) {
+			Neuron neuron = net.getNeuronList().get(i);
+			NeuroMLCell neuroMLCell = new NeuroMLCell();
+			neuroMLCell.name = "N" + i + "soma";
 		
-		populations.setPopulation(population_all);
+			population.setName("all");
+			population.setCell_type("all");
+			NeuroMLInstance instance = new NeuroMLInstance();
+			instance.setId(i);
+			instance.setX(0);
+			instance.setY(0);
+			instance.setZ(0);
+			all_instance.add(instance);
+
+			//sets soma, dendrite and axon
+			List<Cable> cables = new ArrayList<Cable>();
+			List<NeuroMLSegment> segments = new ArrayList<NeuroMLSegment>();
+
+			Cellipsoid soma = neuron.getSoma();
+			List<Section> sections = soma.getSections();
+
+			/// get some coordinates if no soma present for the give neuron i
+			if (soma.getSections().isEmpty()) {
+				sections.add(neuron.getSoma().cylindricRepresentant());
+			}
+			
+			/// get NeuroMLSegments of soma of neuron i
+			copyToNeuroML(sections, segments, cables, i, "_soma_");
+			
+			Point3f start = sections.get(0).getSegments().get(0).getStart();
+			instance.setX(start.x);
+			instance.setY(start.y);
+			instance.setZ(start.z);
+			sections.clear();
+
+			if (task != null) {
+				float process = (float) (i + 1) / (float) nneuron;
+				task.setMyProgress(process);
+			}
+		}
 		
-		/**
-		 * @todo write populations
-		 */
+		if (task != null) {
+			task.setMyProgress(1.0f);
+		}
+		
+		try {
+			instances.setInstances(all_instance);
+			population.setInstances(instances);
+			population_all.add(population);
+			populations.setPopulation(population_all);
+			oos.writeObject(populations);
+			oos.flush();
+		} catch (IOException e) {
+			logger.error(e, e);
+		}
 	}
 
 	/**
@@ -836,7 +902,7 @@ public final class NeuroMLWriter {
 			exportML.setXStreamOptions(level);
 
 			String head = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-			String name = "NeuroML Level " + level + "(" + NEUROML_SPECIFICATION + ") file exported from " + VERSION;
+			String name = "NeuroML Level " + level + " (" + NEUROML_SPECIFICATION + ") file exported from " + VERSION;
 			String lengthUnits = "micron";
 			String schemaLocation = "";
 			if (level == 1) {
@@ -952,14 +1018,18 @@ public final class NeuroMLWriter {
 					writerP2.addAttribute("\n\t\t name", name);
 					writerP2.addAttribute("\n\t\t lengthUnits", lengthUnits);
 					
+					/// cells (level 1)
 					writerP2.startNode("cells");
 					exportML.writeXMLCells(oos2, net);
 					writerP2.endNode();
 					
+					/// channels (level 2)
 					/// writerP2.startNode("channels");
 					exportML.writeXMLChannels(oos2, net);
 					/// writerP2.endNode();
-					
+				
+					/// connections (level 3)
+					exportML.writeXMLPopulations(oos2, net);
 					exportML.writeXMLSynapses(oos2, net);
 					
 					oos2.flush();

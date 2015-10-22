@@ -51,12 +51,14 @@
 package org.neugen.parsers.NeuroML.NetworkML;
 
 /// imports
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 import java.util.ArrayList;
 
 /**
  * @brief NeuroMLPopulations element
  * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
+@XStreamAlias("populations")
 public class NeuroMLPopulations {
 	private String xmlns = "http://morphml.org/networkml/schema";
 
