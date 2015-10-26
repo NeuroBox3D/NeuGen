@@ -85,6 +85,7 @@ import org.neugen.parsers.NeuroML.NetworkML.NetworkMLElement;
 import org.neugen.parsers.NeuroML.NetworkML.NeuroMLConnections;
 import org.neugen.parsers.NeuroML.NetworkML.NeuroMLInstance;
 import org.neugen.parsers.NeuroML.NetworkML.NeuroMLInstances;
+import org.neugen.parsers.NeuroML.NetworkML.NeuroMLLocation;
 import org.neugen.parsers.NeuroML.NetworkML.NeuroMLPopulation;
 import org.neugen.parsers.NeuroML.NetworkML.NeuroMLPopulations;
 import org.neugen.parsers.NeuroML.NetworkML.NeuroMLProjection;
@@ -469,9 +470,9 @@ public final class NeuroMLWriter {
 			
 
 			xstream.useAttributeFor(NeuroMLInstance.class, "id");
-			xstream.useAttributeFor(NeuroMLInstance.class, "x");
-			xstream.useAttributeFor(NeuroMLInstance.class, "y");
-			xstream.useAttributeFor(NeuroMLInstance.class, "z");
+			xstream.useAttributeFor(NeuroMLLocation.class, "x");
+			xstream.useAttributeFor(NeuroMLLocation.class, "y");
+			xstream.useAttributeFor(NeuroMLLocation.class, "z");
 		}
 	}
 
@@ -809,10 +810,6 @@ public final class NeuroMLWriter {
 			population.setCell_type("all");
 			NeuroMLInstance instance = new NeuroMLInstance();
 			instance.setId(i);
-			instance.setX(0);
-			instance.setY(0);
-			instance.setZ(0);
-			all_instance.add(instance);
 
 			//sets soma, dendrite and axon
 			List<Cable> cables = new ArrayList<Cable>();
@@ -830,9 +827,8 @@ public final class NeuroMLWriter {
 			copyToNeuroML(sections, segments, cables, i, "_soma_");
 			
 			Point3f start = sections.get(0).getSegments().get(0).getStart();
-			instance.setX(start.x);
-			instance.setY(start.y);
-			instance.setZ(start.z);
+			instance.setLocation(new NeuroMLLocation(start.x, start.y, start.z));
+			all_instance.add(instance);
 			sections.clear();
 
 			if (task != null) {
@@ -999,7 +995,7 @@ public final class NeuroMLWriter {
 					xstreamLoc2.useAttributeFor(NeuroMLProjection.class, "name");
 					xstreamLoc2.useAttributeFor(NeuroMLProjection.class, "source");
 					xstreamLoc2.useAttributeFor(NeuroMLProjection.class, "target");
-					xstreamLoc2.useAttributeFor(NeuroMLSynapseProperty.class, "type");
+					xstreamLoc2.useAttributeFor(NeuroMLSynapseProperty.class, "synapse_type");
 					xstreamLoc2.useAttributeFor(NeuroMLSynapseProperty.class, "weight");
 					xstreamLoc2.useAttributeFor(NeuroMLSynapseProperty.class, "internal_delay");
 					xstreamLoc2.useAttributeFor(NeuroMLSynapseProperty.class, "threshold");

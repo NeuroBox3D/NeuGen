@@ -52,107 +52,52 @@ package org.neugen.parsers.NeuroML.NetworkML;
 
 /// imports
 import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 /**
- * @brief NeuroMLSynapseProperty element
+ * @brief NeuroMLLocation element
  * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
-@XStreamAlias("properties")
-public final class NeuroMLSynapseProperty {
-	/// private members
-	private float internal_delay;
-	private float weight;
-	private float threshold;
-	@XStreamOmitField
-	private String synapse_type;
-
-	/**
-	 * @brief construct empty synapse properties
-	 */
-	public NeuroMLSynapseProperty() {
-		this.internal_delay = 0;
-		this.weight = 0;
-		this.threshold = 0;
-		this.synapse_type = "";
-	}
+@XStreamAlias("location")
+public final class NeuroMLLocation {
+	/// private final members
+	private final double x;
+	private final double y;
+	private final double z;
 	
 	/**
-	 * @brief construct synapse properties
-	 * @param internal_delay
-	 * @param weight
-	 * @param threshold
-	 * @param synapse_type
+	 * @brief create a location based on cartesian coordinates
+	 * @param x
+	 * @param y
+	 * @param z
 	 */
-	public NeuroMLSynapseProperty(final float internal_delay, final float weight, 
-				      final float threshold, final String synapse_type) {
-		this.internal_delay = internal_delay;
-		this.weight = weight;
-		this.threshold = threshold;
-		this.synapse_type = synapse_type;
+	public NeuroMLLocation(final double x, final double y, final double z) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
 	}
 
 	/**
-	 * @brief get internal delay
+	 * @brief get x coordinate
+	 * @return
+	 */
+	public double getX() {
+		return x;
+	}
+
+	/**
+	 * @brief get y coordinate
+	 * @return
+	 */
+	public double getY() {
+		return y;
+	}
+
+	/**
+	 * @brief get z coordinate
 	 * @return 
 	 */
-	public float getInternal_delay() {
-		return internal_delay;
-	}
-
-	/**
-	 * @brief get weight
-	 * @return
-	 */
-	public float getWeight() {
-		return weight;
-	}
-
-	/**
-	 * @brief get threshold
-	 * @return
-	 */
-	public float getThreshold() {
-		return threshold;
-	}
-
-	/**
-	 * @brief get synapse type
-	 * @return
-	 */
-	public String getSynapse_type() {
-		return synapse_type;
+	public double getZ() {
+		return z;
 	}
 	
-	/**
-	 * @brief set internal delay
-	 * @param internal_delay 
-	 */
-	public void setInternal_delay(float internal_delay) {
-		this.internal_delay = internal_delay;
-	}
-
-	/**
-	 * @set weight
-	 * @param weight 
-	 */
-	public void setWeight(float weight) {
-		this.weight = weight;
-	}
-
-	/**
-	 * @brief set threshold
-	 * @param threshold 
-	 */
-	public void setThreshold(float threshold) {
-		this.threshold = threshold;
-	}
-
-	/**
-	 * @brief set synapse type
-	 * @param synapse_type
-	 */
-	public void setSynapse_type(String synapse_type) {
-		this.synapse_type = synapse_type;
-	}
 }

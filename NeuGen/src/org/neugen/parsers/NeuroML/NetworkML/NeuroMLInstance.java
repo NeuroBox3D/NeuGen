@@ -59,10 +59,16 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  */
 @XStreamAlias("instance")
 public class NeuroMLInstance {
+	private NeuroMLLocation location;
 	private int id;
-	private double x;
-	private double y;
-	private double z;
+
+	public NeuroMLLocation getLocation() {
+		return location;
+	}
+
+	public void setLocation(NeuroMLLocation location) {
+		this.location = location;
+	}
 
 	public int getId() {
 		return id;
@@ -72,27 +78,4 @@ public class NeuroMLInstance {
 		this.id = id;
 	}
 
-	public double getX() {
-		return x;
-	}
-
-	public void setX(double x) {
-		this.x = x;
-	}
-
-	public double getY() {
-		return y;
-	}
-
-	public void setY(double y) {
-		this.y = y;
-	}
-
-	public double getZ() {
-		return z;
-	}
-
-	public void setZ(double z) {
-		this.z = z;
-	}
 }
