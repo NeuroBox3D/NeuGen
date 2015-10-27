@@ -46,6 +46,7 @@
  * Neurocomputing, 70(1-3), pp. 327-343, doi: 10.1016/j.neucom.2006.01.028
  *
  */
+
 /// package's name
 package org.neugen.backend;
 
@@ -81,6 +82,7 @@ import org.neugen.gui.NeuGenProject;
 import org.neugen.parsers.DefaultInheritance;
 import org.neugen.parsers.NGX.NGXWriter;
 import org.neugen.parsers.NeuGenConfigStreamer;
+import org.neugen.parsers.TXT.TXTWriter;
 import org.neugen.utils.NeuGenLogger;
 import org.neugen.utils.Utils;
 
@@ -181,109 +183,110 @@ public final class NGBackend {
 	 * @param projectPath
 	 * @param projectType
 	 * @param force
+	 * @param open_only - if specified opens only the project
 	 * @return
 	 */
 	@SuppressWarnings("NestedAssignment")
-	public Map<String, XMLObject> create_and_open_project(String projectPath, String projectType, boolean force) {
-		logger.info("project path (project type: " + projectType + "): " + projectPath);
-		File projectDir = new File(projectPath);
-		if (!NGBackendUtil.fileExists(projectDir, force)) {
-			URL inputUrl = getClass().getResource("/org/neugen/gui/resources/" + projectType.toLowerCase() + ".zip");
-			File dest = new File(projectPath + System.getProperty("file.separator") + projectType.toLowerCase() + ".zip");
-			try {
-				FileUtils.copyURLToFile(inputUrl, dest);
-			} catch (IOException ex) {
-				java.util.logging.Logger.getLogger(NeuGenProject.class.getName()).log(Level.SEVERE, null, ex);
-			}
+	public Map<String, XMLObject> create_and_open_project(String projectPath, String projectType, boolean force, boolean open_only) {
+		if (!open_only) {
+			logger.info("project path (project type: " + projectType + "): " + projectPath);
+			File projectDir = new File(projectPath);
+			if (!NGBackendUtil.fileExists(projectDir, force)) {
+				URL inputUrl = getClass().getResource("/org/neugen/gui/resources/" + projectType.toLowerCase() + ".zip");
+				File dest = new File(projectPath + System.getProperty("file.separator") + projectType.toLowerCase() + ".zip");
+				try {
+					FileUtils.copyURLToFile(inputUrl, dest);
+				} catch (IOException ex) {
+					java.util.logging.Logger.getLogger(NeuGenProject.class.getName()).log(Level.SEVERE, null, ex);
+				}
 
-			ZipInputStream zis = null;
-			try {
+				ZipInputStream zis = null;
+				try {
 
-				zis = new ZipInputStream(new FileInputStream(projectDir + System.getProperty("file.separator") + projectType.toLowerCase() + ".zip"));
-				ZipEntry entry;
+					zis = new ZipInputStream(new FileInputStream(projectDir + System.getProperty("file.separator") + projectType.toLowerCase() + ".zip"));
+					ZipEntry entry;
 
-				while ((entry = zis.getNextEntry()) != null) {
+					while ((entry = zis.getNextEntry()) != null) {
 
-					File entryFile = new File(projectDir + System.getProperty("file.separator") + entry.getName());
-					if (entry.isDirectory()) {
+						File entryFile = new File(projectDir + System.getProperty("file.separator") + entry.getName());
+						if (entry.isDirectory()) {
 
-						if (entryFile.exists()) {
+							if (entryFile.exists()) {
+							} else {
+								entryFile.mkdirs();
+							}
+
 						} else {
-							entryFile.mkdirs();
-						}
+							if (entryFile.getParentFile() != null && !entryFile.getParentFile().exists()) {
+								entryFile.getParentFile().mkdirs();
+							}
 
-					} else {
-						if (entryFile.getParentFile() != null && !entryFile.getParentFile().exists()) {
-							entryFile.getParentFile().mkdirs();
-						}
+							if (!entryFile.exists()) {
+								entryFile.createNewFile();
+							}
 
-						if (!entryFile.exists()) {
-							entryFile.createNewFile();
-						}
-
-						OutputStream os = null;
-						try {
-							os = new FileOutputStream(entryFile);
-							IOUtils.copy(zis, os);
-						} finally {
-							IOUtils.closeQuietly(os);
+							OutputStream os = null;
+							try {
+								os = new FileOutputStream(entryFile);
+								IOUtils.copy(zis, os);
+							} finally {
+								IOUtils.closeQuietly(os);
+							}
 						}
 					}
-				}
-			} catch (FileNotFoundException ex) {
-				java.util.logging.Logger.getLogger(NeuGenProject.class.getName()).log(Level.SEVERE, null, ex);
-			} catch (IOException ex) {
-				java.util.logging.Logger.getLogger(NeuGenProject.class.getName()).log(Level.SEVERE, null, ex);
-			} finally {
-				IOUtils.closeQuietly(zis);
-			}
-		}
-
-
-		
-		if (!NGBackendUtil.fileExists(projectDir, force)) {
-			if (projectType.equals(NeuGenConstants.HIPPOCAMPUS_PROJECT)) {
-				String sourcePath = NeuGenConstants.CONFIG_DIR + System.getProperty("file.separator") + NeuGenConstants.HIPPOCAMPUS_PROJECT.toLowerCase();
-				File sourceDir = new File(sourcePath);
-				try {
-					Utils.copyDir(sourceDir, projectDir);
-					Properties prop = getProjectProp(projectPath, projectType);
-					OutputStream out = new FileOutputStream(projectPath + System.getProperty("file.separator") + NeuGenConstants.NEUGEN_PROJECT_FILE);
-					prop.storeToXML(out, "NeuGen project directory ", ENCODING);
-					out.close();
-					Region.setCortColumn(false);
-					Region.setCa1Region(true);
 				} catch (FileNotFoundException ex) {
-					logger.error(ex);
+					java.util.logging.Logger.getLogger(NeuGenProject.class.getName()).log(Level.SEVERE, null, ex);
 				} catch (IOException ex) {
-					logger.error(ex);
+					java.util.logging.Logger.getLogger(NeuGenProject.class.getName()).log(Level.SEVERE, null, ex);
+				} finally {
+					IOUtils.closeQuietly(zis);
 				}
-			} else if (projectType.equals(NeuGenConstants.NEOCORTEX_PROJECT)) {
-				String sourcePath = NeuGenConstants.CONFIG_DIR + System.getProperty("file.separator") + NeuGenConstants.NEOCORTEX_PROJECT.toLowerCase();
-				logger.info("source path: " + sourcePath);
-				logger.info("project path: " + projectDir.getPath());
-				File sourceDir = new File(sourcePath);
-				logger.info(projectType.toLowerCase() + ", path: " + sourceDir.getPath());
-				try {
-					Utils.copyDir(sourceDir, projectDir);
-					Properties prop = getProjectProp(projectPath, projectType);
-					OutputStream out = new FileOutputStream(projectPath + System.getProperty("file.separator") + NeuGenConstants.NEUGEN_PROJECT_FILE);
-					prop.storeToXML(out, "NeuGen project directory ", ENCODING);
-					out.close();
-					Region.setCortColumn(true);
-					Region.setCa1Region(false);
-				} catch (FileNotFoundException ex) {
-					logger.error(ex);
-				} catch (IOException ex) {
-					logger.error(ex);
-				}
-			} else {
-				logger.fatal("Wrong project type specified aborting: "
-					+ projectType + ". Supported project types are "
-					+ NeuGenConstants.NEOCORTEX_PROJECT + " and "
-					+ NeuGenConstants.HIPPOCAMPUS_PROJECT + ".");
 			}
-		}
+
+			if (!NGBackendUtil.fileExists(projectDir, force)) {
+				if (projectType.equals(NeuGenConstants.HIPPOCAMPUS_PROJECT)) {
+					String sourcePath = NeuGenConstants.CONFIG_DIR + System.getProperty("file.separator") + NeuGenConstants.HIPPOCAMPUS_PROJECT.toLowerCase();
+					File sourceDir = new File(sourcePath);
+					try {
+						Utils.copyDir(sourceDir, projectDir);
+						Properties prop = getProjectProp(projectPath, projectType);
+						OutputStream out = new FileOutputStream(projectPath + System.getProperty("file.separator") + NeuGenConstants.NEUGEN_PROJECT_FILE);
+						prop.storeToXML(out, "NeuGen project directory ", ENCODING);
+						out.close();
+						Region.setCortColumn(false);
+						Region.setCa1Region(true);
+					} catch (FileNotFoundException ex) {
+						logger.error(ex);
+					} catch (IOException ex) {
+						logger.error(ex);
+					}
+				} else if (projectType.equals(NeuGenConstants.NEOCORTEX_PROJECT)) {
+					String sourcePath = NeuGenConstants.CONFIG_DIR + System.getProperty("file.separator") + NeuGenConstants.NEOCORTEX_PROJECT.toLowerCase();
+					logger.info("source path: " + sourcePath);
+					logger.info("project path: " + projectDir.getPath());
+					File sourceDir = new File(sourcePath);
+					logger.info(projectType.toLowerCase() + ", path: " + sourceDir.getPath());
+					try {
+						Utils.copyDir(sourceDir, projectDir);
+						Properties prop = getProjectProp(projectPath, projectType);
+						OutputStream out = new FileOutputStream(projectPath + System.getProperty("file.separator") + NeuGenConstants.NEUGEN_PROJECT_FILE);
+						prop.storeToXML(out, "NeuGen project directory ", ENCODING);
+						out.close();
+						Region.setCortColumn(true);
+						Region.setCa1Region(false);
+					} catch (FileNotFoundException ex) {
+						logger.error(ex);
+					} catch (IOException ex) {
+						logger.error(ex);
+					}
+				} else {
+					logger.fatal("Wrong project type specified aborting: "
+						+ projectType + ". Supported project types are "
+						+ NeuGenConstants.NEOCORTEX_PROJECT + " and "
+						+ NeuGenConstants.HIPPOCAMPUS_PROJECT + ".");
+				}
+			}
+		} 
 		return initProjectParam(projectPath, projectType);
 	}
 
@@ -332,7 +335,9 @@ public final class NGBackend {
 		 * @todo brief: tied to GUI! 
 		 * workaround: 1) alter parameters in project file before generating the net
 		 *             2) generate net 
-		 * 	       3) save the file in a gui-independent way
+		 * 	       3) save the file in a gui-independent way (i. e. 
+		 * 		dont use the XML tree representations in the GUI 
+		 * 		since those values are not availabel for us)
 		 */
 		XMLObject rootCopy = XMLObject.getCopyXMLObject(XMLObject.convert(currentRoot));
 		DefaultInheritance.reverseProcess(rootCopy);
@@ -434,6 +439,13 @@ public final class NGBackend {
 			logger.info("Exporting NGX data to... " + file);
 			NGXWriter ngxWriter = new NGXWriter(net, new File(file));
 			ngxWriter.exportNetToNGX();
+		} else if ("TXT".equalsIgnoreCase(type)) {
+			logger.info("Exporting TXT data to... " + file);
+        		TXTWriter txtWriter = new TXTWriter(net, new File(file));
+			txtWriter.setCompressed(false);
+			txtWriter.setUncompressed(true);
+			txtWriter.setWithCellType(true);
+			txtWriter.exportNetToTXT();
 		} else {
 			logger.info("Unsupported exporter chosen for now.");
 		}
@@ -727,11 +739,11 @@ public final class NGBackend {
 		 */
 		try {
 			NGBackend back = new NGBackend();
-			Map<String, XMLObject> params = back.create_and_open_project("foo24", NeuGenConstants.NEOCORTEX_PROJECT, true);
+			Map<String, XMLObject> params = back.create_and_open_project("foo24", NeuGenConstants.NEOCORTEX_PROJECT, true, false);
 			back.modifyNPartsDensity(params, "foo24/Neocortex", 0.1);
 			back.generate_network(NeuGenConstants.NEOCORTEX_PROJECT);
 			back.export_network("NGX", "foo24.ngx");
-			back.save_and_close_project(params, "foo24/");
+			back.save_and_close_project(params, "foo26");
 		} catch (Exception e) {
 			logger.fatal("Make sure you selected a valid project directory: " + e);
 			e.printStackTrace();

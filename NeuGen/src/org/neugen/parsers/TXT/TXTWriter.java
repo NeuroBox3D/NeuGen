@@ -637,7 +637,7 @@ public class TXTWriter {
 	 * @brief set compression method
 	 * @param method 
 	 */
-	void setCompressionMethod(String method) {
+	public void setCompressionMethod(String method) {
 		this.compressMethod = method;
 	}
 	
@@ -645,7 +645,7 @@ public class TXTWriter {
 	 * @brief set compress 
 	 * @param compress 
 	 */
-	void setCompressed(boolean compress) {
+	public void setCompressed(boolean compress) {
 		this.compressed = compress;
 	}
 
@@ -653,7 +653,7 @@ public class TXTWriter {
 	 * @brief set to compress and not compressed write
 	 * @param uncompressed
 	 */
-	void setUncompressed(boolean uncompressed) {
+	public void setUncompressed(boolean uncompressed) {
 		this.uncompressed = uncompressed;
 	}
 
@@ -662,7 +662,7 @@ public class TXTWriter {
 	 * @brief set with cell type
 	 * @param withCellType 
 	 */
-	void setWithCellType(boolean withCellType) {
+	public void setWithCellType(boolean withCellType) {
 		this.withCellType = withCellType;
 	}
 
@@ -670,7 +670,7 @@ public class TXTWriter {
 	 * @brief sets the file exits helper dialog
 	 * @param fileExistsDialog 
 	 */
-        void setFileExistsDialog(FileExistsDialog fileExistsDialog) {
+        public void setFileExistsDialog(FileExistsDialog fileExistsDialog) {
        		this.fed = fileExistsDialog;
     	}
 	
