@@ -70,12 +70,18 @@ public final class SimpleCLI {
 			String project_type = args[1];
 			String export_format = args[2];
 			String output_name = args[3];
+
 			
 			/// flags
 			boolean open_only = false;
 			boolean force = false;
-			if ("OPEN".equalsIgnoreCase(args[4])) { open_only = true; }
-			if ("FORCE".equalsIgnoreCase(args[5]) || ! args[5].isEmpty()) { force = true; }
+			if (args.length == 5) {
+				if ("OPEN".equalsIgnoreCase(args[4])) { open_only = true; }
+			}
+			
+			if (args.length == 6) {
+				if ("FORCE".equalsIgnoreCase(args[5]) || ! args[5].isEmpty()) { force = true; }
+			}
 			
 			try {
 				final NGBackend backend = new NGBackend();
