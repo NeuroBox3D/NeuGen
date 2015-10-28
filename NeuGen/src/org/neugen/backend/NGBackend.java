@@ -418,7 +418,7 @@ public final class NGBackend {
 		
 		/**
 		 * @todo how to close savely the project? save above does not work,
-		 * since tightly tied to the GUI...
+		 * since tightly tied to the GUI... (i. e. XML tree only available with GUI)
 		 */
 		
 		/// clear param data and destroy all net components
@@ -429,6 +429,10 @@ public final class NGBackend {
 
 	/**
 	 * @brief exports a network
+	 * 
+	 * Note: Enhance this function by needs, i. e. if you
+	 * need another exporter, like HOC or something else, you
+	 * may add it here
 	 *
 	 * @param type
 	 * @param file
@@ -447,7 +451,7 @@ public final class NGBackend {
 			txtWriter.setWithCellType(true);
 			txtWriter.exportNetToTXT();
 		} else {
-			logger.info("Unsupported exporter chosen for now.");
+			logger.info("Unsupported exporter chosen.");
 		}
 	}
 

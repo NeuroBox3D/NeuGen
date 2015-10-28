@@ -145,12 +145,17 @@
 		
 	<!-- post-jar task -->
 	<target name="-post-jar">
-		<!-- add additional resources directory -->
-		<jar destfile="dist/NeuGen.jar" update="true">
+		<!-- add additional resources directory 
+		     (this is not required however apparently)
+		-->
+
+		<!-- <jar destfile="dist/NeuGen.jar" update="true">
 			<fileset dir="${resources.dir}">
 				<include name="**/*"/>
 			</fileset>
 		</jar>
+		-->
+
 		<!-- Change the value of this property to be the name of your JAR,
 		minus the .jar extension. It should not have spaces.
 		<property name="store.jar.name" value="MyJarName"/>
