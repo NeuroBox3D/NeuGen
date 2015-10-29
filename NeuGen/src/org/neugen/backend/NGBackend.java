@@ -279,6 +279,8 @@ public final class NGBackend {
 						logger.error(ex);
 					}
 				} else {
+					Region.setCortColumn(false);
+					Region.setCa1Region(false);
 					logger.fatal("Wrong project type specified aborting: "
 						+ projectType + ". Supported project types are "
 						+ NeuGenConstants.NEOCORTEX_PROJECT + " and "
@@ -295,6 +297,8 @@ public final class NGBackend {
 			Region.setCortColumn(false);
 			Region.setCa1Region(true);
 		} else {
+			Region.setCortColumn(false);
+			Region.setCa1Region(false);
 			logger.fatal("Wrong project type specified aborting: "
 				+ projectType + ". Supported project types are "
 				+ NeuGenConstants.NEOCORTEX_PROJECT + " and "
