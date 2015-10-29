@@ -149,12 +149,11 @@
 		     (this is not required however apparently)
 		-->
 
-		<!-- <jar destfile="dist/NeuGen.jar" update="true">
+		<jar destfile="dist/NeuGen.jar" update="true">
 			<fileset dir="${resources.dir}">
 				<include name="**/*"/>
 			</fileset>
 		</jar>
-		-->
 
 		<!-- Change the value of this property to be the name of your JAR,
 		minus the .jar extension. It should not have spaces.

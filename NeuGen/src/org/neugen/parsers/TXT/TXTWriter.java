@@ -78,6 +78,7 @@ import org.apache.commons.compress.compressors.CompressorStreamFactory;
 import org.apache.commons.io.FilenameUtils;
 import org.neugen.backend.NGBackend;
 import org.neugen.datastructures.Pair;
+import org.neugen.datastructures.Region;
 import org.neugen.gui.NeuGenView;
 
 /**
@@ -105,6 +106,7 @@ public class TXTWriter {
 	private boolean uncompressed;
 	private boolean withCellType;
         private FileExistsDialog fed;
+	private String projectType;
 
 	/**
 	 * @brief ctor
@@ -353,8 +355,9 @@ public class TXTWriter {
 		return new Pair<ArrayList<TXTBase>, ArrayList<TXTBase>>(neuron_sections, neuron_connex);
 	}
 
+
 	/**
-	 * @brief writes the net into the TXT file
+	 * @brief writes the net into the TXT file with GUI
 	 * @author stephanmg <stephan@syntaktischer-zucker.de>
 	 */
 	@SuppressWarnings("CallToPrintStackTrace")
@@ -571,7 +574,19 @@ public class TXTWriter {
 		/////////////////////////////////
 		/// configuration string
 		/////////////////////////////////
-		String configString = NeuGenView.getInstance().getCurrentProjectType() + System.getProperty("line.separator") + withCellType;
+		String configString;
+		/// Note: This if/else statement can be reduced to the code 
+		///       given in the else part of this code block
+		if (NeuGenConstants.WITH_GUI) {
+			/// if GUI is used, we can get the project type from the view
+			configString = NeuGenView.getInstance().getCurrentProjectType() + System.getProperty("line.separator") + withCellType;	
+		} else {
+			/// if no GUI is used, infer it from the region 
+			final NGBackend backend = new NGBackend();
+			configString = backend.getProjectType() + System.getProperty("line.separator") + withCellType;
+		}
+		
+		System.err.println(configString);
 		pw4.write(configString);
 
 		if (pw4 != null) {

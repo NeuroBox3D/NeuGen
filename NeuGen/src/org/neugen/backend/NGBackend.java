@@ -93,7 +93,6 @@ import org.neugen.utils.Utils;
  * @note maybe a configuration builder (SettingsBuilder) is a good choice
  */
 public final class NGBackend {
-
 	/// public static members
 	public static final Logger logger = Logger.getLogger(NGBackend.class.getName());
 
@@ -287,6 +286,21 @@ public final class NGBackend {
 				}
 			}
 		} 
+		
+		/// set the project type (if an existing project is used)
+		if (projectType.equals(NeuGenConstants.NEOCORTEX_PROJECT)) {
+			Region.setCortColumn(true);
+			Region.setCa1Region(false);
+		} else if (projectType.equals(NeuGenConstants.HIPPOCAMPUS_PROJECT)) {
+			Region.setCortColumn(false);
+			Region.setCa1Region(true);
+		} else {
+			logger.fatal("Wrong project type specified aborting: "
+				+ projectType + ". Supported project types are "
+				+ NeuGenConstants.NEOCORTEX_PROJECT + " and "
+				+ NeuGenConstants.HIPPOCAMPUS_PROJECT + ".");
+		}
+		
 		return initProjectParam(projectPath, projectType);
 	}
 
@@ -454,7 +468,7 @@ public final class NGBackend {
 			logger.info("Unsupported exporter chosen.");
 		}
 	}
-
+	
 	/**
 	 * @brief modify the project params and set them
 	 *
@@ -729,6 +743,20 @@ public final class NGBackend {
 			}
 		}
 
+	}
+
+	/**
+	 * @brief returns the project type
+	 * @return
+	 */
+	public String getProjectType() {
+		if (Region.isCa1Region()) {
+			return NeuGenConstants.HIPPOCAMPUS_PROJECT;
+		} else if (Region.isCortColumn()) {
+			return NeuGenConstants.NEOCORTEX_PROJECT;
+		} else {
+			return "";
+		}
 	}
 
 	/**
