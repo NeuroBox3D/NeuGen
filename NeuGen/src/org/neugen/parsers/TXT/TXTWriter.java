@@ -388,11 +388,14 @@ public class TXTWriter {
                         for (String s : subfiles) {
                             File f = new File(basefile + "_" + s);
                             if (f.exists() && !f.isDirectory()) {
-                                fed.setVisible(true);
-                                if (!fed.getStatus()) {
-					return;
-                                }
-                                break;
+
+				if (NeuGenConstants.WITH_GUI) {
+ 	                               fed.setVisible(true);
+         	                       if (!fed.getStatus()) {
+						return;
+                	                }
+                       		        break;
+				}
                             }
                         }
 

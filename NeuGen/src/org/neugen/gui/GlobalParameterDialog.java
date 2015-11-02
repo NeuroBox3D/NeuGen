@@ -88,6 +88,8 @@ public class GlobalParameterDialog extends JDialog {
                 + "utilized for each compartment respectively. (Note: section-length "
                 + "parameter is overriden by the nparts-density parameter if the latter"
                 + "parameter is not set!";
+	private final static String TOOLTIP_SECTION_LENGTH_VS_DENSITY = "The n-parts-Density"
+		+ "parameter overrides the section-length parameter.";
 	
 	
 	/// private final members
@@ -171,6 +173,7 @@ public class GlobalParameterDialog extends JDialog {
 
         jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N
+        jLabel3.setToolTipText("<html><p style=\"text-align: justify\" width=\"400\">" +TOOLTIP_SECTION_LENGTH_VS_DENSITY+"</p></html>");
 
         jLabel4.setText(resourceMap.getString("jLabel4.text")); // NOI18N
         jLabel4.setName("jLabel4"); // NOI18N

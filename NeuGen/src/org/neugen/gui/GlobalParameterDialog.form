@@ -171,6 +171,9 @@
         <Property name="text" type="java.lang.String" resourceKey="jLabel3.text"/>
         <Property name="name" type="java.lang.String" value="jLabel3" noResource="true"/>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="jLabel3.setToolTipText(&quot;&lt;html&gt;&lt;p style=\&quot;text-align: justify\&quot; width=\&quot;400\&quot;&gt;&quot; +TOOLTIP_SECTION_LENGTH_VS_DENSITY+&quot;&lt;/p&gt;&lt;/html&gt;&quot;);"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel4">
       <Properties>
