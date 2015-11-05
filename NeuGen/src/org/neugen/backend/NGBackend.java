@@ -454,8 +454,9 @@ public final class NGBackend {
 	 *
 	 * @param type
 	 * @param file
+	 * @param withCellType
 	 */
-	public void export_network(String type, String file) {
+	public void export_network(String type, String file, boolean withCellType) {
 		Net net = ngLib.getNet();
 		if ("NGX".equalsIgnoreCase(type)) {
 			logger.info("Exporting NGX data to... " + file);
@@ -466,7 +467,7 @@ public final class NGBackend {
         		TXTWriter txtWriter = new TXTWriter(net, new File(file));
 			txtWriter.setCompressed(false);
 			txtWriter.setUncompressed(true);
-			txtWriter.setWithCellType(true);
+			txtWriter.setWithCellType(withCellType);
 			txtWriter.exportNetToTXT();
 		} else {
 			logger.info("Unsupported exporter chosen.");
@@ -778,7 +779,7 @@ public final class NGBackend {
 			Map<String, XMLObject> params = back.create_and_open_project("foo24", NeuGenConstants.NEOCORTEX_PROJECT, true, false);
 			back.modifyNPartsDensity(params, "foo24/Neocortex", 0.1);
 			back.generate_network(NeuGenConstants.NEOCORTEX_PROJECT);
-			back.export_network("NGX", "foo24.ngx");
+			back.export_network("NGX", "foo24.ngx", false);
 			back.save_and_close_project(params, "foo26");
 		} catch (Exception e) {
 			logger.fatal("Make sure you selected a valid project directory: " + e);

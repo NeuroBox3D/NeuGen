@@ -18,6 +18,7 @@
 
     <!-- variables -->
     <property name="lib.dir" value="libs/" />
+    <property name="build.dir" value="build/" />
     <property name="dist.lib.dir" value="dist/"/>
     <property name="mainclass" value="org.neugen.gui.NeuGenApp"/>
     <property name="release.version" value="2.0"/>
@@ -64,7 +65,14 @@
 	  test-report:              JUnit report generation
 	-->
 
-	<!-- copy all dependencies in one jar (TODO add release target=win, mac or linux) -->
+	<!-- ensure that the dist/lib, dist and build dirs are available when not using an IDE -->
+    	<target name="-pre-compile">
+		<mkdir dir="${dist.lib.dir}" />
+		<mkdir dir="${dist.lib.dir}/lib" />
+		<mkdir dir="${build.dir}" />
+    	</target>
+
+	<!-- copy all dependencies in one jar (@todo: add release target=win, mac or linux) -->
 	<target name="copy-dependencies">
 		<mkdir dir="${dist.lib.dir}" />
 		<jar jarfile="${dist.lib.dir}/dependencies-all.jar">
@@ -105,7 +113,7 @@
 		 classname="com.oracle.appbundler.AppBundlerTask"   
 		 classpath="libs/appbundler-1.0.jar" />
 
-	<!-- TODO: probably we should use $JAVA_HOME below, not hardcoded path! -->
+	<!-- @todo: probably we should use $JAVA_HOME below, not hardcoded path! -->
 	<property environment="env" />
  
 	<target name="bundle-NeuGen">

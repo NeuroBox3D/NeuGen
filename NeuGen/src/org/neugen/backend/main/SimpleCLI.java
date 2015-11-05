@@ -75,12 +75,19 @@ public final class SimpleCLI {
 			/// flags
 			boolean open_only = false;
 			boolean force = false;
+			boolean with_cell_type = false;
 			if (args.length == 5) {
 				if ("OPEN".equalsIgnoreCase(args[4])) { open_only = true; }
 			}
 			
 			if (args.length == 6) {
 				if ("FORCE".equalsIgnoreCase(args[5]) || ! args[5].isEmpty()) { force = true; }
+			}
+			
+			if (args.length == 7) {
+				if ("TRUE".equalsIgnoreCase(args[6])) {
+					with_cell_type = true;
+				}
 			}
 			
 			try {
@@ -93,7 +100,7 @@ public final class SimpleCLI {
 				}
 				
 				backend.generate_network(project_type);
-				backend.export_network(export_format, output_name);
+				backend.export_network(export_format, output_name, with_cell_type);
 			} catch (Exception e) {
 				logger.fatal(e);
 				e.printStackTrace();
@@ -105,9 +112,15 @@ public final class SimpleCLI {
 	 * @brief prints usage for the simple CLI
 	 */
 	private static void usage() {
-		System.out.println("Usage: SimpleCLI PROJECT_BASE_DIR PROJECT_TYPE EXPORT_FORMAT OUTPUT_NAME [OPEN_OR_CREATE] [FORCE]");
-		System.out.println("Project type either Neocortex or Hippocampus");
-		System.out.println("Export format: TXT, HOC or NGX");
-		System.out.println("Note: Only the first four parameters are mandatory.");
+		System.out.println("Usage: SimpleCLI PROJECT_BASE_DIR PROJECT_TYPE EXPORT_FORMAT OUTPUT_NAME [OPEN_OR_CREATE] [FORCE] [WITH_CELL_TYPE]");
+		System.out.println("\tProject base dir on your FS where the project is located");
+		System.out.println("\tProject type either Neocortex or Hippocampus");
+		System.out.println("\tExport format: TXT, HOC or NGX");
+		System.out.println("\tOutput name on your FS for the exported network given your format");
+		System.out.println("\tOpen or create: Depending on your choise you can start with a new project or a existing project (specifeid by project base dir). Default OPEN.");
+		System.out.println("\tForce: If CREATE was chosen previously, specify also FORCE to override if you specify an existing project location. Default. FALSE");
+		System.out.println("\tWith cell type: True or False, depending if we want the cell type to be encoded");
+		System.out.println("\tNote: Only the first four parameters are mandatory.");
+		System.out.println("In case of any questions contact: stephan.grein@gcsc.uni-frankfurt.de");
 	}
 }
