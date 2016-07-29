@@ -54,14 +54,13 @@ package org.neugen.backend.main;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.neugen.backend.NGBackend;
 import org.neugen.gui.NeuGenConstants;
 
 /**
- * @brief enhanced command line interface (CLI) for NeuGen
+ * @brief enhanced command line interface (CLI) for NeuGen's pseudo-backend
  * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
 public final class EnhancedCLI {
@@ -72,7 +71,7 @@ public final class EnhancedCLI {
 	 * @brief main
 	 * Execute as: java -cp NeuGen.jar org.neugen.backend.main.EnhancedCLI
 	 * 
-	 * @todo implement CLI enhanced (WIP)
+	 * @todo implement CLI enhanced (WIP... if necessar)
 	 * @param args
 	 */
 	public static void main(String... args) {
@@ -85,7 +84,7 @@ public final class EnhancedCLI {
 			formatter.printHelp(NeuGenConstants.VERSION + " enhanced CLI", options);
 			
  			CommandLine line = new DefaultParser().parse( options, args );
-        		if( line.hasOption("generate") ) {
+        		if(line.hasOption("generate") ) {
 				generate();
 			}
 			

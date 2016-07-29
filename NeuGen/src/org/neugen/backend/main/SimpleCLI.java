@@ -56,11 +56,11 @@ import org.neugen.gui.NeuGenConstants;
 import static org.neugen.backend.NGBackend.logger;
 
 /**
- * @brief simple command line interface (CLI) for NeuGen
+ * @brief simple command line interface (CLI) for NeuGen's pseudo-backend
  * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
 public final class SimpleCLI {
-	@SuppressWarnings("CallToPrintStackTrace")
+	@SuppressWarnings({"CallToPrintStackTrace", "CallToThreadDumpStack"})
 	public static void main(String... args) {
 		if (args.length != 4) {
 			usage();

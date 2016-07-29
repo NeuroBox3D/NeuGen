@@ -53,11 +53,10 @@ package org.neugen.backend;
 import java.io.File;
 
 /**
- * @brief NeuGen pseudo backend utility
+ * @brief NeuGen's pseudo-backend utility
  * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
 public final class NGBackendUtil {
-
 	/**
 	 * @brief
 	 */
@@ -67,7 +66,6 @@ public final class NGBackendUtil {
 
 	/**
 	 * @brief checks for file existence, if present force is true deletes
-	 *
 	 * @param file
 	 * @param force
 	 * @return

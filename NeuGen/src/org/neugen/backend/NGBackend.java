@@ -87,10 +87,12 @@ import org.neugen.utils.NeuGenLogger;
 import org.neugen.utils.Utils;
 
 /**
- * @brief provide some backend functionality
+ * @brief NeuGen's backend
+ * Note: This pseudo-backend attempts to disentangle the interweaved
+ * GUI and backend components of NeuGen. Therefore this pseudo-backend
+ * may be considered as a hack. Some functionality is available, cf. 
+ * below, however this backend needs to be enhanced for desired functionality.
  * @author stephanmg <stephan@syntaktischer-zucker.de>
- *
- * @note maybe a configuration builder (SettingsBuilder) is a good choice
  */
 public final class NGBackend {
 	/// public static members
@@ -119,8 +121,7 @@ public final class NGBackend {
 	}
 
 	/**
-	 * @brief executes just the project
-	 *
+	 * @brief executes the project
 	 * @param projectType
 	 */
 	public void execute(String projectType) {
@@ -129,12 +130,11 @@ public final class NGBackend {
 
 	/**
 	 * @brief loads the initial parameters from project directory
-	 *
 	 * @param file
 	 * @param root
-	 * @return
+	 * @return parameter list
 	 */
-	@SuppressWarnings("CallToPrintStackTrace")
+	@SuppressWarnings({"CallToPrintStackTrace", "CallToThreadDumpStack"})
 	private XMLObject loadParam(File file) {
 		XMLObject root = null;
 		try {
@@ -150,10 +150,10 @@ public final class NGBackend {
 	}
 
 	/**
-	 * @brief get's the project property
-	 *
+	 * @brief get the project property
 	 * @param projectPath
 	 * @param projectType
+	 * @return list of properties
 	 */
 	private Properties getProjectProp(String projectPath, String projectType) {
 		Properties prop = new Properties();
@@ -177,13 +177,12 @@ public final class NGBackend {
 	}
 
 	/**
-	 * @brief creates a project
-	 *
+	 * @brief creates a NeuGen project
 	 * @param projectPath
 	 * @param projectType
 	 * @param force
 	 * @param open_only - if specified opens only the project
-	 * @return
+	 * @return parameters as a map
 	 */
 	@SuppressWarnings("NestedAssignment")
 	public Map<String, XMLObject> create_and_open_project(String projectPath, String projectType, boolean force, boolean open_only) {
@@ -309,8 +308,7 @@ public final class NGBackend {
 	}
 
 	/**
-	 * @brief saves the PARAM parameters
-	 *
+	 * @brief saves the PARAM parameters (NeuGen parameters)
 	 * @param currentRoot
 	 * @param projectDirPath
 	 */
@@ -319,8 +317,7 @@ public final class NGBackend {
 	}
 
 	/**
-	 * @brief saves the INTERNA parameters
-	 *
+	 * @brief saves the INTERNA parameters (NeuGen parameters)
 	 * @param currentRoot
 	 * @param projectDirPath
 	 */
@@ -330,7 +327,6 @@ public final class NGBackend {
 
 	/**
 	 * @brief save all params
-	 *
 	 * @param paramTrees
 	 * @param projectDirPath
 	 */
@@ -340,8 +336,7 @@ public final class NGBackend {
 	}
 
 	/**
-	 * @brief saves INTERNA or PARAM parameters
-	 *
+	 * @brief saves INTERNA or PARAM parameters (NeuGen parameters)
 	 * @param currentRoot
 	 * @param projectDirPath
 	 * @param param
@@ -350,7 +345,7 @@ public final class NGBackend {
 		logger.info("leaf count: " + currentRoot.getLeafCount());
 		
 		/**
-		 * @todo brief: tied to GUI! 
+		 * @todo brief: tied to GUI! (implement the pseudocode below - more reasonable)
 		 * workaround: 1) alter parameters in project file before generating the net
 		 *             2) generate net 
 		 * 	       3) save the file in a gui-independent way (i. e. 
@@ -378,56 +373,52 @@ public final class NGBackend {
 	}
 
 	/**
-	 * @brief init param table
-	 *
+	 * @brief inits param table
 	 * @param paramTrees
 	 * @param paramPath
 	 * @param internaPath
+	 * @return map of parameters
 	 */
 	private Map<String, XMLObject> initParamTable(Map<String, XMLObject> paramTrees, String paramPath, String internaPath) {
 		XMLObject param = paramTrees.get(NeuGenConstants.PARAM);
 		XMLObject interna = paramTrees.get(NeuGenConstants.INTERNA);
 		Map<String, XMLObject> allParam = new HashMap<String, XMLObject>();
-
 		allParam.put(paramPath, param);
 		allParam.put(internaPath, interna);
 		return allParam;
 	}
 
 	/**
-	 * @brief init all parameters
-	 *
+	 * @brief inits all parameters
 	 * @param dirPath
 	 * @param projectType
+	 * @return map of all parameters
 	 */
 	private Map<String, XMLObject> initProjectParam(String dirPath, String projectType) {
 		File param = new File(dirPath + System.getProperty("file.separator") + NeuGenConstants.PARAM_FNAME);
 		File interna = new File(dirPath + System.getProperty("file.separator") + NeuGenConstants.INTERNA_FNAME);
-
 		Map<String, XMLObject> paramTrees = new HashMap<String, XMLObject>();
 		XMLObject paramRoot = loadParam(param);
 		XMLObject internaRoot = loadParam(interna);
 		paramTrees.put(NeuGenConstants.PARAM, paramRoot);
 		paramTrees.put(NeuGenConstants.INTERNA, internaRoot);
-
 		NeuGenLib.initParamData(initParamTable(paramTrees, param.getPath(), interna.getPath()), projectType);
-
 		return paramTrees;
 	}
 
 	/**
-	 * @brief generates the net actually
-	 *
+	 * @brief generates the NeuGen net 
 	 * @param projectType
 	 */
 	public void generate_network(String projectType) {
 		ngLib.run(projectType);
+		/// not necessary:
 		/// ngLib.getNet().destroy();
 		/// ngLib.destroy();
 	}
 	
 	/**
-	 * @brief saves and closes project
+	 * @brief saves and closes the NeuGen project
 	 * @param paramTrees
 	 * @param projectDirPath
 	 */
@@ -446,12 +437,10 @@ public final class NGBackend {
 	}
 
 	/**
-	 * @brief exports a network
-	 * 
+	 * @brief exports the NeuGen network
 	 * Note: Enhance this function by needs, i. e. if you
 	 * need another exporter, like HOC or something else, you
 	 * may add it here
-	 *
 	 * @param type
 	 * @param file
 	 * @param withCellType
@@ -476,7 +465,6 @@ public final class NGBackend {
 	
 	/**
 	 * @brief modify the project params and set them
-	 *
 	 * @param paramTrees;
 	 * @param projectDirPath
 	 */
@@ -492,8 +480,7 @@ public final class NGBackend {
 	}
 
 	/**
-	 * @brief modifies n parts density
-	 *
+	 * @brief modifies n parts density (NeuGen property)
 	 * @param paramTrees
 	 * @param projectDirPath
 	 * @param density
@@ -578,8 +565,7 @@ public final class NGBackend {
 	}
 
 	/**
-	 * @brief correct synapse dist to custom value
-	 *
+	 * @brief correct synapse dist to custom value (NeuGen property)
 	 * @param paramTrees
 	 * @param projectDirPath
 	 * @param dist_synapse
@@ -609,7 +595,7 @@ public final class NGBackend {
 
 	
 	/**
-	 * @brief modifies a Neuron and Interna parameter
+	 * @brief modifies a Neuron and INTERNA parameter
 	 * @param paramTrees
 	 * @param projectDirPath
 	 * @param param
@@ -623,7 +609,7 @@ public final class NGBackend {
 	}
 	
 	/**
-	 * @brief modifies a Neuron or Interna parameter
+	 * @brief modifies a Neuron or INTERNA parameter
 	 * @param paramTrees
 	 * @param projectDirPath
 	 * @param param
@@ -642,7 +628,7 @@ public final class NGBackend {
 	}
 	
 	/**
-	 * @brief modify's an Interna parameter
+	 * @brief modifies an INTERNA parameter (NeuGen parameter)
 	 * @param paramTrees
 	 * @param projectDirPath
 	 * @param param
@@ -653,7 +639,7 @@ public final class NGBackend {
 	}
 	
 	/**
-	 * @brief modify's a Neuron parameter
+	 * @brief modifies a Neuron parameter (NeuGen parameter)
 	 * @param paramTrees
 	 * @param projectDirPath
 	 * @param param
@@ -664,7 +650,7 @@ public final class NGBackend {
 	}
 	
 	/**
-	 * @brief modifies some NEURON parameter recursively
+	 * @brief modifies some Neuron parameter recursively (NeuGen parameter)
 	 * @param paramTree
 	 * @param projectDirPath
 	 * @param param
@@ -693,7 +679,7 @@ public final class NGBackend {
 	}
 
 	/**
-	 * @brief modifies some NEURON parameter recursively
+	 * @brief modifies some Neuron parameter recursively (NeuGen parameter)
 	 * @param root
 	 * @param param
 	 * @param identifier
@@ -718,10 +704,9 @@ public final class NGBackend {
 	}
 
 	/**
-	 * @brief replaces content of a given node specified by identifier with
-	 * replacement
+	 * @brief replaces content of a given node.
+	 * The replacement is specified by identifier.
 	 * @author stephanmg <stephan@syntaktischer-zucker.de>
-	 *
 	 * @param child
 	 * @param identifier
 	 * @param replacement
@@ -752,7 +737,7 @@ public final class NGBackend {
 
 	/**
 	 * @brief returns the project type
-	 * @return
+	 * @return project type
 	 */
 	public String getProjectType() {
 		if (Region.isCa1Region()) {
@@ -765,22 +750,20 @@ public final class NGBackend {
 	}
 
 	/**
-	 * @brief test
-	 *
+	 * @brief main method
 	 * @param args
 	 */
-	@SuppressWarnings("CallToPrintStackTrace")
+	@SuppressWarnings({"CallToPrintStackTrace", "CallToThreadDumpStack"})
 	public static void main(String... args) {
-		/**
-		 * @brief todo works - test remaining functionality...
-		 */
 		try {
 			NGBackend back = new NGBackend();
 			Map<String, XMLObject> params = back.create_and_open_project("foo24", NeuGenConstants.NEOCORTEX_PROJECT, true, false);
 			back.modifyNPartsDensity(params, "foo24/Neocortex", 0.1);
 			back.generate_network(NeuGenConstants.NEOCORTEX_PROJECT);
 			back.export_network("NGX", "foo24.ngx", false);
-			back.save_and_close_project(params, "foo26");
+			/// TODO: fix for save_and_close_project necessary
+			/// back.save_and_close_project(params, "foo26");
+                        
 		} catch (Exception e) {
 			logger.fatal("Make sure you selected a valid project directory: " + e);
 			e.printStackTrace();
