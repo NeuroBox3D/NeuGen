@@ -40,6 +40,9 @@ a positive number for the n-parts-density textfield when opening a project.
 Also one can specify the cutoff distance for synapse generation by a positive
 number in analogue for the synapse-distance textfield. 
 
+## Backend
+See Backend.java in package org.neugen.backend for usage.
+
 ## Important note
 1. Hippocampal networks cannot be exported by now to any format correctly, since
 either not implemented at all or no synapse export present - see open issues.
