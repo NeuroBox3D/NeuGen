@@ -12,14 +12,11 @@
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/parsers/HocWriterTask.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/parsers/NeuroMLWriter.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/parsers/NeuroML/NetworkML/NeuroMLSynapse.java</file>
-            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/visual/NeuGenDensityVisualization.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/parsers/TXT/TXTWriterTask.java</file>
-            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/backend/main/EnhancedCLI.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/parsers/TXT/TXTAlphaSynapse.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/parsers/SimpleHocWriter.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/parsers/NeuroML/NetworkML/NeuroMLSynapseUnilateral.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/gui/SectionLengthWarningDocumentListener.java</file>
-            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/vrl/VRLDensityVisualization.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/parsers/NeuroML/NetworkML/NeuroMLSynapseBilateral.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/gui/NeuGenApp.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/parsers/NeuroML/NetworkML/NetworkMLElement.java</file>
@@ -34,7 +31,6 @@
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/gui/NeuroMLLevelSelector.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/backend/NGBackend.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/gui/NeuGenView.java</file>
-            <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/visual/NeuGenVisualization.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/parsers/NeuroMLWriterTask.java</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/build.properties</file>
             <file>file:/Users/stephan/Code/git/NeuGen_source/NeuGen/src/org/neugen/parsers/TXT/WriteToTXT.java</file>

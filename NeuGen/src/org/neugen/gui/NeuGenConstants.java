@@ -56,13 +56,25 @@ import java.util.HashMap;
 
 /**
  * @author stephanmg <stephan@syntaktischer-zucker.de>
+ * ////////////////////////////////////////////////
+ * ////////////////////////////////////////////////
+ * Note: This is a really *useless* class... try
+ * to refactor this somehow! *Hardly* possible!
+ * Discard in future whole class... also many
+ * unused stuff in here... really bad "design" 
+ * leftovers of the previous author... also
+ * everything tied to GUI components, try to
+ * make somehow usable in the backend package.
+ * In general such classes e.g. NeuGenConstants
+ * should be highly avoided - bad design!
+ * ////////////////////////////////////////////////
+ * ////////////////////////////////////////////////
  * 
  * and Sergei Wolf
  */
 public final class NeuGenConstants {
-
     private final static HashMap<String, String> mappingMethodToExtension = new HashMap<String, String>();
-
+    
     static {
         mappingMethodToExtension.put("bzip2", "bz2");
         mappingMethodToExtension.put("tar", "tar");
@@ -87,7 +99,7 @@ public final class NeuGenConstants {
     public static final String CITE =
               "1) S. Wolf, S. Grein, G. Queisser. " + VERSION + " -" + NL
             + "Employing " + VERSION + " to automatically generate realistic" + NL
-            + "morphologies of hippocapal neurons and neural networks in 3D." + NL
+            + "morphologies of hippocampal neurons and neural networks in 3D." + NL
             + "Neuroinformatics, 2013, 11(2), pp. 137-148, doi: 10.1007/s12021-012-9170-1" + NL + NL
             + "2) J. P. Eberhard, A. Wanner, G. Wittum. NeuGen -" + NL
             + "A tool for the generation of realistic morphology" + NL

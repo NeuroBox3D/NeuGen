@@ -84,7 +84,6 @@ import org.neugen.parsers.NGX.NGXWriter;
 import org.neugen.parsers.NeuGenConfigStreamer;
 import org.neugen.parsers.TXT.TXTWriter;
 import org.neugen.utils.NeuGenLogger;
-import org.neugen.utils.Utils;
 
 /**
  * @brief NeuGen's backend
@@ -93,6 +92,10 @@ import org.neugen.utils.Utils;
  * may be considered as a hack. Some functionality is available, cf. 
  * below, however this backend needs to be enhanced for desired functionality.
  * @author stephanmg <stephan@syntaktischer-zucker.de>
+ * 
+ * @todo NGBackend should probably be refactored to a singleton
+ * @todo some functionality should be refactored to a facade (
+ * @todo params map should be avoided - use this as a member
  */
 public final class NGBackend {
 	/// public static members
@@ -179,24 +182,27 @@ public final class NGBackend {
 	/**
 	 * @brief creates a NeuGen project
 	 * @param projectPath
+	 * @param sourceTemplate  
 	 * @param projectType
 	 * @param force
 	 * @param open_only - if specified opens only the project
 	 * @return parameters as a map
 	 */
 	@SuppressWarnings("NestedAssignment")
-	public Map<String, XMLObject> create_and_open_project(String projectPath, String projectType, boolean force, boolean open_only) {
+	public Map<String, XMLObject> create_and_open_project(String projectPath, String sourceTemplate, String projectType, boolean force, boolean open_only) {
 		if (!open_only) {
 			logger.info("project path (project type: " + projectType + "): " + projectPath);
 			File projectDir = new File(projectPath);
+			System.err.println("projectPath: " + projectPath);
 			if (!NGBackendUtil.fileExists(projectDir, force)) {
-				URL inputUrl = getClass().getResource("/org/neugen/gui/resources/" + projectType.toLowerCase() + ".zip");
-				File dest = new File(projectPath + System.getProperty("file.separator") + projectType.toLowerCase() + ".zip");
+				URL inputUrl = NGBackend.class.getResource("/org/neugen/gui/resources/" + projectType.toLowerCase() + ".zip");
+				File dest = new File(sourceTemplate + System.getProperty("file.separator") + projectPath + System.getProperty("file.separator") + projectType.toLowerCase() + ".zip");
 				try {
 					FileUtils.copyURLToFile(inputUrl, dest);
+					System.err.println("Copying file from: " + inputUrl + " to " + dest);
 				} catch (IOException ex) {
 					java.util.logging.Logger.getLogger(NeuGenProject.class.getName()).log(Level.SEVERE, null, ex);
-				}
+				} 
 
 				ZipInputStream zis = null;
 				try {
@@ -240,10 +246,11 @@ public final class NGBackend {
 					IOUtils.closeQuietly(zis);
 				}
 			}
-
-			if (!NGBackendUtil.fileExists(projectDir, force)) {
+		}
+			
+			/*if (!NGBackendUtil.fileExists(projectDir, force)) {
 				if (projectType.equals(NeuGenConstants.HIPPOCAMPUS_PROJECT)) {
-					String sourcePath = NeuGenConstants.CONFIG_DIR + System.getProperty("file.separator") + NeuGenConstants.HIPPOCAMPUS_PROJECT.toLowerCase();
+					String sourcePath = sourceTemplate + System.getProperty("file.separator") + NeuGenConstants.CONFIG_DIR + System.getProperty("file.separator") + NeuGenConstants.CONFIG_DIR + System.getProperty("file.separator") + NeuGenConstants.HIPPOCAMPUS_PROJECT.toLowerCase();
 					File sourceDir = new File(sourcePath);
 					try {
 						Utils.copyDir(sourceDir, projectDir);
@@ -259,9 +266,11 @@ public final class NGBackend {
 						logger.error(ex);
 					}
 				} else if (projectType.equals(NeuGenConstants.NEOCORTEX_PROJECT)) {
-					String sourcePath = NeuGenConstants.CONFIG_DIR + System.getProperty("file.separator") + NeuGenConstants.NEOCORTEX_PROJECT.toLowerCase();
+					String sourcePath = sourceTemplate + System.getProperty("file.separator") + NeuGenConstants.CONFIG_DIR + System.getProperty("file.separator") + NeuGenConstants.NEOCORTEX_PROJECT.toLowerCase();
 					logger.info("source path: " + sourcePath);
 					logger.info("project path: " + projectDir.getPath());
+					System.err.println("source path: " + sourcePath);
+					System.err.println("project path: " + projectPath);
 					File sourceDir = new File(sourcePath);
 					logger.info(projectType.toLowerCase() + ", path: " + sourceDir.getPath());
 					try {
@@ -286,7 +295,16 @@ public final class NGBackend {
 						+ NeuGenConstants.HIPPOCAMPUS_PROJECT + ".");
 				}
 			}
-		} 
+		} */
+			
+		if (projectType.equals(NeuGenConstants.HIPPOCAMPUS_PROJECT)) {
+			Region.setCortColumn(true);
+			Region.setCa1Region(false);
+		} else {
+			Region.setCortColumn(false);
+			Region.setCa1Region(false);
+		}
+		
 		
 		/// set the project type (if an existing project is used)
 		if (projectType.equals(NeuGenConstants.NEOCORTEX_PROJECT)) {
@@ -303,7 +321,7 @@ public final class NGBackend {
 				+ NeuGenConstants.NEOCORTEX_PROJECT + " and "
 				+ NeuGenConstants.HIPPOCAMPUS_PROJECT + ".");
 		}
-		
+
 		return initProjectParam(projectPath, projectType);
 	}
 
@@ -352,7 +370,8 @@ public final class NGBackend {
 		 * 		dont use the XML tree representations in the GUI 
 		 * 		since those values are not availabel for us)
 		 */
-		XMLObject rootCopy = XMLObject.getCopyXMLObject(XMLObject.convert(currentRoot));
+		///XMLObject rootCopy = XMLObject.getCopyXMLObject(XMLObject.convert(currentRoot));
+		XMLObject rootCopy = (XMLObject) currentRoot; /// This should fix already the issue (concerning cannot save because tied to GUI)
 		DefaultInheritance.reverseProcess(rootCopy);
 		NeuGenConfigStreamer streamer = new NeuGenConfigStreamer(projectDirPath);
 		String neuPath = null;
@@ -423,13 +442,8 @@ public final class NGBackend {
 	 * @param projectDirPath
 	 */
 	public void save_and_close_project(Map<String, XMLObject> paramTrees, String projectDirPath) {
+		/// save
 		save(paramTrees, projectDirPath);
-		
-		/**
-		 * @todo how to close savely the project? save above does not work,
-		 * since tightly tied to the GUI... (i. e. XML tree only available with GUI)
-		 */
-		
 		/// clear param data and destroy all net components
 		NeuGenLib.clearOldParamData();
 		ngLib.destroy();
@@ -757,12 +771,11 @@ public final class NGBackend {
 	public static void main(String... args) {
 		try {
 			NGBackend back = new NGBackend();
-			Map<String, XMLObject> params = back.create_and_open_project("foo24", NeuGenConstants.NEOCORTEX_PROJECT, true, false);
-			back.modifyNPartsDensity(params, "foo24/Neocortex", 0.1);
+			Map<String, XMLObject> params = back.create_and_open_project("foo27", "/Users/stephan/Code/git/NeuGen_source/NeuGen", NeuGenConstants.NEOCORTEX_PROJECT, true, false);
+			back.modifyNPartsDensity(params, "foo27/Neocortex", 0.5);
 			back.generate_network(NeuGenConstants.NEOCORTEX_PROJECT);
-			back.export_network("NGX", "foo24.ngx", false);
-			/// TODO: fix for save_and_close_project necessary
-			/// back.save_and_close_project(params, "foo26");
+			back.export_network("NGX", "foo27.ngx", false);
+			back.save_and_close_project(params, "foo27");
                         
 		} catch (Exception e) {
 			logger.fatal("Make sure you selected a valid project directory: " + e);
