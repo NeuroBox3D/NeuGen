@@ -33,6 +33,9 @@ Current development on devel branch, current stable on master branch.
 [![Stories in In Progress](https://badge.waffle.io/NeuroBox3D/NeuGen.png?label=in progress&title=In Progress)](http://waffle.io/NeuroBox3D/NeuGen)
 [![Stories in Done](https://badge.waffle.io/NeuroBox3D/NeuGen.png?label=done&title=Done)](http://waffle.io/NeuroBox3D/NeuGen)
 
+### License
+* [![LGPLv3](https://img.shields.io/badge/license-LGPLv3-blue.svg)](./README.md)
+
 ## Documentation
 Export .ngx (NeuGen XML) from the GUI by Save Dialog or Ctrl-Shift-N.
 One can pre-coarsen by supplying the (global!) level of detail by 
