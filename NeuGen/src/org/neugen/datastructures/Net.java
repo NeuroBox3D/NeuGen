@@ -104,4 +104,6 @@ public interface Net {
     public int getTotalNumOfSegments();
 
     public Region getRegion();
+
+    public List<String> getCellTypesOfNetwork();
 }

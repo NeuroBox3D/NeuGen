@@ -84,6 +84,7 @@ import org.neugen.parsers.NGX.NGXWriter;
 import org.neugen.parsers.NeuGenConfigStreamer;
 import org.neugen.parsers.TXT.TXTWriter;
 import org.neugen.utils.NeuGenLogger;
+import org.neugen.utils.Utils;
 
 /**
  * @brief NeuGen's backend
@@ -248,7 +249,8 @@ public final class NGBackend {
 			}
 		}
 			
-			/*if (!NGBackendUtil.fileExists(projectDir, force)) {
+			File projectDir = new File(projectPath);
+			if (!NGBackendUtil.fileExists(projectDir, force)) {
 				if (projectType.equals(NeuGenConstants.HIPPOCAMPUS_PROJECT)) {
 					String sourcePath = sourceTemplate + System.getProperty("file.separator") + NeuGenConstants.CONFIG_DIR + System.getProperty("file.separator") + NeuGenConstants.CONFIG_DIR + System.getProperty("file.separator") + NeuGenConstants.HIPPOCAMPUS_PROJECT.toLowerCase();
 					File sourceDir = new File(sourcePath);
@@ -295,8 +297,9 @@ public final class NGBackend {
 						+ NeuGenConstants.HIPPOCAMPUS_PROJECT + ".");
 				}
 			}
-		} */
 			
+	/*
+		} 
 		if (projectType.equals(NeuGenConstants.HIPPOCAMPUS_PROJECT)) {
 			Region.setCortColumn(true);
 			Region.setCa1Region(false);
@@ -304,6 +307,7 @@ public final class NGBackend {
 			Region.setCortColumn(false);
 			Region.setCa1Region(false);
 		}
+	*/
 		
 		
 		/// set the project type (if an existing project is used)
@@ -601,11 +605,40 @@ public final class NGBackend {
 							node2.setValue(dist_synapse);
 						}
 					}
-
 				}
 			}
 		}
 	}
+	
+	/**
+	 * @brief adjust network size 
+	 * Network will contain *n* cells consisting of a predefined ratio
+	 * of different cell types characteristic for the given network type
+	 * @param paramTrees
+	 * @param n 
+	 */
+	public void adjustNetworkSize(Map<String, XMLObject> paramTrees, int n) {
+		for (Map.Entry<String, XMLObject> entry : paramTrees.entrySet()) {
+			XMLObject obj = entry.getValue();
+			@SuppressWarnings("unchecked")
+			Enumeration<XMLNode> childs = obj.children();
+
+			while (childs.hasMoreElements()) {
+				XMLNode node = childs.nextElement();
+				if ("net".equals(node.toString())) {
+					@SuppressWarnings("unchecked")
+					Enumeration<XMLNode> childs2 = node.children();
+					while (childs2.hasMoreElements()) {
+						XMLNode node2 = childs2.nextElement();
+						if (! "dist_synapse".equals(node2.getKey())) {
+							node2.setValue(Integer.parseInt(node2.getValue().toString()) * n);
+						}
+					}
+
+				}
+			}
+		}
+	} 
 
 	
 	/**
@@ -772,8 +805,9 @@ public final class NGBackend {
 		try {
 			NGBackend back = new NGBackend();
 			Map<String, XMLObject> params = back.create_and_open_project("foo27", "/Users/stephan/Code/git/NeuGen_source/NeuGen", NeuGenConstants.NEOCORTEX_PROJECT, true, false);
-			back.modifyNPartsDensity(params, "foo27/Neocortex", 0.5);
-			back.generate_network(NeuGenConstants.NEOCORTEX_PROJECT);
+			back.modifyNPartsDensity(params, "foo27/Neocortex", 1000);
+			////back.adjustNetworkSize(params, 1000);
+			////back.generate_network(NeuGenConstants.NEOCORTEX_PROJECT);
 			back.export_network("NGX", "foo27.ngx", false);
 			back.save_and_close_project(params, "foo27");
                         

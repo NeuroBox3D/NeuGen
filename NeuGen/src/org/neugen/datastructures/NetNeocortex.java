@@ -1782,4 +1782,10 @@ public final class NetNeocortex extends NetBase implements Serializable, Net {
 			fw.flush();
 		}
 	}
+	@Override
+	public List<String> getCellTypesOfNetwork() {
+		return new ArrayList<String>() {{
+    			add("C");
+		}};
+	}
 }
