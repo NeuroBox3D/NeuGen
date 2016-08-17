@@ -93,13 +93,7 @@ public final class SimpleCLI {
 			try {
 				final NGBackend backend = new NGBackend();
 				backend.create_and_open_project(project_base_dir, "", NeuGenConstants.NEOCORTEX_PROJECT, force, open_only);
-				if (project_type.equalsIgnoreCase((NeuGenConstants.NEOCORTEX_PROJECT))) {
-					project_type = NeuGenConstants.NEOCORTEX_PROJECT;
-				} else {
-					project_type = NeuGenConstants.HIPPOCAMPUS_PROJECT;
-				}
-				
-				backend.generate_network(project_type);
+				backend.generate_network();
 				backend.export_network(export_format, output_name, with_cell_type);
 			} catch (Exception e) {
 				logger.fatal(e);

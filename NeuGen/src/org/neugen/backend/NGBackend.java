@@ -72,6 +72,7 @@ import java.util.zip.ZipInputStream;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
+import org.neugen.datastructures.DataStructureConstants;
 import org.neugen.datastructures.Net;
 import org.neugen.datastructures.Region;
 import org.neugen.datastructures.xml.XMLNode;
@@ -84,7 +85,6 @@ import org.neugen.parsers.NGX.NGXWriter;
 import org.neugen.parsers.NeuGenConfigStreamer;
 import org.neugen.parsers.TXT.TXTWriter;
 import org.neugen.utils.NeuGenLogger;
-import org.neugen.utils.Utils;
 
 /**
  * @brief NeuGen's backend
@@ -94,34 +94,37 @@ import org.neugen.utils.Utils;
  * below, however this backend needs to be enhanced for desired functionality.
  * @author stephanmg <stephan@syntaktischer-zucker.de>
  * 
- * @todo NGBackend should probably be refactored to a singleton
- * @todo some functionality should be refactored to a facade (
- * @todo params map should be avoided - use this as a member
+ * @todo introduce some facade methods maybe
+ * @todo params and project specific settings should be encapsulated into NGBackendProject
+ * @todo introduce unit tests
  */
 public final class NGBackend {
 	/// public static members
 	public static final Logger logger = Logger.getLogger(NGBackend.class.getName());
 
 	/// private static members
-	private static final String ENCODING = "UTF-8";
 	private static final NeuGenLib ngLib = new NeuGenLib();
 	private static final double DIST_SYNAPSE = 1.0;
 	private static final double N_PARTS_DENSITY = 0.01;
-
+	
+	/// TODO: encapsulate into NGBackendProject
+	////////////////////////////////////////////////////////////////
+	private Map<String, XMLObject> params;
+	private String projectName;
+	private String projectPath;
+	private String projectType;
+	////////////////////////////////////////////////////////////////
+	
+	public NGBackendProject newNeuGenProject() {
+		return new NGBackendProject(this);
+	}
+	
 	/**
 	 * @brief default ctor
 	 */
 	public NGBackend() {
 		NeuGenConstants.WITH_GUI = false;
 		NeuGenLogger.initLogger();
-	}
-
-	/**
-	 * @brief enhanced ctor
-	 * @param with_gui
-	 */
-	public NGBackend(boolean with_gui) {
-		NeuGenConstants.WITH_GUI = with_gui;
 	}
 
 	/**
@@ -181,16 +184,38 @@ public final class NGBackend {
 	}
 
 	/**
+	 * @brief opens an existing project
+	 * If the project does not exist create a project in the projectPath,
+	 * with the default network settings. 
+	 * @param projectPath
+	 * @param sourceTemplate
+	 * @param projectType
+	 */
+	public void open_project(String projectPath, String sourceTemplate, String projectType) {
+		create_and_open_project(projectPath, sourceTemplate, projectType, true, true);
+	}
+
+	/**
+	 * @brief creates a project in given path
+	 * @param projectPath
+	 * @param sourceTemplate
+	 * @param projectType 
+	 */
+	public void create_project(String projectPath, String sourceTemplate, String projectType) {
+		create_and_open_project(projectPath, sourceTemplate, projectType, true, false);
+	}
+	
+	/**
 	 * @brief creates a NeuGen project
 	 * @param projectPath
 	 * @param sourceTemplate  
 	 * @param projectType
 	 * @param force
 	 * @param open_only - if specified opens only the project
-	 * @return parameters as a map
 	 */
 	@SuppressWarnings("NestedAssignment")
-	public Map<String, XMLObject> create_and_open_project(String projectPath, String sourceTemplate, String projectType, boolean force, boolean open_only) {
+	public void create_and_open_project(String projectPath, String sourceTemplate, String projectType, boolean force, boolean open_only) {
+		/// open new project
 		if (!open_only) {
 			logger.info("project path (project type: " + projectType + "): " + projectPath);
 			File projectDir = new File(projectPath);
@@ -249,6 +274,7 @@ public final class NGBackend {
 			}
 		}
 			
+	/*
 			File projectDir = new File(projectPath);
 			if (!NGBackendUtil.fileExists(projectDir, force)) {
 				if (projectType.equals(NeuGenConstants.HIPPOCAMPUS_PROJECT)) {
@@ -298,7 +324,6 @@ public final class NGBackend {
 				}
 			}
 			
-	/*
 		} 
 		if (projectType.equals(NeuGenConstants.HIPPOCAMPUS_PROJECT)) {
 			Region.setCortColumn(true);
@@ -326,7 +351,10 @@ public final class NGBackend {
 				+ NeuGenConstants.HIPPOCAMPUS_PROJECT + ".");
 		}
 
-		return initProjectParam(projectPath, projectType);
+		this.params = initProjectParam(projectPath, projectType);
+		this.projectName = projectPath;
+		this.projectPath = sourceTemplate;
+		this.projectType = projectType;
 	}
 
 	/**
@@ -431,10 +459,9 @@ public final class NGBackend {
 
 	/**
 	 * @brief generates the NeuGen net 
-	 * @param projectType
 	 */
-	public void generate_network(String projectType) {
-		ngLib.run(projectType);
+	public void generate_network() {
+		ngLib.run(this.projectType);
 		/// not necessary:
 		/// ngLib.getNet().destroy();
 		/// ngLib.destroy();
@@ -442,16 +469,46 @@ public final class NGBackend {
 	
 	/**
 	 * @brief saves and closes the NeuGen project
-	 * @param paramTrees
-	 * @param projectDirPath
 	 */
-	public void save_and_close_project(Map<String, XMLObject> paramTrees, String projectDirPath) {
-		/// save
-		save(paramTrees, projectDirPath);
+	public void save_and_close_project() {
+		/// save param data
+		save_project();
 		/// clear param data and destroy all net components
+		close_project();
+		/// delete the network
+		delete_network();
+	}
+
+	/**
+	 * @brief save the NeuGen Project
+	 */
+	public void save_project() {
+		save(params, getProjectFolderName());
+	}
+	
+	/**
+	 * @brief close the NeuGen project aka remove all parameter data
+	 */
+	public void close_project() {
 		NeuGenLib.clearOldParamData();
 		ngLib.destroy();
-		ngLib.getNet().destroy();
+	}
+	
+	/**
+	 * @brief delete the NeuGen network if available
+	 */
+	public void delete_network() {
+		if (ngLib.getNet() != null) {
+			ngLib.getNet().destroy();
+		}
+	}
+	
+	/**
+	 * @brief reset changes made to the current open NeuGen project
+	 */
+	public void reset_project() {
+		delete_network();
+		close_project();
 	}
 
 	/**
@@ -482,30 +539,26 @@ public final class NGBackend {
 	}
 	
 	/**
-	 * @brief modify the project params and set them
-	 * @param paramTrees;
-	 * @param projectDirPath
+	 * @brief modify the project params with predefined defaults
 	 */
-	public void modifyProject(Map<String, XMLObject> paramTrees, String projectDirPath) {
+	public void modifyProjectWithDefaults() {
 		/// correct synapse distance
-		modifySynapseDistance(paramTrees, projectDirPath, DIST_SYNAPSE);
+		modifySynapseDistance(DIST_SYNAPSE);
 
 		/// correct n parts density
-		modifyNPartsDensity(paramTrees, projectDirPath, N_PARTS_DENSITY);
+		modifyNPartsDensity(N_PARTS_DENSITY);
 
 		/// save new parameters to file
-		save(paramTrees, projectDirPath);
+		save_project();
 	}
 
 	/**
 	 * @brief modifies n parts density (NeuGen property)
-	 * @param paramTrees
-	 * @param projectDirPath
 	 * @param density
 	 */
 	@SuppressWarnings("unchecked")
-	public void modifyNPartsDensity(Map<String, XMLObject> paramTrees, String projectDirPath, double density) {
-		for (Map.Entry<String, XMLObject> entry : paramTrees.entrySet()) {
+	public void modifyNPartsDensity(double density) {
+		for (Map.Entry<String, XMLObject> entry : params.entrySet()) {
 			XMLObject obj = entry.getValue();
 
 			Enumeration<XMLNode> childs = obj.children();
@@ -580,16 +633,16 @@ public final class NGBackend {
 				}
 			}
 		}
+		save_project();
+		open_project(this.projectName, this.projectPath, this.projectType);
 	}
 
 	/**
 	 * @brief correct synapse dist to custom value (NeuGen property)
-	 * @param paramTrees
-	 * @param projectDirPath
 	 * @param dist_synapse
 	 */
-	public void modifySynapseDistance(Map<String, XMLObject> paramTrees, String projectDirPath, double dist_synapse) {
-		for (Map.Entry<String, XMLObject> entry : paramTrees.entrySet()) {
+	public void modifySynapseDistance(double dist_synapse) {
+		for (Map.Entry<String, XMLObject> entry : params.entrySet()) {
 			XMLObject obj = entry.getValue();
 			@SuppressWarnings("unchecked")
 			Enumeration<XMLNode> childs = obj.children();
@@ -608,17 +661,18 @@ public final class NGBackend {
 				}
 			}
 		}
+		save_project();
+		open_project(this.projectName, this.projectPath, this.projectType);
 	}
 	
 	/**
 	 * @brief adjust network size 
 	 * Network will contain *n* cells consisting of a predefined ratio
 	 * of different cell types characteristic for the given network type
-	 * @param paramTrees
-	 * @param n 
+	 * @param factor
 	 */
-	public void adjustNetworkSize(Map<String, XMLObject> paramTrees, int n) {
-		for (Map.Entry<String, XMLObject> entry : paramTrees.entrySet()) {
+	public void adjustNetworkSize(int factor) {
+		for (Map.Entry<String, XMLObject> entry : params.entrySet()) {
 			XMLObject obj = entry.getValue();
 			@SuppressWarnings("unchecked")
 			Enumeration<XMLNode> childs = obj.children();
@@ -631,28 +685,103 @@ public final class NGBackend {
 					while (childs2.hasMoreElements()) {
 						XMLNode node2 = childs2.nextElement();
 						if (! "dist_synapse".equals(node2.getKey())) {
-							node2.setValue(Integer.parseInt(node2.getValue().toString()) * n);
+							node2.setValue(Integer.parseInt(node2.getValue().toString()) * factor);
 						}
 					}
 
 				}
 			}
 		}
+		save_project();
+		open_project(this.projectName, this.projectPath, this.projectType);
 	} 
+	
+	public void adjust_number_of_star_pyramidal_cells(int numberOfCells) {
+		adjust_number_of_cells_for_cell_type("nstarpyramidal", numberOfCells, DataStructureConstants.STAR_PYRAMIDAL);
+	}
+	
+	public void adjust_number_of_stellate_cells(int numberOfCells) {
+		adjust_number_of_cells_for_cell_type("nL4stellate", numberOfCells, DataStructureConstants.L4_STELLATE);
+	}
+	
+	public void adjust_number_of_layer_23_pyramidal(int numberOfCells) {
+		adjust_number_of_cells_for_cell_type("nL23pyramidal", numberOfCells, DataStructureConstants.L23_PYRAMIDAL);
+	}
+	
+	public void adjust_number_of_layer_5_pyramidal(int numberOfCells) {
+		adjust_number_of_cells_for_cell_type("nL23pyramidal", numberOfCells, DataStructureConstants.L5_PYRAMIDAL);
+	}
+	
+	public void adjust_number_of_layer_5_a_pyramidal(int numberOfCells) {
+		adjust_number_of_cells_for_cell_type("nL5Apyramidal", numberOfCells, DataStructureConstants.L5A_PYRAMIDAL);
+	}
+	
+	public void adjust_number_of_layer_5_b_pyramidal(int numberOfCells) {
+		adjust_number_of_cells_for_cell_type("nL5Bpyramidal", numberOfCells, DataStructureConstants.L5A_PYRAMIDAL);
+	}
+		
+	/**
+	 * @brief set the number of cells of a given type
+	 * In the network there will be generated numberOfCells cellType cells
+	 * Note: The additional cellType parameter is required, as NeuGen 
+	 * previously was developed without a MVC design pattern - 
+	 * NeuGen should be refactored to use MVC design pattern!
+	 * @param cellType
+	 * @param numberOfCells
+	 * @param neugenCellType 
+	 */
+	private void adjust_number_of_cells_for_cell_type(String cellType, int numberOfCells, String neugenCellType) {
+		/**
+		 * @todo check for correct cell types must be implemented - 
+		 * probably store a private list of allowed cell types for
+		 * a. neocortex
+		 * b. hippocampus
+		 * 
+		 * with the stored project type we can infer if this is okay or not
+		 */
+		adjust_cell_number_for_cell_type(cellType, numberOfCells);
+	}
+
+	/**
+	 * @brief adjust the number of cells for a given cell type
+	 * @param cellType
+	 * @param numberOfCells 
+	 */
+	private void adjust_cell_number_for_cell_type(String cellType, int numberOfCells) {
+		for (Map.Entry<String, XMLObject> entry : params.entrySet()) {
+			XMLObject obj = entry.getValue();
+			@SuppressWarnings("unchecked")
+			Enumeration<XMLNode> childs = obj.children();
+			while (childs.hasMoreElements()) {
+				XMLNode node = childs.nextElement();
+				if ("net".equals(node.toString())) {
+					@SuppressWarnings("unchecked")
+					Enumeration<XMLNode> childs2 = node.children();
+					while (childs2.hasMoreElements()) {
+						XMLNode node2 = childs2.nextElement();
+						if (cellType.equals(node2.getKey())) {
+							node2.setValue(numberOfCells);
+						}
+					}
+
+				}
+			}
+		}	
+		save_project();
+		open_project(this.projectName, this.projectPath, this.projectType);
+	}
 
 	
 	/**
 	 * @brief modifies a Neuron and INTERNA parameter
-	 * @param paramTrees
-	 * @param projectDirPath
 	 * @param param
 	 * @param param2
 	 * @param identifier
 	 * @param identifier2 
 	 */
-	public void modifyAllParameter(Map<String, XMLObject> paramTrees, String projectDirPath, double param, double param2, String identifier, String identifier2) {
-		modifyParameter(paramTrees, projectDirPath, param, identifier, NeuGenConstants.PARAM);
-		modifyParameter(paramTrees, projectDirPath, param2, identifier2, NeuGenConstants.INTERNA);
+	public void modifyAllParameter(double param, double param2, String identifier, String identifier2) {
+		modifyParameter(param, identifier, NeuGenConstants.PARAM);
+		modifyParameter(param2, identifier2, NeuGenConstants.INTERNA);
 	}
 	
 	/**
@@ -663,11 +792,11 @@ public final class NGBackend {
 	 * @param identifier
 	 * @param parameter_domain 
 	 */
-	private void modifyParameter(Map<String, XMLObject> paramTrees, String projectDirPath, double param, String identifier, String parameter_domain) {
-		for (Map.Entry<String, XMLObject> entry : paramTrees.entrySet()) {
+	private void modifyParameter(double param, String identifier, String parameter_domain) {
+		for (Map.Entry<String, XMLObject> entry : params.entrySet()) {
 			XMLObject obj = entry.getValue();
 			if (entry.getKey().equals(NeuGenConstants.PARAM)) {
-				modifyParameter(obj, projectDirPath, param, identifier);
+				modifyParameter(obj, param, identifier);
 			} else {
 				logger.warn("You did not supply a NeuGen ***" + parameter_domain + "*** tree!");
 			}
@@ -676,35 +805,30 @@ public final class NGBackend {
 	
 	/**
 	 * @brief modifies an INTERNA parameter (NeuGen parameter)
-	 * @param paramTrees
-	 * @param projectDirPath
 	 * @param param
 	 * @param identifier 
 	 */
-	public void modifyInternaParameter(Map<String, XMLObject> paramTrees, String projectDirPath, double param, String identifier) {
-		modifyParameter(paramTrees, projectDirPath, param, identifier, NeuGenConstants.INTERNA);
+	public void modifyInternaParameter(double param, String identifier) {
+		modifyParameter(param, identifier, NeuGenConstants.INTERNA);
 	}
 	
 	/**
 	 * @brief modifies a Neuron parameter (NeuGen parameter)
-	 * @param paramTrees
-	 * @param projectDirPath
 	 * @param param
 	 * @param identifier 
 	 */
-	public void modifyNeuronParameter(Map<String, XMLObject> paramTrees, String projectDirPath, double param, String identifier) {
-		modifyParameter(paramTrees, projectDirPath, param, identifier, NeuGenConstants.PARAM);
+	public void modifyNeuronParameter(double param, String identifier) {
+		modifyParameter(param, identifier, NeuGenConstants.PARAM);
 	}
 	
 	/**
 	 * @brief modifies some Neuron parameter recursively (NeuGen parameter)
 	 * @param paramTree
-	 * @param projectDirPath
 	 * @param param
 	 * @param identifier
 	 */
 	@SuppressWarnings("unchecked")
-	private void modifyParameter(XMLObject paramTree, String projectDirPath, double param, String identifier) {
+	private void modifyParameter(XMLObject paramTree, double param, String identifier) {
 		if (!identifier.equals("/")) {
 			logger.warn("Apparently you did not supply a path to a parameter: " + identifier);
 			return;
@@ -723,6 +847,8 @@ public final class NGBackend {
 				logger.warn("Invalid path to parameter specified: " + identifier);
 			}
 		}
+		
+		save_project();
 	}
 
 	/**
@@ -795,6 +921,14 @@ public final class NGBackend {
 			return "";
 		}
 	}
+	
+	/**
+	 * @brief get the name of the project folder
+	 * @return 
+	 */
+	private String getProjectFolderName() {
+		return this.projectPath + File.separator + this.projectName;
+	}
 
 	/**
 	 * @brief main method
@@ -804,12 +938,22 @@ public final class NGBackend {
 	public static void main(String... args) {
 		try {
 			NGBackend back = new NGBackend();
-			Map<String, XMLObject> params = back.create_and_open_project("foo27", "/Users/stephan/Code/git/NeuGen_source/NeuGen", NeuGenConstants.NEOCORTEX_PROJECT, true, false);
-			back.modifyNPartsDensity(params, "foo27/Neocortex", 1000);
-			////back.adjustNetworkSize(params, 1000);
-			////back.generate_network(NeuGenConstants.NEOCORTEX_PROJECT);
-			back.export_network("NGX", "foo27.ngx", false);
-			back.save_and_close_project(params, "foo27");
+			back.create_and_open_project("foo28", "/Users/stephan/Code/git/NeuGen_source/NeuGen", NeuGenConstants.NEOCORTEX_PROJECT, true, false);
+			back.modifyNPartsDensity(0.25);
+			back.modifySynapseDistance(0.1);
+			back.adjustNetworkSize(1);
+			int starPyramidal = 0;
+			back.adjust_number_of_star_pyramidal_cells(starPyramidal);
+			int l4Stellate = 0;
+			back.adjust_number_of_stellate_cells(l4Stellate);
+			int l23Pyramidal = 0;
+			back.adjust_number_of_layer_23_pyramidal(l23Pyramidal);
+			int l5APyramidal = 0;
+			back.adjust_number_of_layer_5_a_pyramidal(l5APyramidal);
+			int l5BPyramidal = 0;
+			back.adjust_number_of_layer_5_b_pyramidal(l5BPyramidal);
+			back.generate_network();
+			back.export_network("TXT", "foo28.txt", false);
                         
 		} catch (Exception e) {
 			logger.fatal("Make sure you selected a valid project directory: " + e);

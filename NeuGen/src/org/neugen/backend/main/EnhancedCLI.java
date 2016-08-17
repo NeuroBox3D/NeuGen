@@ -62,6 +62,7 @@ import org.neugen.gui.NeuGenConstants;
 /**
  * @brief enhanced command line interface (CLI) for NeuGen's pseudo-backend
  * @author stephanmg <stephan@syntaktischer-zucker.de>
+ * @todo implement an enhanced CLI for NeuGen's backend
  */
 public final class EnhancedCLI {
 	/// the backend for NeuGen
