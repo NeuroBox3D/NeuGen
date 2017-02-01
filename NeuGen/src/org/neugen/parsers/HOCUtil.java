@@ -1,6 +1,8 @@
 /// package's name
 package org.neugen.parsers;
 
+import java.util.Locale;
+
 /**
  * @brief hoc utility functions
  * @author stephanmg <stephan@syntaktischer-zucker.de>
@@ -26,7 +28,7 @@ public final class HOCUtil {
 	 * @return 
 	 */
 	public static String format(Number number) {
-		return String.format(FORMAT, number);
+		return String.format(Locale.ENGLISH, FORMAT, number);
 	}
 
 }

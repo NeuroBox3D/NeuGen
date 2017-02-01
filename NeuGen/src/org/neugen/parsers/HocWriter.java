@@ -632,6 +632,7 @@ public final class HocWriter {
 			}
 		} catch (Exception e) {
 			logger.error("Could not create file: " + e, e);
+            System.out.println("Error encountered: "+e.getMessage());
 		}
 	}
 

@@ -58,11 +58,12 @@ import static org.neugen.backend.NGBackend.logger;
 /**
  * @brief simple command line interface (CLI) for NeuGen's pseudo-backend
  * @author stephanmg <stephan@syntaktischer-zucker.de>
+ * @todo parsing of options could be improved
  */
 public final class SimpleCLI {
 	@SuppressWarnings({"CallToPrintStackTrace", "CallToThreadDumpStack"})
 	public static void main(String... args) {
-		if (args.length != 4) {
+		if (args.length < 4) {
 			usage();
 		} else {
 			/// string parameters
@@ -71,34 +72,85 @@ public final class SimpleCLI {
 			String export_format = args[2];
 			String output_name = args[3];
 
-			
-			/// flags
-			boolean open_only = false;
-			boolean force = false;
-			boolean with_cell_type = false;
-			if (args.length == 5) {
-				if ("OPEN".equalsIgnoreCase(args[4])) { open_only = true; }
-			}
-			
-			if (args.length == 6) {
-				if ("FORCE".equalsIgnoreCase(args[5]) || ! args[5].isEmpty()) { force = true; }
-			}
-			
-			if (args.length == 7) {
-				if ("TRUE".equalsIgnoreCase(args[6])) {
-					with_cell_type = true;
-				}
-			}
-			
-			try {
-				final NGBackend backend = new NGBackend();
-				backend.create_and_open_project(project_base_dir, "", NeuGenConstants.NEOCORTEX_PROJECT, force, open_only);
-				backend.generate_network();
-				backend.export_network(export_format, output_name, with_cell_type);
-			} catch (Exception e) {
-				logger.fatal(e);
-				e.printStackTrace();
-			}
+			if ("PARHOC".equalsIgnoreCase(export_format))
+            {
+                // number of procs
+                if (args.length < 5)
+                {
+                    System.out.println("\tExport type PARHOC requires a target process "
+                        + "number as argument after OUTPUT_NAME.");
+                    return;
+                }
+
+                int nProcs;
+                try {nProcs = Integer.parseUnsignedInt(args[4]);}
+                catch (NumberFormatException ex)
+                {
+                    System.out.println("\tExport type PARHOC requires a target process "
+                        + "number (positive integer) as argument after OUTPUT_NAME.");
+                    return;
+                }
+
+                if (nProcs < 1 || nProcs > 1000000)
+                {
+                    System.out.println("\tExport type PARHOC requires a target process "
+                        + "number (positive integer <= 1M) as argument after OUTPUT_NAME.");
+                    return;
+                }
+
+                /// flags
+                boolean open_only = false;
+                boolean force = false;
+                if (args.length > 5 && "OPEN".equalsIgnoreCase(args[5]))
+                    open_only = true;
+
+                if (args.length > 6 && ("FORCE".equalsIgnoreCase(args[6]) || ! args[5].isEmpty()))
+                    force = true;
+
+                try
+                {
+                    final NGBackend backend = new NGBackend();
+                    backend.create_and_open_project(project_base_dir, "", NeuGenConstants.NEOCORTEX_PROJECT, force, open_only);
+                    backend.generate_network();
+                    backend.export_parallel_network(output_name, nProcs);
+                }
+                catch (Exception e)
+                {
+                    logger.fatal(e);
+                    e.printStackTrace();
+                }
+
+            }
+            else
+            {
+                /// flags
+                boolean open_only = false;
+                boolean force = false;
+                boolean with_cell_type = false;
+                if (args.length >= 5) {
+                    if ("OPEN".equalsIgnoreCase(args[4])) { open_only = true; }
+                }
+
+                if (args.length >= 6) {
+                    if ("FORCE".equalsIgnoreCase(args[5]) || ! args[5].isEmpty()) { force = true; }
+                }
+
+                if (args.length >= 7) {
+                    if ("TRUE".equalsIgnoreCase(args[6])) {
+                        with_cell_type = true;
+                    }
+                }
+
+                try {
+                    final NGBackend backend = new NGBackend();
+                    backend.create_and_open_project(project_base_dir, "", NeuGenConstants.NEOCORTEX_PROJECT, force, open_only);
+                    backend.generate_network();
+                    backend.export_network(export_format, output_name, with_cell_type);
+                } catch (Exception e) {
+                    logger.fatal(e);
+                    e.printStackTrace();
+                }
+            }
 		}
 	}
 	
@@ -109,9 +161,9 @@ public final class SimpleCLI {
 		System.out.println("Usage: SimpleCLI PROJECT_BASE_DIR PROJECT_TYPE EXPORT_FORMAT OUTPUT_NAME [OPEN_OR_CREATE] [FORCE] [WITH_CELL_TYPE]");
 		System.out.println("\tProject base dir on your FS where the project is located");
 		System.out.println("\tProject type either Neocortex or Hippocampus");
-		System.out.println("\tExport format: TXT, HOC or NGX");
+		System.out.println("\tExport format: TXT, HOC, PARHOC or NGX");
 		System.out.println("\tOutput name on your FS for the exported network given your format");
-		System.out.println("\tOpen or create: Depending on your choise you can start with a new project or a existing project (specifeid by project base dir). Default OPEN.");
+		System.out.println("\tOpen or create: Depending on your choice, you can start with a new project or a existing project (specified by project base dir). Default OPEN.");
 		System.out.println("\tForce: If CREATE was chosen previously, specify also FORCE to override if you specify an existing project location. Default. FALSE");
 		System.out.println("\tWith cell type: True or False, depending if we want the cell type to be encoded");
 		System.out.println("\tNote: Only the first four parameters are mandatory.");

@@ -72,265 +72,263 @@ import org.neugen.parsers.TXT.WriteToTXT;
  */
 public class NetBase implements Serializable, Net {
 
-	private static final long serialVersionUID = -7041930069294524614L;
-	/**
-	 * use to log messages
-	 */
-	private final static Logger logger = Logger.getLogger(NetBase.class.getName());
-	/**
-	 * random number generator
-	 */
-	protected transient Frand drawNumber;
-	protected int totalNumberOfDenSegments;
-	protected int totalNumberOfSomataSegments;
-	protected int totalNumberOfAxonalSegments;
-	protected final List<Neuron> neuronList;
-	protected final List<Cons> synapseList;
-	protected final List<String> typeCellNames;
-	protected transient NetParam netParam;
-	protected Region region;
-	protected int[] typeCellNumbers;
-	protected int[] cellOffsets;
-	protected long[][] synNumbers;
-	/**
-	 * number of synapses
-	 */
-	protected int nsynapse;
-	protected int nnf_synapses;
-	/**
-	 * number of neurons
-	 */
-	protected int nneuron;
+    private static final long serialVersionUID = -7041930069294524614L;
+    /** use to log messages */
+    private final static Logger logger = Logger.getLogger(NetBase.class.getName());
+    /** random number generator */
+    protected transient Frand drawNumber;
+    protected int totalNumberOfDenSegments;
+    protected int totalNumberOfSomataSegments;
+    protected int totalNumberOfAxonalSegments;
+    protected final List<Neuron> neuronList;
+    protected final List<Cons> synapseList;
+    protected final List<String> typeCellNames;
+    protected transient NetParam netParam;
+    protected Region region;
+    protected int[] typeCellNumbers;
+    protected int[] cellOffsets;
+    protected long[][] synNumbers;
+    /** number of synapses */
+    protected int nsynapse;
+    protected int nnf_synapses;
+    /** number of neurons */
+    protected int nneuron;
 
-	/**
-	 * Constructor. It initializes the neural net and uses the various
-	 * subclasses of neuron to create a cortical column.
-	 */
-	public NetBase() {
-		Section.resetSecCounter();
-		Segment.resetSegCounter();
-		neuronList = new ArrayList<Neuron>();
-		synapseList = new ArrayList<Cons>();
-		typeCellNames = new ArrayList<String>();
-		netParam = NetParam.getInstance();
+    /**
+     * Constructor. It initializes the neural net and uses the various subclasses
+     * of neuron to create a cortical column.
+     */
+    public NetBase() {
+        Section.resetSecCounter();
+        Segment.resetSegCounter();
+        neuronList = new ArrayList<Neuron>();
+        synapseList = new ArrayList<Cons>();
+        typeCellNames = new ArrayList<String>();
+        netParam = NetParam.getInstance();
 
-		Region.setInstance(null);
-		region = new Region();
-		Region.setInstance(region);
+        Region.setInstance(null);
+        region = new Region();
+        Region.setInstance(region);
 
-		cellOffsets = new int[1];
-		cellOffsets[0] = 0;
-		typeCellNames.add("imported cell");
-	}
+        cellOffsets = new int[1];
+        cellOffsets[0] = 0;
+        typeCellNames.add("imported cell");
+    }
 
-	@Override
-	public void destroy() {
-		drawNumber = null;
-		netParam = null;
-		if (neuronList != null) {
-			for (Neuron neuron : neuronList) {
-				List<Dendrite> dendriteList = neuron.getDendrites();
-				for (Dendrite dendrite : dendriteList) {
-					Section.Iterator secIterator = dendrite.getFirstSection().getIterator();
-					while (secIterator.hasNext()) {
-						Section section = secIterator.next();
-						section.getSegments().clear();
-					}
-					dendrite = null;
-				}
-				dendriteList.clear();
-				Axon axon = neuron.getAxon();
-				if (axon.getFirstSection() != null) {
-					Section.Iterator secIterator = axon.getFirstSection().getIterator();
-					while (secIterator.hasNext()) {
-						Section section = secIterator.next();
-						section.getSegments().clear();
-					}
-				}
-				axon = null;
-				neuron = null;
-			}
-			neuronList.clear();
-		}
-		if (synapseList != null) {
-			synapseList.clear();
-		}
+    @Override
+    public void destroy() {
+        drawNumber = null;
+        netParam = null;
+        if (neuronList != null) {
+            for (Neuron neuron : neuronList) {
+                List<Dendrite> dendriteList = neuron.getDendrites();
+                for (Dendrite dendrite : dendriteList) {
+                    Section.Iterator secIterator = dendrite.getFirstSection().getIterator();
+                    while (secIterator.hasNext()) {
+                        Section section = secIterator.next();
+                        section.getSegments().clear();
+                    }
+                    dendrite = null;
+                }
+                dendriteList.clear();
+                Axon axon = neuron.getAxon();
+                if (axon.getFirstSection() != null) {
+                    Section.Iterator secIterator = axon.getFirstSection().getIterator();
+                    while (secIterator.hasNext()) {
+                        Section section = secIterator.next();
+                        section.getSegments().clear();
+                    }
+                }
+                axon = null;
+                neuron = null;
+            }
+            neuronList.clear();
+        }
+        if (synapseList != null) {
+            synapseList.clear();
+        }
 
-		if (typeCellNames != null) {
-			typeCellNames.clear();
-		}
-		System.gc();
-	}
+        if (typeCellNames != null) {
+            typeCellNames.clear();
+        }
+        System.gc();
+    }
 
-	@Override
-	public List<String> getTypeCellNames() {
-		return typeCellNames;
-	}
+    @Override
+    public List<String> getTypeCellNames() {
+        return typeCellNames;
+    }
 
-	@Override
-	public Region getRegion() {
-		return region;
-	}
+    @Override
+    public Region getRegion() {
+        return region;
+    }
 
-	@Override
-	public int[] getCellOffsets() {
-		return cellOffsets;
-	}
+    @Override
+    public int[] getCellOffsets() {
+        return cellOffsets;
+    }
 
-	@Override
-	public List<Cons> getSynapseList() {
-		return synapseList;
-	}
+    @Override
+    public List<Cons> getSynapseList() {
+        return synapseList;
+    }
 
-	/**
-	 * Get number of synapses
-	 *
-	 * @return number of synapses
-	 */
-	@Override
-	public long getNumOfSynapses(int presynapticType, int postSynapticType) {
-		return synNumbers[presynapticType][postSynapticType];
-	}
+    /** 
+     * Get number of synapses
+     *
+     * @return number of synapses
+     */
+    @Override
+    public long getNumOfSynapses(int presynapticType, int postSynapticType) {
+        return synNumbers[presynapticType][postSynapticType];
+    }
 
-	public Frand getDrawNumber() {
-		return drawNumber;
-	}
+    public Frand getDrawNumber() {
+        return drawNumber;
+    }
 
-	public void setDrawNumber(Frand drawNumber) {
-		this.drawNumber = drawNumber;
-	}
+    public void setDrawNumber(Frand drawNumber) {
+        this.drawNumber = drawNumber;
+    }
 
-	@Override
-	public List<Neuron> getNeuronList() {
-		return neuronList;
-	}
+    @Override
+    public List<Neuron> getNeuronList() {
+        return neuronList;
+    }
 
-	@Override
-	public int getNumNeurons() {
-		return neuronList.size();
-	}
+    @Override
+    public int getNumNeurons() {
+        return neuronList.size();
+    }
 
-	@Override
-	public int getTotalNumOfAxonalSegments() {
-		return totalNumberOfAxonalSegments;
-	}
+    @Override
+    public int getTotalNumOfAxonalSegments() {
+        return totalNumberOfAxonalSegments;
+    }
 
-	@Override
-	public int getTotalNumOfDenSegments() {
-		return totalNumberOfDenSegments;
-	}
+    @Override
+    public int getTotalNumOfDenSegments() {
+        return totalNumberOfDenSegments;
+    }
 
-	@Override
-	public int getTotalNumOfSomataSegments() {
-		return totalNumberOfSomataSegments;
-	}
+    @Override
+    public int getTotalNumOfSomataSegments() {
+        return totalNumberOfSomataSegments;
+    }
 
-	@Override
-	public int getTotalNumOfSegments() {
-		return totalNumberOfAxonalSegments + totalNumberOfDenSegments + totalNumberOfSomataSegments;
-	}
+    @Override
+    public int getTotalNumOfSegments() {
+        return totalNumberOfAxonalSegments + totalNumberOfDenSegments + totalNumberOfSomataSegments;
+    }
 
-	/**
-	 * Function sets the total number of dendrite, axon and soma segments of
-	 * the neural net
-	 */
-	@Override
-	public void setTotalNumOfSegments() {
-		totalNumberOfSomataSegments = 0;
-		totalNumberOfAxonalSegments = 0;
-		totalNumberOfDenSegments = 0;
-		for (Neuron neuron : neuronList) {
-			Axon axon = neuron.getAxon();
-			Cellipsoid soma = neuron.getSoma();
-			//totalNumberOfAxonalSegments += axon.getNumberOfAxonalSegments();
-			totalNumberOfAxonalSegments += axon.getNumOfSegments();
-			totalNumberOfSomataSegments += soma.getNumberOfSomaSegments();
-			totalNumberOfDenSegments += neuron.getNumberOfAllDenSegments();
-		}
-	}
+    /**
+     * Function sets the total number of dendrite, axon
+     * and soma segments of the neural net
+     */
+    @Override
+    public void setTotalNumOfSegments() {
+        totalNumberOfSomataSegments = 0;
+        totalNumberOfAxonalSegments = 0;
+        totalNumberOfDenSegments = 0;
+        for (Neuron neuron : neuronList) {
+            Axon axon = neuron.getAxon();
+            Cellipsoid soma = neuron.getSoma();
+            //totalNumberOfAxonalSegments += axon.getNumberOfAxonalSegments();
+            totalNumberOfAxonalSegments += axon.getNumOfSegments();
+            totalNumberOfSomataSegments += soma.getNumberOfSomaSegments();
+            totalNumberOfDenSegments += neuron.getNumberOfAllDenSegments();
+        }
+    }
 
-	@Override
-	public void interconnect() {
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
+    @Override
+    public void interconnect() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
-	@Override
-	public void generate() {
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
+    @Override
+    public void generate() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
-	@Override
-	public Map<String, Float> computeAPSN() {
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
+    @Override
+    public Map<String, Float> computeAPSN() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
-	@Override
-	public int getTypeOfNeuron(int indexOfNeuron) {
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
+    @Override
+    public int getTypeOfNeuron(int indexOfNeuron) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
-	@Override
-	public WriteToHoc getHocData() {
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
+    @Override
+    public WriteToHoc getHocData() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
-	@Override
-	public WriteToNGX getNGXData() {
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
+    @Override
+    public WriteToParHoc getParHocData(int nProcs) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
-	@Override
-	public WriteToTXT getTXTData() {
-		throw new UnsupportedOperationException("Not supported yet.");
+    @Override
+    public WriteToNGX getNGXData() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
-	}
+    @Override
+    public WriteToTXT getTXTData() {
+        throw new UnsupportedOperationException("Not supported yet.");
 
-	/**
-	 * @brief get types of cells supported in this network
-	 * @return 
-	 */
-	@Override
-	public List<String> getCellTypesOfNetwork() {
-		return new ArrayList<String>();
-	}
+    }
 
-	public class AxonSegmentData {
-		public Neuron neuron;
-		public Section section;
-		public Segment segment;
-		public Point3f end;
+    /**
+     * @brief get types of cells supported in this network
+     * @return 
+     */
+    @Override
+    public List<String> getCellTypesOfNetwork() {
+        return new ArrayList<String>();
+    }
 
-		public AxonSegmentData(Neuron neuron, Section section, Segment segment) {
-			this.neuron = neuron;
-			this.section = section;
-			this.segment = segment;
-			end = segment.getEnd();
-		}
+    public class AxonSegmentData {
 
-		public Point3f get3DVec() {
-			return end;
-		}
+        public Neuron neuron;
+        public Section section;
+        public Segment segment;
+        public Point3f end;
 
-		@Override
-		public String toString() {
-			String ret;
-			ret = "neuron_idx = " + neuron.getIndex() + " local_segment=" + segment.getId();
-			if (section == null) {
-				ret += "section = null";
-			} else {
-				ret += "section = " + section.getId();
-			}
-			ret += "end = ";
-			ret += end.toString();
-			return ret;
-		}
+        public AxonSegmentData(Neuron neuron, Section section, Segment segment) {
+            this.neuron = neuron;
+            this.section = section;
+            this.segment = segment;
+            end = segment.getEnd();
+        }
 
-		public Segment getSegment() {
-			return segment;
-		}
-	}
+        public Point3f get3DVec() {
+            return end;
+        }
 
-	public void calculateSomaticDistance(Cons synapse) {
+        @Override
+        public String toString() {
+            String ret;
+            ret = "neuron_idx = " + neuron.getIndex() + " local_segment=" + segment.getId();
+            if (section == null) {
+                ret += "section = null";
+            } else {
+                ret += "section = " + section.getId();
+            }
+            ret += "end = ";
+            ret += end.toString();
+            return ret;
+        }
+
+        public Segment getSegment() {
+            return segment;
+        }
+    }
+
+    public void calculateSomaticDistance(Cons synapse) {
         //logger.info("neuron1_idx: " + iter.neuron1_idx);
 		//logger.info("neuron2_idx: " + iter.neuron2_idx);       
 		float ax_soma_dist = 0;

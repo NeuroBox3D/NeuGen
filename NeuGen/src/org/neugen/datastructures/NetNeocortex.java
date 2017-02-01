@@ -1347,7 +1347,7 @@ public final class NetNeocortex extends NetBase implements Serializable, Net {
 	public WriteToHoc getHocData() {
 		return new WriteToHocData();
 	}
-
+        
 	/**
 	 * @brief
 	 * @todo should be a factory, all the WriteToXXX can be generalized 
@@ -1415,7 +1415,7 @@ public final class NetNeocortex extends NetBase implements Serializable, Net {
 				+ "  forall insert na \n");
 			int ii = 0;
 			for (; ii < getNumL4stellate(); ++ii) {
-				if (ii % 101 == 100) {
+				if (ii % 101 == 100) {  // WHY!? can Neuron not handle this otherwise?
 					fw.append("} \n"
 						+ "proc init_cell" + secProcCounter++ + "(){ \n");
 				}
@@ -1782,10 +1782,391 @@ public final class NetNeocortex extends NetBase implements Serializable, Net {
 			fw.flush();
 		}
 	}
-	@Override
+    
+    @Override
 	public List<String> getCellTypesOfNetwork() {
 		return new ArrayList<String>() {{
     			add("C");
 		}};
+	}        
+        
+
+    @Override
+	public WriteToParHoc getParHocData(int nProcs)
+        {
+		return new WriteToParHocData(nProcs);
 	}
+        
+    /**
+     * Writes .hoc files for parallel simulation, one for each proc.
+     * Distribution of neurons to procs à la round-robin.
+     */
+    @SuppressWarnings("PublicInnerClass")
+	public class WriteToParHocData implements WriteToParHoc
+    {
+        private int nProcs;
+
+        // constructor with number of procs arguments
+        public WriteToParHocData(int nProcs)
+        {
+            this.nProcs = nProcs;
+        }
+
+
+        /**
+         * Function to get the uEPSP value of a synapse connecting
+         * Neuron1 and Neuron2 depending on their types (simone)
+         * @param typeN1
+         * @param typeN2
+         * @return 
+         */
+        @Override
+        public float get_uEPSP_Value(int typeN1, int typeN2)
+        {
+            float uEPSP; //unitary EPSP variable for the various neuron type combinations
+
+            //which type combination? -> which uEPSP?
+            if ((typeN1 == NeuronTypes.L4_STELLATE.ordinal())
+                && (typeN2 == NeuronTypes.L4_STELLATE.ordinal())) {
+                uEPSP = 0.0016f;
+                //cout << "typeN1: L4, typeN2: L4, uEPSP: " << uEPSP << endl;
+            } else if ((typeN1 == NeuronTypes.L4_STELLATE.ordinal())
+                && (typeN2 == NeuronTypes.L23_PYRAMIDAL.ordinal())) {
+                uEPSP = 0.0007f;
+                //cout << "typeN1: L4, typeN2: L2/3, uEPSP: " << uEPSP << endl;
+            } else if ((typeN1 == NeuronTypes.L4_STELLATE.ordinal())
+                && (typeN2 == NeuronTypes.L5A_PYRAMIDAL.ordinal())) {
+                uEPSP = 0.0006f;
+                //cout << "typeN1: L4, typeN2: L5A, uEPSP: " << uEPSP << endl;
+            } else if ((typeN1 == NeuronTypes.L23_PYRAMIDAL.ordinal())
+                && (typeN2 == NeuronTypes.L23_PYRAMIDAL.ordinal())) {
+                uEPSP = 0.0010f;
+                //cout << "typeN1: L2/3, typeN2: L2/3, uEPSP: " << uEPSP << endl;
+            } else if ((typeN1 == NeuronTypes.L23_PYRAMIDAL.ordinal())
+                && (typeN2 == NeuronTypes.L5A_PYRAMIDAL.ordinal())) {
+                uEPSP = 0.0008f;
+                //cout << "typeN1: L2/3, typeN2: L5A, uEPSP: " << uEPSP << endl;
+            } else if ((typeN1 == NeuronTypes.L23_PYRAMIDAL.ordinal())
+                && (typeN2 == NeuronTypes.L5B_PYRAMIDAL.ordinal())) {
+                uEPSP = 0.0003f;
+                //cout << "typeN1: L2/3, typeN2: L5B, uEPSP: " << uEPSP << endl;
+            } else if ((typeN1 == NeuronTypes.L5A_PYRAMIDAL.ordinal())
+                && (typeN2 == NeuronTypes.L5A_PYRAMIDAL.ordinal())) {
+                uEPSP = 0.0020f;
+                //cout << "typeN1: L5A, typeN2: L5A, uEPSP: " << uEPSP << endl;
+            } else if ((typeN1 == NeuronTypes.L5A_PYRAMIDAL.ordinal())
+                && (typeN2 == NeuronTypes.L23_PYRAMIDAL.ordinal())) {
+                uEPSP = 0.0005f;
+                //cout << "typeN1: L5A, typeN2: L2/3, uEPSP: " << uEPSP << endl;
+            } else if ((typeN1 == NeuronTypes.L5B_PYRAMIDAL.ordinal())
+                && (typeN2 == NeuronTypes.L5B_PYRAMIDAL.ordinal())) {
+                uEPSP = 0.0013f;
+                //cout << "typeN1: L5B, typeN2: L5B, uEPSP: " << uEPSP << endl;
+            } else {
+                uEPSP = 0.0010f;
+                //cout << "typeN1: " << typeN1 << ", typeN2: " << typeN2 << ", uEPSP: ??? " << uEPSP << endl;
+            }
+            return uEPSP;
+        }
+
+        @Override
+        public final void writeToParHocChannels(Writer fw, int proc) throws IOException
+        {
+            int initProcCounter = 1; //counter for init procedures
+
+            fw.append("  // na+ channels \n"
+                    + "  forall {\n"
+                    + "    insert na\n"
+                    + "    insert kv\n"
+                    + "  }\n\n");
+
+            // dendritic models
+            int i = 0;
+            int ii = proc;
+            for (; ii < nneuron; ii += nProcs, ++i)
+            {
+                if (i+1 % 100 == 0)
+                {
+                    fw.append("}\n"
+                        + "proc init_cell" + initProcCounter++ + "(){ \n");
+                }
+                fw.append("  forsec \"N" + ii + "dendrite\" {\n"
+                    + "    gbar_na = gna_dend\n"
+                    + "    gbar_kv = gkv_dend\n"
+                    + "  }\n");
+            }
+
+            fw.append("} \n\n"
+                    + "proc init_cell" + initProcCounter++ + "() { \n");
+
+
+            // axonal models
+            i = 0;
+            ii = proc;
+            for (; ii < nneuron; ii += nProcs, ++i) {
+                    if (i+1 % 25 == 0)
+                    {
+                        fw.append("} \n"
+                            + "proc init_cell" + initProcCounter++ + "(){ \n");
+                    }
+                fw.append("  forsec \"N" + ii + "axon\" {\n"
+                    + "    gbar_na = gna_axon \n"
+                    + "    gbar_kv = gkv_axon \n"
+                    + "  }\n");
+            }
+
+            fw.append("} \n\n"
+                    + "proc init_cell" + initProcCounter++ + "() { \n");
+
+
+            // somatic models
+            i = 0;
+            ii = proc;
+            for (; ii < nneuron; ii += nProcs, i++)
+            {
+                if (i % 100 == 0)
+                {
+                    fw.append("} \n"
+                        + "proc init_cell" + initProcCounter++ + "(){ \n");
+                }
+
+                fw.append("  N" + ii + "soma {\n"
+                    + "    gbar_na = gna_soma \n"
+                    + "    gbar_kv = gkv_soma \n"
+                    + "  }\n");
+            }
+
+            fw.append("\n"
+                + "  forall if(ismembrane(\"k_ion\")) ek = Ek \n"
+                + "  forall if(ismembrane(\"na_ion\")) { \n"
+                + "    ena = Ena \n"
+                + "    // seems to be necessary for 3d cells to shift Na kinetics -5 mV \n"
+                + "    vshift_na = -5 \n"
+                + "  } \n"
+                + "  forall if(ismembrane(\"ca_ion\")) { \n"
+                + "    eca = 140 \n"
+                + "    ion_style(\"ca_ion\",0,1,0,0,0) \n"
+                + "    vshift_ca = 0 \n"
+                + "  } \n"
+                + "} \n\n");
+
+            for (int k = 0; k < initProcCounter; ++k)
+                fw.append("init_cell" + k + "() \n");
+
+            fw.append("\n");
+            fw.flush();
+        }
+
+        @Override
+        public final void writeToParHocAlphaSynapses(Writer fw, int proc) throws IOException
+        {
+            writetohocAlphaSynapses(fw, NeuronTypes.L4_STELLATE, proc);
+            writetohocAlphaSynapses(fw, NeuronTypes.L23_PYRAMIDAL, proc);
+            writetohocAlphaSynapses(fw, NeuronTypes.L5B_PYRAMIDAL, proc);
+        }
+
+        /**
+         * Function to write alpha synapses to a hoc file.
+         *
+         * @param fw stream for the hoc file
+         * @param neuronType
+         * @param proc
+         * @throws java.io.FileNotFoundException
+         */
+        public final void writetohocAlphaSynapses(Writer fw, NeuronTypes neuronType, int proc)
+            throws FileNotFoundException, IOException
+        {
+            for (int j = 0; j < synapseList.size(); j++)
+            {
+                Cons synapse = synapseList.get(j);
+                int n_idx = synapse.getNeuron2().getIndex();
+
+                // if index is not on the proc, ignore
+                if ((n_idx - proc) % nProcs != 0)
+                    continue;
+
+                // no biexp synapses
+                if (synapse.getNeuron1() != null)
+                    continue;
+
+                if (neuronType.equals(NeuronTypes.L4_STELLATE))
+                {
+                    if (synapse.getNeuron2().getIndex() >= getNumL4stellate())
+                        continue;
+                }
+                else if (neuronType.equals(NeuronTypes.L23_PYRAMIDAL))
+                {
+                    int nNum = getNumL4stellate() + getNumL23pyramidal();
+                    if (synapse.getNeuron2().getIndex() < getNumL4stellate()
+                        || synapse.getNeuron2().getIndex() >= nNum)
+                            continue;
+                }
+                else if (neuronType.equals(NeuronTypes.L5B_PYRAMIDAL))
+                {
+                    int nNum = getNumL4stellate() + getNumL23pyramidal() + getNumL5Apyramidal();
+                    int nNum2 = getNumL4stellate() + getNumPyramidal();
+                    if (synapse.getNeuron2().getIndex() < nNum || synapse.getNeuron2().getIndex() > nNum2)
+                        continue;
+                }
+                else continue;
+
+
+
+                int c_idx = 0;
+                for (Segment denSeg : synapse.getNeuron2DenSection().getSegments())
+                {
+                    if (denSeg.getId() == synapse.getNeuron2DenSectionSegment().getId())
+                        break;
+
+                    c_idx++;
+                }
+
+                int sec_id = synapse.getNeuron2DenSection().getId();
+                float dd = NeuronalTreeStructure.getDendriteSectionData(synapse.getNeuron2DenSection(), c_idx);
+
+                fw.append("objectvar Synapse" + j + "\n"
+                    + "N" + n_idx + "dendrite" + sec_id + " Synapse" + j
+                    + " = new AlphaSynapse(" + dd + ")" + "\n"
+                    + "Synapse" + j + ".onset = 0.0\n"
+                    + "Synapse" + j + ".tau = 1.7\n"
+                    + "Synapse" + j + ".gmax = " + (1 + 0.001 * synapse.getDendriticSomaDistance()) * 0.001 + "\n" // maximum value
+                    + "Synapse" + j + ".e = 0" + "\n"
+                    + "\n");
+                fw.flush();
+            }
+        }
+
+        @Override
+        public final void writeToParHocExp2Synapses(Writer fw, Writer synFW, int proc)
+            throws IOException
+        {
+            // Factor to rise weight of a synapse per micrometer.
+            float wfactor = 0.001f;
+            List<Cons> synapseList = getSynapseList();
+            for (int j = 0; j < synapseList.size(); j++)
+            {
+                Cons synapse = synapseList.get(j);
+
+                // no alpha synapses
+                if (synapse.getNeuron1() == null)
+                    continue;
+
+                int n_post_idx = synapse.getNeuron2().getIndex();
+                int n_pre_idx = synapse.getNeuron1().getIndex();
+
+                // spike source needs to be represented by a netcon on 
+                // processor holding the presynaptic neuron
+                if ((n_pre_idx - proc) % nProcs == 0)
+                {
+                    Section ax_section = synapse.getNeuron1AxSection();
+                    assert (ax_section.getLength() > 0.0);
+                    int axSegPos = 0;
+                    for (Segment axSeg : ax_section.getSegments())
+                    {
+                        if (axSeg.getId() == synapse.getNeuron1AxSegment().getId())
+                            break;
+
+                        axSegPos++;
+                    }
+
+                    float ff = NeuronalTreeStructure.getDendriteSectionData(synapse.getNeuron1AxSection(), axSegPos);
+                    assert (ff <= 1.0);
+
+                    fw.append("objectvar nc_pre" + j + "\n"
+                        + "{pc.set_gid2node(" + j + ", pc.id)}    // associate global id to this proc\n"
+                        + "N" + synapse.getNeuron1().getIndex() + ax_section.getName() + " nc_pre" + j
+                        + " = new NetCon(&v(" + ff + "), nil)    // declare presynapse\n"
+                        + "nc_pre" + j + ".threshold = -10.0\n"
+                        + "{pc.cell(" + j + ", nc_pre" + j + ")}    // globally declare id " + j + " to correspond to this presynapse\n\n");
+                }
+
+                // postsynapse
+                if ((n_post_idx - proc) % nProcs == 0)
+                {
+                    int typeN1 = getTypeOfNeuron(synapse.getNeuron1().getIndex());
+                    int typeN2 = getTypeOfNeuron(synapse.getNeuron2().getIndex());
+
+                    int c_idx = 0;
+                    for (Segment denSeg : synapse.getNeuron2DenSection().getSegments())
+                    {
+                        if (denSeg.getId() == synapse.getNeuron2DenSectionSegment().getId())
+                            break;
+
+                        c_idx++;
+                    }
+
+                    int sec_id = synapse.getNeuron2DenSection().getId();
+                    float dd = NeuronalTreeStructure.getDendriteSectionData(synapse.getNeuron2DenSection(), c_idx);
+                    //float dd = synapse.neuron2.getDendrites().get(d_idx).getdendritesectionData(sec_id, c_idx);
+                    //logger.info("dendrite secion data: " + dd);
+                    //int n1_idx = synapse.neuron1_idx;
+
+                    if (synFW != null)
+                    {
+                        //write functional synapse (NetCon) coordinates in file
+                        Point3f sc = synapse.getNeuron1AxSegment().getEnd();
+                        synFW.append(sc.x + " " + sc.y + " " + sc.z + "\n");
+                        synFW.flush();
+                    }
+
+                    fw.append("\nobjectvar Synapse" + j + "\n"
+                        + "N" + n_post_idx + "dendrite" + sec_id + " Synapse" + j + " = new Exp2Syn(" + dd + ")" + "\n"
+                        + "Synapse" + j + ".tau1 = 0.2" + "\n" /* ms */
+                        + "Synapse" + j + ".tau2 = 1.7" + "\n" /* ms */
+                        + "Synapse" + j + ".e = 0.0" + "\n\n" /* reversal potential, mV */
+
+                    // create netcon
+                        + "objectvar nc_post" + j + "\n"
+                        + "nc_post" + j + " = pc.gid_connect(" + j + ", Synapse" + j + ")    // connect this synapse to its presynapse \n"
+                        + "nc_post" + j + ".delay = 0.5\n"
+                        + "nc_post" + j + ".weight = "
+                        + HOCUtil.format((1 + wfactor * synapse.getDendriticSomaDistance()) * get_uEPSP_Value(typeN1, typeN2)) + "\n\n");
+                }
+            }
+            if (synFW != null)
+                synFW.close();
+
+            fw.flush();
+        }
+
+        @Override
+        public final void writeToParHocModel(Writer fw) throws IOException
+        {
+            //fw.append("objref fih \n");
+            //fw.append("fih = new FInitializeHandler(2, \"mkmovie()\")\n");
+            //fw.append("access N0soma\n");
+            //fw.append("objref st\n");
+            //fw.append("st=new IClamp(0.5)\n");
+            //fw.append("st.dur = 10\n");
+            //fw.append("st.del = 10\n");
+            //fw.append("st.amp = 0.2\n\n");
+            fw.append("// --------------------------------------------------------------\n");
+            fw.append("// passive & active membrane\n");
+            fw.append("// --------------------------------------------------------------\n");
+            fw.append("ra        = 150\n");
+            fw.append("global_ra = ra\n");
+            fw.append("rm        = 30000\n");
+            fw.append("c_m       = 0.75\n");
+            fw.append("Ek = -90 \n");
+            fw.append("Ena = 60\n");
+            fw.append("gna_dend = 40\n");
+            fw.append("gna_axon = 30000\n");
+            fw.append("gna_soma = 1500\n\n");
+            fw.append("gkv_dend = 30\n");
+            fw.append("gkv_axon = 400\n");
+            fw.append("gkv_soma = 200\n");
+            fw.append("v_init = -70.0 \n\n");
+            fw.append("proc init_cell0() {\n");
+            fw.append("  // passive\n");
+            fw.append("  forall {\n");
+            fw.append("    insert pas\n");
+            fw.append("    Ra = ra\n");
+            fw.append("    cm = c_m\n");
+            fw.append("    g_pas = 1/rm\n");
+            fw.append("    e_pas = v_init\n");
+            fw.append("  }\n\n");
+            fw.flush();
+        }
+	}
+    
 }

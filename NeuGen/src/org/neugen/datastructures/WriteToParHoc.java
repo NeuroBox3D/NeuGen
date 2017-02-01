@@ -48,64 +48,22 @@
  */
 package org.neugen.datastructures;
 
-import org.neugen.parsers.NGX.WriteToNGX;
-import org.neugen.datastructures.neuron.Neuron;
-import java.util.List;
-import java.util.Map;
-import org.neugen.parsers.TXT.WriteToTXT;
+import java.io.IOException;
+import java.io.Writer;
 
 /**
- * @author Sergei Wolf
+ *
+ * @author Markus Breit
  */
-public interface Net {
-
-    public void interconnect();
-
-    public void generate();
-
-    public Map<String, Float> computeAPSN();
-
-    public int getTypeOfNeuron(int indexOfNeuron);
-
-    public WriteToHoc getHocData();
+public interface WriteToParHoc {
     
-    public WriteToParHoc getParHocData(int nProcs);
-    
-    public WriteToNGX getNGXData();
-    
-    public WriteToTXT getTXTData();
+    public float get_uEPSP_Value(int typeN1, int typeN2);
 
-    public int createNonFunSynapses();
+    public void writeToParHocExp2Synapses(Writer fw4Proc, Writer synFW, int proc) throws IOException;
 
-    public int getNumSynapse();
+    public void writeToParHocChannels(Writer fw, int proc) throws IOException;
 
-    public int getNumNonFunSynapses();
+    public void writeToParHocAlphaSynapses(Writer fw, int proc) throws IOException;
 
-    public long getNumOfSynapses(int presynapticType, int postSynapticType);
-
-    public List<String> getTypeCellNames();
-
-    public List<Neuron> getNeuronList();
-
-    public int[] getCellOffsets();
-
-    public void destroy();
-
-    public int getTotalNumOfAxonalSegments();
-
-    public int getTotalNumOfDenSegments();
-
-    public int getTotalNumOfSomataSegments();
-
-    public List<Cons> getSynapseList();
-
-    public int getNumNeurons();
-
-    public void setTotalNumOfSegments();
-
-    public int getTotalNumOfSegments();
-
-    public Region getRegion();
-
-    public List<String> getCellTypesOfNetwork();
+    public void writeToParHocModel(Writer fw) throws IOException;
 }

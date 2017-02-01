@@ -83,6 +83,7 @@ import org.neugen.gui.NeuGenProject;
 import org.neugen.parsers.DefaultInheritance;
 import org.neugen.parsers.NGX.NGXWriter;
 import org.neugen.parsers.NeuGenConfigStreamer;
+import org.neugen.parsers.ParHocWriter;
 import org.neugen.parsers.TXT.TXTWriter;
 import org.neugen.utils.NeuGenLogger;
 
@@ -533,9 +534,27 @@ public final class NGBackend {
 			txtWriter.setUncompressed(true);
 			txtWriter.setWithCellType(withCellType);
 			txtWriter.exportNetToTXT();
-		} else {
+        } else {
 			logger.info("Unsupported exporter chosen.");
 		}
+	}
+        
+	/**
+	 * @brief exports a network for parallel computation with NEURON
+	 * 
+	 * Note: Enhance this function by needs, i. e. if you
+	 * need another exporter, like HOC or something else, you
+	 * may add it here
+	 *
+	 * @param file 
+	 * @param nProcs 
+	 */
+	public void export_parallel_network(String file, int nProcs)
+        {
+            Net net = ngLib.getNet();
+            logger.info("Exporting parallel HOC data to " + file);
+            ParHocWriter parHocWriter = new ParHocWriter(net, new File(file), nProcs);
+            parHocWriter.exportNet();
 	}
 	
 	/**

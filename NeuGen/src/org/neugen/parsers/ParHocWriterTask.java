@@ -46,66 +46,52 @@
  * Neurocomputing, 70(1-3), pp. 327-343, doi: 10.1016/j.neucom.2006.01.028
  *
  */
-package org.neugen.datastructures;
+package org.neugen.parsers;
 
-import org.neugen.parsers.NGX.WriteToNGX;
-import org.neugen.datastructures.neuron.Neuron;
-import java.util.List;
-import java.util.Map;
-import org.neugen.parsers.TXT.WriteToTXT;
+import org.neugen.gui.*;
+import java.io.File;
+import org.jdesktop.application.Task;
+import org.jdesktop.application.Application;
+import org.neugen.datastructures.Net;
 
 /**
- * @author Sergei Wolf
+ * @author Markus Breit, adapted from Sergej Wolf
  */
-public interface Net {
 
-    public void interconnect();
+public final class ParHocWriterTask extends Task<Void, Void>
+{
+     private final File file;
+    private final int nProcs;
 
-    public void generate();
+    public ParHocWriterTask(Application app, File f, int nProcs)
+    {
+        super(app);
+        file = f;
+        this.nProcs = nProcs;
+    }
 
-    public Map<String, Float> computeAPSN();
+    public void setMyProgress(int value, int min, int max)
+    {
+        setProgress(value, min, max);
+    }
 
-    public int getTypeOfNeuron(int indexOfNeuron);
+    @Override
+    protected Void doInBackground()
+    {
+        Net net = NeuGenView.getInstance().getNet();
+        ParHocWriter parHocWriter = new ParHocWriter(net, file, nProcs);
 
-    public WriteToHoc getHocData();
-    
-    public WriteToParHoc getParHocData(int nProcs);
-    
-    public WriteToNGX getNGXData();
-    
-    public WriteToTXT getTXTData();
+        HocDialog hocConfigDialog = new HocDialog(NeuGenView.getInstance().getFrame(), true);
+        hocConfigDialog.setVisible(true);
+        //String eventPostfix = hocConfigDialog.getEventsTextField().getText();
+        //String voltagesPostfix = hocConfigDialog.getVoltagesTextField().getText();
+        //parHocWriter.setNetConEventsFilePostfix(eventPostfix);
+        //parHocWriter.setVoltageFilePostfix(voltagesPostfix);
+        setMessage("Exporting parallel hoc data to " + file.getName());
+        parHocWriter.exportNet();
+	return null;
+    }
 
-    public int createNonFunSynapses();
-
-    public int getNumSynapse();
-
-    public int getNumNonFunSynapses();
-
-    public long getNumOfSynapses(int presynapticType, int postSynapticType);
-
-    public List<String> getTypeCellNames();
-
-    public List<Neuron> getNeuronList();
-
-    public int[] getCellOffsets();
-
-    public void destroy();
-
-    public int getTotalNumOfAxonalSegments();
-
-    public int getTotalNumOfDenSegments();
-
-    public int getTotalNumOfSomataSegments();
-
-    public List<Cons> getSynapseList();
-
-    public int getNumNeurons();
-
-    public void setTotalNumOfSegments();
-
-    public int getTotalNumOfSegments();
-
-    public Region getRegion();
-
-    public List<String> getCellTypesOfNetwork();
+    @Override
+    protected void succeeded(Void result) {}
 }
