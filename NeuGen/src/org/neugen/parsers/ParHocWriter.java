@@ -747,8 +747,9 @@ public final class ParHocWriter
             }
             
             // write gathering file
-            try (Writer fw = new FileWriter(file))
-            {
+	    Writer fw = null;
+            try { 
+		fw = new FileWriter(file);
                 fw.append("// load the GUI and standard run libraries\n");
                 fw.append("{load_file(\"nrngui.hoc\")}\n\n");
                 fw.append("// initialize parallel context\n");
@@ -769,6 +770,7 @@ public final class ParHocWriter
                 fw.flush();
             }
             catch (Exception e) {System.out.println("Could not write gathering file: " + e.getMessage());}
+	    finally { fw.close(); }
         }
         catch (Exception e)
         {

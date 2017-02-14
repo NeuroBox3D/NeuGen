@@ -83,7 +83,7 @@ public final class SimpleCLI {
                 }
 
                 int nProcs;
-                try {nProcs = Integer.parseUnsignedInt(args[4]);}
+                try {nProcs = Integer.parseInt(args[4]);}
                 catch (NumberFormatException ex)
                 {
                     System.out.println("\tExport type PARHOC requires a target process "
