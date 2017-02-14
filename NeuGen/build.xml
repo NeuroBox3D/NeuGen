@@ -158,12 +158,14 @@ minus the .jar extension. It should not have spaces.
         <delete dir="dist-single"/>
         <delete dir="dist/lib"/>
         
-        <!--Copy final jar to studio plugin folder-->   
+        <!--Copy final jar to studio plugin folder-->
+        <!--
         <property file="build.properties"/>
         <echo message="Copying ${dist.jar} to ${vrl.dir}/plugin-updates"/>
         <copy 
         file="${dist.jar}" 
         todir="${vrl.dir}/plugin-updates"/>
+        -->
         
     </target>
     
