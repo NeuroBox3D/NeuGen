@@ -862,9 +862,6 @@ public final class NetNeocortex extends NetBase implements Serializable, Net {
 					axSegPos++;
 				}
 
-				/**
-				 * @todo from and to is interchanged here probably!
-				 */
 				float ax_local_position = (ax_section.getLength() * axSegPos) / ax_section.getLength();
 				assert (!Float.isInfinite(ax_local_position));
 
@@ -922,43 +919,19 @@ public final class NetNeocortex extends NetBase implements Serializable, Net {
 				//ngxsynapse.setFrom_loc(ff);
 				exp2syn.setFrom_loc(to_walk_on_given_edge_axon);
 				exp2syn.setGmax((1 + wfactor * synapse.getDendriticSomaDistance()) * get_uEPSP_Value(typeN1, typeN2));
-				sb.append(exp2syn.getFrom_point_start().x);
+				sb.append(exp2syn.getFrom_loc());		// local pos on segment FROM
 				sb.append(" ");
-				sb.append(exp2syn.getFrom_point_start().y);
+				sb.append(exp2syn.getTo_loc());			// local pos on segment TO
 				sb.append(" ");
-				sb.append(exp2syn.getFrom_point_start().z);
+				sb.append(exp2syn.getSynapseInfo());	// type + max conductance
 				sb.append(" ");
-				sb.append(exp2syn.getFrom_point_end().x);
+				sb.append(exp2syn.getFrom());			// section name FROM
 				sb.append(" ");
-				sb.append(exp2syn.getFrom_point_end().y);
+				sb.append(exp2syn.getTo());				// section name TO
 				sb.append(" ");
-				sb.append(exp2syn.getFrom_point_end().z);
+				sb.append(exp2syn.getFrom_Index());		// section start (0) or end (1) of FROM section
 				sb.append(" ");
-				sb.append(exp2syn.getTo_point_start().x);
-				sb.append(" ");
-				sb.append(exp2syn.getTo_point_start().y);
-				sb.append(" ");
-				sb.append(exp2syn.getTo_point_start().z);
-				sb.append(" ");
-				sb.append(exp2syn.getTo_point_end().x);
-				sb.append(" ");
-				sb.append(exp2syn.getTo_point_end().y);
-				sb.append(" ");
-				sb.append(exp2syn.getTo_point_end().z);
-				sb.append(" ");
-				sb.append(exp2syn.getFrom_loc());
-				sb.append(" ");
-				sb.append(exp2syn.getTo_loc());
-				sb.append(" ");
-				sb.append(exp2syn.getSynapseInfo());
-				sb.append(" ");
-				sb.append(exp2syn.getFrom());
-				sb.append(" ");
-				sb.append(exp2syn.getTo());
-				sb.append(" ");
-				sb.append(exp2syn.getFrom_Index());
-				sb.append(" ");
-				sb.append(exp2syn.getTo_Index());
+				sb.append(exp2syn.getTo_Index());		// section start (0) or end (1) of TO section
 				sb.append(" ");
 				
 				if (pw != null) {
@@ -1085,43 +1058,19 @@ public final class NetNeocortex extends NetBase implements Serializable, Net {
 				alpha.setGmax((1 + wfactor * synapse.getDendriticSomaDistance()) * 0.001f);
 				
 				/// write one alpha synapse
-				sb.append(alpha.getFrom_point_start().x);
+				sb.append(alpha.getFrom_loc());			// local pos on segment FROM
 				sb.append(" ");
-				sb.append(alpha.getFrom_point_start().y);
+				sb.append(alpha.getTo_loc());			// local pos on segment TO
 				sb.append(" ");
-				sb.append(alpha.getFrom_point_start().z);
+				sb.append(alpha.getSynapseInfo());		// type + max conductance
 				sb.append(" ");
-				sb.append(alpha.getFrom_point_end().x);
+				sb.append(alpha.getFrom());				// section name FROM
 				sb.append(" ");
-				sb.append(alpha.getFrom_point_end().y);
+				sb.append(alpha.getTo());				// section name TO
 				sb.append(" ");
-				sb.append(alpha.getFrom_point_end().z);
+				sb.append(alpha.getFrom_Index());		// section start (0) or end (1) of FROM section
 				sb.append(" ");
-				sb.append(alpha.getTo_point_start().x);
-				sb.append(" ");
-				sb.append(alpha.getTo_point_start().y);
-				sb.append(" ");
-				sb.append(alpha.getTo_point_start().z);
-				sb.append(" ");
-				sb.append(alpha.getTo_point_end().x);
-				sb.append(" ");
-				sb.append(alpha.getTo_point_end().y);
-				sb.append(" ");
-				sb.append(alpha.getTo_point_end().z);
-				sb.append(" ");
-				sb.append(alpha.getFrom_loc());
-				sb.append(" ");
-				sb.append(alpha.getTo_loc());
-				sb.append(" ");
-				sb.append(alpha.getSynapseInfo());
-				sb.append(" ");
-				sb.append(alpha.getFrom());
-				sb.append(" ");
-				sb.append(alpha.getTo());
-				sb.append(" ");
-				sb.append(alpha.getFrom_Index());
-				sb.append(" ");
-				sb.append(alpha.getTo_Index());
+				sb.append(alpha.getTo_Index());			// section start (0) or end (1) of TO section
 				sb.append(" ");
 				
 				if (pw != null) {

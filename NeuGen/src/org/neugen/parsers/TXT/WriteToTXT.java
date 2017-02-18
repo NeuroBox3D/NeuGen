@@ -59,6 +59,6 @@ import org.apache.commons.compress.compressors.CompressorOutputStream;
  * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
 public interface WriteToTXT {
- 	public void writeExp2Synapses(CompressorOutputStream cos, PrintWriter pw);
-        public void writeAlphaSynapses(CompressorOutputStream cos, PrintWriter pw);
+	public void writeExp2Synapses(CompressorOutputStream cos, PrintWriter pw);
+	public void writeAlphaSynapses(CompressorOutputStream cos, PrintWriter pw);
 }
