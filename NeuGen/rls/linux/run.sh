@@ -7,7 +7,7 @@ EXT_LIBS_DIR=libs/
 MAX_HEAP_MEMORY=6000m
 MAIN=org.neugen.gui.NeuGenApp
 CLASSPATH=dist/NeuGen.jar
-APP_DIR=../
+APP_DIR=../../
 
 # execute
 cd $APP_DIR;
