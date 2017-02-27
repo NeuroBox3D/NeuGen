@@ -5,6 +5,14 @@ NeuGen generates nonidentical neurons of morphological classes of the cortex, e.
 
 The generated neurons can be exported into a 3D graphic format for visualization and into multi-compartment files for simulations with the program NEURON. NeuGen is intended for scientists aiming at simulations of realistic networks in 3D.
 
+# Howto build NeuGen
+1. Netbeans: Clean & Build
+2. Ant: ant from NeuGen folder
+
+# Howto run NeuGen
+1. Netbeans: Run File ```NeuGenApp.java```
+2. Terminal: Goto rls folder - execute run script according to your OS
+
 ## Releases
 NeuGen 2.0 - git tag v2.0
 Current development on devel branch, current stable on master branch.
