@@ -78,8 +78,6 @@ import org.apache.commons.compress.compressors.CompressorStreamFactory;
 import org.apache.commons.io.FilenameUtils;
 import org.neugen.backend.NGBackend;
 import org.neugen.datastructures.Pair;
-import org.neugen.datastructures.Region;
-import org.neugen.gui.NeuGenView;
 
 /**
  * @brief TXT writer (NeuGen XML)
@@ -91,6 +89,8 @@ import org.neugen.gui.NeuGenView;
  * 	 incrementally the networks by passing getTXTDendriteData() and
  *       getTXTExp2Synapses() for instance a PrintWriter instance, and write
  *       directly, instead of creating instances of TXTAxon or TXTExp2Synapse.
+ * 
+ * 	 TODO: Ab Zeile 455 Bottleneck? Besser gleich schreiben nicht Sections akkumilieren?
  */
 public class TXTWriter {
 	/// private final members

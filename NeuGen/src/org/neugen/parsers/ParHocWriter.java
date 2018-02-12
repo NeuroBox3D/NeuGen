@@ -58,7 +58,6 @@ import org.apache.log4j.Logger;
 import org.neugen.backend.NGBackend;
 import org.neugen.datastructures.Axon;
 import org.neugen.datastructures.Cellipsoid;
-import org.neugen.datastructures.Cons;
 import org.neugen.datastructures.Dendrite;
 import org.neugen.datastructures.Net;
 import org.neugen.datastructures.neuron.Neuron;
@@ -96,8 +95,9 @@ public final class ParHocWriter
         hocBaseName = file.getName();
         String[] str = hocBaseName.split("\\.");
         hocBaseName = str[0];
-        if (NeuGenConstants.WITH_GUI)
-            trigger = Trigger.getInstance();
+        if (NeuGenConstants.WITH_GUI) {
+		trigger = Trigger.getInstance();
+	}
     }
 
    /*
@@ -180,8 +180,9 @@ public final class ParHocWriter
     {
         int nsections = 0;
         Axon axon = neuron.getAxon();
-        if (axon.getFirstSection() == null)
-            return 0;
+        if (axon.getFirstSection() == null) {
+		return 0;
+	}
 
         Section.Iterator secIterator = axon.getFirstSection().getIterator();
         while (secIterator.hasNext())
@@ -192,10 +193,11 @@ public final class ParHocWriter
             String data = "create " + "N" + nn + secName + "\n";
             fw.write(data);
             Section parSec;
-            if (section.getParentalLink() != null)
-                parSec = section.getParentalLink().getParental();
-            else
-                parSec = neuron.getSoma().getCylindricRepresentant();
+            if (section.getParentalLink() != null) {
+		    parSec = section.getParentalLink().getParental();
+	    } else {
+		    parSec = neuron.getSoma().getCylindricRepresentant();
+	    }
 
             float fractAlongParent = parSec.getFractAlongParentForChild(section);
             //connect N0axon_hillock(0), N0soma(0)
@@ -212,8 +214,9 @@ public final class ParHocWriter
             }
             fw.write("N" + nn + secName + " {\n");
             fw.write("\t nseg = " + nsegs + "\n\t pt3dclear()\n");
-            for (Segment segment : section.getSegments())
-                writetohocSegment(fw, 0, segment);
+            for (Segment segment : section.getSegments()) {
+		    writetohocSegment(fw, 0, segment);
+	    }
             
             Segment segment = section.getSegments().get(nsegs - 1);
             writetohocSegment(fw, 1, segment);
@@ -251,10 +254,11 @@ public final class ParHocWriter
                 String data = "create " + "N" + nn + secName + "\n";
                 fw.write(data);
                 Section parSec;
-                if (section.getParentalLink() != null)
-                    parSec = section.getParentalLink().getParental();
-                else
-                    parSec = neuron.getSoma().getCylindricRepresentant();
+                if (section.getParentalLink() != null) {
+			parSec = section.getParentalLink().getParental();
+		} else {
+			parSec = neuron.getSoma().getCylindricRepresentant();
+		}
                 
                 float fractAlongParent = parSec.getFractAlongParentForChild(section);
                 String parentSecName = parSec.getName();
@@ -272,8 +276,9 @@ public final class ParHocWriter
                 }
                 fw.write("N" + nn + secName + " {\n");
                 fw.write("\t nseg = " + nsegs + "\n\t pt3dclear()\n");
-                for (Segment segment : section.getSegments())
-                    writetohocSegment(fw, 0, segment);
+                for (Segment segment : section.getSegments()) {
+			writetohocSegment(fw, 0, segment);
+		}
                 
                 Segment segment = section.getSegments().get(nsegs - 1);
                 writetohocSegment(fw, 1, segment);
@@ -327,8 +332,9 @@ public final class ParHocWriter
         fw.write("tmpveclist = new List()\n\n");
         
         // write neuron geometry    
-        for (int i = p; i < nneuron; i += nProcs)
-            writetohocNeuron(fw, i);
+        for (int i = p; i < nneuron; i += nProcs) {
+		writetohocNeuron(fw, i);
+	}
 
         // write exp2 synapses
         try
@@ -351,10 +357,11 @@ public final class ParHocWriter
         
         // write model to file
         String sm_fname = hocBaseName + "model.hoc";
-        if (NeuGenConstants.WITH_GUI)
-            trigger.outPrintln("\t" + sm_fname);
-        else
-            NGBackend.logger.info("\t" + sm_fname);
+        if (NeuGenConstants.WITH_GUI) {
+		trigger.outPrintln("\t" + sm_fname);
+	} else {
+		NGBackend.logger.info("\t" + sm_fname);
+	}
         
         String procAsString = String.format("%0"+(int)Math.ceil(Math.log10(nProcs+1))+"d", p);
         String procModelFileName = file.getParentFile().getPath()
@@ -389,14 +396,16 @@ public final class ParHocWriter
             printCmdPt1 += "%g ";
             printCmdPt2 += ", N" + id + "soma.v(.5)";
             
-            if (cnt == 19)
-                fw.append(printCmdPt1 + "\\n\"" + printCmdPt2 + ")\n");
+            if (cnt == 19) {
+		    fw.append(printCmdPt1 + "\\n\"" + printCmdPt2 + ")\n");
+	    }
             
             id += nProcs;
             cnt = (cnt+1) % 20;
         }
-        if (cnt != 0)
-            fw.append(printCmdPt1 + "\\n\"" + printCmdPt2 + ")\n");
+        if (cnt != 0) {
+		fw.append(printCmdPt1 + "\\n\"" + printCmdPt2 + ")\n");
+	}
         
         //fw.append("\tcvode.event(t+dt, \"wtvoltage()\")\n\n\n");
         
@@ -680,8 +689,9 @@ public final class ParHocWriter
     {
         String hoc = NeuGenConstants.EXTENSION_HOC;
         String extension = Utils.getExtension(file);
-        if (!hoc.equals(extension))
-            file = new File(file.getAbsolutePath() + "." + hoc);
+        if (!hoc.equals(extension)) {
+		file = new File(file.getAbsolutePath() + "." + hoc);
+	}
         
         /*
         if ("".equals(netConEventsFilePostfix))

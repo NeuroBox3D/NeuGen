@@ -56,9 +56,9 @@ import org.neugen.gui.NeuGenConstants;
 import static org.neugen.backend.NGBackend.logger;
 
 /**
- * @brief simple command line interface (CLI) for NeuGen's pseudo-backend
+ * @brief simple CLI interface for special task: exporting parallel HOC files
+ *        (and opening project files to then generate the network and export it)
  * @author stephanmg <stephan@syntaktischer-zucker.de>
- * @todo parsing of options could be improved
  */
 public final class SimpleCLI {
 	@SuppressWarnings({"CallToPrintStackTrace", "CallToThreadDumpStack"})

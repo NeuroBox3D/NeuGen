@@ -179,8 +179,8 @@ public final class NGBackend {
 		}
 		prop.setProperty(NeuGenConstants.PROP_DATE_KEY, (new Date().toString()));
 		prop.setProperty(NeuGenConstants.PROP_PROJECT_NAME_KEY, projectType);
-		String projectName = new File(projectPath).getName();
-		prop.setProperty(projectName, prop.getProperty(NeuGenConstants.PROPERTIES_KEY));
+		String projectFileName = new File(projectPath).getName();
+		prop.setProperty(projectFileName, prop.getProperty(NeuGenConstants.PROPERTIES_KEY));
 		return prop;
 	}
 
@@ -957,19 +957,19 @@ public final class NGBackend {
 	public static void main(String... args) {
 		try {
 			NGBackend back = new NGBackend();
-			back.create_and_open_project("foo28", "/Users/stephan/Code/git/NeuGen_source/NeuGen", NeuGenConstants.NEOCORTEX_PROJECT, true, false);
+			back.create_and_open_project("foo29", "/Users/stephan/Code/git/NeuGen_source/NeuGen", NeuGenConstants.NEOCORTEX_PROJECT, true, false);
 			back.modifyNPartsDensity(0.25);
 			back.modifySynapseDistance(0.1);
-			back.adjustNetworkSize(1);
-			int starPyramidal = 0;
+			back.adjustNetworkSize(10);
+			int starPyramidal = 1;
 			back.adjust_number_of_star_pyramidal_cells(starPyramidal);
-			int l4Stellate = 0;
+			int l4Stellate = 1;
 			back.adjust_number_of_stellate_cells(l4Stellate);
-			int l23Pyramidal = 0;
+			int l23Pyramidal = 1;
 			back.adjust_number_of_layer_23_pyramidal(l23Pyramidal);
-			int l5APyramidal = 0;
+			int l5APyramidal = 1;
 			back.adjust_number_of_layer_5_a_pyramidal(l5APyramidal);
-			int l5BPyramidal = 0;
+			int l5BPyramidal = 1;
 			back.adjust_number_of_layer_5_b_pyramidal(l5BPyramidal);
 			back.generate_network();
 			back.export_network("TXT", "foo28.txt", false);
