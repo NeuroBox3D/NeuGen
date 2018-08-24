@@ -36,10 +36,7 @@ Current development on devel branch, current stable on master branch.
 * [![Build Status](https://buildhive.cloudbees.com/job/NeuroBox3D/job/NeuGen/badge/icon)](https://buildhive.cloudbees.com/job/NeuroBox3D/job/NeuGen/)
 
 ### Issues
-* [![Stories in Backlog](https://badge.waffle.io/NeuroBox3D/NeuGen.png?label=backlog&title=Backlog)](http://waffle.io/NeuroBox3D/NeuGen)
 [![Stories in Ready](https://badge.waffle.io/NeuroBox3D/NeuGen.png?label=ready&title=Ready)](http://waffle.io/NeuroBox3D/NeuGen)
-[![Stories in In Progress](https://badge.waffle.io/NeuroBox3D/NeuGen.png?label=in progress&title=In Progress)](http://waffle.io/NeuroBox3D/NeuGen)
-[![Stories in Done](https://badge.waffle.io/NeuroBox3D/NeuGen.png?label=done&title=Done)](http://waffle.io/NeuroBox3D/NeuGen)
 
 ### License
 * [![LGPLv3](https://img.shields.io/badge/license-LGPLv3-blue.svg)](./README.md)
