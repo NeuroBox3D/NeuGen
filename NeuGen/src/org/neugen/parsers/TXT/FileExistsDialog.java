@@ -46,13 +46,16 @@ public class FileExistsDialog extends javax.swing.JDialog {
         jPopupMenu1.setName("jPopupMenu1"); // NOI18N
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(org.neugen.gui.NeuGenApp.class).getContext().getResourceMap(FileExistsDialog.class);
+        setTitle(resourceMap.getString("Form.title")); // NOI18N
+        setBounds(new java.awt.Rectangle(0, 10, 0, 0));
         setName("Form"); // NOI18N
+        setPreferredSize(new java.awt.Dimension(200, 139));
 
         jLabel1.setName("jLabel1"); // NOI18N
 
         javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(org.neugen.gui.NeuGenApp.class).getContext().getActionMap(FileExistsDialog.class, this);
         jButton1.setAction(actionMap.get("setStatus")); // NOI18N
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(org.neugen.gui.NeuGenApp.class).getContext().getResourceMap(FileExistsDialog.class);
         jButton1.setText(resourceMap.getString("jButton1.text")); // NOI18N
         jButton1.setName("jButton1"); // NOI18N
 

@@ -292,6 +292,7 @@ public final class NetNeocortex extends NetBase implements Serializable, Net {
 						somaMid.y = widthY * drawNumber.fdraw();
 					}
 					somaMid.z = l5Astart + layer5AHeight / 2.0f * drawNumber.fdraw();
+					/// TODO: should use flyweight pattern, this consumes _WAY_ too much memory.
 					l5APyramidal.setSoma(somaMid, somaRad);
 					l5APyramidal.setNeuron();
 					l5APyramidal.infoNeuron();
