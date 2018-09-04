@@ -33,10 +33,11 @@ Current development on devel branch, current stable on master branch.
 [![CI Coverage Status](https://coveralls.io/repos/NeuroBox3D/NeuGen/badge.png)](https://coveralls.io/r/NeuroBox3D/NeuGen)
 
 ### BuildHive
+BuildHive is dead. Will add Appveyor for Windows here.
 * [![Build Status](https://buildhive.cloudbees.com/job/NeuroBox3D/job/NeuGen/badge/icon)](https://buildhive.cloudbees.com/job/NeuroBox3D/job/NeuGen/)
 
 ### Issues
-[![Stories in Ready](https://badge.waffle.io/NeuroBox3D/NeuGen.png?label=ready&title=Ready)](http://waffle.io/NeuroBox3D/NeuGen)
+* [![Stories in Ready](https://badge.waffle.io/NeuroBox3D/NeuGen.png?label=ready&title=Ready)](http://waffle.io/NeuroBox3D/NeuGen)
 
 ### License
 * [![LGPLv3](https://img.shields.io/badge/license-LGPLv3-blue.svg)](./README.md)
