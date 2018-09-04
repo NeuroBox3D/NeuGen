@@ -27,9 +27,14 @@ Current development on devel branch, current stable on master branch.
 
 ## Development
 ### CI
+### Travis (Linux/Mac build status)
 * [![CI Build Status](https://travis-ci.org/NeuroBox3D/NeuGen.svg?branch=master)](https://travis-ci.org/NeuroBox3D/NeuGen)
 [![CI Build Status](https://travis-ci.org/NeuroBox3D/NeuGen.svg?branch=devel)](https://travis-ci.org/NeuroBox3D/NeuGen)
 [![CI Coverage Status](https://coveralls.io/repos/NeuroBox3D/NeuGen/badge.png)](https://coveralls.io/r/NeuroBox3D/NeuGen)
+
+### Appveyor (Windows build status)
+[![Build status](https://ci.appveyor.com/api/projects/status/ovyhr78ydpolbjfc?svg=true)](https://ci.appveyor.com/project/stephanmg/neugen)
+
 
 ### Code Metrics
 * [![Codacy Badge](https://api.codacy.com/project/badge/grade/b3714ff664c1490893efdf05afb52027)](https://www.codacy.com/app/stephan_5/NeuGen)
