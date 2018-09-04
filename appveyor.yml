@@ -21,5 +21,4 @@ install:
   - cmd: java -version
 
 build_script:
-  - chdir NeuGen/NeuGen
-  - ant build
+  - ant -buildfile Neugen/build.xml build
