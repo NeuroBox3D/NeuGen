@@ -7,4 +7,5 @@ install:
   - '"C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64'
 
 build_script:
-  - CALL gradlew.bat build
+  - chdir NeuGen/
+  - CALL ant build
