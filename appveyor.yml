@@ -21,4 +21,4 @@ install:
   - cmd: java -version
 
 build_script:
-  - ant -buildfile Neugen/build.xml
+  - ant -buildfile Neugen/build.xml test
