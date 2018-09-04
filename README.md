@@ -26,7 +26,6 @@ Current development on devel branch, current stable on master branch.
 ![](/resources/img/neugen.jpg)
 
 ## Development
-### CI
 ### Travis (Linux/Mac build status)
 * [![CI Build Status](https://travis-ci.org/NeuroBox3D/NeuGen.svg?branch=master)](https://travis-ci.org/NeuroBox3D/NeuGen)
 [![CI Build Status](https://travis-ci.org/NeuroBox3D/NeuGen.svg?branch=devel)](https://travis-ci.org/NeuroBox3D/NeuGen)
