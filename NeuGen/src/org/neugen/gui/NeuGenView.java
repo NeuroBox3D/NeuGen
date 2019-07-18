@@ -1817,7 +1817,8 @@ private void writeTXTMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//
         }
         destroyVisualizeTasks();
         disableButtons();
-        NeuGenLib.initParamData(initParamTable(), currentProjectType);
+        //NeuGenLib.initParamData(initParamTable(), currentProjectType);
+        NeuGenLib.initParamData(initParamTable());
         calcTask = new NeuGenLibTask(getApplication(), currentProjectType);
         NeuGenLibTask.setInstance((NeuGenLibTask) calcTask);
         importedData = false;
@@ -1992,7 +1993,8 @@ private void writeTXTMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//
         save();
         projectTree.setContentChanged(false);
         
-        NeuGenLib.initParamData(initParamTable(), currentProjectType);  
+        //NeuGenLib.initParamData(initParamTable(), currentProjectType);
+        NeuGenLib.initParamData(initParamTable());
     }
 
     public Map<String, XMLObject> initParamTable() { 

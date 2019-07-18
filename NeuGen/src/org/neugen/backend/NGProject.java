@@ -2,19 +2,18 @@ package org.neugen.backend;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.util.Map;
-import java.util.HashMap;
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.zip.ZipEntry;
-import java.net.URL;
 import java.util.zip.ZipInputStream;
+import java.net.URL;
 
 import org.apache.commons.io.FileUtils;
-//import org.apache.commons.io.IOUtils;
-
 import org.apache.log4j.Logger;
+
 import org.neugen.datastructures.xml.XMLObject;
 import org.neugen.gui.NeuGenConstants;
 import org.neugen.utils.NeuGenLogger;
@@ -35,11 +34,11 @@ public final class NGProject {
     public static final Logger logger = Logger.getLogger(NGProject.class.getName());
 
     ////////////////////////////////////////////////////////////////
-    private Map<String, XMLObject> params;
+    private static Map<String, XMLObject> params;
     // projectPath= sourceTemplate +File.separator+projecName;
-    private String projectName;
-    private String sourceTemplate;
-    private String projectType;
+    private static String projectName;
+    private static String sourceTemplate;
+    private static String projectType;
 
     public NGProject(){
         NeuGenConstants.WITH_GUI = false;
@@ -141,26 +140,47 @@ public final class NGProject {
      *
      * @return projectType
      */
-    public String setProjectType(){
+    public String getProjectType(){
         return projectType;
     }
 
     //////////////////////////////////////////////////////////////////////////////////
     //// creating a project by copying and unzipping params.zip
     /////////////////////////////////////////////////////////////////////////////////
-    public void createProject(boolean force){
-        String projectPath=getProjectPath();
+
+    /**
+     * createProject in the folder with projectPath
+     * @param projectPath
+     * @param force
+     */
+    public static void createProject(String projectPath, boolean force){
         if(projectPath==null) {
             logger.error("please input the project path!");
             return;
         }
-            String zipPath = copyParamZip(projectType, projectPath, force);
-            unzipFile(zipPath, projectPath);
-            loadParamTree();
+        String zipPath = copyParamZip(projectType, projectPath, force);
+        unzipFile(zipPath, projectPath);
+        String paramPath=projectPath+File.separator+NeuGenConstants.PARAM_FNAME;
+        String internaPath=projectPath+File.separator+NeuGenConstants.INTERNA_FNAME;
+        loadParamTree(paramPath, internaPath);
     }
 
-    private static String copyParamZip(String projectType,String projectPath,boolean force){
-        //String projectPath=sourceTemplate+System.getProperty("file.separator") +projectName;
+    /**
+     * creating Project
+     * @param force
+     */
+    public void createProject(boolean force){
+        createProject(getProjectPath(),force);
+    }
+
+    /**
+     * copying parameter .zip file from /org/neugen/gui/resources/ to the user folder
+     * @param projectType
+     * @param projectPath
+     * @param force
+     * @return
+     */
+    private static String copyParamZip(String projectType,String projectPath, boolean force){
         System.out.println("project path (project type: " + projectType + "): " + projectPath);
         File projectDir = new File(projectPath);
         System.err.println("projectPath: " + projectPath);
@@ -181,7 +201,11 @@ public final class NGProject {
         return dest.toString();
     }
 
-
+    /**
+     * unzip parameter .zip file
+     * @param zipFilePath
+     * @param projectPath
+     */
     private static void unzipFile(String zipFilePath, String projectPath) {
         File dir = new File(projectPath);
         System.out.println("projectPath:"+projectPath);
@@ -196,7 +220,7 @@ public final class NGProject {
             System.out.println("zipFile:"+zipFilePath);
             ZipInputStream zis = new ZipInputStream(fis);
             ZipEntry ze = zis.getNextEntry();
-            System.out.println("ze:"+ze.getName());
+            //System.out.println("ze:"+ze.getName());
             while(ze != null){
                if(!ze.getName().contains("/")){
                 String fileName = ze.getName();
@@ -256,11 +280,16 @@ public final class NGProject {
      * @param internaPath
      */
     public void loadParamTree(){
-        XMLObject paramRoot = loadParam(new File(getParamPath()));
-        XMLObject internaRoot = loadParam(new File(getInternaPath()));
+        loadParamTree(getParamPath(), getInternaPath());
+    }
+
+    public static void loadParamTree(String ParamPath, String InternaPath){
+        XMLObject paramRoot = loadParam(new File(ParamPath));
+        XMLObject internaRoot = loadParam(new File(InternaPath));
         params.put(NeuGenConstants.PARAM, paramRoot);
         params.put(NeuGenConstants.INTERNA, internaRoot);
     }
+
     /**
      *
      * @return parameter tree
@@ -326,7 +355,10 @@ public final class NGProject {
         saveParamTree(paramTrees, projectPath);
     }
 
-
+    /**
+     * class internal test
+     * @param args
+     */
     public static void main(String... args) {
         try {
             NGProject project = new NGProject();

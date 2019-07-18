@@ -159,13 +159,13 @@ public final class NeuGenLib implements Serializable {
         return allParam;
     }
 
-    public static void initParamData(Map<String, XMLObject> allParam, String project) {
+    /*public static void initParamData(Map<String, XMLObject> allParam, String project) {
         clearOldParamData();
         for (Map.Entry<String, XMLObject> e : allParam.entrySet()) {
-            if (e.getKey().contains(NeuGenConstants.PARAM_FNAME)) {
+            if (e.getKey().contains(NeuGenConstants.PARAM_FNAME)||e.getKey().contains(NeuGenConstants.PARAM) ) {
                 ConfigParserContainer.setParamParser(new ConfigParser(e.getKey(), e.getValue()));
                 System.err.println("*** KEY *** " + e.getKey() + " *** VALUE ***" + e.getValue());
-            } else if (e.getKey().contains(NeuGenConstants.INTERNA_FNAME)) {
+            } else if (e.getKey().contains(NeuGenConstants.INTERNA_FNAME)||e.getKey().contains(NeuGenConstants.INTERNA)) {
                 ConfigParserContainer.setInternaParser(new ConfigParser(e.getKey(), e.getValue()));
                 System.err.println("*** KEY *** " + e.getKey() + " *** VALUE ***" + e.getValue());
             }
@@ -174,6 +174,19 @@ public final class NeuGenLib implements Serializable {
         //Axon.setDrawNumber(new Vrand(nParam.getAxonParam().getSeedValue()));
         //Dendrite.setDrawNumber(new Vrand(nParam.getDendriteParam().getSeedValue()));
         //NeuronBase.setDrawNumber(new Vrand(nParam.getSeedValue()));
+    }*/
+
+    public static void initParamData(Map<String, XMLObject> allParam) {
+        clearOldParamData();
+        for (Map.Entry<String, XMLObject> e : allParam.entrySet()) {
+            if (e.getKey().contains(NeuGenConstants.PARAM_FNAME)||e.getKey().contains(NeuGenConstants.PARAM) ) {
+                ConfigParserContainer.setParamParser(new ConfigParser(e.getKey(), e.getValue()));
+                System.err.println("*** KEY *** " + e.getKey() + " *** VALUE ***" + e.getValue());
+            } else if (e.getKey().contains(NeuGenConstants.INTERNA_FNAME)||e.getKey().contains(NeuGenConstants.INTERNA)) {
+                ConfigParserContainer.setInternaParser(new ConfigParser(e.getKey(), e.getValue()));
+                System.err.println("*** KEY *** " + e.getKey() + " *** VALUE ***" + e.getValue());
+            }
+        }
     }
 
     public void run(String projectType) {

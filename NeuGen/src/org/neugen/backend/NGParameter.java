@@ -10,6 +10,8 @@ import java.util.*;
 
 /**
  * resetting parameters by finding the parameter item in paramTree
+ *
+ * Code based on NGBackend
  */
 public class NGParameter {
     /// public static members
@@ -221,7 +223,7 @@ public class NGParameter {
      * @param double value
      * @param identifier
      */
-    public void modifyRegionColumn(double value, String identifier, String projectType){
+    public void modifyRegion_neocortex(double value, String identifier, String projectType){
         String name="region,column,"+identifier;
         ArrayList<String> items=new ArrayList<>(Arrays.asList(name.split(",")));
 
@@ -232,7 +234,7 @@ public class NGParameter {
      * @param double value
      * @param identifier
      */
-    public void modifyRegionCA1(double value, String identifier){
+    public void modifyRegion_hippocampus(double value, String identifier){
 
         String name="region,ca1,"+identifier;
         ArrayList<String> items=new ArrayList<>(Arrays.asList(name.split(",")));

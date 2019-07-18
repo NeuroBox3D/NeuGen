@@ -454,7 +454,8 @@ public final class NGBackend {
 		XMLObject internaRoot = loadParam(interna);
 		paramTrees.put(NeuGenConstants.PARAM, paramRoot);
 		paramTrees.put(NeuGenConstants.INTERNA, internaRoot);
-		NeuGenLib.initParamData(initParamTable(paramTrees, param.getPath(), interna.getPath()), projectType);
+		//NeuGenLib.initParamData(initParamTable(paramTrees, param.getPath(), interna.getPath()), projectType);
+		NeuGenLib.initParamData(initParamTable(paramTrees, param.getPath(), interna.getPath()));
 		return paramTrees;
 	}
 
