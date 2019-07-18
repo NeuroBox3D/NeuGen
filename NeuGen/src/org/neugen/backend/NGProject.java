@@ -238,6 +238,7 @@ public final class NGProject {
     public static XMLObject loadParam(File file) {
         XMLObject root = null;
         try {
+            System.out.println("Load file: "+file);
             NeuGenConfigStreamer stream = new NeuGenConfigStreamer(null);
             root = stream.streamIn(file);
             DefaultInheritance inhProzess = new DefaultInheritance();
@@ -254,7 +255,7 @@ public final class NGProject {
      * @param paramPath
      * @param internaPath
      */
-    private void loadParamTree(){
+    public void loadParamTree(){
         XMLObject paramRoot = loadParam(new File(getParamPath()));
         XMLObject internaRoot = loadParam(new File(getInternaPath()));
         params.put(NeuGenConstants.PARAM, paramRoot);
