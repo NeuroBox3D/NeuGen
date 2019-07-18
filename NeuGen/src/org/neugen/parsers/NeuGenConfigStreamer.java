@@ -60,6 +60,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URL;
+
 import org.apache.log4j.Logger;
 import org.neugen.datastructures.DataStructureConstants;
 import org.neugen.datastructures.xml.XMLInt;
@@ -433,11 +435,14 @@ public final class NeuGenConfigStreamer {
         //write dtd.txt
         //File fileIn = new File(fileName);
         try {
-            String absDTDPath = absProjectPath + System.getProperty("file.separator")
+            /*String absDTDPath = absProjectPath + System.getProperty("file.separator")
                     + NeuGenConstants.DTD_FNAME;
             if (absProjectPath == null) {
                 absDTDPath = NeuGenConstants.DTD_FNAME;
-            }
+            }*/
+
+            URL inputUrl = NeuGenConfigStreamer.class.getResource("/org/neugen/gui/resources/"+NeuGenConstants.DTD_FNAME);
+            String absDTDPath=inputUrl.getPath();
             logger.info("path of DTD.txt: " + absDTDPath);
             FileInputStream in = new FileInputStream(absDTDPath);
             FileOutputStream out = new FileOutputStream(file);

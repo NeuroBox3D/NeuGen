@@ -57,6 +57,7 @@ import java.io.File;
  * @author stephanmg <stephan@syntaktischer-zucker.de>
  */
 public final class NGBackendUtil {
+
 	/**
 	 * @brief
 	 */
@@ -100,4 +101,6 @@ public final class NGBackendUtil {
 
 		return false;
 	}
+
+
 }
