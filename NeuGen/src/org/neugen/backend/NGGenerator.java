@@ -13,7 +13,9 @@ import java.util.Map;
 /**
  * Generating a neuronal network with paramter tree (Map<String, XMLObject>) including Param and Interna
  *
- * Code from NGBackend
+ * Code from NGBackend @author stephanmg <stephan@syntaktischer-zucker.de>
+ *
+ * @author junxi <junxi.wang@gcsc.uni-frankfurt.de>
  */
 public final class NGGenerator {
     /// public static members

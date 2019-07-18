@@ -27,7 +27,9 @@ import org.neugen.gui.NeuGenProject;
 /**
  * creating, opening, saving project (i.e parameter files: param.neu and internau.neu)
  *
- * Code from NGBackend
+ * Code from NGBackend: @author stephanmg <stephan@syntaktischer-zucker.de>
+ *
+ * @author junxi <junxi.wang@gcsc.uni-frankfurt.de>
  */
 public final class NGProject {
     /// public static members

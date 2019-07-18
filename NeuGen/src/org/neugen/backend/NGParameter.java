@@ -11,7 +11,9 @@ import java.util.*;
 /**
  * resetting parameters by finding the parameter item in paramTree
  *
- * Code based on NGBackend
+ * Code based on NGBackend @author stephanmg <stephan@syntaktischer-zucker.de>
+ *
+ * @author junxi <junxi.wang@gcsc.uni-frankfurt.de>
  */
 public class NGParameter {
     /// public static members
