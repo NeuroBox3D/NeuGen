@@ -26,6 +26,13 @@ public final class NGGenerator {
     private static final NeuGenLib ngLib = new NeuGenLib();
     private Net net;
 
+    public NGGenerator(Map<String, XMLObject> params){
+        NeuGenConstants.WITH_GUI = false;
+        NeuGenLogger.initLogger();
+        this.params=params;
+        this.projectType=NGParameter.getProjectTypefromXMLObject(params.get(NeuGenConstants.INTERNA));
+    }
+
     public NGGenerator(Map<String, XMLObject> params, String projectType){
         NeuGenConstants.WITH_GUI = false;
         NeuGenLogger.initLogger();

@@ -12,15 +12,17 @@ public class NGTest {
             NGProject project = new NGProject();
             project.setProjectName("Neo");
             project.setSourceTemplate("/Users/jwang/GCSC/Project/Neuron/HBP733/Test/Test");
-            project.setProjectType(NeuGenConstants.NEOCORTEX_PROJECT);
+            //project.setProjectType(NeuGenConstants.NEOCORTEX_PROJECT);
             project.loadParamTree();
             //project.createProject(true);
 
             NGParameter paramChange = new NGParameter(project.getParamTree());
             paramChange.modifyNPartsDensity(0.1);
-
-            NGGenerator gen=new NGGenerator(paramChange.getParamTree(),project.getProjectType());
-            gen.run();
+            System.out.println("projectType:"+ NGParameter.getProjectTypefromXMLObject(project.getParamTree().get("Param")));
+            System.out.println("isParam:"+NGParameter.isParamXMLObject(project.getParamTree().get("Param")));
+            System.out.println("isInterna:"+NGParameter.isInternaXMLObject(project.getParamTree().get("Interna")));
+            /*NGGenerator gen=new NGGenerator(paramChange.getParamTree(),NeuGenConstants.NEOCORTEX_PROJECT);
+            gen.run();*/
             //NGProject.saveParamTree(paramChange.getParamTree(), "/Users/jwang/GCSC/Project/Neuron/HBP733/Test/Test/Neo1");
         } catch (Exception e) {
             e.printStackTrace();

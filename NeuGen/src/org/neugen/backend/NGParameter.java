@@ -44,6 +44,11 @@ public class NGParameter {
      */
     @SuppressWarnings("unchecked")
     public void modifyDoubleParameter(XMLNode root, double param, ArrayList<String> identifier) {
+        if(param<0){
+            logger.error("Please give a positive value.");
+            return ;
+        }
+
         Enumeration<XMLNode> childs = root.children();
         while (childs.hasMoreElements()) {
 
@@ -74,6 +79,10 @@ public class NGParameter {
      */
     @SuppressWarnings("unchecked")
     public void modifyIntegerParameter(XMLNode root, int param, ArrayList<String> identifier) {
+        if(param<0){
+            logger.error("Please give a positive value.");
+            return ;
+        }
         Enumeration<XMLNode> childs = root.children();
         while (childs.hasMoreElements()) {
 
@@ -264,12 +273,104 @@ public class NGParameter {
      * @param location_name: oriens, pyramidale, proximal_radiatum, distal_radiatum, lacunosum/moleculare
      */
     public void adjust_number_of_hippocampus_neuron(int numberOfCells, String neuron_type, String location_name){
+
         String name="net,"+"n"+neuron_type+","+location_name;
         ArrayList<String> items=new ArrayList<>(Arrays.asList(name.split(",")));
 
         modifyIntegerParameter(params.get("Param"), numberOfCells,items);
     }
 
+    ///////////////////////////////////////////////////////
+    // projectType from params
+    //////////////////////////////////////////////////////
 
+    /**
+     * find
+     * @param root
+     * @param identifier
+     * @return
+     */
+    public static boolean findNamefromXMLNode(XMLNode root, ArrayList<String> identifier){
+        boolean isfind=false;
+
+        Enumeration<XMLNode> childs = root.children();
+        while (childs.hasMoreElements()) {
+
+            XMLNode node = childs.nextElement();
+
+            if (identifier.get(0).equals(node.getKey())) {
+
+                if (identifier.size() == 1) {
+                    isfind =true;
+                } else {
+                    identifier.remove(0);
+                    isfind =isfind || findNamefromXMLNode(node, identifier);
+                }
+
+            }
+        }
+
+        return isfind;
+    }
+
+    /**
+     * According to the special cells (L4stellate in Neocortex and calbindin in Hippocampus),
+     * projectType can be defined by XMLNode/XMLObject.
+     * @param param
+     * @return
+     */
+
+    public static String getProjectTypefromXMLObject(XMLNode param){
+        String name="neuron,subclasses,";
+        ArrayList<String> items;
+
+        ////for Neocortex:
+        String nameN=name+"L4stellate";
+        items=new ArrayList<>(Arrays.asList(nameN.split(",")));
+        if(findNamefromXMLNode(param, items)){
+            return NeuGenConstants.NEOCORTEX_PROJECT;
+        }
+
+        ///for Hippocampus
+        String nameH=name+"calbindin";
+        items=new ArrayList<>(Arrays.asList(name.split(",")));
+        if(findNamefromXMLNode(param, items)){
+            return NeuGenConstants.HIPPOCAMPUS_PROJECT;
+        }
+
+        return null;
+    }
+
+    /**
+     * Judge if an XMLObject is a Param by finding if "region" exists.
+     * Since "region" exists only in Param
+     *
+     * @param param
+     * @return
+     */
+    public static boolean isParamXMLObject(XMLNode param){
+        boolean isParam=false;
+        String name="region";
+        ArrayList<String> items=new ArrayList<>(Arrays.asList(name.split(",")));
+        isParam=findNamefromXMLNode(param, items);
+
+        return isParam;
+    }
+
+    /**
+     * Judge if an XMLObject is an Interna by finding if "net>seed" exists.
+     * Since "net>seed" exists only in Interna
+     *
+     * @param param
+     * @return
+     */
+    public static boolean isInternaXMLObject(XMLNode param){
+        boolean isInterna=false;
+        String name="net,seed";
+        ArrayList<String> items=new ArrayList<>(Arrays.asList(name.split(",")));
+        isInterna=findNamefromXMLNode(param, items);
+
+        return isInterna;
+    }
 
 }

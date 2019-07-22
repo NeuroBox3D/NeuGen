@@ -66,8 +66,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.neugen.gui.NeuGenApp;
-import org.neugen.vrl.DensityVisualizationParamsInput;
-import org.neugen.vrl.VCanvas3DType;
+import org.neugen.vrl.*;
 
 /**
  * 
@@ -82,7 +81,10 @@ public class Configurator extends VPluginConfigurator{
         setDescription("NeuGen Plugin");
         exportPackage("org.neugen");
 
-        addDependency(new PluginDependency("VRL", "0.4.2", "0.4.x"));
+        // add dependencies with the other VRL-Plugins so that this project can run based on the other plugins.
+        //and please store the related libraries (.jar) that are added in properties during building (see build.xml)
+        addDependency(new PluginDependency("VRL", "0.4.x", "0.4.x"));
+        addDependency(new PluginDependency("JCSG", "0.x", "0.x"));
     }
     
     
@@ -99,10 +101,16 @@ public class Configurator extends VPluginConfigurator{
                 NeuGenApp.main(logPropFile, new String[]{});
             }
         }, ActionDelegator.TOOL_MENU);
-        
-        
+
+
         vapi.addTypeRepresentation(VCanvas3DType.class);
         vapi.addComponent(DensityVisualizationParamsInput.class);
+
+        vapi.addComponent(VRLNeuGenProjectCreate.class);
+        vapi.addComponent(VRLNeuGenParameterLoad.class);
+        vapi.addComponent(VRLNeuGenParameterVisual.class);
+        vapi.addComponent(VRLNeuGenParameterSave.class);
+        vapi.addComponent(VRLNeuGenGenerator.class);
     }
 
     @Override
