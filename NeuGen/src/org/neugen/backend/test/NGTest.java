@@ -18,6 +18,7 @@ public class NGTest {
 
             NGParameter paramChange = new NGParameter(project.getParamTree());
             paramChange.modifyNPartsDensity(0.1);
+            paramChange.adjust_number_of_neocortex_neuron(1,"L4stellate");
             System.out.println("projectType:"+ NGParameter.getProjectTypefromXMLObject(project.getParamTree().get("Param")));
             System.out.println("isParam:"+NGParameter.isParamXMLObject(project.getParamTree().get("Param")));
             System.out.println("isInterna:"+NGParameter.isInternaXMLObject(project.getParamTree().get("Interna")));

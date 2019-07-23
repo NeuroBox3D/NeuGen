@@ -1,6 +1,7 @@
 package org.neugen.backend;
 
 import org.apache.log4j.Logger;
+import org.apache.tools.ant.taskdefs.Java;
 import org.neugen.datastructures.xml.XMLNode;
 import org.neugen.datastructures.xml.XMLObject;
 import org.neugen.gui.NeuGenConstants;
@@ -43,7 +44,7 @@ public class NGParameter {
      * @param identifier
      */
     @SuppressWarnings("unchecked")
-    public void modifyDoubleParameter(XMLNode root, double param, ArrayList<String> identifier) {
+    public void modifyParameter(XMLNode root, double param, ArrayList<String> identifier) {
         if(param<0){
             logger.error("Please give a positive value.");
             return ;
@@ -57,51 +58,27 @@ public class NGParameter {
 
             if (identifier.get(0).equals(node.getKey())) {
                 if (identifier.size() == 1) {
-                    System.out.println();
-                    node.setValue(param);
+                    //System.out.println();
+                    Class valClass=node.getValue().getClass();
+                    //System.out.println("Value Class: "+valClass);
+                    if(valClass.equals(Integer.class)){
+                       // System.out.println("isInteger: "+valClass.equals(Integer.class));
+                        node.setValue(Math.round(param));
+                    }else {
+                        node.setValue(param);
+                    }
                     System.out.println(node.getKey() + ": is reset to "+node.getValue());
                     break;
 
                 } else {
                     identifier.remove(0);
-                    modifyDoubleParameter(node, param, identifier);
+                    //modifyDoubleParameter(node, param, identifier);
+                    modifyParameter(node, param, identifier);
                 }
             }
         }
     }
 
-
-    /**
-     * @brief modifies an integer parameter: for example: cell number
-     * @param root
-     * @param param
-     * @param identifier
-     */
-    @SuppressWarnings("unchecked")
-    public void modifyIntegerParameter(XMLNode root, int param, ArrayList<String> identifier) {
-        if(param<0){
-            logger.error("Please give a positive value.");
-            return ;
-        }
-        Enumeration<XMLNode> childs = root.children();
-        while (childs.hasMoreElements()) {
-
-            XMLNode node = childs.nextElement();
-            //System.out.println("node: " + node.getKey());
-
-            if (identifier.get(0).equals(node.getKey())) {
-                if (identifier.size() == 1) {
-                    System.out.println();
-                    node.setValue(param);
-                    System.out.println(node.getKey() + ": is reset to "+node.getValue());
-                    break;
-                } else {
-                    identifier.remove(0);
-                    modifyIntegerParameter(node, param, identifier);
-                }
-            }
-        }
-    }
 
     /**
      * adjust the parameters in sibling (XMLNode)
@@ -131,12 +108,15 @@ public class NGParameter {
             if(Indices.contains(iterI)) {
                 if (identifier.get(0).equals(current_child.getKey())) {
                     if (identifier.size() == 1) {
-                        current_child.setValue(replacement);
+
+
+                        current_child.setValue( replacement);
                         System.out.println("siblings"+iterI+"(" + current_child.getKey() + "): is reset to " + current_child.getValue());
                     } else {
                         ArrayList<String> identifierCopy = (ArrayList) identifier.clone();
                         identifierCopy.remove(0);
-                        modifyDoubleParameter(current_child, replacement, identifierCopy);
+                        //modifyDoubleParameter(current_child, replacement, identifierCopy);
+                        modifyParameter(current_child, replacement, identifierCopy);
                     }
                 }
 
@@ -190,7 +170,8 @@ public class NGParameter {
 
         String name="neuron,axon,gen_0,nparts_density";
         ArrayList<String> items=new ArrayList<>(Arrays.asList(name.split(",")));
-        modifyDoubleParameter(params.get("Param"),density, items);
+        //modifyDoubleParameter(params.get("Param"),density, items);
+        modifyParameter(params.get("Param"),density, items);
 
         ArrayList<Integer> indices=new ArrayList<>();
         for(int i=0;i<10;++i ){
@@ -203,7 +184,8 @@ public class NGParameter {
 
         name="neuron,dendrite,gen_0,nparts_density";
         items=new ArrayList<>(Arrays.asList(name.split(",")));
-        modifyDoubleParameter(params.get("Param"),density, items);
+        //modifyDoubleParameter(params.get("Param"),density, items);
+        modifyParameter(params.get("Param"),density, items);
 
         name="neuron,dendrite,gen_0,siblings,nparts_density";
         items=new ArrayList<>(Arrays.asList(name.split(",")));
@@ -224,7 +206,8 @@ public class NGParameter {
         String name="net,dist_synapse";
         ArrayList<String> items=new ArrayList<>(Arrays.asList(name.split(",")));
 
-        modifyDoubleParameter(params.get("Param"),dist_synapse, items);
+        //modifyDoubleParameter(params.get("Param"),dist_synapse, items);
+        modifyParameter(params.get("Param"),dist_synapse, items);
 
     }
 
@@ -238,7 +221,8 @@ public class NGParameter {
         String name="region,column,"+identifier;
         ArrayList<String> items=new ArrayList<>(Arrays.asList(name.split(",")));
 
-        modifyDoubleParameter(params.get("Param"),value, items);
+        //modifyDoubleParameter(params.get("Param"),value, items);
+        modifyParameter(params.get("Param"),value, items);
     }
     /**
      * @brief correct identifer in Region Column for Hippocampus to custom value (NeuGen property)
@@ -250,7 +234,8 @@ public class NGParameter {
         String name="region,ca1,"+identifier;
         ArrayList<String> items=new ArrayList<>(Arrays.asList(name.split(",")));
 
-        modifyDoubleParameter(params.get("Param"),value, items);
+        //modifyDoubleParameter(params.get("Param"),value, items);
+        modifyParameter(params.get("Param"),value, items);
     }
 
 
@@ -263,7 +248,8 @@ public class NGParameter {
         String name="net,"+"n"+neuron_type;
         ArrayList<String> items=new ArrayList<>(Arrays.asList(name.split(",")));
 
-        modifyIntegerParameter(params.get("Param"), numberOfCells,items);
+        //modifyIntegerParameter(params.get("Param"), numberOfCells,items);
+        modifyParameter(params.get("Param"), numberOfCells,items);
     }
 
     /**
@@ -277,7 +263,8 @@ public class NGParameter {
         String name="net,"+"n"+neuron_type+","+location_name;
         ArrayList<String> items=new ArrayList<>(Arrays.asList(name.split(",")));
 
-        modifyIntegerParameter(params.get("Param"), numberOfCells,items);
+        //modifyIntegerParameter(params.get("Param"), numberOfCells,items);
+        modifyParameter(params.get("Param"), numberOfCells,items);
     }
 
     ///////////////////////////////////////////////////////
