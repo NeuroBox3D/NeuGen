@@ -13,10 +13,12 @@ import java.io.Serializable;
 import java.util.Map;
 
 
-@ComponentInfo(name="Visual Parameter Tree", category = "NeuGen", description = "...")
+@ComponentInfo(name="Visualise Parameter", category = "NeuGen", description = "...")
 public class VRLNeuGenParameterVisual implements Serializable {
+    private static final long serialVersionUID=1L;
+
     public JComponent showNeuGenParameter(
-            @ParamInfo(name="Parameter Tree") Map<String, XMLObject> params
+            @ParamInfo(name="Parameter Map") Map<String, XMLObject> params
     ){
         XMLTreeView tree = new XMLTreeView(root -> {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -35,8 +37,8 @@ public class VRLNeuGenParameterVisual implements Serializable {
     }
 
     public JComponent showNeuGenParameter(
-            @ParamInfo(name="Param") XMLObject paramRoot,
-            @ParamInfo(name="Interna") XMLObject internaRoot
+            @ParamInfo(name="Param XMLObject") XMLObject paramRoot,
+            @ParamInfo(name="Interna XMLObject") XMLObject internaRoot
 
     ){
         XMLTreeView tree = new XMLTreeView(root -> {

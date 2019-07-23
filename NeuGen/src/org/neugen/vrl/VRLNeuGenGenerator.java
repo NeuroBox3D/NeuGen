@@ -14,15 +14,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-@ComponentInfo(name="Net Generation", category = "NeuGen", description = "...")
+@ComponentInfo(name="Generate Neuron Network", category = "NeuGen", description = "...")
 public class VRLNeuGenGenerator implements Serializable {
     private static final long serialVersionUID=1L;
 
     private NGGenerator gen;
 
-    @OutputInfo(name="Neuron Net")
+    @OutputInfo(name="Neuron Network")
     public Net Generation(
-            @ParamInfo(name="Parameter Tree") Map<String, XMLObject> params
+            @ParamInfo(name="Parameter Map") Map<String, XMLObject> params
     ){
         gen=new NGGenerator(params);
         gen.run();
@@ -30,10 +30,10 @@ public class VRLNeuGenGenerator implements Serializable {
         return gen.getNet();
     }
 
-    @OutputInfo(name="Neuron Net")
+    @OutputInfo(name="Neuron Network")
     public Net Generation(
-            @ParamInfo(name="Param") XMLObject paramRoot,
-            @ParamInfo(name="Interna") XMLObject internaRoot
+            @ParamInfo(name="Param XMLObject") XMLObject paramRoot,
+            @ParamInfo(name="Interna XMLObject") XMLObject internaRoot
     ){
 
         String projectTypeP= NGParameter.getProjectTypefromXMLObject(paramRoot);

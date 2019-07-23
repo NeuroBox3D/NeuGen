@@ -13,7 +13,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.Map;
 
-@ComponentInfo(name="Create NeuGen-Project", category = "NeuGen", description = "...")
+@ComponentInfo(name="Create Parameter", category = "NeuGen", description = "...")
 public class VRLNeuGenProjectCreate implements Serializable {
     private static final long serialVersionUID=1L;
 
@@ -23,7 +23,7 @@ public class VRLNeuGenProjectCreate implements Serializable {
     private transient String projectPath;
     private  transient String projectType;
 
-   @OutputInfo(name="Parameters")
+   @OutputInfo(name="Parameter Map")
     public Map<String, XMLObject> CreateDefaultNeocortexProject(
             @ParamGroupInfo(group="General|true|General")
             @ParamInfo(name="Project File", style = "save-folder-dialog", options="") File file,
@@ -178,5 +178,23 @@ public class VRLNeuGenProjectCreate implements Serializable {
 
         return paramChange.getParamTree();
     }
+
+    public Map<String, XMLObject> CreateDefaultNeuGenProject(
+            @ParamInfo(name="Project File", style = "save-folder-dialog", options="") File file,
+            @ParamInfo(name="Force", options="value=true")Boolean force,
+            @ParamInfo(name="Project Type",style="selection", options="value=[\"Neocortex\", \"Hippocampus\"]")String projectType
+
+    ){
+        this.projectType=projectType;
+        this.projectPath=file.getAbsolutePath();
+
+        project=new NGProject();
+        project.setProjectPath(projectPath);
+        project.setProjectType(projectType);
+        project.createProject(force);
+
+        return project.getParamTree();
+    }
+
 
 }

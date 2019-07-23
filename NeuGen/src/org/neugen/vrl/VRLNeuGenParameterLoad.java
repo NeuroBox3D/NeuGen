@@ -13,14 +13,14 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-@ComponentInfo(name="Load NeuGen-Parameters", category = "NeuGen", description = "...")
+@ComponentInfo(name="Load Parameter", category = "NeuGen", description = "...")
 public class VRLNeuGenParameterLoad implements Serializable {
     private static final long serialVersionUID=1L;
 
 
-    @OutputInfo(name="Parameters")
+    @OutputInfo(name="Parameter Map")
     public Map<String, XMLObject> LoadParameterMap(
-            @ParamInfo(name="Project File", style = "open-folder-dialog", options="") File file
+            @ParamInfo(name="Project File", style = "save-folder-dialog", options="") File file
     ){
         NGProject project=new NGProject();
         project.setProjectPath(file.getAbsolutePath());
@@ -31,15 +31,15 @@ public class VRLNeuGenParameterLoad implements Serializable {
 
     @OutputInfo(name="Parameter XMLObject")
     public XMLObject LoadParamXMLObject(
-            @ParamInfo(name="Project File", style = "open-folder-dialog", options="") File file
+            @ParamInfo(name="Project File", style = "save-folder-dialog", options="") File file
     ){
 
         return NGProject.loadParam(file);
     }
 
     public Map<String, XMLObject> CreateParameterMap(
-            @ParamInfo(name="Param",  options="") XMLObject paramRoot,
-            @ParamInfo(name="Interna",  options="") XMLObject internaRoot
+            @ParamInfo(name="Param XMLObjcet",  options="") XMLObject paramRoot,
+            @ParamInfo(name="Interna XMLObject",  options="") XMLObject internaRoot
     ){
 
         String projectTypeP=NGParameter.getProjectTypefromXMLObject(paramRoot);

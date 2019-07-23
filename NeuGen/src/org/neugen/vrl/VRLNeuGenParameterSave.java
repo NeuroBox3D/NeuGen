@@ -11,8 +11,9 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.Map;
 
-@ComponentInfo(name="Save NeuGen-Parameter", category = "NeuGen", description = "...")
+@ComponentInfo(name="Save Parameter", category = "NeuGen", description = "...")
 public class VRLNeuGenParameterSave implements Serializable {
+    private static final long serialVersionUID=1L;
 
     public void saveParameterTree(
             @ParamInfo(name="Parameter Map") Map<String, XMLObject> params,
@@ -22,7 +23,7 @@ public class VRLNeuGenParameterSave implements Serializable {
     }
 
     public void saveXMLObject(
-            @ParamInfo(name="Parameter Map")XMLObject param,
+            @ParamInfo(name="Parameter XMLObject")XMLObject param,
             @ParamInfo(name="Project File", style = "save-file-dialog", options="") File file
     ){
             String projectPath=file.getAbsolutePath();
