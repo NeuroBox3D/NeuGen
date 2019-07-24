@@ -108,8 +108,6 @@ public class NGParameter {
             if(Indices.contains(iterI)) {
                 if (identifier.get(0).equals(current_child.getKey())) {
                     if (identifier.size() == 1) {
-
-
                         current_child.setValue( replacement);
                         System.out.println("siblings"+iterI+"(" + current_child.getKey() + "): is reset to " + current_child.getValue());
                     } else {
@@ -147,7 +145,6 @@ public class NGParameter {
         while (childs.hasMoreElements()) {
 
             XMLNode node = childs.nextElement();
-            //System.out.println("node: " + node.getKey());
 
             if (identifier.get(0).equals(node.getKey())) {
                 identifier.remove(0);
@@ -206,7 +203,6 @@ public class NGParameter {
         String name="net,dist_synapse";
         ArrayList<String> items=new ArrayList<>(Arrays.asList(name.split(",")));
 
-        //modifyDoubleParameter(params.get("Param"),dist_synapse, items);
         modifyParameter(params.get("Param"),dist_synapse, items);
 
     }
@@ -221,7 +217,6 @@ public class NGParameter {
         String name="region,column,"+identifier;
         ArrayList<String> items=new ArrayList<>(Arrays.asList(name.split(",")));
 
-        //modifyDoubleParameter(params.get("Param"),value, items);
         modifyParameter(params.get("Param"),value, items);
     }
     /**
@@ -234,7 +229,6 @@ public class NGParameter {
         String name="region,ca1,"+identifier;
         ArrayList<String> items=new ArrayList<>(Arrays.asList(name.split(",")));
 
-        //modifyDoubleParameter(params.get("Param"),value, items);
         modifyParameter(params.get("Param"),value, items);
     }
 
@@ -248,7 +242,6 @@ public class NGParameter {
         String name="net,"+"n"+neuron_type;
         ArrayList<String> items=new ArrayList<>(Arrays.asList(name.split(",")));
 
-        //modifyIntegerParameter(params.get("Param"), numberOfCells,items);
         modifyParameter(params.get("Param"), numberOfCells,items);
     }
 
@@ -263,7 +256,6 @@ public class NGParameter {
         String name="net,"+"n"+neuron_type+","+location_name;
         ArrayList<String> items=new ArrayList<>(Arrays.asList(name.split(",")));
 
-        //modifyIntegerParameter(params.get("Param"), numberOfCells,items);
         modifyParameter(params.get("Param"), numberOfCells,items);
     }
 

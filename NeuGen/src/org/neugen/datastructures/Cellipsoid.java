@@ -73,9 +73,10 @@ public class Cellipsoid implements Serializable {
     public final static int d = 3;
     private Point3f c_mid;
     private Point3f c_radii;
+    //private Section section;
     private Section cylindricRepresentant;
     private Section ellipsoidRepresentant;
-    private final List<Section> sections;
+    private List<Section> sections;
 
     /** 
      * Constructor.
@@ -84,6 +85,7 @@ public class Cellipsoid implements Serializable {
     public Cellipsoid() {
         c_mid = new Point3f();
         c_radii = new Point3f();
+        //section=null;
         sections = new ArrayList<Section>();
         ellipsoidRepresentant = new Section();
     }
@@ -127,6 +129,7 @@ public class Cellipsoid implements Serializable {
             }
         }
 
+
         if (maxRadius == 0.0f) {
             return c_radii.x;
         }
@@ -149,6 +152,8 @@ public class Cellipsoid implements Serializable {
                 averageRadius += radius;
             }
         }
+
+
         if (averageRadius != 0.0f) {
             averageRadius /= numSeg;
         }
@@ -172,6 +177,7 @@ public class Cellipsoid implements Serializable {
         cylindricRepresentant = cylindricRep;
     }
 
+
     /**
      * Return section list of soma.
      * @return sections The section list of soma.
@@ -179,6 +185,7 @@ public class Cellipsoid implements Serializable {
     public List<Section> getSections() {
         return sections;
     }
+
 
     /**
      * Return the number of soma segments.
@@ -191,6 +198,7 @@ public class Cellipsoid implements Serializable {
             Section section = sections.get(i);
             numberOfSomaSegments += section.getSegments().size();
         }
+
         return numberOfSomaSegments;
     }
 
@@ -217,6 +225,7 @@ public class Cellipsoid implements Serializable {
                 segment.setSegment(sstart, send, r);
                 segments.add(segment);
             }
+            cylindricRepresentant=getEllipsoid();
             return cylindricRepresentant;
         }
     }
@@ -241,23 +250,29 @@ public class Cellipsoid implements Serializable {
         c_radii.set(sradius, sradius, sradius);
     }
 
-    public Section getEllipsoid() {
+    public Section getEllipsoid(){
+        return getEllipsoid(getMeanRadius(), c_mid);
+    }
+
+
+    public static Section getEllipsoid(float rad, Point3f m) {
         //ungerade, wegen der Symmetrie der Ellipse
         //int nsegs = 2 * 11 - 1;
+        Section ellipsoidRepresentant=new Section();
         List<Segment> segmentList = ellipsoidRepresentant.getSegments();
         segmentList.clear();
 
         //segmentList.ensureCapacity(nsegs);
         // in kleinen Schritten
         float step = 0.0f;
-        float a = 5.0f;    // in NeuGen: Länge der Zylinderhaelfte
+        float a = 5.0f;    // in NeuGen: Länge der Zylinderhaelfte (Ellipsoid)
         int ellipsePoints = 2 * (int) a + 1;
         step = a / (ellipsePoints - 1);
         //std::cout << "Schrittweite: " << step << std::endl;
         // Mittelpunktsgleichung 3D der Ellipse
         // x^2/a^2 + y^2/b^2  = 1
 
-        float b = 7.0f;    // // In NeuGen: Radius
+        float b = 7.0f;    // // In NeuGen: Breite von Ellipsoid
         float x = 0.0f;    // Koordinaten, x bewegt sich, entspricht z in NeuGen.
         float y = 0.0f;
         float[] ellipseRadius = new float[ellipsePoints];
@@ -273,14 +288,15 @@ public class Cellipsoid implements Serializable {
             ellipseRadius[i] = y;
             x += step;
         }
-        Point3f m = new Point3f(c_mid);
-        float r = getMeanRadius();
-        m.z -= r;
+        /*Point3f m = new Point3f(c_mid);
+        float rad = getMeanRadius();*/
+        m.z -= rad;
         Point3f l = new Point3f(m); //start
         m.z += step; //end
         //std::cout << "ellipseRadius.size(): " << ellipseRadius.size() << std::endl;
+        float r;
         for (int j = ellipseRadius.length - 1; j > 0; j--) {
-            r = ellipseRadius[j];
+            r = ellipseRadius[j]*rad/b;
             //std::cout << "start: " << l[d - 1] << ", ";
             //std::cout << "end: " << m[d - 1] << ", ";
             //std::cout << "radius: " << r << std::endl;
@@ -293,7 +309,7 @@ public class Cellipsoid implements Serializable {
         }
 
         for (int j = 0; j < ellipseRadius.length; j++) {
-            r = ellipseRadius[j];
+            r = ellipseRadius[j]*rad/b;
             //std::cout << "start: " << l[d - 1] << ", ";
             //std::cout << "end: " << m[d - 1] << ", ";
             //std::cout << "radius: " << r << std::endl;
@@ -345,8 +361,11 @@ public class Cellipsoid implements Serializable {
         for (Segment seg : getCylindricRepresentant().getSegments()) {
             area += seg.getSurfaceArea();
         }
+
         return area;
     }
+
+
 
     /**
      * Get the mean radius of cellipsoid. It returns the geometric mean of a s_radii.
