@@ -18,7 +18,7 @@ import java.util.*;
  */
 public class NGParameter {
     /// public static members
-    public static final Logger logger = Logger.getLogger(NGProject.class.getName());
+    public static final Logger logger = Logger.getLogger(NGParameter.class.getName());
 
     ////////
     private Map<String, XMLObject> params;
