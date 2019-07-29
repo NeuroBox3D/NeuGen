@@ -1,0 +1,166 @@
+2019-07-22 11:09:25,562 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenApp: Look and feel name: com.apple.laf.AquaLookAndFeel
+2019-07-22 11:09:29,416 INFO  [AWT-EventQueue-0] org.neugen.help.NeuGenHelp: init help
+2019-07-22 11:09:50,849 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenView: Closed with status: 1
+2019-07-22 11:09:50,849 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenView: *** Density *** : 0.25
+2019-07-22 11:09:50,849 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenView: *** Synapse distance *** : 2.5
+2019-07-22 11:09:51,166 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenComments: load comments: /Users/jwang/GCSC/Project/Neuron/HBP733/Test/Hippocampus1/Param.properties
+2019-07-22 11:09:51,187 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenComments: complete property for comments: Param
+2019-07-22 11:09:51,209 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenComments: load comments: /Users/jwang/GCSC/Project/Neuron/HBP733/Test/Hippocampus1/Interna.properties
+2019-07-22 11:09:51,211 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenComments: complete property for comments: Interna
+2019-07-22 11:09:51,229 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenView: 1922
+2019-07-22 11:09:51,229 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenView: child key: Param
+2019-07-22 11:09:51,239 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenView: speichere Datei: /Users/jwang/GCSC/Project/Neuron/HBP733/Test/Hippocampus1/Param.neu
+2019-07-22 11:09:51,241 INFO  [AWT-EventQueue-0] org.neugen.parsers.NeuGenConfigStreamer: path of DTD.txt: /Users/jwang/GCSC/Project/Neuron/HBP733/Programm/NeuGen1907/production/NeuGen/org/neugen/gui/resources/DTD.txt
+2019-07-22 11:09:51,264 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenView: child key: Interna
+2019-07-22 11:09:51,264 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenView: speichere Datei: /Users/jwang/GCSC/Project/Neuron/HBP733/Test/Hippocampus1/Interna.neu
+2019-07-22 11:09:51,266 INFO  [AWT-EventQueue-0] org.neugen.parsers.NeuGenConfigStreamer: path of DTD.txt: /Users/jwang/GCSC/Project/Neuron/HBP733/Programm/NeuGen1907/production/NeuGen/org/neugen/gui/resources/DTD.txt
+2019-07-22 11:28:47,939 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenProject: project path: /Users/jwang/GCSC/Project/Neuron/HBP733/Test/Hippocampus
+2019-07-22 11:29:14,194 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenView: Closed with status: 1
+2019-07-22 11:29:14,195 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenView: *** Density *** : 0.25
+2019-07-22 11:29:14,195 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenView: *** Synapse distance *** : 2.5
+2019-07-22 11:29:14,245 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenComments: load comments: /Users/jwang/GCSC/Project/Neuron/HBP733/Test/Hippocampus/Param.properties
+2019-07-22 11:29:14,253 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenComments: complete property for comments: Param
+2019-07-22 11:29:14,263 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenComments: load comments: /Users/jwang/GCSC/Project/Neuron/HBP733/Test/Hippocampus/Interna.properties
+2019-07-22 11:29:14,264 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenComments: complete property for comments: Interna
+2019-07-22 11:29:14,271 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenView: 1922
+2019-07-22 11:29:14,271 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenView: child key: Param
+2019-07-22 11:29:14,274 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenView: speichere Datei: /Users/jwang/GCSC/Project/Neuron/HBP733/Test/Hippocampus/Param.neu
+2019-07-22 11:29:14,275 INFO  [AWT-EventQueue-0] org.neugen.parsers.NeuGenConfigStreamer: path of DTD.txt: /Users/jwang/GCSC/Project/Neuron/HBP733/Programm/NeuGen1907/production/NeuGen/org/neugen/gui/resources/DTD.txt
+2019-07-22 11:29:14,282 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenView: child key: Interna
+2019-07-22 11:29:14,282 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenView: speichere Datei: /Users/jwang/GCSC/Project/Neuron/HBP733/Test/Hippocampus/Interna.neu
+2019-07-22 11:29:14,283 INFO  [AWT-EventQueue-0] org.neugen.parsers.NeuGenConfigStreamer: path of DTD.txt: /Users/jwang/GCSC/Project/Neuron/HBP733/Programm/NeuGen1907/production/NeuGen/org/neugen/gui/resources/DTD.txt
+2019-07-22 11:49:22,534 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenProject: project path: /Users/jwang/GCSC/Project/Neuron/HBP733/Test/Neocortex/Neocortex
+2019-07-22 11:49:25,462 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenView: Closed with status: 1
+2019-07-22 11:49:25,463 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenView: *** Density *** : 0.25
+2019-07-22 11:49:25,463 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenView: *** Synapse distance *** : 2.5
+2019-07-22 11:49:25,525 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenComments: load comments: /Users/jwang/GCSC/Project/Neuron/HBP733/Test/Neocortex/Neocortex/Param.properties
+2019-07-22 11:49:25,533 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenComments: complete property for comments: Param
+2019-07-22 11:49:25,547 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenComments: load comments: /Users/jwang/GCSC/Project/Neuron/HBP733/Test/Neocortex/Neocortex/Interna.properties
+2019-07-22 11:49:25,558 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenComments: complete property for comments: Interna
+2019-07-22 11:49:25,565 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenView: 2569
+2019-07-22 11:49:25,565 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenView: child key: Param
+2019-07-22 11:49:25,570 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenView: speichere Datei: /Users/jwang/GCSC/Project/Neuron/HBP733/Test/Neocortex/Neocortex/Param.neu
+2019-07-22 11:49:25,571 INFO  [AWT-EventQueue-0] org.neugen.parsers.NeuGenConfigStreamer: path of DTD.txt: /Users/jwang/GCSC/Project/Neuron/HBP733/Programm/NeuGen1907/production/NeuGen/org/neugen/gui/resources/DTD.txt
+2019-07-22 11:49:25,600 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenView: child key: Interna
+2019-07-22 11:49:25,601 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenView: speichere Datei: /Users/jwang/GCSC/Project/Neuron/HBP733/Test/Neocortex/Neocortex/Interna.neu
+2019-07-22 11:49:25,602 INFO  [AWT-EventQueue-0] org.neugen.parsers.NeuGenConfigStreamer: path of DTD.txt: /Users/jwang/GCSC/Project/Neuron/HBP733/Programm/NeuGen1907/production/NeuGen/org/neugen/gui/resources/DTD.txt
+2019-07-22 11:55:57,463 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenProject: project path: /Users/jwang/GCSC/Project/Neuron/HBP733/Test/Hippocampus/Hippocampus
+2019-07-22 11:56:00,184 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenView: Closed with status: 1
+2019-07-22 11:56:00,184 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenView: *** Density *** : 0.25
+2019-07-22 11:56:00,184 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenView: *** Synapse distance *** : 2.5
+2019-07-22 11:56:00,205 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenComments: load comments: /Users/jwang/GCSC/Project/Neuron/HBP733/Test/Hippocampus/Hippocampus/Param.properties
+2019-07-22 11:56:00,209 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenComments: complete property for comments: Param
+2019-07-22 11:56:00,226 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenComments: load comments: /Users/jwang/GCSC/Project/Neuron/HBP733/Test/Hippocampus/Hippocampus/Interna.properties
+2019-07-22 11:56:00,227 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenComments: complete property for comments: Interna
+2019-07-22 11:56:00,231 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenView: 1922
+2019-07-22 11:56:00,231 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenView: child key: Param
+2019-07-22 11:56:00,234 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenView: speichere Datei: /Users/jwang/GCSC/Project/Neuron/HBP733/Test/Hippocampus/Hippocampus/Param.neu
+2019-07-22 11:56:00,235 INFO  [AWT-EventQueue-0] org.neugen.parsers.NeuGenConfigStreamer: path of DTD.txt: /Users/jwang/GCSC/Project/Neuron/HBP733/Programm/NeuGen1907/production/NeuGen/org/neugen/gui/resources/DTD.txt
+2019-07-22 11:56:00,240 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenView: child key: Interna
+2019-07-22 11:56:00,240 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenView: speichere Datei: /Users/jwang/GCSC/Project/Neuron/HBP733/Test/Hippocampus/Hippocampus/Interna.neu
+2019-07-22 11:56:00,244 INFO  [AWT-EventQueue-0] org.neugen.parsers.NeuGenConfigStreamer: path of DTD.txt: /Users/jwang/GCSC/Project/Neuron/HBP733/Programm/NeuGen1907/production/NeuGen/org/neugen/gui/resources/DTD.txt
+2019-07-22 12:53:31,370 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenView: Closed with status: 1
+2019-07-22 12:53:31,375 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenView: *** Density *** : 0.25
+2019-07-22 12:53:31,375 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenView: *** Synapse distance *** : 2.5
+2019-07-22 12:53:31,417 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenComments: load comments: /Users/jwang/GCSC/Project/Neuron/HBP733/Test/Neocortex/Neocortex/Param.properties
+2019-07-22 12:53:31,444 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenComments: complete property for comments: Param
+2019-07-22 12:53:31,461 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenComments: load comments: /Users/jwang/GCSC/Project/Neuron/HBP733/Test/Neocortex/Neocortex/Interna.properties
+2019-07-22 12:53:31,463 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenComments: complete property for comments: Interna
+2019-07-22 12:53:31,467 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenView: 2569
+2019-07-22 12:53:31,468 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenView: child key: Param
+2019-07-22 12:53:31,470 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenView: speichere Datei: /Users/jwang/GCSC/Project/Neuron/HBP733/Test/Neocortex/Neocortex/Param.neu
+2019-07-22 12:53:31,471 INFO  [AWT-EventQueue-0] org.neugen.parsers.NeuGenConfigStreamer: path of DTD.txt: /Users/jwang/GCSC/Project/Neuron/HBP733/Programm/NeuGen1907/production/NeuGen/org/neugen/gui/resources/DTD.txt
+2019-07-22 12:53:31,485 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenView: child key: Interna
+2019-07-22 12:53:31,486 INFO  [AWT-EventQueue-0] org.neugen.gui.NeuGenView: speichere Datei: /Users/jwang/GCSC/Project/Neuron/HBP733/Test/Neocortex/Neocortex/Interna.neu
+2019-07-22 12:53:31,487 INFO  [AWT-EventQueue-0] org.neugen.parsers.NeuGenConfigStreamer: path of DTD.txt: /Users/jwang/GCSC/Project/Neuron/HBP733/Programm/NeuGen1907/production/NeuGen/org/neugen/gui/resources/DTD.txt
+es.neuron.NeuronBase: set dendirte (number of dendrites):7
+2019-07-22 12:06:57,468 INFO  [main] org.neugen.datastructures.NetNeocortex: generate 3 L23pyramidal neurons
+2019-07-22 12:06:57,485 INFO  [main] org.neugen.datastructures.neuron.NeuronBase: set for L23 pyramidal neuron
+2019-07-22 12:06:57,485 INFO  [main] org.neugen.datastructures.neuron.NeuronBase: soma rad: 5.0000005
+2019-07-22 12:06:57,486 INFO  [main] org.neugen.datastructures.Axon: set axon draw number!
+2019-07-22 12:06:57,486 INFO  [main] org.neugen.datastructures.Axon: axon seed value: 22
+2019-07-22 12:06:57,486 INFO  [main] org.neugen.datastructures.Axon: branch start: 3.0
+2019-07-22 12:06:57,488 INFO  [main] org.neugen.datastructures.Dendrite: create dendrite section with low branching limit: 20.0
+2019-07-22 12:06:57,523 INFO  [main] org.neugen.datastructures.neuron.NeuronBase: set for L23 pyramidal neuron
+2019-07-22 12:06:57,523 INFO  [main] org.neugen.datastructures.neuron.NeuronBase: soma rad: 5.0000005
+2019-07-22 12:06:57,523 INFO  [main] org.neugen.datastructures.Axon: axon seed value: 889843327
+2019-07-22 12:06:57,523 INFO  [main] org.neugen.datastructures.Axon: branch start: 3.0
+2019-07-22 12:06:57,526 INFO  [main] org.neugen.datastructures.Dendrite: create dendrite section with low branching limit: 20.0
+2019-07-22 12:06:57,572 INFO  [main] org.neugen.datastructures.neuron.NeuronBase: set for L23 pyramidal neuron
+2019-07-22 12:06:57,572 INFO  [main] org.neugen.datastructures.neuron.NeuronBase: soma rad: 5.0000005
+2019-07-22 12:06:57,572 INFO  [main] org.neugen.datastructures.Axon: axon seed value: 1244843607
+2019-07-22 12:06:57,572 INFO  [main] org.neugen.datastructures.Axon: branch start: 3.0
+2019-07-22 12:06:57,575 INFO  [main] org.neugen.datastructures.Dendrite: create dendrite section with low branching limit: 20.0
+2019-07-22 12:06:57,615 INFO  [main] org.neugen.datastructures.NetNeocortex: generate 2 L5Apyramidal neurons
+2019-07-22 12:06:57,618 INFO  [main] org.neugen.datastructures.Axon: set axon draw number!
+2019-07-22 12:06:57,618 INFO  [main] org.neugen.datastructures.Axon: axon seed value: 22
+2019-07-22 12:06:57,618 INFO  [main] org.neugen.datastructures.Axon: branch start: 3.0
+2019-07-22 12:06:57,621 INFO  [main] org.neugen.datastructures.Dendrite: create dendrite section with low branching limit: 770.0
+2019-07-22 12:06:57,665 INFO  [main] org.neugen.datastructures.Axon: axon seed value: 1700662943
+2019-07-22 12:06:57,665 INFO  [main] org.neugen.datastructures.Axon: branch start: 3.0
+2019-07-22 12:06:57,673 INFO  [main] org.neugen.datastructures.Dendrite: create dendrite section with low branching limit: 770.0
+2019-07-22 12:06:57,724 INFO  [main] org.neugen.datastructures.NetNeocortex: generate 2 L5Bpyramidal neurons
+2019-07-22 12:06:57,725 INFO  [main] org.neugen.datastructures.Axon: set axon draw number!
+2019-07-22 12:06:57,725 INFO  [main] org.neugen.datastructures.Axon: axon seed value: 22
+2019-07-22 12:06:57,725 INFO  [main] org.neugen.datastructures.Axon: branch start: 3.0
+2019-07-22 12:06:57,729 INFO  [main] org.neugen.datastructures.Dendrite: create dendrite section with low branching limit: 700.0
+2019-07-22 12:06:57,756 INFO  [main] org.neugen.datastructures.Axon: axon seed value: 555144824
+2019-07-22 12:06:57,756 INFO  [main] org.neugen.datastructures.Axon: branch start: 3.0
+2019-07-22 12:06:57,761 INFO  [main] org.neugen.datastructures.Dendrite: create dendrite section with low branching limit: 700.0
+2019-07-22 12:06:58,181 INFO  [main] org.neugen.gui.NeuGenLib: presynapticConv: 20
+2019-07-22 12:06:58,183 INFO  [main] org.neugen.backend.NGBackend: Without GUI!
+2019-07-22 12:59:47,324 INFO  [main] org.neugen.datastructures.Section: reset section counter:0
+2019-07-22 12:59:47,326 INFO  [main] org.neugen.datastructures.Segment: segment counter is:0
+2019-07-22 12:59:47,331 INFO  [main] org.neugen.datastructures.Region: column size: (600.0, 600.0, 1600.0)
+2019-07-22 12:59:47,343 INFO  [main] org.neugen.datastructures.NetNeocortex: generate 5 L4stellate neurons
+2019-07-22 12:59:47,355 INFO  [main] org.neugen.datastructures.Axon: set axon draw number!
+2019-07-22 12:59:47,355 INFO  [main] org.neugen.datastructures.Axon: axon seed value: 22
+2019-07-22 12:59:47,357 INFO  [main] org.neugen.datastructures.Axon: branch start: 3.0
+2019-07-22 12:59:47,370 INFO  [main] org.neugen.datastructures.neuron.NeuronBase: set dendirte (number of dendrites):7
+2019-07-22 12:59:47,412 INFO  [main] org.neugen.datastructures.Axon: axon seed value: 2143816922
+2019-07-22 12:59:47,412 INFO  [main] org.neugen.datastructures.Axon: branch start: 3.0
+2019-07-22 12:59:47,417 INFO  [main] org.neugen.datastructures.neuron.NeuronBase: set dendirte (number of dendrites):7
+2019-07-22 12:59:47,444 INFO  [main] org.neugen.datastructures.Axon: axon seed value: 1063480635
+2019-07-22 12:59:47,444 INFO  [main] org.neugen.datastructures.Axon: branch start: 3.0
+2019-07-22 12:59:47,448 INFO  [main] org.neugen.datastructures.neuron.NeuronBase: set dendirte (number of dendrites):7
+2019-07-22 12:59:47,470 INFO  [main] org.neugen.datastructures.Axon: axon seed value: 345895083
+2019-07-22 12:59:47,470 INFO  [main] org.neugen.datastructures.Axon: branch start: 3.0
+2019-07-22 12:59:47,477 INFO  [main] org.neugen.datastructures.neuron.NeuronBase: set dendirte (number of dendrites):7
+2019-07-22 12:59:47,505 INFO  [main] org.neugen.datastructures.Axon: axon seed value: 1297415491
+2019-07-22 12:59:47,505 INFO  [main] org.neugen.datastructures.Axon: branch start: 3.0
+2019-07-22 12:59:47,509 INFO  [main] org.neugen.datastructures.neuron.NeuronBase: set dendirte (number of dendrites):7
+2019-07-22 12:59:47,526 INFO  [main] org.neugen.datastructures.NetNeocortex: generate 3 L23pyramidal neurons
+2019-07-22 12:59:47,530 INFO  [main] org.neugen.datastructures.neuron.NeuronBase: set for L23 pyramidal neuron
+2019-07-22 12:59:47,531 INFO  [main] org.neugen.datastructures.neuron.NeuronBase: soma rad: 5.0000005
+2019-07-22 12:59:47,531 INFO  [main] org.neugen.datastructures.Axon: set axon draw number!
+2019-07-22 12:59:47,531 INFO  [main] org.neugen.datastructures.Axon: axon seed value: 22
+2019-07-22 12:59:47,531 INFO  [main] org.neugen.datastructures.Axon: branch start: 3.0
+2019-07-22 12:59:47,533 INFO  [main] org.neugen.datastructures.Dendrite: create dendrite section with low branching limit: 20.0
+2019-07-22 12:59:47,579 INFO  [main] org.neugen.datastructures.neuron.NeuronBase: set for L23 pyramidal neuron
+2019-07-22 12:59:47,579 INFO  [main] org.neugen.datastructures.neuron.NeuronBase: soma rad: 5.0000005
+2019-07-22 12:59:47,579 INFO  [main] org.neugen.datastructures.Axon: axon seed value: 889843327
+2019-07-22 12:59:47,580 INFO  [main] org.neugen.datastructures.Axon: branch start: 3.0
+2019-07-22 12:59:47,583 INFO  [main] org.neugen.datastructures.Dendrite: create dendrite section with low branching limit: 20.0
+2019-07-22 12:59:47,636 INFO  [main] org.neugen.datastructures.neuron.NeuronBase: set for L23 pyramidal neuron
+2019-07-22 12:59:47,636 INFO  [main] org.neugen.datastructures.neuron.NeuronBase: soma rad: 5.0000005
+2019-07-22 12:59:47,637 INFO  [main] org.neugen.datastructures.Axon: axon seed value: 1244843607
+2019-07-22 12:59:47,637 INFO  [main] org.neugen.datastructures.Axon: branch start: 3.0
+2019-07-22 12:59:47,641 INFO  [main] org.neugen.datastructures.Dendrite: create dendrite section with low branching limit: 20.0
+2019-07-22 12:59:47,683 INFO  [main] org.neugen.datastructures.NetNeocortex: generate 2 L5Apyramidal neurons
+2019-07-22 12:59:47,685 INFO  [main] org.neugen.datastructures.Axon: set axon draw number!
+2019-07-22 12:59:47,686 INFO  [main] org.neugen.datastructures.Axon: axon seed value: 22
+2019-07-22 12:59:47,686 INFO  [main] org.neugen.datastructures.Axon: branch start: 3.0
+2019-07-22 12:59:47,690 INFO  [main] org.neugen.datastructures.Dendrite: create dendrite section with low branching limit: 770.0
+2019-07-22 12:59:47,725 INFO  [main] org.neugen.datastructures.Axon: axon seed value: 1700662943
+2019-07-22 12:59:47,726 INFO  [main] org.neugen.datastructures.Axon: branch start: 3.0
+2019-07-22 12:59:47,735 INFO  [main] org.neugen.datastructures.Dendrite: create dendrite section with low branching limit: 770.0
+2019-07-22 12:59:47,785 INFO  [main] org.neugen.datastructures.NetNeocortex: generate 2 L5Bpyramidal neurons
+2019-07-22 12:59:47,786 INFO  [main] org.neugen.datastructures.Axon: set axon draw number!
+2019-07-22 12:59:47,786 INFO  [main] org.neugen.datastructures.Axon: axon seed value: 22
+2019-07-22 12:59:47,786 INFO  [main] org.neugen.datastructures.Axon: branch start: 3.0
+2019-07-22 12:59:47,791 INFO  [main] org.neugen.datastructures.Dendrite: create dendrite section with low branching limit: 700.0
+2019-07-22 12:59:47,830 INFO  [main] org.neugen.datastructures.Axon: axon seed value: 555144824
+2019-07-22 12:59:47,830 INFO  [main] org.neugen.datastructures.Axon: branch start: 3.0
+2019-07-22 12:59:47,837 INFO  [main] org.neugen.datastructures.Dendrite: create dendrite section with low branching limit: 700.0
+2019-07-22 12:59:48,266 INFO  [main] org.neugen.gui.NeuGenLib: presynapticConv: 20
+2019-07-22 12:59:48,269 INFO  [main] org.neugen.backend.NGBackend: Without GUI!
