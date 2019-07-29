@@ -177,8 +177,9 @@ public class NGNeuronVisual {
      * section visualisation for the section of soma or undefinedSections
      * @param section
      */
-    private void sectionVisual(Section section){
-        int secNum=section.getSectionType().getSecNum(); // Myelinized: 3, unmylinzed: 4
+    private void sectionVisual(Section section, int secNum){
+        //System.out.println("segment type:"+section.getSectionType());
+        //int secNum=section.getSectionType().getSecNum(); // Myelinized: 3, unmylinzed: 4
         for(Segment segment:section.getSegments()){
             segmentVisual(segment, secNum);
         }
@@ -194,7 +195,8 @@ public class NGNeuronVisual {
             Section.Iterator secIterator=firstSection.getIterator();
             while(secIterator.hasNext()){
                 Section section=secIterator.next();
-                sectionVisual(section);
+                int secNum=section.getSectionType().getSecNum();
+                sectionVisual(section, secNum);
             }
         }
     }
@@ -214,7 +216,7 @@ public class NGNeuronVisual {
         if(sec==null){
             sec=soma.getEllipsoid();
         }
-        sectionVisual(sec);
+        sectionVisual(sec, Section.SectionType.SOMA.getSecNum());
     }
 
     private Point3f startLocation(Section firstSection){
@@ -308,7 +310,7 @@ public class NGNeuronVisual {
         if(neuron.getUndefinedSections().size()>0) {
             System.out.println("Print UndefinedSections:");
             for (Section section : neuron.getUndefinedSections()) {
-                sectionVisual(section);
+                sectionVisual(section, Section.SectionType.UNDEFINED.getSecNum());
             }
         }
 
