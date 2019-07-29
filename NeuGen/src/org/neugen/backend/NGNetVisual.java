@@ -106,36 +106,41 @@ public class NGNetVisual {
     /// core functions:
     ///////////////////////
 
+
     /**
      * synapse visualisation
      * @param synapse
      */
     public void synapseVisual(Cons synapse){
-        Segment axSeg=synapse.getNeuron1AxSegment();
-        Segment denSeg=synapse.getNeuron2DenSectionSegment();
-        Point3f axSegCenter = axSeg.getCenter();  //.getEnd();
-        axSegCenter.scale(scale);
-        Point3f denSegCenter = denSeg.getCenter();
-        denSegCenter.scale(scale);
+        if(synapse.getNeuron1()!=null) {
+            Segment axSeg = synapse.getNeuron1AxSegment();
+            Segment denSeg = synapse.getNeuron2DenSectionSegment();
 
-        Point3f center = new Point3f();
-        center.add(axSegCenter, denSegCenter);
-        center.scale(0.5f);
+            //System.out.println("synpase center"+center(axSeg));
+            Point3f axSegCenter = axSeg.getCenter();  //.getEnd();
+            axSegCenter.scale(scale);
+            Point3f denSegCenter = denSeg.getCenter();
+            denSegCenter.scale(scale);
 
-        float rad=scale*3.0f;
+            Point3f center = new Point3f();
+            center.add(axSegCenter, denSegCenter);
+            center.scale(0.5f);
 
-        NGNeuronNodeVisual nodVis=new NGNeuronNodeVisual(center, rad);
-        switch (visM){
-            case LINE:
-               nodVis.setLocation(axSegCenter);
-               shape3DSyn.addGeometry(nodVis.getLineArray(denSegCenter, colList.get(7)));
-               break;
-            case VRL:
-                vtaSyn.addAll(nodVis.getVTriangleArray());
-                break;
-            case SOLID:
-                tgListSyn.add(nodVis.getTransformGroup(appList.get(7)));
-                break;
+            float rad = scale * 3.0f;
+
+            NGNeuronNodeVisual nodVis = new NGNeuronNodeVisual(center, rad);
+            switch (visM) {
+                case LINE:
+                    nodVis.setLocation(axSegCenter);
+                    shape3DSyn.addGeometry(nodVis.getLineArray(denSegCenter, colList.get(7)));
+                    break;
+                case VRL:
+                    vtaSyn.addAll(nodVis.getVTriangleArray());
+                    break;
+                case SOLID:
+                    tgListSyn.add(nodVis.getTransformGroup(appList.get(7)));
+                    break;
+            }
         }
     }
 

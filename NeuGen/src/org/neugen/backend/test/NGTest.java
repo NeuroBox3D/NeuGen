@@ -1,9 +1,6 @@
 package org.neugen.backend.test;
 
-import org.neugen.backend.NGGenerator;
-import org.neugen.backend.NGNeuronVisual;
-import org.neugen.backend.NGParameter;
-import org.neugen.backend.NGProject;
+import org.neugen.backend.*;
 import org.neugen.datastructures.Net;
 import org.neugen.datastructures.neuron.Neuron;
 import org.neugen.gui.NeuGenConstants;
@@ -31,11 +28,15 @@ public class NGTest {
             NGGenerator gen=new NGGenerator(paramChange.getParamTree(),NeuGenConstants.NEOCORTEX_PROJECT);
             gen.run();
             Net net=gen.getNet();
-            List<Neuron> neuronList=net.getNeuronList();
+            NGNetVisual netVisual=new NGNetVisual(net);
+            netVisual.setVisualMethod("line");
+            netVisual.run(false, true);
+
+            /*List<Neuron> neuronList=net.getNeuronList();
             Neuron neuron=neuronList.get(0);
             NGNeuronVisual neuronVisual=new NGNeuronVisual(neuron);
             neuronVisual.setVisualMethod("line");
-            neuronVisual.run(false);
+            neuronVisual.run(false);*/
             //System.out.println(neuronVisual.getShape3D().numGeometries());
 
             //NGProject.saveParamTree(paramChange.getParamTree(), "/Users/jwang/GCSC/Project/Neuron/HBP733/Test/Test/Neo1");
