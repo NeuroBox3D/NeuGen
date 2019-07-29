@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import org.neugen.datastructures.Segment;
 import org.neugen.gui.NeuGenConstants;
 import org.neugen.utils.NeuGenLogger;
+import org.neugen.utils.Utils;
 import org.neugen.visual.Utils3D;
 
 import javax.media.j3d.*;
@@ -15,48 +16,46 @@ import javax.vecmath.Color3f;
 import javax.vecmath.Point3f;
 import javax.vecmath.Vector3f;
 
+/**
+ * visualisation of a basis element, i.e. segment
+ * as Line with color3f
+ * as VTriangle
+ * as TransformGroup with appearance
+ *
+ */
 public class NGNeuronSegmentVisual {
 
     public static final Logger logger = Logger.getLogger(NGNeuronSegmentVisual.class.getName());
 
     private Segment segment;
-    private Color3f color;
     private float scale;
-
-    private TransparencyAttributes ta;
-    private Material mat;
 
     public NGNeuronSegmentVisual(Segment segment){
         NeuGenConstants.WITH_GUI = false;
         NeuGenLogger.initLogger();
         this.segment=segment;
-        this.color= Utils3D.white;
         this.scale=0.0001f;
-        this.ta=null;
-        this.mat=null;
     }
 
+    /////////////////////////////////////////////////////////////
+    ////// parameter: setting and getting funtions:
+    ////////////////////////////////////////////////////////////
+    public void setSegment(Segment segment){this.segment=segment;}
+
     public Segment getSegment(){return segment;}
-
-    public void setColor(Color3f color){this.color=color;}
-
-    public Color3f getColor(){return color;}
 
     public void setScale(float scale){this.scale=scale;}
 
     public float getScale(){return scale;}
 
-    public void setTransparencyAttributes(TransparencyAttributes ta) {this.ta=ta;}
-
-    public void setMaterial(Material mat){this.mat=mat;}
 
     //////////////////////////////////////////////////////////
-    ///  core functions for creating the basic visual elements
+    ///  core functions for creating the basis visual elements
     //////////////////////////////////////////////////////////
 
     /**
      * 2D line model: LINE
-     * LineArray is the basic element of Shape3D: shape3D
+     * LineArray is the basis element of Shape3D: shape3D
      * through the function addGeometry we can add LineArray into Shape3D:
      * i.e: shape3D.addGeometry(la)
      * @param segment
@@ -82,7 +81,7 @@ public class NGNeuronSegmentVisual {
 
     /**
      * 2D VRL model with Triangle
-     * Triangle is the basic element of VTriangleArray: vta
+     * Triangle is the basis element of VTriangleArray: vta
      * through the function: addTriangle we can add Triangle into VTriangleArray
      * i.e: vta.addTriangle(triangle)
      * @param segment
@@ -104,14 +103,14 @@ public class NGNeuronSegmentVisual {
 
     /**
      * 3D Solid model: SOLID
-     * Cylinder TransformGroup is the basic element for TransformGroup objRoot
+     * Cylinder TransformGroup is the basis element for TransformGroup objRoot
      * through the function addChild we can add this segmental cylinder TransformGroup into objRoot:
      * i.e.: objRoot.addChild(tg)
      * @param segment
      * @param color
      * @return TransformGroup: tg
      */
-    private TransformGroup tgCylinderfromSegment(Segment segment, Color3f color){
+    private TransformGroup tgCylinderfromSegment(Segment segment, Appearance app){
         Point3f segStart=segment.getStart();
         Point3f segEnd=segment.getEnd();
 
@@ -121,9 +120,6 @@ public class NGNeuronSegmentVisual {
         float hight = len.length()*scale;
         float rad=(float) (segment.getStartRadius()+segment.getEndRadius())*0.5f*scale;
 
-        if(mat!=null)
-            mat=materialFromColor(color);
-        Appearance app=setAppearance(mat, ta);
         Cylinder cyl=new Cylinder(rad,hight,app);
         //cyl.setAppearance(app);
 
@@ -151,36 +147,14 @@ public class NGNeuronSegmentVisual {
 
     }
 
-    private Appearance setAppearance(Material mat, TransparencyAttributes ta){
-        Appearance app = new Appearance();
-        app.setCapability(Appearance.ALLOW_MATERIAL_READ);
-
-       if(mat!=null)
-            app.setMaterial(mat);
-
-        if(ta!=null)
-            app.setTransparencyAttributes(ta);
-
-        return app;
-    }
-
-    private Material materialFromColor(Color3f color){
-        Material mat = new Material();
-        mat.setAmbientColor(color);
-        mat.setDiffuseColor(color);
-        mat.setSpecularColor(color);
-        mat.setEmissiveColor(color);
-        mat.setCapability(Material.ALLOW_COMPONENT_READ);
-        return mat;
-    }
-
-
-
 
     ///////////////////////////////////////
-    ///
+    ///result: getting functions
     //////////////////////////////////////
-    public LineArray getLineArray(){
+    public LineArray getLineArray(Color3f color){
+        if(color==null){
+            color= Utils3D.white;
+        }
         return linefromSegment(segment, color);
     }
 
@@ -188,8 +162,11 @@ public class NGNeuronSegmentVisual {
         return trianglefromSegment(segment);
     }
 
-    public TransformGroup getCylinderTG(){
-        return tgCylinderfromSegment(segment, color);
+    public TransformGroup getCylinderTG(Appearance app){
+        if(app==null){
+            app=new Appearance();
+        }
+        return tgCylinderfromSegment(segment,app);
     }
 
 

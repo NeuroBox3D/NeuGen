@@ -63,7 +63,7 @@ public class NGParameter {
                     //System.out.println("Value Class: "+valClass);
                     if(valClass.equals(Integer.class)){
                        // System.out.println("isInteger: "+valClass.equals(Integer.class));
-                        node.setValue(Math.round(param));
+                        node.setValue((int) Math.round(param));
                     }else {
                         node.setValue(param);
                     }

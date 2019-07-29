@@ -1,9 +1,15 @@
 package org.neugen.backend.test;
 
 import org.neugen.backend.NGGenerator;
+import org.neugen.backend.NGNeuronVisual;
 import org.neugen.backend.NGParameter;
 import org.neugen.backend.NGProject;
+import org.neugen.datastructures.Net;
+import org.neugen.datastructures.neuron.Neuron;
 import org.neugen.gui.NeuGenConstants;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class NGTest {
 
@@ -22,8 +28,16 @@ public class NGTest {
             System.out.println("projectType:"+ NGParameter.getProjectTypefromXMLObject(project.getParamTree().get("Param")));
             System.out.println("isParam:"+NGParameter.isParamXMLObject(project.getParamTree().get("Param")));
             System.out.println("isInterna:"+NGParameter.isInternaXMLObject(project.getParamTree().get("Interna")));
-            /*NGGenerator gen=new NGGenerator(paramChange.getParamTree(),NeuGenConstants.NEOCORTEX_PROJECT);
-            gen.run();*/
+            NGGenerator gen=new NGGenerator(paramChange.getParamTree(),NeuGenConstants.NEOCORTEX_PROJECT);
+            gen.run();
+            Net net=gen.getNet();
+            List<Neuron> neuronList=net.getNeuronList();
+            Neuron neuron=neuronList.get(0);
+            NGNeuronVisual neuronVisual=new NGNeuronVisual(neuron);
+            neuronVisual.setVisualMethod("line");
+            neuronVisual.run(false);
+            //System.out.println(neuronVisual.getShape3D().numGeometries());
+
             //NGProject.saveParamTree(paramChange.getParamTree(), "/Users/jwang/GCSC/Project/Neuron/HBP733/Test/Test/Neo1");
         } catch (Exception e) {
             e.printStackTrace();
