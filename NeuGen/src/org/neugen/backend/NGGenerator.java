@@ -48,7 +48,7 @@ public final class NGGenerator {
 
     /////////////////////////////////////////////////
 
-    private static void initRegion(String projectType){
+    public static void initRegion(String projectType){
         switch (projectType) {
             case NeuGenConstants.NEOCORTEX_PROJECT:
                 Region.setCortColumn(true);

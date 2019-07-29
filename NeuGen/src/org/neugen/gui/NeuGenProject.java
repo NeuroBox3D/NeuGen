@@ -51,6 +51,8 @@
 package org.neugen.gui;
 
 /// imports
+import org.neugen.backend.NGGenerator;
+import org.neugen.backend.NGProject;
 import org.neugen.utils.Utils;
 import java.io.File;
 import java.io.FileInputStream;
@@ -72,8 +74,12 @@ import org.apache.log4j.Logger;
 import org.neugen.datastructures.Region;
 
 /**
+ * creating NeuGen Project through copying and zipping the orignal parameters
+ * more details in NGProject
+ *
  * @author Sergei Wolf,
  * 	   Stephan Grein <stephan@syntaktischer-zucker.de>
+ * 	   Junxi Wang
  */
 @SuppressWarnings("serial")
 public final class NeuGenProject extends javax.swing.JDialog {
@@ -81,6 +87,7 @@ public final class NeuGenProject extends javax.swing.JDialog {
 	private String projectType;
 	private String dirPath;
 	private String projectDirectory = null;
+	private NGProject ngProject;
 
 	/**
 	 * @brief ctor
@@ -91,6 +98,7 @@ public final class NeuGenProject extends javax.swing.JDialog {
 		super(parent, modal);
 		initComponents();
 		descriptionEditorPane.setEditable(false);
+		ngProject=new NGProject(true);
 	}
 
 	/**
@@ -422,13 +430,43 @@ public final class NeuGenProject extends javax.swing.JDialog {
      */
     @SuppressWarnings("NestedAssignment")
     private void finishButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_finishButtonActionPerformed
-		String projectPath = folderTextField.getText().trim();
-		logger.info("project path: " + projectPath);
+        String projectPath = folderTextField.getText().trim();
+        logger.info("project path: " + projectPath);
 
 		File projectDir = new File(projectPath);
 		boolean createProject = Utils.fileExists(projectDir);
+		/*NGProject.createProject(projectType,projectPath, createProject);*/
+        ngProject.setProjectPath(projectPath);
+        ngProject.setProjectType(projectType);
+        ngProject.createProject(createProject);
 
-		if (createProject) {
+
+        try {
+            ///			    Utils.copyDir(sourceDir, projectDir);
+            Properties prop = getProjectProp(projectPath);
+            OutputStream out = new FileOutputStream(projectPath + System.getProperty("file.separator") + NeuGenConstants.NEUGEN_PROJECT_FILE);
+            prop.storeToXML(out, "NeuGen project directory ", "UTF8");
+            out.close();
+        } catch (FileNotFoundException ex) {
+            logger.error(ex);
+        } catch (IOException ex) {
+            logger.error(ex);
+        }
+
+        NGGenerator.initRegion(projectType);
+
+        /*if (projectType.equals(NeuGenConstants.HIPPOCAMPUS_PROJECT)) {
+                Region.setCortColumn(false);
+                Region.setCa1Region(true);
+        }
+
+        if (projectType.equals(NeuGenConstants.NEOCORTEX_PROJECT)) {
+                Region.setCortColumn(true);
+                Region.setCa1Region(false);
+        }*/
+
+
+		/*if (createProject) {
 			URL inputUrl = getClass().getResource("/org/neugen/gui/resources/" + projectType.toLowerCase() + ".zip");
 			File dest = new File(projectPath + System.getProperty("file.separator") + projectType.toLowerCase() + ".zip");
 			try {
@@ -478,9 +516,9 @@ public final class NeuGenProject extends javax.swing.JDialog {
 			} finally {
 				IOUtils.closeQuietly(zis);
 			}
-		}
+		}*/
 
-		if (createProject) {
+		/*if (createProject) {
 			String f = NeuGenConstants.CONFIG_DIR ;
 			if (projectType.equals(NeuGenConstants.HIPPOCAMPUS_PROJECT)) {
 			   /// String sourcePath = NeuGenConstants.CONFIG_DIR + System.getProperty("file.separator") + NeuGenConstants.HIPPOCAMPUS_PROJECT.toLowerCase();
@@ -519,10 +557,11 @@ public final class NeuGenProject extends javax.swing.JDialog {
 					logger.error(ex);
 				}
 			}
-			projectDirectory = projectPath;
-		}
+
+		}*/
 	    //logger.info("project directory: "  + projectDirectory);
 		//logger.info("projectDir: " + this.dirPath);
+        projectDirectory = projectPath;
 		this.dispose();
     }//GEN-LAST:event_finishButtonActionPerformed
 

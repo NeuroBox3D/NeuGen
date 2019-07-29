@@ -113,6 +113,7 @@ public class NGNetVisual {
      */
     public void synapseVisual(Cons synapse){
         if(synapse.getNeuron1()!=null) {
+            System.out.println("print synapse");
             Segment axSeg = synapse.getNeuron1AxSegment();
             Segment denSeg = synapse.getNeuron2DenSectionSegment();
 

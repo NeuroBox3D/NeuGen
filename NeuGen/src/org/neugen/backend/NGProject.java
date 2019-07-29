@@ -42,6 +42,12 @@ public final class NGProject {
     private static String sourceTemplate;
     private static String projectType;
 
+    public NGProject(boolean withGui){
+        NeuGenConstants.WITH_GUI = withGui;
+        NeuGenLogger.initLogger();
+        this.params=new HashMap<>();
+    }
+
     public NGProject(){
         NeuGenConstants.WITH_GUI = false;
         NeuGenLogger.initLogger();
@@ -99,7 +105,7 @@ public final class NGProject {
         if(projectPath.contains("/")){
             int indexLastSlash=projectPath.lastIndexOf("/");
             this.projectName=projectPath.substring(indexLastSlash+1);
-            this.sourceTemplate=projectPath.substring(0,indexLastSlash-1);
+            this.sourceTemplate=projectPath.substring(0,indexLastSlash);
         }else{
             this.projectName=projectPath;
             this.sourceTemplate="";
@@ -155,7 +161,7 @@ public final class NGProject {
      * @param projectPath
      * @param force
      */
-    public static void createProject(String projectPath, boolean force){
+    public static void createProject(String projectType,String projectPath, boolean force){
         if(projectPath==null) {
             logger.error("please input the project path!");
             return;
@@ -172,7 +178,7 @@ public final class NGProject {
      * @param force
      */
     public void createProject(boolean force){
-        createProject(getProjectPath(),force);
+        createProject(projectType, getProjectPath(),force);
     }
 
     /**
@@ -282,14 +288,16 @@ public final class NGProject {
      * @param internaPath
      */
     public void loadParamTree(){
-        loadParamTree(getParamPath(), getInternaPath());
+        this.params=loadParamTree(getParamPath(), getInternaPath());
     }
 
-    public static void loadParamTree(String ParamPath, String InternaPath){
+    public static Map<String, XMLObject> loadParamTree(String ParamPath, String InternaPath){
+        Map<String, XMLObject> params= new HashMap<String, XMLObject>();
         XMLObject paramRoot = loadParam(new File(ParamPath));
         XMLObject internaRoot = loadParam(new File(InternaPath));
         params.put(NeuGenConstants.PARAM, paramRoot);
         params.put(NeuGenConstants.INTERNA, internaRoot);
+        return params;
     }
 
     /**
@@ -363,7 +371,7 @@ public final class NGProject {
      */
     public static void main(String... args) {
         try {
-            NGProject project = new NGProject();
+            NGProject project = new NGProject(false);
             project.setProjectName("Neo1");
             project.setSourceTemplate("/Users/jwang/GCSC/Project/Neuron/HBP733/Test/Test");
             project.setProjectType(NeuGenConstants.NEOCORTEX_PROJECT);

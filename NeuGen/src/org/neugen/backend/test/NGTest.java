@@ -12,7 +12,7 @@ public class NGTest {
 
     public static void main(String... args) {
         try {
-            NGProject project = new NGProject();
+            NGProject project = new NGProject(false);
             project.setProjectName("Neo");
             project.setSourceTemplate("/Users/jwang/GCSC/Project/Neuron/HBP733/Test/Test");
             //project.setProjectType(NeuGenConstants.NEOCORTEX_PROJECT);
@@ -29,8 +29,10 @@ public class NGTest {
             gen.run();
             Net net=gen.getNet();
             NGNetVisual netVisual=new NGNetVisual(net);
-            netVisual.setVisualMethod("line");
+            netVisual.setVisualMethod("solid");
             netVisual.run(false, true);
+            //System.out.println(netVisual.getNetTG().toString());
+
 
             /*List<Neuron> neuronList=net.getNeuronList();
             Neuron neuron=neuronList.get(0);
