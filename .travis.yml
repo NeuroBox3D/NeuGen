@@ -9,6 +9,11 @@ env:
 before_install:
    - cd NeuGen
 
+addons:
+  apt:
+    packages:
+      ant
+
 script:
    - ant test
 
