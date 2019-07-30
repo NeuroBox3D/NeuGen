@@ -1,7 +1,7 @@
 language: java
 
 jdk:
-- oraclejdk8
+- oraclejdk12
 
 env:
 - TERM=dumb
@@ -18,7 +18,3 @@ notifications:
   on_success: always
   on_failure: always
 
-addons:
-  artifacts:
-    # ...
-    debug: true
