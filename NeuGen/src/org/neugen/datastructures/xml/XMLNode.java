@@ -48,13 +48,15 @@
  */
 package org.neugen.datastructures.xml;
 
+import java.util.Enumeration;
 import java.util.LinkedList;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
+
 import org.apache.log4j.Logger;
 import org.neugen.datastructures.DataStructureConstants;
 import org.neugen.gui.MenuHandler;
+import org.neugen.gui.TreeNodeInterface;
 
 /**
  * @author Alexander Wanner
@@ -264,4 +266,6 @@ public class XMLNode extends DefaultMutableTreeNode
     public void doIt(Object order) throws Exception {
         handler.doIt(order);
     }
+
+    //public Enumeration children(){return this.children();}
 }

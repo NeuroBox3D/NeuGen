@@ -62,7 +62,7 @@ public class XMLReal extends XMLNode {
 
     public XMLReal(String name, XMLObject parent, boolean inheritanceFlag, double value) {
         super(name, parent, inheritanceFlag);
-        super.setValue(new Float(value));
+        super.setValue(Float.valueOf((float) value));
     }
 
     @Override

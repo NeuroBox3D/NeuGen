@@ -64,7 +64,7 @@ import org.apache.log4j.Logger;
  * @author Alexander Wanner
  * @author Sergei Wolf
  */
-public class XMLObject extends XMLNode implements XMLObjectInterface, TreeNode {
+public class XMLObject extends XMLNode implements XMLObjectInterface,TreeNode {
 
     public static final class CompareObjects implements Comparator<XMLObject> {
 

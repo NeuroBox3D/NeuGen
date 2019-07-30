@@ -182,8 +182,8 @@ public class Cube3dCreator {
     }
 
     public void addCubeToContainer(MiniVoxel miniVoxel) {
-        addCubeToContainer(cubeContainer, new Float(miniVoxel.getXCoord()).floatValue(),
-                new Float(miniVoxel.getYCoord()).floatValue(), new Float(miniVoxel.getZCoord()).floatValue());
+        addCubeToContainer(cubeContainer, (float) miniVoxel.getXCoord(),
+                (float) miniVoxel.getYCoord(), (float) miniVoxel.getZCoord());
     }
 
     private void addCubeToContainer(Shape3D container, float x, float y, float z) {

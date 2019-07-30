@@ -354,15 +354,20 @@ private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
 			/// logger.info("Key:" + entry.getKey());
 			XMLObject obj = entry.getValue();
 			//if ("net".equals(entry.getKey())) {
-			Enumeration<XMLNode> childs = obj.children();
+
+			//Enumeration<XMLNode> childs = obj.children();
+			Enumeration childs=obj.depthFirstEnumeration();
 
 			while (childs.hasMoreElements()) {
-				XMLNode node = childs.nextElement();
+				//XMLNode node = childs.nextElement();
+				XMLNode node=(XMLNode) childs.nextElement();
 				/// logger.info("Node: " + node.toString());
 				if ("net".equals(node.toString())) {
-					Enumeration<XMLNode> childs2 = node.children();
+					//Enumeration<XMLNode> childs2 = node.children();
+					Enumeration childs2=obj.depthFirstEnumeration();
+
 					while (childs2.hasMoreElements()) {
-						XMLNode node2 = childs2.nextElement();
+						XMLNode node2 = (XMLNode) childs2.nextElement();
 						/// logger.info("*** CHILD *** :" + node2);
 						if (identifier.equals(node2.getKey())) {
 							node2.setValue(replacement);
@@ -388,25 +393,26 @@ private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
 		for (Entry<String, XMLObject> entry : NeuGenView.getInstance().getParamTrees().entrySet()) {
 			/// logger.info("Key:" + entry.getKey());
 			XMLObject obj = entry.getValue();
-			Enumeration<XMLNode> childs = obj.children();
+			//Enumeration<XMLNode> childs = obj.children();
+			Enumeration childs = obj.children();
 
 			while (childs.hasMoreElements()) {
-				XMLNode node = childs.nextElement();
+				XMLNode node =(XMLNode) childs.nextElement();
 				/// logger.info("Node: " + node.toString());
 				if ("neuron".equals(node.toString())) {
-					Enumeration<XMLNode> childs2 = node.children();
+					Enumeration childs2 = node.children();
 					while (childs2.hasMoreElements()) {
-						XMLNode node2 = childs2.nextElement();
+						XMLNode node2 = (XMLNode) childs2.nextElement();
 						if ("axon".equals(node2.toString())) {
-							Enumeration<XMLNode> childs3 = node2.children();
+							Enumeration childs3 = node2.children();
 							while (childs3.hasMoreElements()) {
-								XMLNode child4 = childs3.nextElement();
+								XMLNode child4 =(XMLNode) childs3.nextElement();
 								/// logger.info("axon child: " + child4.toString());
 								if ("gen_0".equals(child4.toString())) {
-									Enumeration<XMLNode> childs5 = child4.children();
+									Enumeration childs5 = child4.children();
 
 									while (childs5.hasMoreElements()) {
-										XMLNode child6 = childs5.nextElement();
+										XMLNode child6 =(XMLNode) childs5.nextElement();
 
 										if (identifier.equals(child6.getKey())) {
 											/// logger.info("child6 (before): " + child6.toString());
@@ -427,15 +433,15 @@ private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
 
 						} else if ("dendrite".equals(node2.toString())) {
 
-							Enumeration<XMLNode> childs3 = node2.children();
+							Enumeration childs3 = node2.children();
 							while (childs3.hasMoreElements()) {
-								XMLNode child4 = childs3.nextElement();
+								XMLNode child4 =(XMLNode) childs3.nextElement();
 								/// System.err.println("axon child: " + child4.toString());
 								if ("gen_0".equals(child4.toString())) {
-									Enumeration<XMLNode> childs5 = child4.children();
+									Enumeration childs5 = child4.children();
 
 									while (childs5.hasMoreElements()) {
-										XMLNode child6 = childs5.nextElement();
+										XMLNode child6 =(XMLNode) childs5.nextElement();
 
 										if ("nparts_density".equals(child6.getKey())) {
 											/// logger.info("child6 (before): " + child6.toString());
@@ -474,13 +480,13 @@ private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
 	@SuppressWarnings("unchecked")
 	private void correct_siblings(XMLNode child, String identifier, float replacement) {
 		/// only one child called siblings within childs of current XMLNode child
-		Enumeration<XMLNode> childs = child.children();
-		XMLNode sibling = childs.nextElement();
-		Enumeration<XMLNode> childs_of_sibling = sibling.children();
+		Enumeration childs = child.children();
+		XMLNode sibling =(XMLNode) childs.nextElement();
+		Enumeration childs_of_sibling = sibling.children();
 
 		while (childs_of_sibling.hasMoreElements()) {
 			/// current child of current sibling's child
-			XMLNode current_child = childs_of_sibling.nextElement();
+			XMLNode current_child =(XMLNode) childs_of_sibling.nextElement();
 
 			/// replace node's content
 			if (identifier.equals(current_child.getKey())) {

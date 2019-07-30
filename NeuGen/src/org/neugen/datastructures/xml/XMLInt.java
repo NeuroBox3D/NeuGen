@@ -59,11 +59,11 @@ public class XMLInt extends XMLNode {
 
     public XMLInt(String name, XMLObject parent, boolean inheritanceFlag, int value) {
         super(name, parent, inheritanceFlag);
-        super.setValue(new Integer(value));
+        super.setValue(Integer.valueOf(value));
     }
 
     public int value() {
-        return (new Integer(super.value.toString())).intValue();
+        return (Integer.valueOf(super.value.toString())).intValue();
     }
 
     @Override
@@ -72,7 +72,7 @@ public class XMLInt extends XMLNode {
     }
 
     public void setValue(int value) {
-        super.value = new Integer(value);
+        super.value = Integer.valueOf(value);
     }
 
     public static XMLInt convert(XMLNode node) {

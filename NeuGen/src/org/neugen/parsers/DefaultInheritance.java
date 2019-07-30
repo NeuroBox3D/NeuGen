@@ -613,15 +613,15 @@ public final class DefaultInheritance {
                                 //testAdress(current, (DefaultXMLObject)currentDep);
                                 //System.out.println("inherit order (if): " + order);
                                 currentDepChild = complete(currentChild, (XMLObject) currentDep);
-                                currentDepChild.setAppendix(new Integer(order));
+                                currentDepChild.setAppendix(Integer.valueOf(order));
                             } else if (!isTreeRoot(current)) {
                                 //System.out.println("inherit order (else): " + order);
                                 currentDepChild = complete(currentChild, (XMLObject) currentDep);
-                                currentDepChild.setAppendix(new Integer(order));
+                                currentDepChild.setAppendix(Integer.valueOf(order));
                             } //tree root
                             else if (isTreeRoot((XMLObject) currentDep)) {
                                 currentDepChild = complete(currentChild, (XMLObject) currentDep);
-                                currentDepChild.setAppendix(new Integer(order));
+                                currentDepChild.setAppendix(Integer.valueOf(order));
                             }
                         }
                     }

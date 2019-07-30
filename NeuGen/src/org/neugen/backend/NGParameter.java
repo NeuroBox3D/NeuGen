@@ -50,10 +50,10 @@ public class NGParameter {
             return ;
         }
 
-        Enumeration<XMLNode> childs = root.children();
+        Enumeration childs = root.children();
         while (childs.hasMoreElements()) {
 
-            XMLNode node = childs.nextElement();
+            XMLNode node =(XMLNode) childs.nextElement();
             //System.out.println("node: " + node.getKey());
 
             if (identifier.get(0).equals(node.getKey())) {
@@ -96,13 +96,13 @@ public class NGParameter {
             return;
 
         System.out.println(identifier);
-        Enumeration<XMLNode> childs = child.children();
-        XMLNode sibling = childs.nextElement();
-        Enumeration<XMLNode> childs_of_sibling = sibling.children();
+        Enumeration childs = child.children();
+        XMLNode sibling =(XMLNode) childs.nextElement();
+        Enumeration childs_of_sibling = sibling.children();
 
         while (childs_of_sibling.hasMoreElements()) {
             /// current child of current sibling's child
-            XMLNode current_child = childs_of_sibling.nextElement();
+            XMLNode current_child =(XMLNode) childs_of_sibling.nextElement();
 
             /// replace node's content
             if(Indices.contains(iterI)) {
@@ -111,7 +111,7 @@ public class NGParameter {
                         current_child.setValue( replacement);
                         System.out.println("siblings"+iterI+"(" + current_child.getKey() + "): is reset to " + current_child.getValue());
                     } else {
-                        ArrayList<String> identifierCopy = (ArrayList) identifier.clone();
+                        ArrayList<String> identifierCopy = new ArrayList<String>(identifier);//(ArrayList) identifier.clone();
                         identifierCopy.remove(0);
                         //modifyDoubleParameter(current_child, replacement, identifierCopy);
                         modifyParameter(current_child, replacement, identifierCopy);
@@ -141,10 +141,10 @@ public class NGParameter {
             return;
         }
 
-        Enumeration<XMLNode> childs = root.children();
+        Enumeration childs = root.children();
         while (childs.hasMoreElements()) {
 
-            XMLNode node = childs.nextElement();
+            XMLNode node =(XMLNode) childs.nextElement();
 
             if (identifier.get(0).equals(node.getKey())) {
                 identifier.remove(0);
@@ -272,10 +272,10 @@ public class NGParameter {
     public static boolean findNamefromXMLNode(XMLNode root, ArrayList<String> identifier){
         boolean isfind=false;
 
-        Enumeration<XMLNode> childs = root.children();
+        Enumeration childs = root.children();
         while (childs.hasMoreElements()) {
 
-            XMLNode node = childs.nextElement();
+            XMLNode node =(XMLNode) childs.nextElement();
 
             if (identifier.get(0).equals(node.getKey())) {
 

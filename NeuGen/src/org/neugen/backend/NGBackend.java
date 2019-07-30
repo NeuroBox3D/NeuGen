@@ -581,23 +581,24 @@ public final class NGBackend {
 		for (Map.Entry<String, XMLObject> entry : params.entrySet()) {
 			XMLObject obj = entry.getValue();
 
-			Enumeration<XMLNode> childs = obj.children();
+			Enumeration childs=obj.depthFirstEnumeration();
+			//Enumeration<XMLNode> childs = obj.children();
 
 			while (childs.hasMoreElements()) {
-				XMLNode node = childs.nextElement();
+				XMLNode node =(XMLNode) childs.nextElement();
 				if ("neuron".equals(node.toString())) {
-					Enumeration<XMLNode> childs2 = node.children();
+					Enumeration childs2 = node.children();
 					while (childs2.hasMoreElements()) {
-						XMLNode node2 = childs2.nextElement();
+						XMLNode node2 =(XMLNode) childs2.nextElement();
 						if ("axon".equals(node2.toString())) {
-							Enumeration<XMLNode> childs3 = node2.children();
+							Enumeration childs3 = node2.children();
 							while (childs3.hasMoreElements()) {
-								XMLNode child4 = childs3.nextElement();
+								XMLNode child4 =(XMLNode) childs3.nextElement();
 								if ("gen_0".equals(child4.toString())) {
-									Enumeration<XMLNode> childs5 = child4.children();
+									Enumeration childs5 = child4.children();
 
 									while (childs5.hasMoreElements()) {
-										XMLNode child6 = childs5.nextElement();
+										XMLNode child6 =(XMLNode) childs5.nextElement();
 
 										if ("nparts_density".equals(child6.getKey())) {
 											System.err.println("child6 (before): " + child6.toString());
@@ -619,15 +620,15 @@ public final class NGBackend {
 
 						} else if ("dendrite".equals(node2.toString())) {
 
-							Enumeration<XMLNode> childs3 = node2.children();
+							Enumeration childs3 = node2.children();
 							while (childs3.hasMoreElements()) {
-								XMLNode child4 = childs3.nextElement();
+								XMLNode child4 =(XMLNode) childs3.nextElement();
 								System.err.println("axon child: " + child4.toString());
 								if ("gen_0".equals(child4.toString())) {
-									Enumeration<XMLNode> childs5 = child4.children();
+									Enumeration childs5 = child4.children();
 
 									while (childs5.hasMoreElements()) {
-										XMLNode child6 = childs5.nextElement();
+										XMLNode child6 =(XMLNode) childs5.nextElement();
 
 										if ("nparts_density".equals(child6.getKey())) {
 											System.err.println("child6 (before): " + child6.toString());
@@ -665,15 +666,15 @@ public final class NGBackend {
 		for (Map.Entry<String, XMLObject> entry : params.entrySet()) {
 			XMLObject obj = entry.getValue();
 			@SuppressWarnings("unchecked")
-			Enumeration<XMLNode> childs = obj.children();
+			Enumeration childs = obj.children();
 
 			while (childs.hasMoreElements()) {
-				XMLNode node = childs.nextElement();
+				XMLNode node =(XMLNode) childs.nextElement();
 				if ("net".equals(node.toString())) {
 					@SuppressWarnings("unchecked")
-					Enumeration<XMLNode> childs2 = node.children();
+					Enumeration childs2 = node.children();
 					while (childs2.hasMoreElements()) {
-						XMLNode node2 = childs2.nextElement();
+						XMLNode node2 =(XMLNode) childs2.nextElement();
 						if ("dist_synapse".equals(node2.getKey())) {
 							node2.setValue(dist_synapse);
 						}
@@ -695,15 +696,15 @@ public final class NGBackend {
 		for (Map.Entry<String, XMLObject> entry : params.entrySet()) {
 			XMLObject obj = entry.getValue();
 			@SuppressWarnings("unchecked")
-			Enumeration<XMLNode> childs = obj.children();
+			Enumeration childs = obj.children();
 
 			while (childs.hasMoreElements()) {
-				XMLNode node = childs.nextElement();
+				XMLNode node =(XMLNode) childs.nextElement();
 				if ("net".equals(node.toString())) {
 					@SuppressWarnings("unchecked")
-					Enumeration<XMLNode> childs2 = node.children();
+					Enumeration childs2 = node.children();
 					while (childs2.hasMoreElements()) {
-						XMLNode node2 = childs2.nextElement();
+						XMLNode node2 =(XMLNode) childs2.nextElement();
 						if (! "dist_synapse".equals(node2.getKey())) {
 							node2.setValue(Integer.parseInt(node2.getValue().toString()) * factor);
 						}
@@ -771,14 +772,14 @@ public final class NGBackend {
 		for (Map.Entry<String, XMLObject> entry : params.entrySet()) {
 			XMLObject obj = entry.getValue();
 			@SuppressWarnings("unchecked")
-			Enumeration<XMLNode> childs = obj.children();
+			Enumeration childs = obj.children();
 			while (childs.hasMoreElements()) {
-				XMLNode node = childs.nextElement();
+				XMLNode node =(XMLNode) childs.nextElement();
 				if ("net".equals(node.toString())) {
 					@SuppressWarnings("unchecked")
-					Enumeration<XMLNode> childs2 = node.children();
+					Enumeration childs2 = node.children();
 					while (childs2.hasMoreElements()) {
-						XMLNode node2 = childs2.nextElement();
+						XMLNode node2 =(XMLNode) childs2.nextElement();
 						if (cellType.equals(node2.getKey())) {
 							node2.setValue(numberOfCells);
 						}
@@ -855,10 +856,10 @@ public final class NGBackend {
 		}
 
 		ArrayList<String> pathes = new ArrayList<String>(Arrays.asList(identifier.split("/")));
-		Enumeration<XMLNode> childs = paramTree.children();		
+		Enumeration childs = paramTree.children();
 		
 		while (childs.hasMoreElements()) {
-			XMLNode node = childs.nextElement();
+			XMLNode node =(XMLNode) childs.nextElement();
 			if (pathes.get(0).equals(node.getKey())) {
 				modifyParameter_rec(node,
 					param,
@@ -879,9 +880,9 @@ public final class NGBackend {
 	 */
 	@SuppressWarnings("unchecked")
 	private void modifyParameter_rec(XMLNode root, double param, ArrayList<String> identifier) {
-		Enumeration<XMLNode> childs = root.children();
+		Enumeration childs = root.children();
 		while (childs.hasMoreElements()) {
-			XMLNode node = childs.nextElement();
+			XMLNode node =(XMLNode) childs.nextElement();
 			if (identifier.get(0).equals(node.getKey())) {
 				if (identifier.size() == 1) {
 					node.setValue(param);
@@ -907,13 +908,13 @@ public final class NGBackend {
 	@SuppressWarnings("unchecked")
 	private void correct_siblings(XMLNode child, String identifier, double replacement) {
 		/// only one child called siblings within childs of current XMLNode child
-		Enumeration<XMLNode> childs = child.children();
-		XMLNode sibling = childs.nextElement();
-		Enumeration<XMLNode> childs_of_sibling = sibling.children();
+		Enumeration childs = child.children();
+		XMLNode sibling =(XMLNode) childs.nextElement();
+		Enumeration childs_of_sibling = sibling.children();
 
 		while (childs_of_sibling.hasMoreElements()) {
 			/// current child of current sibling's child
-			XMLNode current_child = childs_of_sibling.nextElement();
+			XMLNode current_child =(XMLNode) childs_of_sibling.nextElement();
 
 			/// replace node's content
 			if (identifier.equals(current_child.getKey())) {

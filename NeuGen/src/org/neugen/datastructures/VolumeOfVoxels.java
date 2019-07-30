@@ -596,7 +596,7 @@ public final class VolumeOfVoxels {
                         float xF = voxel.getX();
                         float yF = voxel.getY();
                         float zF = voxel.getZ();
-                        miniVoxelArrayList.add(new MiniVoxel(voxelValue, new Float(xF).doubleValue(), new Float(yF).doubleValue(), new Float(zF).doubleValue(), k));
+                        miniVoxelArrayList.add(new MiniVoxel(voxelValue, Float.valueOf(xF).doubleValue(), Float.valueOf(yF).doubleValue(), Float.valueOf(zF).doubleValue(), k));
                     }
                 }
             }

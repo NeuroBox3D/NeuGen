@@ -82,7 +82,7 @@ public class MinMaxAngle<T> extends MinMaxParameter<T> {
                 float tmpVal = (Float) value.get(0);
                 //logger.info("MinMaxAngle before value1: " + tmpVal);
                 float val = tmpVal * grad2rad;
-                value.set(0, (T) new Float(val));
+                value.set(0, (T)  Float.valueOf(val));
                 //value.set(0, val);
                 //logger.info("MinMaxAngle value1: " + val);
             }
@@ -91,7 +91,7 @@ public class MinMaxAngle<T> extends MinMaxParameter<T> {
                 //logger.info("MinMaxAngle before value2: " + tmpVal);
                 float val1 = tmpVal * grad2rad;
                 //value.set(1, val1);
-                value.set(1, (T) new Float(val1));
+                value.set(1, (T) Float.valueOf(val1));
                 //logger.info("MinMaxAngle value2: " + val1);
             }
         }
@@ -149,7 +149,7 @@ public class MinMaxAngle<T> extends MinMaxParameter<T> {
         } else {
             float val = (Float) parser.getValue() * grad2rad;
             //value.set(0, val);
-            value.set(0, (T) new Float(val));
+            value.set(0, (T) Float.valueOf(val));
         }
         end = path.length();
         path.delete(start, end);
@@ -166,7 +166,7 @@ public class MinMaxAngle<T> extends MinMaxParameter<T> {
             //logger.info("MinMaxAnlge: " + this.value.get(1).toString());
             float val = (Float) parser.getValue() * grad2rad;
             //value.set(1, val);
-            value.set(1, (T) new Float(val));
+            value.set(1, (T) Float.valueOf(val));
         }
         return true;
     }

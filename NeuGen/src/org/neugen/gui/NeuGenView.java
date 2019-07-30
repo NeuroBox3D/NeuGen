@@ -506,7 +506,7 @@ public final class NeuGenView extends FrameView implements TreeSaver {
         exportMenu.setName("exportMenu"); // NOI18N
 
         writeNeuronMenuItem.setAction(actionMap.get("exportData")); // NOI18N
-        writeNeuronMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_H, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        writeNeuronMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_H, java.awt.event.InputEvent.SHIFT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
         writeNeuronMenuItem.setText(resourceMap.getString("writeNeuronMenuItem.text")); // NOI18N
         writeNeuronMenuItem.setName("writeNeuronMenuItem"); // NOI18N
         writeNeuronMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -517,7 +517,7 @@ public final class NeuGenView extends FrameView implements TreeSaver {
         exportMenu.add(writeNeuronMenuItem);
 
         writeNeuroMLMenuItem.setAction(actionMap.get("exportData")); // NOI18N
-        writeNeuroMLMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        writeNeuroMLMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.SHIFT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
         writeNeuroMLMenuItem.setText(resourceMap.getString("writeNeuroMLMenuItem.text")); // NOI18N
         writeNeuroMLMenuItem.setName("writeNeuroMLMenuItem"); // NOI18N
         writeNeuroMLMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -528,7 +528,7 @@ public final class NeuGenView extends FrameView implements TreeSaver {
         exportMenu.add(writeNeuroMLMenuItem);
 
         writeNeuGenMenuItem.setAction(actionMap.get("exportData")); // NOI18N
-        writeNeuGenMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_B, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        writeNeuGenMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_B, java.awt.event.InputEvent.SHIFT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
         writeNeuGenMenuItem.setText(resourceMap.getString("writeNeuGenMenuItem.text")); // NOI18N
         writeNeuGenMenuItem.setName("writeNeuGenMenuItem"); // NOI18N
         writeNeuGenMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -539,7 +539,7 @@ public final class NeuGenView extends FrameView implements TreeSaver {
         exportMenu.add(writeNeuGenMenuItem);
 
         writeNeuTriaMenuItem.setAction(actionMap.get("exportData")); // NOI18N
-        writeNeuTriaMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        writeNeuTriaMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.SHIFT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
         writeNeuTriaMenuItem.setText(resourceMap.getString("writeNeuTriaMenuItem.text")); // NOI18N
         writeNeuTriaMenuItem.setName("writeNeuTriaMenuItem"); // NOI18N
         writeNeuTriaMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -550,7 +550,7 @@ public final class NeuGenView extends FrameView implements TreeSaver {
         exportMenu.add(writeNeuTriaMenuItem);
 
         writeNeuronInfoMenuItem.setAction(actionMap.get("exportData")); // NOI18N
-        writeNeuronInfoMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        writeNeuronInfoMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.SHIFT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
         writeNeuronInfoMenuItem.setText(resourceMap.getString("writeNeuronInfoMenuItem.text")); // NOI18N
         writeNeuronInfoMenuItem.setName("writeNeuronInfoMenuItem"); // NOI18N
         writeNeuronInfoMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -561,7 +561,7 @@ public final class NeuGenView extends FrameView implements TreeSaver {
         exportMenu.add(writeNeuronInfoMenuItem);
 
         writeObjMenuItem.setAction(actionMap.get("exportData")); // NOI18N
-        writeObjMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        writeObjMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.SHIFT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
         writeObjMenuItem.setText(resourceMap.getString("writeObjMenuItem.text")); // NOI18N
         writeObjMenuItem.setName("writeObjMenuItem"); // NOI18N
         writeObjMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -572,7 +572,7 @@ public final class NeuGenView extends FrameView implements TreeSaver {
         exportMenu.add(writeObjMenuItem);
 
         writeNGXMenuItem.setAction(actionMap.get("exportData")); // NOI18N
-        writeNGXMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        writeNGXMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.SHIFT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
         writeNGXMenuItem.setText(resourceMap.getString("writeNGXMenuItem.text")); // NOI18N
         writeNGXMenuItem.setName("writeNGXMenuItem"); // NOI18N
         writeNGXMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -583,7 +583,7 @@ public final class NeuGenView extends FrameView implements TreeSaver {
         exportMenu.add(writeNGXMenuItem);
 
         writeTXTMenuItem.setAction(actionMap.get("exportData")); // NOI18N
-        writeTXTMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        writeTXTMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.SHIFT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
         writeTXTMenuItem.setText(resourceMap.getString("writeTXTMenuItem.text")); // NOI18N
         writeTXTMenuItem.setToolTipText(resourceMap.getString("writeTXTMenuItem.toolTipText")); // NOI18N
         writeTXTMenuItem.setName("writeTXTMenuItem"); // NOI18N
