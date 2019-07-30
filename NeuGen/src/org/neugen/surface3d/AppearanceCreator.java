@@ -61,7 +61,7 @@ import javax.media.j3d.PolygonAttributes;
 
 /**
  * Simple utility class to provide some useful appearance creators as static functions.
- *
+ * don't need any more
  * @author Jens P Eberhard
  */
 public class AppearanceCreator {

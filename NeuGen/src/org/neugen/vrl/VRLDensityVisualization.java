@@ -1175,9 +1175,9 @@ public final class VRLDensityVisualization {
             Point3dQH pnt = vertices[vi];
             // System.out.println("point3d: " + pnt.x + " " + pnt.y
             // + " " + pnt.z);
-            float x = (new Double(pnt.x)).floatValue();
-            float y = (new Double(pnt.y)).floatValue();
-            float z = (new Double(pnt.z)).floatValue();
+            float x = (Double.valueOf(pnt.x)).floatValue();
+            float y = (Double.valueOf(pnt.y)).floatValue();
+            float z = (Double.valueOf(pnt.z)).floatValue();
             cube3dCreator.addCubeToContainer(x, y, z);
         }
 
@@ -1209,22 +1209,22 @@ public final class VRLDensityVisualization {
             // System.out.println("vertices[vertex0IDint]: " +
             // vertices[vertex0IDint]);
             Point3dQH point0 = vertices[vertex0IDint];
-            Point3f p0 = new Point3f((new Float(point0.x)).floatValue(),
-                    (new Float(point0.y)).floatValue(), (new Float(point0.z)).floatValue());
+            Point3f p0 = new Point3f((float)point0.x,
+                    (float) point0.y, (float)point0.z);
             Integer vertex1ID = (Integer) face.get(1);
             int vertex1IDint = vertex1ID.intValue();
             // System.out.println("vertex1ID: " + vertex1IDint);
             // System.out.println("vertices[vertex1IDint]: " + vertices[vertex1IDint]);
             Point3dQH point1 = vertices[vertex1IDint];
-            Point3f p1 = new Point3f((new Float(point1.x)).floatValue(),
-                    (new Float(point1.y)).floatValue(), (new Float(point1.z)).floatValue());
+            Point3f p1 = new Point3f((float)point1.x,
+                    (float) point1.y, (float) point1.z);
             Integer vertex2ID = (Integer) face.get(2);
             int vertex2IDint = vertex2ID.intValue();
             // System.out.println("vertex2ID: " + vertex2IDint);
             // System.out.println("vertices[vertex2IDint]: " + vertices[vertex2IDint]);
             Point3dQH point2 = vertices[vertex2IDint];
-            Point3f p2 = new Point3f((new Float(point2.x)).floatValue(),
-                    (new Float(point2.y)).floatValue(), (new Float(point2.z)).floatValue());
+            Point3f p2 = new Point3f((float)point2.x,
+                    (float)point2.y, (float)point2.z);
             triangle3dCreator.addTriangleToContainer(p0, p1, p2);
             Point3d pd0 = new Point3d(p0.x, p0.y, p0.z);
             Point3d pd1 = new Point3d(p1.x, p1.y, p1.z);

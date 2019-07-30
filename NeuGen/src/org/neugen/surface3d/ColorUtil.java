@@ -66,7 +66,8 @@ import com.sun.j3d.utils.geometry.Sphere;
 
 /**
  * Color utility and color constants class
- * 
+ *  don't need any more
+ *
  * @author J. P. Eberhard
  * @created July 7, 2005
  */

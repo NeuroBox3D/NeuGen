@@ -54,7 +54,7 @@
  */
 package org.neugen.surface3d;
 
-import java.applet.Applet;
+//import java.applet.Applet;
 import java.awt.BorderLayout;
 import java.awt.Frame;
 import java.awt.GraphicsConfiguration;
@@ -79,11 +79,11 @@ import org.neugen.geometry3d.Triangle3dCreator;
 import org.neugen.simpletriangulation.Triangle;
 
 /**
- *
+ * don't need any more
  * @author Jens P Eberhard
  */
-@SuppressWarnings("serial")
-public final class MainApp extends Applet {
+//@SuppressWarnings("serial")
+/*public final class MainApp extends Applet {
 
     private static int FrameWidth = 600;
     private static int FrameHeight = 700;
@@ -103,11 +103,11 @@ public final class MainApp extends Applet {
         ColorUtil.addCoordinateSphereAxesToSceneGraph(contentRoot, 0.01f);
 
         VolumeOfVoxels vv = new VolumeOfVoxels(VOV_L, VOV_W, VOV_H);
-        vv.fillVolumeOfSphere(true);
+        vv.fillVolumeOfSphere(true);*/
 
         /* Simple visualization by triangles */
 
-        Vector<Triangle> triangleVector = new Vector<Triangle>();
+        /*Vector<Triangle> triangleVector = new Vector<Triangle>();
         Util.triangulation(vv.getVoxelsValueAsFloatArray(), VOV_L, VOV_W, VOV_H, triangleVector);
         Triangle3dCreator triangleCreator = new Triangle3dCreator(ColorUtil.grey);
 
@@ -118,18 +118,18 @@ public final class MainApp extends Applet {
                     t.getP3AsScaledPoint3f(1.0f / VOV_L, 1.0f / VOV_W, 1.0f / VOV_H));
             //t.printData();
         }
-        contentRoot.addChild(triangleCreator.getTriangleContainer());
+        contentRoot.addChild(triangleCreator.getTriangleContainer());*/
 
 
         /* Simple visualization by boxes */
-        Material mat = new Material();
+        /*Material mat = new Material();
         mat.setEmissiveColor(ColorUtil.red);
         Cube3dCreator cubeCreator = new Cube3dCreator(0.05f, 0.05f, 0.05f, mat, 0.0f);
         // vv.addAllTagedVoxelsToContainer(cubeCreator);
-        contentRoot.addChild(cubeCreator.getCubeContainer());
+        contentRoot.addChild(cubeCreator.getCubeContainer());*/
 
         /* For cube testing */
-        contentRoot.addChild(cubeCreator.getCubeAsShapeOfQuadArrays(0.1f, 0.1f, 0.1f));
+        /*contentRoot.addChild(cubeCreator.getCubeAsShapeOfQuadArrays(0.1f, 0.1f, 0.1f));
         contentRoot.addChild(cubeCreator.getCubeAsBox(0.15f, 0.15f, 0.15f));
 
         Background background = new Background(new ImageComponent2D(ImageComponent2D.FORMAT_RGB,
@@ -139,13 +139,13 @@ public final class MainApp extends Applet {
 
         contentRoot.compile();
         return contentRoot;
-    }
+    }*/
 
     /** Creates a new instance of MainApp
      * Create a simple scene and attach it to the virtual universe
      *
      */
-    public MainApp(String[] args) {
+   /* public MainApp(String[] args) {
 
         setLayout(new BorderLayout());
         GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
@@ -170,15 +170,15 @@ public final class MainApp extends Applet {
         orbit.setSchedulingBounds(new BoundingSphere());
         ViewingPlatform vp = simpleU.getViewingPlatform();
         vp.setViewPlatformBehavior(orbit);
-    }
+    }*/
 
     /**
      * The following allows this to be run as an application as well as an applet
      *
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+   /* public static void main(String[] args) {
         @SuppressWarnings("unused")
         Frame frame = new MainFrame(new MainApp(args), FrameWidth, FrameHeight);
     }
-}
+}*/

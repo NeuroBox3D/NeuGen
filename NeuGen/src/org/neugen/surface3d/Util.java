@@ -74,6 +74,7 @@ import org.neugen.simpletriangulation.Triangle;
 
 /**
  * A util class of useful functions for three dimensions
+ * don't need any more
  * 
  * @author Jens Eberhard
  */

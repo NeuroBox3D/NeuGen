@@ -182,16 +182,16 @@ public final class SimplifiedInheritance {
             }
             XMLNode supremeChild = supreme.getChild(current.getKey());
             if (!supremeChild.isInherited()) {
-                return new Pair<XMLNode, Integer>(supremeChild, new Integer(order));
+                return new Pair<XMLNode, Integer>(supremeChild, Integer.valueOf(order));
             }
             Object appendix = supremeChild.getAppendix();
             if (appendix instanceof Number) {
                 int locOrder = ((Number) appendix).intValue();
                 if (locOrder <= order) {
                     if (!isTreeRoot(supreme)) {
-                        return new Pair<XMLNode, Integer>(supremeChild, new Integer(order));
+                        return new Pair<XMLNode, Integer>(supremeChild, Integer.valueOf(order));
                     } else if (isTreeRoot(supreme) && isTreeRoot(parent)) {
-                        return new Pair<XMLNode, Integer>(supremeChild, new Integer(order));
+                        return new Pair<XMLNode, Integer>(supremeChild, Integer.valueOf(order));
                     }
                 }
             }

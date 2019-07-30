@@ -297,7 +297,7 @@ public final class MorphMLReader extends XMLFilterImpl {
             incrementTotalNumSegs();
 
             Section section;
-            Integer sectionIdInteger = new Integer(sectionId);
+            Integer sectionIdInteger = Integer.valueOf(sectionId);
             if (sections.containsKey(sectionIdInteger)) {
                 section = sections.get(sectionIdInteger);
             } else {
@@ -308,7 +308,7 @@ public final class MorphMLReader extends XMLFilterImpl {
                 //logger.info("new Section: " + section.getId());
             }
 
-            Integer segmentIdInteger = new Integer(id);
+            Integer segmentIdInteger = Integer.valueOf(id);
             segments.put(segmentIdInteger, segment);
             segIdSecId.put(segmentIdInteger, sectionIdInteger);
             currentSegment = segment;
@@ -320,7 +320,7 @@ public final class MorphMLReader extends XMLFilterImpl {
             if (parent != null) {
                 try {
                     //logger.info("parent: " + parent);
-                    Segment parentSegment = segments.get(new Integer(parent));
+                    Segment parentSegment = segments.get(Integer.valueOf(parent));
                     parentSegment.getName();     // Just to check for null pointer...
                     segment.setParent(parentSegment);
                     int parentSegId = parentSegment.getId();
@@ -393,7 +393,7 @@ public final class MorphMLReader extends XMLFilterImpl {
             String id = attributes.getValue(MorphMLConstants.CABLE_ID_ATTR);       //id
             String name = attributes.getValue(MorphMLConstants.CABLE_NAME_ATTR);   //name
             Section section = null;
-            Integer sectionIdInteger = new Integer(id);
+            Integer sectionIdInteger = Integer.valueOf(id);
             section = sections.get(sectionIdInteger);
             if (section == null) {
                 String mes = "Problem parsing MorphML file. Section/cable " + name

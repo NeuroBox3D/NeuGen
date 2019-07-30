@@ -151,7 +151,7 @@ public final class SimpleHocReader {
                     String name = secData[0] + secData[1];
                     String somaId = secData[1];
                     //System.out.println("soma Name: "+ name );
-                    somaSecIds.add(new Integer(somaId)); //speichere die Sektionen des Soma in die Liste
+                    somaSecIds.add(Integer.valueOf(somaId)); //speichere die Sektionen des Soma in die Liste
                     //nsegs
                     String data = lineReader.readLine().trim();
                     secData = data.split(" ");
@@ -186,7 +186,7 @@ public final class SimpleHocReader {
                     //segment.setSegmentId(segId);
 
                     Section section = null;
-                    Integer sectionIdInteger = new Integer(somaId);
+                    Integer sectionIdInteger = Integer.valueOf(somaId);
                     if (sections.containsKey(sectionIdInteger)) {
                         section = sections.get(sectionIdInteger);
                     } else {
@@ -203,7 +203,7 @@ public final class SimpleHocReader {
                         }
 
                         //speichere die id des Segmenten und den Segmenten selbst
-                        Integer segmentIdInteger = new Integer(segId);
+                        Integer segmentIdInteger = Integer.valueOf(segId);
                         segments.put(segmentIdInteger, segment);
                         segIdSecId.put(segmentIdInteger, sectionIdInteger);
                         Segment parSeg = segment;
@@ -256,7 +256,7 @@ public final class SimpleHocReader {
                     //segment.setSegmentId(segId);
 
                     Section section = null;
-                    Integer sectionIdInteger = new Integer(axonId);
+                    Integer sectionIdInteger = Integer.valueOf(axonId);
                     if (sections.containsKey(sectionIdInteger)) {
                         section = sections.get(sectionIdInteger);
                     } else {
@@ -267,7 +267,7 @@ public final class SimpleHocReader {
                     section.getSegments().add(segment);
                     while (true) {
                         //speichere die id des Segmenten und den Segmenten selbst
-                        Integer segmentIdInteger = new Integer(segId);
+                        Integer segmentIdInteger = Integer.valueOf(segId);
                         segments.put(segmentIdInteger, segment);
                         segIdSecId.put(segmentIdInteger, sectionIdInteger);
 
@@ -312,7 +312,7 @@ public final class SimpleHocReader {
 
                     if (nextLine.startsWith("end")) {
                     }
-                    if (somaSecIds.contains(new Integer(parentSecId))) {
+                    if (somaSecIds.contains(Integer.valueOf(parentSecId))) {
                         axon.setFirstSection((AxonSection) section);
                     }
 
