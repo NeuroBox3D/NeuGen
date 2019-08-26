@@ -3,6 +3,8 @@ package org.neugen.backend;
 import com.sun.j3d.utils.geometry.Cylinder;
 import eu.mihosoft.vrl.v3d.Node;
 import eu.mihosoft.vrl.v3d.Triangle;
+import eu.mihosoft.vrl.v3d.VGeometry3D;
+import eu.mihosoft.vrl.v3d.VTriangleArray;
 import org.apache.log4j.Logger;
 import org.neugen.datastructures.Segment;
 import org.neugen.gui.NeuGenConstants;
@@ -15,6 +17,7 @@ import javax.vecmath.AxisAngle4f;
 import javax.vecmath.Color3f;
 import javax.vecmath.Point3f;
 import javax.vecmath.Vector3f;
+import java.awt.*;
 
 /**
  * visualisation of a basis element, i.e. segment
@@ -28,6 +31,10 @@ public class NGNeuronSegmentVisual {
     public static final Logger logger = Logger.getLogger(NGNeuronSegmentVisual.class.getName());
 
     private Segment segment;
+    private Point3f start;
+    private Point3f end;
+    private float radStart;
+    private float radEnd;
     private float scale;
 
     public NGNeuronSegmentVisual(Segment segment){
@@ -37,12 +44,19 @@ public class NGNeuronSegmentVisual {
         this.scale=0.0001f;
     }
 
+    private void initSegment(Segment segment){
+      this.start=new Point3f(segment.getStart());
+      this.end=new Point3f(segment.getEnd());
+      this.radStart=segment.getStartRadius();
+      this.radEnd=segment.getEndRadius();
+    }
+
     /////////////////////////////////////////////////////////////
     ////// parameter: setting and getting funtions:
     ////////////////////////////////////////////////////////////
-    public void setSegment(Segment segment){this.segment=segment;}
+    public void setSegment(Segment segment){initSegment(segment);}
 
-    public Segment getSegment(){return segment;}
+    //public Segment getSegment(){return segment;}
 
     public void setScale(float scale){this.scale=scale;}
 
@@ -63,17 +77,21 @@ public class NGNeuronSegmentVisual {
      * @return LineArray: la
      */
     private LineArray linefromSegment(Segment segment, Color3f color){
-        Point3f segStart=segment.getStart();
-        segStart.scale(scale);
+        /*Point3f segStart=segment.getStart();
+        Point3f start=new Point3f(segStart.x, segStart.y, segStart.z);
+        seg.scale(scale);
 
         Point3f segEnd=segment.getEnd();
-        segEnd.scale(scale);
+        segEnd.scale(scale);*/
+        initSegment(segment);
+        start.scale(scale);
+        end.scale(scale);
 
         LineArray la=new LineArray(2, LineArray.COORDINATES | LineArray.COLOR_3);
 
-        la.setCoordinate(0,segStart);
+        la.setCoordinate(0,start);
         la.setColor(0, color);
-        la.setCoordinate(1,segEnd);
+        la.setCoordinate(1,end);
         la.setColor(1, color);
 
         return la;
@@ -88,14 +106,22 @@ public class NGNeuronSegmentVisual {
      * @return
      */
     private Triangle trianglefromSegment(Segment segment){
-        Point3f segStart=segment.getStart();
-        segStart.scale(scale);
+        /*Point3f segStart=segment.getStart();
+        Point3f start=new Point3f(segStart.x, segStart.y, segStart.z);
 
         Point3f segEnd=segment.getEnd();
-        segEnd.scale(scale);
+        Point3f end=new Point3f(segEnd.x, segEnd.y, segEnd.z);*/
+        initSegment(segment);
 
-        eu.mihosoft.vrl.v3d.Node nodeStart=new eu.mihosoft.vrl.v3d.Node(segStart);
-        eu.mihosoft.vrl.v3d.Node nodeEnd=new eu.mihosoft.vrl.v3d.Node(segEnd);
+        return trianglefromPoints(start, end);
+    }
+
+    private Triangle trianglefromPoints(Point3f start, Point3f end){
+        start.scale(scale);
+        end.scale(scale);
+
+        eu.mihosoft.vrl.v3d.Node nodeStart=new eu.mihosoft.vrl.v3d.Node(start);
+        eu.mihosoft.vrl.v3d.Node nodeEnd=new eu.mihosoft.vrl.v3d.Node(end);
         Triangle triangle=new Triangle(nodeStart, nodeEnd, nodeEnd);
 
         return triangle;
@@ -111,11 +137,14 @@ public class NGNeuronSegmentVisual {
      * @return TransformGroup: tg
      */
     private TransformGroup tgCylinderfromSegment(Segment segment, Appearance app){
-        Point3f segStart=segment.getStart();
+        /*Point3f segStart=segment.getStart();
         Point3f segEnd=segment.getEnd();
+         */
 
-        Vector3f len = new Vector3f(segEnd);
-        len.sub(segStart);
+        initSegment(segment);
+
+        Vector3f len = new Vector3f(end);
+        len.sub(start);
 
         float hight = len.length()*scale;
         float rad=(float) (segment.getStartRadius()+segment.getEndRadius())*0.5f*scale;
@@ -144,7 +173,6 @@ public class NGNeuronSegmentVisual {
         tg.addChild(cyl);
 
         return tg;
-
     }
 
 
@@ -162,13 +190,20 @@ public class NGNeuronSegmentVisual {
         return trianglefromSegment(segment);
     }
 
+    public VGeometry3D getVGeometry(Color color, float wireThickness, boolean lighting){
+        VTriangleArray vta=new VTriangleArray();
+        vta.add(trianglefromSegment(segment));
+        VGeometry3D vg=new VGeometry3D(vta, color, color, wireThickness, lighting);
+        return vg;
+    }
+
+
     public TransformGroup getCylinderTG(Appearance app){
         if(app==null){
             app=new Appearance();
         }
         return tgCylinderfromSegment(segment,app);
     }
-
 
 
 }

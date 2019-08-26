@@ -17,7 +17,7 @@ import java.util.Map;
 public class VRLNeuGenParameterVisual implements Serializable {
     private static final long serialVersionUID=1L;
 
-    public JComponent showNeuGenParameter(
+    public JComponent showParameterMap(
             @ParamInfo(name="Parameter Map") Map<String, XMLObject> params
     ){
         XMLTreeView tree = new XMLTreeView(root -> {
@@ -36,7 +36,7 @@ public class VRLNeuGenParameterVisual implements Serializable {
         return new JScrollPane(tree);
     }
 
-    public JComponent showNeuGenParameter(
+    public JComponent showParameterXMLObjects(
             @ParamInfo(name="Param XMLObject") XMLObject paramRoot,
             @ParamInfo(name="Interna XMLObject") XMLObject internaRoot
 

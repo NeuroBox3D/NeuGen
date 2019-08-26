@@ -21,16 +21,21 @@ public class NGTest {
 
             NGParameter paramChange = new NGParameter(project.getParamTree());
             paramChange.modifyNPartsDensity(0.1);
-            paramChange.adjust_number_of_neocortex_neuron(1,"L4stellate");
+            paramChange.adjust_number_of_neocortex_neuron(1,"starpyramidal");
             System.out.println("projectType:"+ NGParameter.getProjectTypefromXMLObject(project.getParamTree().get("Param")));
             System.out.println("isParam:"+NGParameter.isParamXMLObject(project.getParamTree().get("Param")));
             System.out.println("isInterna:"+NGParameter.isInternaXMLObject(project.getParamTree().get("Interna")));
             NGGenerator gen=new NGGenerator(paramChange.getParamTree(),NeuGenConstants.NEOCORTEX_PROJECT);
             gen.run();
             Net net=gen.getNet();
-            NGNetVisual netVisual=new NGNetVisual(net);
+            Neuron neuron=net.getNeuronList().get(0);
+            NGNeuronVisual neuronVisual=new NGNeuronVisual(neuron, NGNeuronVisual.VisualMethod.VTA);
+            //neuronVisual.setScale(1);
+            neuronVisual.run(true);
+            neuronVisual.getShape3DArray();
+            /*NGNetVisual netVisual=new NGNetVisual(net);
             netVisual.setVisualMethod("solid");
-            netVisual.run(false, true);
+            netVisual.run(false, true);*/
             //System.out.println(netVisual.getNetTG().toString());
 
 

@@ -2,19 +2,20 @@ package org.neugen.backend;
 
 //import eu.mihosoft.vrl.ext.com.jhlabs.vecmath.Point3f;
 import com.sun.j3d.utils.geometry.Cylinder;
+import eu.mihosoft.vrl.v3d.*;
 import eu.mihosoft.vrl.v3d.Node;
-import eu.mihosoft.vrl.v3d.Triangle;
-import eu.mihosoft.vrl.v3d.VTriangleArray;
 import org.apache.log4j.Logger;
 import org.neugen.datastructures.*;
 import org.neugen.datastructures.neuron.Neuron;
 import org.neugen.gui.NeuGenConstants;
 import org.neugen.utils.NeuGenLogger;
+import org.neugen.visual.Utils3D;
 
 import javax.media.j3d.*;
 import javax.vecmath.Color3f;
 import javax.vecmath.Point3f;
 import javax.vecmath.Vector3f;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,7 +31,8 @@ public class NGNeuronVisual {
     private List<Appearance> appList; //based on Section.SectionType:
 
     private Shape3D shape3D;
-    private VTriangleArray vta;
+    private List<VTriangleArray> vtaList;
+    //private List<VGeometry3D> vg3DList;
     private List<TransformGroup> tgList;
 
 
@@ -40,7 +42,7 @@ public class NGNeuronVisual {
 
     public enum VisualMethod {
 
-        LINE("line"),VRL("vrl"), SOLID("solid");//, WIRE("wire");
+        LINE("line"),VTA("vta"), SOLID("solid");//, WIRE("wire");
 
         private final String value;
 
@@ -64,6 +66,7 @@ public class NGNeuronVisual {
         }
     }
 
+    // default visualisation with line
     public NGNeuronVisual(Neuron neuron){
         NeuGenConstants.WITH_GUI = false;
         NeuGenLogger.initLogger();
@@ -95,11 +98,16 @@ public class NGNeuronVisual {
             case LINE:
                 this.shape3D=new Shape3D();
                 break;
-            case VRL:
-                this.vta=new VTriangleArray();
+            case VTA:
+                this.vtaList=new ArrayList<VTriangleArray>();
+                for(int secNum=0; secNum<7;secNum++)
+                    this.vtaList.add(secNum, new VTriangleArray());
+                //this.vg3DList=new ArrayList<VGeometry3D>();
                 break;
             case SOLID:
                 this.tgList=new ArrayList<TransformGroup>();
+                for(int secNum=0; secNum<7;secNum++)
+                    this.tgList.add(secNum,  new TransformGroup());
                 break;
         }
     }
@@ -158,14 +166,16 @@ public class NGNeuronVisual {
      * @param secNum
      */
     private void segmentVisual(Segment segment, int secNum){
+        //System.out.println("Print segment in Section "+secNum+ " with "+visM);
         NGNeuronSegmentVisual segVis=new NGNeuronSegmentVisual(segment);
+        //System.out.println("SegmentScale:"+scale);
         segVis.setScale(scale);
         switch(visM){
             case LINE:
                 shape3D.addGeometry(segVis.getLineArray(colList.get(secNum)));
                 break;
-            case VRL:
-                vta.add(segVis.getTriangle());
+            case VTA:
+                vtaList.get(secNum).add(segVis.getTriangle());
                 break;
             case SOLID:
                 tgList.add(segVis.getCylinderTG(appList.get(secNum)));
@@ -180,7 +190,10 @@ public class NGNeuronVisual {
     private void sectionVisual(Section section, int secNum){
         //System.out.println("segment type:"+section.getSectionType());
         //int secNum=section.getSectionType().getSecNum(); // Myelinized: 3, unmylinzed: 4
+        //System.out.println("Print section:");
         for(Segment segment:section.getSegments()){
+            System.out.println("SegmentStart"+segment.getStart());
+            System.out.println("SegmentEnd"+segment.getEnd());
             segmentVisual(segment, secNum);
         }
     }
@@ -196,10 +209,12 @@ public class NGNeuronVisual {
             while(secIterator.hasNext()){
                 Section section=secIterator.next();
                 int secNum=section.getSectionType().getSecNum();
+                System.out.println("Section Number"+secNum);
                 sectionVisual(section, secNum);
             }
         }
     }
+
 
 
     //////////////////////////////////////////////////////////////////////////////////////////
@@ -211,12 +226,20 @@ public class NGNeuronVisual {
      * @param soma
      */
     public void somaSegmentVisual(Cellipsoid soma){
-        System.out.println("Print soma:");
+        System.out.println("Print segmental soma:");
         Section sec=soma.getCylindricRepresentant();
+
         if(sec==null){
             sec=soma.getEllipsoid();
         }
-        sectionVisual(sec, Section.SectionType.SOMA.getSecNum());
+
+        int secNum=Section.SectionType.SOMA.getSecNum();
+        sectionVisual(sec, secNum);
+        /*if(visM==VisualMethod.VTA){
+            Color col=colList.get(secNum).get();
+            VGeometry3D vg=new VGeometry3D(vtaList.get(secNum),col,col,1,false);
+            vg3DList.add(secNum, vg);
+        }*/
     }
 
     private Point3f startLocation(Section firstSection){
@@ -251,23 +274,24 @@ public class NGNeuronVisual {
     }
 
     public void somaSphereVisual(Cellipsoid soma){
-        System.out.println("Print soma:");
+        System.out.println("Print spherical soma:");
         float rad=soma.getMeanRadius();
         Point3f loc=soma.getMid();
-        loc.scale(scale);
-        NGNeuronNodeVisual nodVis=new NGNeuronNodeVisual(loc, rad*scale);
+        //loc.scale(scale);
+        NGNeuronNodeVisual nodVis=new NGNeuronNodeVisual(loc, rad);
+        nodVis.setScale(scale);
 
         int secNum=Section.SectionType.SOMA.getSecNum();//6
         switch(visM){
             case LINE:
                 List<Point3f> startList=startLocationList();
                 for(Point3f loc1:startList){
-                    loc1.scale(scale);
+                    //loc1.scale(scale);
                     shape3D.addGeometry(nodVis.getLineArray(loc1, colList.get(secNum)));
                 }
                 break;
-            case VRL:
-                vta.addAll(nodVis.getVTriangleArray());
+            case VTA:
+                vtaList.add(secNum, nodVis.getVTriangleArray());
                 break;
             case SOLID:
                 tgList.add(nodVis.getTransformGroup(appList.get(secNum)));
@@ -280,6 +304,7 @@ public class NGNeuronVisual {
     public void axonVisual(){
         System.out.println("Print axon:");
         Axon axon=neuron.getAxon();
+
         firstSectionVisual(axon.getFirstSection());
     }
 
@@ -314,16 +339,64 @@ public class NGNeuronVisual {
             }
         }
 
+
     }
+
+
+
+
 
     //////////////////////////////////////////////////
     //// result: getting functions
     ////////////////////////////////////////////////////
     public Shape3D getShape3D(){return shape3D;}
 
-    public VTriangleArray getVTriangleArray(){return vta;}
+    public VTriangleArray getVTriangleArray_Part(int secNum){return vtaList.get(secNum);}
 
-    public List<TransformGroup> getTransformGroupList(){return tgList;}
+    public VGeometry3D getVGeometry3D(int secNum){
+        Color3f col3f=colList.get(secNum);
+        if(col3f==null){
+            col3f= Utils3D.white;
+        }
+
+        if(!vtaList.get(secNum).isEmpty()) {
+            VGeometry3D vg = new VGeometry3D(vtaList.get(secNum), col3f.get(), col3f.get(), 1, false);
+            return vg;
+        }
+        return null;
+    }
+
+    /*private List<VGeometry3D> getVGeometry3DList(){
+        List<VGeometry3D> vgList=new ArrayList<>();
+        for(int secNum=0; secNum<7;++secNum){
+          vgList.add(getVGeometry3D(secNum));
+        }
+        return vgList;
+    }*/
+
+    public Shape3DArray getShape3DArray(){
+        Shape3DArray shape3DA=new Shape3DArray();
+        for(int secNum=0; secNum<7;++secNum) {
+            VGeometry3D vg=getVGeometry3D(secNum);
+            if(vg!=null) {
+                shape3DA.addAll(vg.generateShape3DArray());
+            }
+        }
+        return shape3DA;
+    }
+
+    public VTriangleArray getVTriangleArray(){
+        VTriangleArray vta=new VTriangleArray();
+        for(VTriangleArray part:vtaList){
+             vta.addAll(part);
+        }
+        return vta;
+    }
+
+
+    /*public List<VTriangleArray> getVTriangleArrayList(){return vtaList;}
+
+    public List<TransformGroup> getTransformGroupList(){return tgList;}*/
 
     public TransformGroup getTransformGroup(){
         TransformGroup spinner =new TransformGroup();

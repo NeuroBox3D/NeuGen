@@ -37,7 +37,7 @@ public class VRLNeuGenParameterLoad implements Serializable {
         return NGProject.loadParam(file);
     }
 
-    public Map<String, XMLObject> CreateParameterMap(
+    public Map<String, XMLObject> LoadandCreateParameterMap(
             @ParamInfo(name="Param XMLObjcet",  options="") XMLObject paramRoot,
             @ParamInfo(name="Interna XMLObject",  options="") XMLObject internaRoot
     ){

@@ -1,5 +1,7 @@
 package org.neugen.backend;
 
+import eu.mihosoft.vrl.v3d.Shape3DArray;
+import eu.mihosoft.vrl.v3d.VGeometry3D;
 import eu.mihosoft.vrl.v3d.VTriangleArray;
 import org.neugen.datastructures.Cons;
 import org.neugen.datastructures.Net;
@@ -7,6 +9,7 @@ import org.neugen.datastructures.Segment;
 import org.neugen.datastructures.neuron.Neuron;
 import org.neugen.gui.NeuGenConstants;
 import org.neugen.utils.NeuGenLogger;
+import org.neugen.visual.Utils3D;
 
 import javax.media.j3d.Appearance;
 import javax.media.j3d.Shape3D;
@@ -25,9 +28,11 @@ public class NGNetVisual {
 
     private Shape3D shape3DSyn;
     private VTriangleArray vtaSyn;
+    //private VGeometry3D vgSyn;
     private List<TransformGroup> tgListSyn;
 
-    private List<VTriangleArray> vtaNeuron;
+    private List<Shape3D> shape3DNeuron;
+    private List<Shape3DArray> shape3DANeuron;
     private List<TransformGroup> tgListNeuron;
 
     public NGNetVisual(Net net){
@@ -58,12 +63,21 @@ public class NGNetVisual {
 
     public void init(){
        initSynpase();
-       if(visM==NGNeuronVisual.VisualMethod.VRL){
-           this.vtaNeuron=new ArrayList<>();
-       }else{
-           this.tgListNeuron=new ArrayList<>();
-       }
+       initNeuron();
+    }
 
+    public void initNeuron(){
+        switch(visM){
+            case LINE:
+                this.shape3DNeuron=new ArrayList<>();
+                break;
+            case VTA:
+                this.shape3DANeuron=new ArrayList<>();
+                break;
+            case SOLID:
+                this.tgListNeuron=new ArrayList<>();
+                break;
+        }
     }
 
     public void initSynpase(){
@@ -71,7 +85,7 @@ public class NGNetVisual {
             case LINE:
                 this.shape3DSyn=new Shape3D();
                 break;
-            case VRL:
+            case VTA:
                 this.vtaSyn=new VTriangleArray();
                 break;
             case SOLID:
@@ -135,7 +149,7 @@ public class NGNetVisual {
                     nodVis.setLocation(axSegCenter);
                     shape3DSyn.addGeometry(nodVis.getLineArray(denSegCenter, colList.get(7)));
                     break;
-                case VRL:
+                case VTA:
                     vtaSyn.addAll(nodVis.getVTriangleArray());
                     break;
                 case SOLID:
@@ -157,16 +171,25 @@ public class NGNetVisual {
         for(Neuron neuron:net.getNeuronList()){
             NGNeuronVisual neuronVis=new NGNeuronVisual(neuron, visM);
             neuronVis.run(somaSphere);
-            if(visM== NGNeuronVisual.VisualMethod.VRL){
-                vtaNeuron.add(neuronVis.getVTriangleArray());
-            }else{
-                tgListNeuron.add(neuronVis.getTransformGroup());
-            }
+           switch(visM){
+               case LINE:
+                   shape3DNeuron.add(neuronVis.getShape3D());
+                   break;
+               case VTA:
+                   shape3DANeuron.add(neuronVis.getShape3DArray());
+                   break;
+               case SOLID:
+                   tgListNeuron.add(neuronVis.getTransformGroup());
+                   break;
+           }
         }
 
         if(withSyn) {
             /////////print Synpases////////////////////
             runSynapse();
+            if(visM== NGNeuronVisual.VisualMethod.VTA){
+
+            }
         }
     }
 
@@ -181,19 +204,40 @@ public class NGNetVisual {
     ////////////////////////////////////////////////////////////
     ///// results: getting functions
     //////////////////////////////////////////////////////////
+
+    //////// return neuron
     public TransformGroup getNeuronTG(int index){
         return tgListNeuron.get(index);
     }
 
-    public VTriangleArray getNeuronVTA(int index){
-        return vtaNeuron.get(index);
+    public Shape3DArray getNeuronShape3DArray(int index){
+        return shape3DANeuron.get(index);
     }
 
-    public VTriangleArray getSynapseVTA(){
-        return vtaSyn;
+    public Shape3D getNeuronShape3D(int index){return shape3DNeuron.get(index);}
+
+
+    public List<Shape3D> getNeuronShape3D(){return shape3DNeuron;}
+
+    public List<Shape3DArray> getNeuronVTA(){return shape3DANeuron;}
+
+    public List<TransformGroup> getNeuronTG(){return tgListNeuron;}
+
+    //////////return Synpase
+
+    public Shape3DArray getSynapseShape3DArray(){
+
+        Color3f col3f=colList.get(7);
+        if(col3f==null){
+            col3f= Utils3D.white;
+        }
+        VGeometry3D vgSyn=new VGeometry3D(vtaSyn,col3f.get(), col3f.get(), 0.7f,true);
+
+        return vgSyn.generateShape3DArray();
     }
 
-    public Shape3D getSynapseS3D(){
+
+    public Shape3D getSynapseShape3D(){
         return shape3DSyn;
     }
 
@@ -201,14 +245,16 @@ public class NGNetVisual {
         return tgListSyn;
     }
 
-    public VTriangleArray getNetVTA(){
-        VTriangleArray sum=new VTriangleArray();
-        for(VTriangleArray vta:vtaNeuron){
-            sum.addAll(vta);
+
+    ///////return net
+    public Shape3DArray getNetShape3DArray(){
+        Shape3DArray sum=new Shape3DArray();
+        for(Shape3DArray shapeA:shape3DANeuron){
+            sum.addAll(shapeA);
         }
 
         if(!vtaSyn.isEmpty()) {
-            sum.addAll(vtaSyn);
+            sum.addAll(getSynapseShape3DArray());
         }
         return sum;
     }
@@ -216,17 +262,20 @@ public class NGNetVisual {
     public TransformGroup getNetTG(){
         TransformGroup spinner =new TransformGroup();
         spinner.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
-        for(TransformGroup tg:tgListNeuron) {
-            spinner.addChild(tg);
-        }
 
         switch (visM) {
             case LINE:
+                for(Shape3D shape:shape3DNeuron){
+                    spinner.addChild(shape);
+                }
                 if (shape3DSyn != null) {
                     spinner.addChild(shape3DSyn);
                 }
                 break;
             case SOLID:
+                for(TransformGroup tg:tgListNeuron) {
+                    spinner.addChild(tg);
+                }
                 if(tgListSyn.size()>0) {
                     for (TransformGroup tg : tgListSyn) {
                         spinner.addChild(tg);
@@ -236,5 +285,23 @@ public class NGNetVisual {
 
         return spinner;
     }
+
+    /*public Shape3DArray getNetShape3DArray(){
+        Shape3DArray netShape3D=new Shape3DArray();
+        switch(visM){
+            case LINE:
+                for(Shape3D shape:shape3DNeuron){
+                    netShape3D.add(shape);
+                }
+                if (shape3DSyn != null) {
+                    netShape3D.add(shape3DSyn);
+                }
+                break;
+
+
+
+        }
+
+    }*/
 
 }
