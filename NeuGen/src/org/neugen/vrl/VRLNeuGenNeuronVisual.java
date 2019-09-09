@@ -9,11 +9,24 @@ import eu.mihosoft.vrl.v3d.VTriangleArray;
 import org.neugen.backend.NGNeuronVisual;
 import org.neugen.datastructures.neuron.Neuron;
 
+import javax.media.j3d.Shape3D;
+import javax.media.j3d.TransformGroup;
 import java.io.Serializable;
 
 @ComponentInfo(name="Neuron Visualization", category = "NeuGen", description = "...")
 public class VRLNeuGenNeuronVisual implements Serializable {
     private static final long serialVersionUID=1L;
+
+    /*public Shape3D NeuronShape3D(
+            @ParamInfo(name="Neuron") Neuron neuron,
+            @ParamInfo(name="Spherical Soma", options="value=true")Boolean somaSphere
+    ){
+        NGNeuronVisual neuronVis=new NGNeuronVisual(neuron, NGNeuronVisual.VisualMethod.LINE);
+        neuronVis.run(somaSphere);
+
+        return neuronVis.getShape3D();
+
+    } don't support*/
 
     public Shape3DArray NeuronShape3DArray(
             @ParamInfo(name="Neuron") Neuron neuron,
@@ -48,6 +61,20 @@ public class VRLNeuGenNeuronVisual implements Serializable {
 
         return neuronVis.getVGeometry3D(secNum);
     }
+
+
+    /*public TransformGroup NeuronTG(
+            @ParamInfo(name="Neuron") Neuron neuron,
+            @ParamInfo(name="Spherical Soma", options="value=true")Boolean somaSphere,
+            @ParamInfo(name="Visualisation", options="value=line")String visual
+    ){
+        NGNeuronVisual neuronVis=new NGNeuronVisual(neuron, NGNeuronVisual.VisualMethod.fromString(visual));
+        neuronVis.run(somaSphere);
+
+        return neuronVis.getTransformGroup();
+
+    } don't support!*/
+
 
 
 

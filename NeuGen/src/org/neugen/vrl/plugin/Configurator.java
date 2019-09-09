@@ -108,6 +108,7 @@ public class Configurator extends VPluginConfigurator{
 
         vapi.addComponent(VRLNeuGenProjectCreate.class);
         vapi.addComponent(VRLNeuGenParameterLoad.class);
+        vapi.addComponent(VRLNeuGenParameterChange.class);
         vapi.addComponent(VRLNeuGenParameterVisual.class);
         vapi.addComponent(VRLNeuGenParameterSave.class);
         vapi.addComponent(VRLNeuGenGenerator.class);

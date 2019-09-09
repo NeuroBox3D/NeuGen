@@ -11,9 +11,10 @@ import org.neugen.gui.NeuGenConstants;
 
 import java.io.File;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
-@ComponentInfo(name="Create Parameter", category = "NeuGen", description = "...")
+@ComponentInfo(name="Parameter Create", category = "NeuGen", description = "...")
 public class VRLNeuGenProjectCreate implements Serializable {
     private static final long serialVersionUID=1L;
 
@@ -82,6 +83,7 @@ public class VRLNeuGenProjectCreate implements Serializable {
         return paramChange.getParamTree();
     }
 
+    @OutputInfo(name="Parameter Map")
     public Map<String, XMLObject> CreateDefaultHippocampusProject(
             @ParamGroupInfo(group="General|true|General")
             @ParamInfo(name="Project File", style = "save-folder-dialog", options="") File file,
@@ -179,6 +181,7 @@ public class VRLNeuGenProjectCreate implements Serializable {
         return paramChange.getParamTree();
     }
 
+    @OutputInfo(name="Parameter Map")
     public Map<String, XMLObject> CreateDefaultNeuGenProject(
             @ParamInfo(name="Project File", style = "save-folder-dialog", options="") File file,
             @ParamInfo(name="Force", options="value=true")Boolean force,
@@ -194,6 +197,35 @@ public class VRLNeuGenProjectCreate implements Serializable {
         project.createProject(force);
 
         return project.getParamTree();
+    }
+
+    @OutputInfo(name="Parameter Map")
+    public Map<String, XMLObject> CreateParameterMapFromXMLObject(
+            @ParamInfo(name="Param XMLObjcet",  options="") XMLObject paramRoot,
+            @ParamInfo(name="Interna XMLObject",  options="") XMLObject internaRoot
+    ){
+
+        String projectTypeP=NGParameter.getProjectTypefromXMLObject(paramRoot);
+        String projectTypeI=NGParameter.getProjectTypefromXMLObject(internaRoot);
+
+        if(projectTypeI!=projectTypeP){
+            System.err.println("The project types are not identifical (Param for "+projectTypeP+", Interna for "+projectTypeI+")");
+        }
+
+        Map<String, XMLObject> params=new HashMap<>();
+        if(NGParameter.isParamXMLObject(paramRoot)) {
+            params.put(NeuGenConstants.PARAM, paramRoot);
+        }else{
+            System.err.println("Please input a Param-XMLObject");
+        }
+
+        if(NGParameter.isInternaXMLObject(internaRoot)) {
+            params.put(NeuGenConstants.INTERNA, internaRoot);
+        }else{
+            System.err.println("Please input a Interna-XMLObject for "+ projectTypeP+ "net.");
+        }
+
+        return params;
     }
 
 

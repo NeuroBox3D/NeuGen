@@ -11,7 +11,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.Map;
 
-@ComponentInfo(name="Save Parameter", category = "NeuGen", description = "...")
+@ComponentInfo(name="Parameter Save", category = "NeuGen", description = "...")
 public class VRLNeuGenParameterSave implements Serializable {
     private static final long serialVersionUID=1L;
 
