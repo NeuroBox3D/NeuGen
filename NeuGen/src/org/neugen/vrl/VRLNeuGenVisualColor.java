@@ -1,12 +1,22 @@
 package org.neugen.vrl;
 
 
+import eu.mihosoft.vrl.annotation.ComponentInfo;
+import eu.mihosoft.vrl.annotation.OutputInfo;
+import eu.mihosoft.vrl.annotation.ParamInfo;
+import org.neugen.backend.NGNeuronAppearance;
+import org.neugen.datastructures.Section;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+
 @ComponentInfo(name="NeuGen Color", category = "NeuGen", description = "...")
 public class VRLNeuGenVisualColor {
 
     @OutputInfo(name="Neuron Section Colors")
     public NGNeuronAppearance NeuronSectionColors(
-            @ParamInfo(name="Soma", style="color-chooser")Color somaCol,//index: Section.SectionType.Soma: 6
+            @ParamInfo(name="Soma", style="color-chooser") Color somaCol,//index: Section.SectionType.Soma: 6
             @ParamInfo(name="Myelined Axon", style="color-chooser")Color myeCol,//3
             @ParamInfo(name="Non-myelined Axon", style="color-chooser")Color nonCol,//4
             @ParamInfo(name="Basal Dendrite", style="color-chooser")Color basCol,// BASAL: 0
