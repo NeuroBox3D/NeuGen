@@ -27,13 +27,14 @@ public class NGNeuronVisual {
     private VisualMethod visM;
     private float scale;
 
-    private List<Color3f> colList; // based on Section.SectionType: 6: SOMA, 3
-    private List<Appearance> appList; //based on Section.SectionType:
+    /*private List<Color3f> colList; // based on Section.SectionType: 6: SOMA, 3
+    private List<Appearance> appList; //based on Section.SectionType:*/
+    private NGNeuronAppearance app;
 
-    private Shape3D shape3D;
-    private List<VTriangleArray> vtaList;
+    private Shape3D shape3D; //VisualMethod.LINE
+    private List<VTriangleArray> vtaList; //VisualMethod.VTA
     //private List<VGeometry3D> vg3DList;
-    private List<TransformGroup> tgList;
+    private List<TransformGroup> tgList; //VisualMethod.SOLID oder LINE
 
 
     //private visualParameter; //soma:emissiveColor, ambientColor, DiffuseColor, SpecularColor, Shininess,
@@ -76,8 +77,9 @@ public class NGNeuronVisual {
         this.vta=new VTriangleArray();
         this.tgList=new ArrayList<TransformGroup>();*/
         this.visM=VisualMethod.LINE;
-        this.colList=initColorList();
-        this.appList=initAppearanceList();
+        /*this.colList=initColorList();
+        this.appList=initAppearanceList();*/
+        this.app=new NGNeuronAppearance();
     }
 
     public NGNeuronVisual(Neuron neuron, VisualMethod visM){
@@ -89,8 +91,9 @@ public class NGNeuronVisual {
         this.vta=new VTriangleArray();
         this.tgList=new ArrayList<TransformGroup>();*/
         this.visM=visM;
-        this.colList=initColorList();
-        this.appList=initAppearanceList();
+        /*this.colList=initColorList();
+        this.appList=initAppearanceList();*/
+        this.app=new NGNeuronAppearance();
     }
 
     public void init(){
@@ -123,35 +126,8 @@ public class NGNeuronVisual {
 
     public void setVisualMethod(String visM){this.visM=VisualMethod.fromString(visM);}
 
-    public static List<Color3f> initColorList(){
-        List<Color3f> colList=new ArrayList<>();
-        for(int i=0; i<7;++i){ //Section.SectionType: 0-6
-            colList.add(i,null);
-        }
-        return colList;
-    }
-
-    public static List<Appearance> initAppearanceList(){
-        List<Appearance> appList=new ArrayList<>();
-        for(int i=0; i<7;++i){ //Section.SectionType: 0-6
-            appList.add(i,null);
-        }
-        return appList;
-    }
-
-    public void changeColor(Color3f color, int ind){
-        if(ind>6){
-            System.err.println("The index must be equal to or smaller than 6. Please check Section.SectionType to ensure the correspanding section index.");
-        }
-
-        colList.set(ind, color);
-    }
-
-    public void changeAppearance(Appearance app, int ind){ // ind<=6
-        if(ind>6){
-            System.err.println("The index must be equal to or smaller than 6. Please check Section.SectionType to ensure the correspanding section index.");
-        }
-        appList.set(ind, app);
+    public void setAppearance(NGNeuronAppearance app){
+        this.app=app;
     }
 
 
@@ -172,13 +148,13 @@ public class NGNeuronVisual {
         segVis.setScale(scale);
         switch(visM){
             case LINE:
-                shape3D.addGeometry(segVis.getLineArray(colList.get(secNum)));
+                shape3D.addGeometry(segVis.getLineArray(app.getSectionColor(secNum)));
                 break;
             case VTA:
                 vtaList.get(secNum).add(segVis.getTriangle());
                 break;
             case SOLID:
-                tgList.add(segVis.getCylinderTG(appList.get(secNum)));
+                tgList.add(segVis.getCylinderTG(app.getSectionAppearance(secNum)));
                 break;
         }
     }
@@ -287,14 +263,14 @@ public class NGNeuronVisual {
                 List<Point3f> startList=startLocationList();
                 for(Point3f loc1:startList){
                     //loc1.scale(scale);
-                    shape3D.addGeometry(nodVis.getLineArray(loc1, colList.get(secNum)));
+                    shape3D.addGeometry(nodVis.getLineArray(loc1, app.getSectionColor(secNum)));
                 }
                 break;
             case VTA:
                 vtaList.add(secNum, nodVis.getVTriangleArray());
                 break;
             case SOLID:
-                tgList.add(nodVis.getTransformGroup(appList.get(secNum)));
+                tgList.add(nodVis.getTransformGroup(app.getSectionAppearance(secNum)));
                 break;
         }
 
@@ -354,7 +330,7 @@ public class NGNeuronVisual {
     public VTriangleArray getVTriangleArray_Part(int secNum){return vtaList.get(secNum);}
 
     public VGeometry3D getVGeometry3D(int secNum){
-        Color3f col3f=colList.get(secNum);
+        Color3f col3f=app.getSectionColor(secNum);
         if(col3f==null){
             col3f= Utils3D.white;
         }
@@ -412,6 +388,10 @@ public class NGNeuronVisual {
         }
 
         return spinner;
+    }
+
+    public NGNeuronAppearance getNeuronAppearance(){
+        return app;
     }
 
 
