@@ -171,9 +171,7 @@ public class NGNeuronNodeVisual {
 
         return vgeometry3DfromNode(location, radius,color,wireThickness, lighting);
     }
-
-
-
+    
     public TransformGroup getTransformGroup(Appearance app){
         if(radius==0.0f) {
             System.err.println("Please input radius.");

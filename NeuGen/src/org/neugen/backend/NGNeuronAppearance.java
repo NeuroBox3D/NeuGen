@@ -22,8 +22,15 @@ public class NGNeuronAppearance {
 
     private Appearance appearanceFromVGApp(VGeometry3DAppearance vgApp){
         Appearance app=new Appearance();
-        vgApp.getSolidColor();
         ColoringAttributes ca=new ColoringAttributes(color3fFromColor(vgApp.getSolidColor()), ColoringAttributes.NICEST);
+        app.setColoringAttributes(ca);
+
+        return app;
+    }
+
+    private Appearance appearanceFromColor3f(Color3f color){
+        Appearance app=new Appearance();
+        ColoringAttributes ca=new ColoringAttributes(color, ColoringAttributes.NICEST);
         app.setColoringAttributes(ca);
 
         return app;
@@ -31,22 +38,29 @@ public class NGNeuronAppearance {
 
 
     public NGNeuronAppearance(){
-        this.colList=initColorList();
-        this.appList=initAppearanceList();
+        this.colList=initColorList(null);
+        this.appList=initAppearanceList(null);
     }
 
-    public static List<Color3f> initColorList(){
+    public NGNeuronAppearance(Color col){
+        Color3f col3f=color3fFromColor(col);
+        this.colList=initColorList(col3f);
+        this.appList=initAppearanceList(appearanceFromColor3f(col3f));
+    }
+
+
+    public static List<Color3f> initColorList(Color3f col){
         List<Color3f> colList=new ArrayList<>();
         for(int i=0; i<7;++i){ //Section.SectionType: 0-6
-            colList.add(i,null);
+            colList.add(i,col);
         }
         return colList;
     }
 
-    public static List<Appearance> initAppearanceList(){
+    public static List<Appearance> initAppearanceList(Appearance app){
         List<Appearance> appList=new ArrayList<>();
         for(int i=0; i<7;++i){ //Section.SectionType: 0-6
-            appList.add(i,null);
+            appList.add(i,app);
         }
         return appList;
     }
@@ -90,6 +104,12 @@ public class NGNeuronAppearance {
             System.err.println("The index must be equal to or smaller than 6. Please check Section.SectionType to ensure the correspanding section index.");
         }
         appList.set(ind, app);
+    }
+
+    public void setUniColor(Color col){
+        for(int i=0; i<7;++i){ //Section.SectionType: 0-6
+            changeColor(col,i);
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////

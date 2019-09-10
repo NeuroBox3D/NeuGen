@@ -168,8 +168,8 @@ public class NGNeuronVisual {
         //int secNum=section.getSectionType().getSecNum(); // Myelinized: 3, unmylinzed: 4
         //System.out.println("Print section:");
         for(Segment segment:section.getSegments()){
-            System.out.println("SegmentStart"+segment.getStart());
-            System.out.println("SegmentEnd"+segment.getEnd());
+            /*System.out.println("SegmentStart"+segment.getStart());
+            System.out.println("SegmentEnd"+segment.getEnd());*/
             segmentVisual(segment, secNum);
         }
     }
@@ -185,7 +185,7 @@ public class NGNeuronVisual {
             while(secIterator.hasNext()){
                 Section section=secIterator.next();
                 int secNum=section.getSectionType().getSecNum();
-                System.out.println("Section Number"+secNum);
+                //System.out.println("Section Number"+secNum);
                 sectionVisual(section, secNum);
             }
         }

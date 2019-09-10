@@ -116,6 +116,9 @@ public class Configurator extends VPluginConfigurator{
         vapi.addComponent(VRLNeuGenNeuronSelection.class);
         vapi.addComponent(VRLNeuGenNeuronVisual.class);
 
+        vapi.addComponent(VRLNeuGenNetVisual.class);
+        vapi.addComponent(VRLNeuGenNetSave.class);
+
     }
 
     @Override

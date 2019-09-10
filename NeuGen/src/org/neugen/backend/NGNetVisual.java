@@ -23,17 +23,20 @@ public class NGNetVisual {
     private Net net;
     private float scale;
     private NGNeuronVisual.VisualMethod visM;
-    private List<Color3f> colList; // based on Section.SectionType: 0-6 Neuron + 7: Synapse
-    private List<Appearance> appList; //based on Section.SectionType: 0-6 Neuron +7: Synapse
+    private Color3f synColor;
+    private Appearance synApp;
+    private List<NGNeuronAppearance> neuAppList;
+    /*private List<Color3f> colList; // based on Section.SectionType: 0-6 Neuron + 7: Synapse
+    private List<Appearance> appList; //based on Section.SectionType: 0-6 Neuron +7: Synapse*/
 
     private Shape3D shape3DSyn;
-    private VTriangleArray vtaSyn;
-    //private VGeometry3D vgSyn;
+    private VTriangleArray vtaSyn; // can be transformed into VGeometry3D using new VGeometry3D(vtaList.get(secNum), col3f.get(), col3f.get(), 1, false);
     private List<TransformGroup> tgListSyn;
 
     private List<Shape3D> shape3DNeuron;
     private List<Shape3DArray> shape3DANeuron;
     private List<TransformGroup> tgListNeuron;
+
 
     public NGNetVisual(Net net){
         NeuGenConstants.WITH_GUI = false;
@@ -41,11 +44,12 @@ public class NGNetVisual {
         this.net=net;
         this.scale=0.001f;
         this.visM= NGNeuronVisual.VisualMethod.LINE;
-
-        this.colList=NGNeuronVisual.initColorList();
+        initNeuronApp();
+        /*this.colList=NGNeuronVisual.initColorList();
         colList.add(7,null);
         this.appList=NGNeuronVisual.initAppearanceList();
-        appList.add(7, null);
+        appList.add(7, null);*/
+
     }
 
     public NGNetVisual(Net net, NGNeuronVisual.VisualMethod visM){
@@ -54,11 +58,12 @@ public class NGNetVisual {
         this.net=net;
         this.scale=0.001f;
         this.visM=visM;
+        initNeuronApp();
 
-        this.colList=NGNeuronVisual.initColorList();
+        /*this.colList=NGNeuronVisual.initColorList();
         colList.add(7,null);
         this.appList=NGNeuronVisual.initAppearanceList();
-        appList.add(7, null);
+        appList.add(7, null);*/
     }
 
     public void init(){
@@ -94,6 +99,13 @@ public class NGNetVisual {
         }
     }
 
+    public void initNeuronApp(){
+        this.neuAppList=new ArrayList<>();
+        for(int i=0; i<net.getTypeCellNames().size();++i){
+            neuAppList.add(new NGNeuronAppearance());
+        }
+    }
+
     ///////////////////////////////////////////////////////////////////////
     ///// parameter: setting and getting functions
     ////////////////////////////////////////////////////////////////////////
@@ -101,7 +113,28 @@ public class NGNetVisual {
 
     public void setVisualMethod(String visM){this.visM= NGNeuronVisual.VisualMethod.fromString(visM);}
 
-    public void changeColor(Color3f color, int ind){
+    public void setNetAppearance(List<NGNeuronAppearance> neuAppList){
+        this.neuAppList=neuAppList;
+    }
+
+    public void changeNeuronAppearance(NGNeuronAppearance app, int ind){
+        if(ind>net.getTypeCellNames().size()){
+            System.err.println("There are only "+net.getTypeCellNames().size()+" cell types in this network.");
+
+        }
+        neuAppList.set(ind, app);
+    }
+
+
+
+    public void setSynapseColor(Color3f color ){
+        this.synColor=color;
+    }
+
+    public void setSynapseAppearance(Appearance app){
+        this.synApp=app;
+    }
+    /*public void changeColor(Color3f color, int ind){
         if(ind>7){
             System.err.println("The index must be equal to or smaller than 7. Please check Section.SectionType to ensure the correspanding section index and 7 for synapse.");
         }
@@ -114,7 +147,7 @@ public class NGNetVisual {
             System.err.println("The index must be equal to or smaller than 7. Please check Section.SectionType to ensure the correspanding section index and 7 for synapse.");
         }
         appList.set(ind, app);
-    }
+    }*/
 
     ///////////////////////
     /// core functions:
@@ -147,13 +180,13 @@ public class NGNetVisual {
             switch (visM) {
                 case LINE:
                     nodVis.setLocation(axSegCenter);
-                    shape3DSyn.addGeometry(nodVis.getLineArray(denSegCenter, colList.get(7)));
+                    shape3DSyn.addGeometry(nodVis.getLineArray(denSegCenter, synColor));
                     break;
                 case VTA:
                     vtaSyn.addAll(nodVis.getVTriangleArray());
                     break;
                 case SOLID:
-                    tgListSyn.add(nodVis.getTransformGroup(appList.get(7)));
+                    tgListSyn.add(nodVis.getTransformGroup(synApp));
                     break;
             }
         }
@@ -170,12 +203,16 @@ public class NGNetVisual {
         /////////////print Neurons////////////////
         for(Neuron neuron:net.getNeuronList()){
             NGNeuronVisual neuronVis=new NGNeuronVisual(neuron, visM);
+            /*System.out.println("Type:"+net.getTypeOfNeuron(neuron.getIndex())+": "+neuron.getType());
+            System.out.println(neuAppList.get(net.getTypeOfNeuron(neuron.getIndex())-1).getSectionColor(1));*/
+            neuronVis.setAppearance(neuAppList.get(net.getTypeOfNeuron(neuron.getIndex())-1));
             neuronVis.run(somaSphere);
            switch(visM){
                case LINE:
                    shape3DNeuron.add(neuronVis.getShape3D());
                    break;
                case VTA:
+                   //System.out.println("Run!!!");
                    shape3DANeuron.add(neuronVis.getShape3DArray());
                    break;
                case SOLID:
@@ -187,9 +224,19 @@ public class NGNetVisual {
         if(withSyn) {
             /////////print Synpases////////////////////
             runSynapse();
-            if(visM== NGNeuronVisual.VisualMethod.VTA){
+            /*switch(visM){
+                case LINE:
+                    shape3DNeuron.addAll(shape3DSyn);
+                    break;
+                case VTA:
+                    VGeometry3D synVG=new VGeometry3D(vtaSyn,synColor.get(),synColor.get(),1,false);
+                    shape3DANeuron.add(synVG.generateShape3DArray());
+                    break;
+                case SOLID:
+                    tgListNeuron.addAll(tgListSyn);
+                    break;
+            }*/
 
-            }
         }
     }
 
@@ -217,7 +264,9 @@ public class NGNetVisual {
     public Shape3D getNeuronShape3D(int index){return shape3DNeuron.get(index);}
 
 
-    public List<Shape3D> getNeuronShape3D(){return shape3DNeuron;}
+    public List<Shape3D> getNeuronShape3D(){
+        return shape3DNeuron;
+    }
 
     public List<Shape3DArray> getNeuronVTA(){return shape3DANeuron;}
 
@@ -227,7 +276,7 @@ public class NGNetVisual {
 
     public Shape3DArray getSynapseShape3DArray(){
 
-        Color3f col3f=colList.get(7);
+        Color3f col3f=synColor;
         if(col3f==null){
             col3f= Utils3D.white;
         }
@@ -249,6 +298,7 @@ public class NGNetVisual {
     ///////return net
     public Shape3DArray getNetShape3DArray(){
         Shape3DArray sum=new Shape3DArray();
+        System.out.println(shape3DANeuron);
         for(Shape3DArray shapeA:shape3DANeuron){
             sum.addAll(shapeA);
         }
@@ -285,6 +335,10 @@ public class NGNetVisual {
 
         return spinner;
     }
+
+    /*public List<NGNeuronAppearance> getNeuronAppearance(){
+        return neuAppList;
+    }*/
 
     /*public Shape3DArray getNetShape3DArray(){
         Shape3DArray netShape3D=new Shape3DArray();

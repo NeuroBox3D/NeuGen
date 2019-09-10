@@ -5,6 +5,7 @@ import org.neugen.datastructures.Net;
 import org.neugen.datastructures.neuron.Neuron;
 import org.neugen.gui.NeuGenConstants;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,11 +29,27 @@ public class NGTest {
             NGGenerator gen=new NGGenerator(paramChange.getParamTree(),NeuGenConstants.NEOCORTEX_PROJECT);
             gen.run();
             Net net=gen.getNet();
-            Neuron neuron=net.getNeuronList().get(0);
-            NGNeuronVisual neuronVisual=new NGNeuronVisual(neuron, NGNeuronVisual.VisualMethod.VTA);
+            NGNetVisual netVis=new NGNetVisual(net, NGNeuronVisual.VisualMethod.VTA);
+
+
+            List<NGNeuronAppearance> appList=new ArrayList<>();
+            appList.add(0,new NGNeuronAppearance(Color.red));
+            appList.add(1,new NGNeuronAppearance(Color.black));
+
+            appList.add(2,new NGNeuronAppearance(Color.blue));
+            appList.add(3,new NGNeuronAppearance(Color.cyan));
+
+            appList.add(4,new NGNeuronAppearance(Color.yellow));
+
+            netVis.setNetAppearance(appList);
+
+            netVis.run(true, true);
+            netVis.getNetShape3DArray();
+            //Neuron neuron=net.getNeuronList().get(0);
+            //NGNeuronVisual neuronVisual=new NGNeuronVisual(neuron, NGNeuronVisual.VisualMethod.VTA);
             //neuronVisual.setScale(1);
-            neuronVisual.run(true);
-            neuronVisual.getShape3DArray();
+            //neuronVisual.run(true);
+            //neuronVisual.getShape3DArray();
             /*NGNetVisual netVisual=new NGNetVisual(net);
             netVisual.setVisualMethod("solid");
             netVisual.run(false, true);*/

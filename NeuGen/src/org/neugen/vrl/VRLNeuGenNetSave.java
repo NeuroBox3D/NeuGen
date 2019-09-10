@@ -10,7 +10,7 @@ import org.neugen.datastructures.Net;
 import java.io.File;
 import java.io.Serializable;
 
-@ComponentInfo(name="Save Neuron Network", category = "NeuGen", description = "...")
+@ComponentInfo(name="Neuron Net Save", category = "NeuGen", description = "...")
 public class VRLNeuGenNetSave implements Serializable {
     private static final long serialVersionUID=1L;
 
