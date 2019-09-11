@@ -57,6 +57,7 @@ import org.neugen.datastructures.Region;
 import org.neugen.datastructures.parameter.AxonParam;
 import org.neugen.datastructures.parameter.NeuronParam;
 import org.neugen.datastructures.parameter.ParameterConstants;
+import org.neugen.gui.NeuGenConstants;
 import org.neugen.gui.Trigger;
 import org.neugen.utils.Vrand;
 
@@ -124,11 +125,13 @@ public final class NeuronCalretinin extends NeuronBase implements Serializable, 
     @Override
     public void setNeuron() {
         Param param = getParam();
-        String mes = "set for " + getType() + " neuron";
-        Trigger trigger = Trigger.getInstance();
-        trigger.outPrintln();
-        trigger.outPrintln(mes);
+       String mes = "set for " + getType() + " neuron";
         logger.info(mes);
+        if (NeuGenConstants.WITH_GUI) {
+            Trigger trigger = Trigger.getInstance();
+            trigger.outPrintln();
+            trigger.outPrintln(mes);
+        }
 
 
         Region.Param.CA1Param ca1RegionParam = Region.Param.getInstance().getCa1Param();

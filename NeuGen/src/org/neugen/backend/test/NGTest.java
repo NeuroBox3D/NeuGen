@@ -27,6 +27,7 @@ public class NGTest {
             System.out.println("isParam:"+NGParameter.isParamXMLObject(project.getParamTree().get("Param")));
             System.out.println("isInterna:"+NGParameter.isInternaXMLObject(project.getParamTree().get("Interna")));
             NGGenerator gen=new NGGenerator(paramChange.getParamTree(),NeuGenConstants.NEOCORTEX_PROJECT);
+
             gen.run();
             Net net=gen.getNet();
             NGNetVisual netVis=new NGNetVisual(net, NGNeuronVisual.VisualMethod.VTA);

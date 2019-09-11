@@ -71,7 +71,7 @@ public final class NGGenerator {
 
     public void run(){
         initRegion(projectType);
-        NeuGenLib.initParamData(params);
+        ngLib.initParamData(params);
         ngLib.run(projectType);
         this.net=ngLib.getNet();
     }
