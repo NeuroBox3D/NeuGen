@@ -5,6 +5,8 @@ import eu.mihosoft.vrl.annotation.ComponentInfo;
 import eu.mihosoft.vrl.annotation.OutputInfo;
 import eu.mihosoft.vrl.annotation.ParamInfo;
 import org.neugen.backend.NGNeuronAppearance;
+import org.neugen.datastructures.NetHippocampus;
+import org.neugen.datastructures.NetNeocortex;
 import org.neugen.datastructures.Section;
 
 import java.awt.*;
@@ -39,47 +41,96 @@ public class VRLNeuGenVisualColor {
         return app;
     }
 
-
+    @OutputInfo(name="Neuron Color List")
     public List<NGNeuronAppearance> NeocortexNetColors(
-            @ParamInfo(name="L23pyramidal",style="color-chooser") Color p23Col,
-            @ParamInfo(name="L4stellate",style="color-chooser") Color s4Col,
-            @ParamInfo(name="L5Apyramidal",style="color-chooser") Color p5ACol,
-            @ParamInfo(name="L5Bpyramidal",style="color-chooser") Color p5BCol,
-            @ParamInfo(name="starpyramidal",style="color-chooser") Color starCol
+            @ParamInfo(name="L4 stellate",style="color-chooser") Color s4Col,
+            @ParamInfo(name="L23 pyramidal",style="color-chooser") Color p23Col,
+            @ParamInfo(name="L5A pyramidal",style="color-chooser") Color p5ACol,
+            @ParamInfo(name="L5B pyramidal",style="color-chooser") Color p5BCol,
+            @ParamInfo(name="Starpyramidal",style="color-chooser") Color starCol
     ){
         List<NGNeuronAppearance> appList=new ArrayList<>();
 
-        appList.add(0,new NGNeuronAppearance(p23Col));
-        appList.add(1,new NGNeuronAppearance(s4Col));
+        appList.add(new NGNeuronAppearance(s4Col));
+        appList.add(new NGNeuronAppearance(p23Col));
 
-        appList.add(2,new NGNeuronAppearance(p5ACol));
-        appList.add(3,new NGNeuronAppearance(p5BCol));
+        appList.add(new NGNeuronAppearance(p5ACol));
+        appList.add(new NGNeuronAppearance(p5BCol));
 
-        appList.add(4,new NGNeuronAppearance(starCol));
+        appList.add(new NGNeuronAppearance(starCol));
 
         return appList;
 
     }
 
+    @OutputInfo(name="Neuron Color List")
+    public List<NGNeuronAppearance> HippocampusNetColors(
+            @ParamInfo(name="CA1 pyramidal",style="color-chooser") Color caCol,
+            @ParamInfo(name="Callbindin",style="color-chooser") Color cbCol,
+            @ParamInfo(name="Calertinin",style="color-chooser") Color crCol,
+            @ParamInfo(name="Cholecystokinin",style="color-chooser") Color cckCol,
+            @ParamInfo(name="Parvalbumin",style="color-chooser") Color pvCol,
+            @ParamInfo(name="Somatosatin",style="color-chooser") Color somCol
+    ){
+        List<NGNeuronAppearance> appList=new ArrayList<>();
+
+        appList.add(new NGNeuronAppearance(caCol));
+        appList.add(new NGNeuronAppearance(cbCol));
+
+        appList.add(new NGNeuronAppearance(crCol));
+        appList.add(new NGNeuronAppearance(cckCol));
+
+        appList.add(new NGNeuronAppearance(pvCol));
+        appList.add(new NGNeuronAppearance(somCol));
+
+        return appList;
+
+    }
+
+    @OutputInfo(name="Neuron Section Colors List")
     public List<NGNeuronAppearance> NeocortexNetSectionColors(
-            @ParamInfo(name="L23pyramidal") NGNeuronAppearance p23App,
-            @ParamInfo(name="L4stellate") NGNeuronAppearance s4App,
-            @ParamInfo(name="L5Apyramidal") NGNeuronAppearance p5AApp,
-            @ParamInfo(name="L5Bpyramidal") NGNeuronAppearance p5BApp,
-            @ParamInfo(name="starpyramidal") NGNeuronAppearance starApp
+            @ParamInfo(name="L4 stellate") NGNeuronAppearance s4App,
+            @ParamInfo(name="L23 pyramidal") NGNeuronAppearance p23App,
+            @ParamInfo(name="L5A pyramidal") NGNeuronAppearance p5AApp,
+            @ParamInfo(name="L5B pyramidal") NGNeuronAppearance p5BApp,
+            @ParamInfo(name="Starpyramidal") NGNeuronAppearance starApp
     ){
         List<NGNeuronAppearance> appList=new ArrayList<>();
 
-        appList.add(0,p23App);
-        appList.add(1,s4App);
+        appList.add(s4App);
+        appList.add(p23App);
 
-        appList.add(2,p5AApp);
-        appList.add(3,p5BApp);
+        appList.add(p5AApp);
+        appList.add(p5BApp);
 
-        appList.add(4,starApp);
+        appList.add(starApp);
 
         return appList;
     }
 
+
+    @OutputInfo(name="Neuron Color List")
+    public List<NGNeuronAppearance> HippocampusNetColors(
+            @ParamInfo(name="CA1 pyramidal") NGNeuronAppearance caApp,
+            @ParamInfo(name="Callbindin") NGNeuronAppearance cbApp,
+            @ParamInfo(name="Calertinin") NGNeuronAppearance crApp,
+            @ParamInfo(name="Cholecystokinin") NGNeuronAppearance cckApp,
+            @ParamInfo(name="Parvalbumin") NGNeuronAppearance pvApp,
+            @ParamInfo(name="Somatosatin") NGNeuronAppearance somApp
+    ){
+        List<NGNeuronAppearance> appList=new ArrayList<>();
+
+        appList.add(caApp);
+        appList.add(cbApp);
+
+        appList.add(crApp);
+        appList.add(cckApp);
+
+        appList.add(pvApp);
+        appList.add(somApp);
+
+        return appList;
+
+    }
 
 }

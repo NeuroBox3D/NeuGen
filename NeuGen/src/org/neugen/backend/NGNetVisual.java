@@ -102,6 +102,7 @@ public class NGNetVisual {
     public void initNeuronApp(){
         this.neuAppList=new ArrayList<>();
         for(int i=0; i<net.getTypeCellNames().size();++i){
+           // System.out.println(net.getTypeCellNames().get(i));
             neuAppList.add(new NGNeuronAppearance());
         }
     }
@@ -125,6 +126,9 @@ public class NGNetVisual {
         neuAppList.set(ind, app);
     }
 
+    public void setScale(float scale){
+        this.scale=scale;
+    }
 
 
     public void setSynapseColor(Color3f color ){

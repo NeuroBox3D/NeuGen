@@ -213,7 +213,7 @@ public class NGParameter {
      * @param double value
      * @param identifier
      */
-    public void modifyRegion_neocortex(double value, String identifier, String projectType){
+    public void modifyRegion_neocortex(double value, String identifier){
         String name="region,column,"+identifier;
         ArrayList<String> items=new ArrayList<>(Arrays.asList(name.split(",")));
 

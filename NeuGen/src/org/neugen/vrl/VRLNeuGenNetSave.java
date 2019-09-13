@@ -10,7 +10,7 @@ import org.neugen.datastructures.Net;
 import java.io.File;
 import java.io.Serializable;
 
-@ComponentInfo(name="Neuron Net Save", category = "NeuGen", description = "...")
+@ComponentInfo(name="Net Save", category = "NeuGen/Net", description = "...")
 public class VRLNeuGenNetSave implements Serializable {
     private static final long serialVersionUID=1L;
 
@@ -24,9 +24,9 @@ public class VRLNeuGenNetSave implements Serializable {
     public void exportNet (
             @ParamInfo(name="Neuron Net")Net net,
             @ParamInfo(name="File", style="save-dialog") File file,
-            @ParamInfo(name="Export Type",style="selection", options="value=[\"NGX\", \"NeuroML\", \"HOC\", \"sHOC\"]")String stype
+            @ParamInfo(name="Export Type",style="selection", options="value=[\"NGX\", \"HOC\",\"sHOC\"]")String stype
     )throws Exception {
-        NGNetExport.ExportType type=NGNetExport.ExportType.valueOf(stype.toLowerCase());
+        NGNetExport.ExportType type=NGNetExport.ExportType.fromString(stype.toLowerCase());
         switch(type){
             case NGX:
                 NGNetExport.export_network_in_ngx(net, file);
@@ -37,9 +37,17 @@ public class VRLNeuGenNetSave implements Serializable {
             case sHOC:
                 NGNetExport.export_network_in_shoc(net,file);
                 break;
-            case NeuroML:
-                NGNetExport.export_network_in_neuroML(net,file);
+            /*case NeuroML:
+                NGNetExport.export_network_in_neuroML(net,file);*/
         }
+    }
+
+    public void exportNetAsNeuroML(
+            @ParamInfo(name="Neuron Net")Net net,
+            @ParamInfo(name="File", style="save-dialog") File file,
+            @ParamInfo(name="Levels(1,2,3)", style="array")Integer[] levels
+    )throws Exception {
+        NGNetExport.export_network_in_neuroML(net,file,levels);
     }
 
 

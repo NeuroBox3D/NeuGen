@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 
-@ComponentInfo(name="Parameter Change", category = "NeuGen", description = "...")
+@ComponentInfo(name="Parameter Change", category = "NeuGen/Parameter", description = "...")
 public class VRLNeuGenParameterChange {
     private transient NGParameter paramChange;
 

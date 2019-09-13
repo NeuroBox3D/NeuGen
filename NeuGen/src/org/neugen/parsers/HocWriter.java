@@ -121,12 +121,12 @@ public final class HocWriter {
 		String data = "\t pt3dadd(";
 		fw.write(data);
 		if (start_end == 0) {
-			Point3f sstart = segment.getStart();
-			fw.write(HOCUtil.format(sstart.x) + ", " + HOCUtil.format(sstart.y) + ", " + HOCUtil.format(sstart.z) + ", ");
-			fw.write(segment.getStartRadius() * 2 + ")\n");
-		}
-		if (start_end == 1) {
-			Point3f send = segment.getEnd();
+				Point3f sstart = segment.getStart();
+				fw.write(HOCUtil.format(sstart.x) + ", " + HOCUtil.format(sstart.y) + ", " + HOCUtil.format(sstart.z) + ", ");
+				fw.write(segment.getStartRadius() * 2 + ")\n");
+			}
+			if (start_end == 1) {
+				Point3f send = segment.getEnd();
 			fw.write(HOCUtil.format(send.x) + ", " + HOCUtil.format(send.y) + ", " + HOCUtil.format(send.z) + ", ");
 			fw.write(segment.getEndRadius() * 2 + ")\n");
 		}
@@ -239,14 +239,20 @@ public final class HocWriter {
 				}
 				float fractAlongParent = parSec.getFractAlongParentForChild(section);
 				String parentSecName = parSec.getName();
-				if (nsections == 0 || parentSecName.contains("soma")) {
-					data = "connect " + "N" + nn + secName + "(0), " + "N" + nn + "soma" + "(" + (int) fractAlongParent + ")\n";
-					//data = "connect N" + secName + "(0), N" + nn + "soma(" + (int)fractAlongParent +")\n";
+
+				if(parentSecName==null){
+					data = "connect " + "N" + nn + secName + "(0), " + "N" + nn + "undefined" + "(" + (int) fractAlongParent + ")\n";
 					fw.write(data);
-				} else {
-					data = "connect " + "N" + nn + secName + "(0), " + "N" + nn + parentSecName + "(" + (int) fractAlongParent + ")\n";
-					//data = "connect N" + secName + "(0), N" + nn + suffix + i + "_" + secIterator.getSectionAdress().parentAdress+ "(" + (int)fractAlongParent +")\n";
-					fw.write(data);
+				}else {
+					if (nsections == 0 || parentSecName.contains("soma")) {
+						data = "connect " + "N" + nn + secName + "(0), " + "N" + nn + "soma" + "(" + (int) fractAlongParent + ")\n";
+						//data = "connect N" + secName + "(0), N" + nn + "soma(" + (int)fractAlongParent +")\n";
+						fw.write(data);
+					} else {
+						data = "connect " + "N" + nn + secName + "(0), " + "N" + nn + parentSecName + "(" + (int) fractAlongParent + ")\n";
+						//data = "connect N" + secName + "(0), N" + nn + suffix + i + "_" + secIterator.getSectionAdress().parentAdress+ "(" + (int)fractAlongParent +")\n";
+						fw.write(data);
+					}
 				}
 				fw.write("N" + nn + secName + " {\n");
 				fw.write("\t nseg = " + nsegs + "\n\t pt3dclear()\n");
@@ -597,11 +603,16 @@ public final class HocWriter {
 		if (!hoc.equals(extension)) {
 			file = new File(file.getAbsolutePath() + "." + hoc);
 		}
-		if (netConEventsFilePostfix.equals("")) {
-			netConEventsFilePostfix = null;
+		if(netConEventsFilePostfix!=null) {
+			if (netConEventsFilePostfix.equals("")) {
+				netConEventsFilePostfix = null;
+			}
 		}
-		if (voltageFilePostfix.equals("")) {
-			voltageFilePostfix = null;
+
+		if(voltageFilePostfix !=null) {
+			if (voltageFilePostfix.equals("")) {
+				voltageFilePostfix = null;
+			}
 		}
 		try {
 			if (NeuGenConstants.WITH_GUI) {

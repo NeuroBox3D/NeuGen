@@ -13,7 +13,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-@ComponentInfo(name="Parameter Load", category = "NeuGen", description = "...")
+@ComponentInfo(name="Parameter Load", category = "NeuGen/Parameter", description = "...")
 public class VRLNeuGenParameterLoad implements Serializable {
     private static final long serialVersionUID=1L;
 

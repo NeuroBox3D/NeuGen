@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-@ComponentInfo(name="Generate Neuron Network", category = "NeuGen", description = "...")
+@ComponentInfo(name="Net Generation", category = "NeuGen/Net", description = "...")
 public class VRLNeuGenGenerator implements Serializable {
     private static final long serialVersionUID=2L;
 

@@ -11,7 +11,7 @@ import org.neugen.datastructures.neuron.Neuron;
 import java.io.Serializable;
 import java.util.List;
 
-@ComponentInfo(name="Neuron Selection", category = "NeuGen", description = "...")
+@ComponentInfo(name="Neuron Selection", category = "NeuGen/Neuron", description = "...")
 public class VRLNeuGenNeuronSelection implements Serializable {
     private static final long serialVersionUID=1L;
 

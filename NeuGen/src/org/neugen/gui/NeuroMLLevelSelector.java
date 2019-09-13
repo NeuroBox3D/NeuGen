@@ -75,6 +75,10 @@ public final class NeuroMLLevelSelector extends JDialog {
 	 * @param parent
 	 * @param modal 
 	 */
+	public  NeuroMLLevelSelector() {
+		initComponents();
+	}
+
 	public NeuroMLLevelSelector(Frame parent, boolean modal) {
 		super(parent, modal);
 		initComponents();

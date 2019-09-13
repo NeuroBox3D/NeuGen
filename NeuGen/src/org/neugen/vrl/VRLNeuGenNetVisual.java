@@ -17,15 +17,20 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@ComponentInfo(name="Neuron Net Visualization", category = "NeuGen", description = "...")
+@ComponentInfo(name="Net Visualization", category = "NeuGen/Net", description = "...")
 public class VRLNeuGenNetVisual {
     public Shape3DArray NetShape3D(
             @ParamInfo(name="Neuron Net") Net net,
             //@ParamInfo(name="Zoom", style="silent", options="min=0.001;max=10")float zoom,
             @ParamInfo(name="Spherical Soma", options="value=true")Boolean somaSphere,
-            @ParamInfo(name="With Synapse", options="value=true")Boolean withSyn
+            @ParamInfo(name="Scale", options="value=0.001") Float scale,
+            @ParamInfo(name="With Synapse", options="value=true")Boolean withSyn,
+            @ParamInfo(name="Synapse Color", style="color-chooser")Color synCol
     ){
         NGNetVisual netVis=new NGNetVisual(net, NGNeuronVisual.VisualMethod.VTA);
+        netVis.setScale(0.001f);
+        netVis.setScale(scale.floatValue());
+        netVis.setSynapseColor(new Color3f(synCol.getRed()/255.0f, synCol.getGreen()/255.0f, synCol.getBlue()/255.0f));
         netVis.run(somaSphere, withSyn);
 
         Shape3DArray vta=netVis.getNetShape3DArray();
@@ -34,14 +39,20 @@ public class VRLNeuGenNetVisual {
 
     public Shape3DArray NetShape3DColor(
             @ParamInfo(name="Neuron Net") Net net,
-            @ParamInfo(name="Colors") List<NGNeuronAppearance> appList,
+            @ParamInfo(name="Color List") List<NGNeuronAppearance> appList,
             @ParamInfo(name="Spherical Soma", options="value=true")Boolean somaSphere,
+            @ParamInfo(name="Scale", options="value=0.001") Float scale,
             @ParamInfo(name="With Synapse", options="value=true")Boolean withSyn,
             @ParamInfo(name="Synapse Color", style="color-chooser")Color synCol
             ){
 
         NGNetVisual netVis=new NGNetVisual(net, NGNeuronVisual.VisualMethod.VTA);
-        netVis.setNetAppearance(appList);
+        netVis.setScale(0.001f);
+        netVis.setScale(scale.floatValue());
+
+        if(appList!=null) {
+            netVis.setNetAppearance(appList);
+        }
         netVis.setSynapseColor(new Color3f(synCol.getRed()/255.0f, synCol.getGreen()/255.0f, synCol.getBlue()/255.0f));
 
         netVis.run(somaSphere, withSyn);

@@ -13,7 +13,7 @@ import java.io.Serializable;
 import java.util.Map;
 
 
-@ComponentInfo(name="Parameter Visualise", category = "NeuGen", description = "...")
+@ComponentInfo(name="Parameter Visualise", category = "NeuGen/Parameter", description = "...")
 public class VRLNeuGenParameterVisual implements Serializable {
     private static final long serialVersionUID=1L;
 

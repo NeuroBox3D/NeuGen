@@ -14,7 +14,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-@ComponentInfo(name="Parameter Create", category = "NeuGen", description = "...")
+@ComponentInfo(name="Parameter Create", category = "NeuGen/Parameter", description = "...")
 public class VRLNeuGenProjectCreate implements Serializable {
     private static final long serialVersionUID=1L;
 
@@ -44,7 +44,25 @@ public class VRLNeuGenProjectCreate implements Serializable {
             @ParamGroupInfo(group="Param;NumberCells")
             @ParamInfo(name="Layer5APyramidal", options="value=2")Integer nL5AP,
             @ParamGroupInfo(group="Param;NumberCells")
-            @ParamInfo(name="Layer5BPyramidal", options="value=2")Integer nL5BP
+            @ParamInfo(name="Layer5BPyramidal", options="value=2")Integer nL5BP,
+
+            @ParamGroupInfo(group="Param;Region|true|Region")
+            @ParamInfo(name="Length", options="value=600.0")Double length,
+            @ParamGroupInfo(group="Param;Region")
+            @ParamInfo(name="Width", options="value=600.0")Double width
+            /*@ParamGroupInfo(group="Param;Region;Layer Height|true|Region")
+            @ParamInfo(name="Layer 1", options="value=100.0")Double l1H,
+            @ParamGroupInfo(group="Param;Region;Layer Height")
+            @ParamInfo(name="Layer 2/3", options="value=500.0")Double l23H,
+            @ParamGroupInfo(group="Param;Region;Layer Height")
+            @ParamInfo(name="Layer 4", options="value=200.0")Double l4H,
+            @ParamGroupInfo(group="Param;Region;Layer Height")
+            @ParamInfo(name="Layer 5A", options="value=350.0")Double l5AH,
+            @ParamGroupInfo(group="Param;Region;Layer Height")
+            @ParamInfo(name="Layer 5B", options="value=350.0")Double l5BH,
+            @ParamGroupInfo(group="Param;Region;Layer Height")
+            @ParamInfo(name="Layer 6", options="value=100.0")Double l6H*/
+
     ){
         this.projectType= NeuGenConstants.NEOCORTEX_PROJECT;//"Neocortex";
         this.projectPath=file.getAbsolutePath();
@@ -53,6 +71,7 @@ public class VRLNeuGenProjectCreate implements Serializable {
         project.setProjectPath(projectPath);
         project.setProjectType(projectType);
         project.createProject(force);
+        project.loadParamTree();
 
         Map<String, XMLObject> params=project.getParamTree();
 
@@ -79,6 +98,12 @@ public class VRLNeuGenProjectCreate implements Serializable {
 
         if(nL5BP!=2)
             paramChange.adjust_number_of_neocortex_neuron(nL5BP,"L5Bpyramidal");
+
+        if(length!=600)
+            paramChange.modifyRegion_neocortex(length,"length");
+
+        if(width!=600)
+            paramChange.modifyRegion_neocortex(width,"width");
 
         return paramChange.getParamTree();
     }
@@ -126,7 +151,12 @@ public class VRLNeuGenProjectCreate implements Serializable {
             @ParamInfo(name="pyramidal", options="value=1") Integer nPVpy,
 
             @ParamGroupInfo(group="Param;NumberCells")
-            @ParamInfo(name="SomatostatinOriens", options="value=2")Integer nSOM
+            @ParamInfo(name="SomatostatinOriens", options="value=2")Integer nSOM,
+
+            @ParamGroupInfo(group="Param;Region|true|Region")
+            @ParamInfo(name="Length", options="value=600.0")Double length,
+            @ParamGroupInfo(group="Param;Region")
+            @ParamInfo(name="Width", options="value=600.0")Double width
     ){
         this.projectType= NeuGenConstants.HIPPOCAMPUS_PROJECT;
         this.projectPath=file.getAbsolutePath();
@@ -135,6 +165,7 @@ public class VRLNeuGenProjectCreate implements Serializable {
         project.setProjectPath(projectPath);
         project.setProjectType(projectType);
         project.createProject(force);
+        project.loadParamTree();
 
         Map<String, XMLObject> params=project.getParamTree();
 
@@ -178,6 +209,12 @@ public class VRLNeuGenProjectCreate implements Serializable {
         if(nSOM!=2)
             paramChange.adjust_number_of_hippocampus_neuron(nSOM,"Somatostatin(SOM)","oriens");
 
+        if(length!=600)
+            paramChange.modifyRegion_neocortex(length,"length");
+
+        if(width!=600)
+            paramChange.modifyRegion_neocortex(width,"width");
+
         return paramChange.getParamTree();
     }
 
@@ -195,6 +232,7 @@ public class VRLNeuGenProjectCreate implements Serializable {
         project.setProjectPath(projectPath);
         project.setProjectType(projectType);
         project.createProject(force);
+        project.loadParamTree();
 
         return project.getParamTree();
     }

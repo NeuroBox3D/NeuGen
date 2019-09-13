@@ -24,7 +24,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@ComponentInfo(name="Neuron Visualization", category = "NeuGen", description = "...")
+@ComponentInfo(name="Neuron Visualization", category = "NeuGen/Neuron", description = "...")
 public class VRLNeuGenNeuronVisual implements Serializable {
     private static final long serialVersionUID=1L;
 
@@ -39,20 +39,25 @@ public class VRLNeuGenNeuronVisual implements Serializable {
 
     } don't support*/
 
-    public Shape3DArray NeuronShape3DArray(
+    /*public Shape3DArray NeuronShape3DArray(
             @ParamInfo(name="Neuron") Neuron neuron,
-            @ParamInfo(name="Spherical Soma", options="value=true")Boolean somaSphere
+            @ParamInfo(name="Spherical Soma", options="value=true")Boolean somaSphere,
+            @ParamInfo(name="Scale", options="value=0.001") Float scale
     ){
         NGNeuronVisual neuronVis=new NGNeuronVisual(neuron, NGNeuronVisual.VisualMethod.VTA);
+        neuronVis.setScale(scale);
         neuronVis.run(somaSphere);
 
         Shape3DArray sArray=neuronVis.getShape3DArray();
         return sArray;
-    }
+    }*/
 
+    @OutputInfo(name="")
     public Shape3DArray NeuronShape3DArrayColor(
             @ParamInfo(name="Neuron") Neuron neuron,
             @ParamInfo(name="Spherical Soma", options="value=true")Boolean somaSphere,
+            @ParamInfo(name="Scale", options="value=0.001") Float scale,
+
             @ParamGroupInfo(group="Color|true|Color")
             @ParamInfo(name="Soma", style="color-chooser")Color somaCol,//index: Section.SectionType.Soma: 6
             @ParamInfo(name="Myelined Axon", style="color-chooser")Color myeCol,//3
@@ -62,7 +67,7 @@ public class VRLNeuGenNeuronVisual implements Serializable {
             @ParamInfo(name="OBlique Dendrite", style="color-chooser")Color oblCol,//2
             @ParamInfo(name="Undefined Part", style="color-chooser")Color undCol// 5
     ){
-        NGNeuronVisual neuronVis=new NGNeuronVisual(neuron, NGNeuronVisual.VisualMethod.VTA);
+
         NGNeuronAppearance app=new NGNeuronAppearance();
 
         app.changeColor(basCol, Section.SectionType.BASAL.getSecNum());
@@ -74,9 +79,10 @@ public class VRLNeuGenNeuronVisual implements Serializable {
         app.changeColor(undCol, Section.SectionType.UNDEFINED.getSecNum());
         app.changeColor(somaCol, Section.SectionType.SOMA.getSecNum());
 
-        List<Color3f> col=app.getNeuronColors();
-
-        neuronVis.getNeuronAppearance().setColor(col);
+        NGNeuronVisual neuronVis=new NGNeuronVisual(neuron, NGNeuronVisual.VisualMethod.VTA);
+        neuronVis.getNeuronAppearance().setColor(app.getNeuronColors());
+        neuronVis.setScale(0.001f);
+        neuronVis.setScale(scale.floatValue());
         neuronVis.run(somaSphere);
 
         //VTriangleArray vta=neuronVis.getVTriangleArray();
@@ -86,27 +92,32 @@ public class VRLNeuGenNeuronVisual implements Serializable {
 
 
 
-    public VGeometry3D NeuronVG(
+    /*public VGeometry3D NeuronVG(
             @ParamInfo(name="Neuron") Neuron neuron,
-            @ParamInfo(name="Spherical Soma", options="value=true")Boolean somaSphere
+            @ParamInfo(name="Spherical Soma", options="value=true")Boolean somaSphere,
+            @ParamInfo(name="Scale", options="value=0.001") Float scale
     ){
         NGNeuronVisual neuronVis=new NGNeuronVisual(neuron, NGNeuronVisual.VisualMethod.VTA);
+        neuronVis.setScale(scale);
         neuronVis.run(somaSphere);
 
         VTriangleArray vta=neuronVis.getVTriangleArray();
         return new VGeometry3D(vta);
-    }
+    }*/
 
-
+    @OutputInfo(name="")
     public VGeometry3D NeuronSectionVG(
             @ParamInfo(name="Neuron") Neuron neuron,
             @ParamInfo(name="Spherical Soma", options="value=true")Boolean somaSphere,
+            @ParamInfo(name="Scale", options="value=0.001") Float scale,
             @ParamInfo(name="Section Index", style="slider", options="min=0;max=6")Integer secNum,
             @ParamInfo(name="Color", style="color-chooser") Color col
             //@ParamInfo(name="Color")Color col
             ){
         NGNeuronVisual neuronVis=new NGNeuronVisual(neuron, NGNeuronVisual.VisualMethod.VTA);
         neuronVis.getNeuronAppearance().changeColor(col, secNum.intValue());
+        neuronVis.setScale(0.001f);
+        neuronVis.setScale(scale.floatValue());
         neuronVis.run(somaSphere);
 
         return neuronVis.getVGeometry3D(secNum.intValue());

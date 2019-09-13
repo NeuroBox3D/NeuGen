@@ -63,6 +63,7 @@ import org.neugen.datastructures.AxonSection;
 import org.neugen.datastructures.Cellipsoid;
 import org.neugen.datastructures.Dendrite;
 import org.neugen.datastructures.NetBase;
+import org.neugen.datastructures.neuron.Neuron;
 import org.neugen.datastructures.neuron.NeuronBase;
 import org.neugen.datastructures.Section;
 import org.neugen.datastructures.SectionLink;
@@ -73,11 +74,12 @@ import org.neugen.datastructures.Segment;
  */
 public final class SimpleHocReader {
 
-    private NeuronBase neuron;
+    private Neuron neuron;
     private Cellipsoid soma;
     private Axon axon;
     private List<Dendrite> denList;
     private NetBase net;
+    //private Segment segment;
     private Map<Integer, Section> sections = new HashMap<Integer, Section>();
     private Map<Integer, Segment> segments = new HashMap<Integer, Segment>();
     private int segId = 0;
@@ -88,6 +90,10 @@ public final class SimpleHocReader {
     //Soma kann auch aus mehreren Sektionen aufgebaut sein. Merke in der Liste die IDs der Sektionen
     // wenn nicht alle Sektionen des Soma rausgeschrieben werden, dann brauche ich eine Liste in Cellipsoid
     private List<Integer> somaSecIds = new ArrayList<Integer>();
+
+    public SimpleHocReader(){
+
+    }
 
     public NetBase getNet() {
         return net;
@@ -110,7 +116,30 @@ public final class SimpleHocReader {
         String yVal = dataArray[1]; //System.out.println("y: " + yVal);
         String zVal = dataArray[2]; //System.out.println("z: " + zVal);
         String diamVal = dataArray[3]; //System.out.println("d: " + diamVal);
+
+        //System.out.println("Start1:"+segment.getStart().);
         segment.setEnd(xVal, yVal, zVal, diamVal);
+    }
+
+    private String[] locationInfo(String data){
+       //List<String> infoList=new ArrayList<>();
+        String[] dataArray = data.split(" ");
+
+        return dataArray;
+    }
+
+
+    private Segment setSegment(String dataStart, String dataEnd){
+       Segment segment=new Segment();
+        //segId++;
+        String[] startInfo=locationInfo(dataStart);
+        String[] endInfo=locationInfo(dataEnd);
+
+        segment.setStart(startInfo[0], startInfo[1], startInfo[2], startInfo[3]);
+        System.out.println("Start"+segment.getStart());
+        segment.setEnd(endInfo[0], endInfo[1], endInfo[2], endInfo[3]);
+
+        return segment;
     }
 
     private void addDataToNet() {
@@ -177,11 +206,14 @@ public final class SimpleHocReader {
                     }
                     //System.out.println("number of segments: " + nsegs);
                     String proximal = lineReader.readLine().trim();
-                    Segment segment = new Segment();
-                    segId++;
-                    setStartOfSegment(proximal, segment);
                     String distal = lineReader.readLine().trim();
-                    setEndOfSegment(distal, segment);
+                    Segment segment = setSegment(proximal, distal);//new Segment();
+                    segId++;
+                    //setStartOfSegment(proximal, segment);
+
+
+                    //System.out.println("Segment Start:"+segment.getStart());
+                    //setEndOfSegment(distal, segment);
                     segment.setName("seg_" + name + segId);
                     //segment.setSegmentId(segId);
 

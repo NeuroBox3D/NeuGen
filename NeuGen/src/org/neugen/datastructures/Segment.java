@@ -483,6 +483,7 @@ public class Segment implements Serializable {
         startPoint.x = Float.parseFloat(x);
         startPoint.y = Float.parseFloat(y);
         startPoint.z = Float.parseFloat(z);
+
         startRadius = (Float.parseFloat(diam)) / 2.0f;
     }
 
@@ -491,12 +492,16 @@ public class Segment implements Serializable {
         endPoint.x = Float.parseFloat(x);
         endPoint.y = Float.parseFloat(y);
         endPoint.z = Float.parseFloat(z);
+        //System.out.println("StartPoint:"+parent==null);
+
         if (startPoint == null) {
             startPoint = parent.getEnd();
             startRadius = parent.getEndRadius();
         }
         direction = new Vector3f();
-        direction.sub(endPoint, startPoint);
+        //if (startPoint != null) {
+            direction.sub(endPoint, startPoint);
+       // }
         length = direction.length();
         direction.normalize();
         endRadius = (Float.parseFloat(diam)) / 2.0f;

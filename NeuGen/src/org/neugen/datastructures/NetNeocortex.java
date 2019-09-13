@@ -1504,7 +1504,11 @@ public final class NetNeocortex extends NetBase implements Serializable, Net {
 		 * @param fw stream for the hoc file
 		 */
 		public final void writetohocAlphaSynapses(Writer fw, NeuronTypes neuronType) throws FileNotFoundException, IOException {
-			String projectPath = NeuGenView.getInstance().getProjectDirPath();
+			String projectPath=null;
+			if(NeuGenConstants.WITH_GUI) {
+				projectPath = NeuGenView.getInstance().getProjectDirPath();
+			}
+
 			String tcuDataPath = projectPath + NeuGenConstants.FILE_SEP + NeuGenConstants.TCU_DATA_FILE;
 
 			FileReader tcuData = new FileReader(new File(tcuDataPath));

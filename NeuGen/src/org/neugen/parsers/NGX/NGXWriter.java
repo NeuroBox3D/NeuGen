@@ -261,17 +261,25 @@ public class NGXWriter {
 				float fractAlongParent = parSec.getFractAlongParentForChild(section);
 				String parentSecName = parSec.getName();
 				NGXConnection ngxconnex = new NGXConnection();
-				
-				if (nsections == 0 || parentSecName.contains("soma")) {
+
+				if(parentSecName==null){
 					ngxconnex.setFrom("N" + nn + secName);
 					ngxconnex.setFrom_loc(0);
-					ngxconnex.setTo("N" + nn + "soma");
+					ngxconnex.setTo("N" + nn + "undefined");
 					ngxconnex.setTo_loc((int) fractAlongParent);
-				} else {
-					ngxconnex.setFrom("N" + nn + secName);
-					ngxconnex.setFrom_loc(0);
-					ngxconnex.setTo("N" + nn + parentSecName);
-					ngxconnex.setTo_loc((int) fractAlongParent);
+				}else {
+
+					if (nsections == 0 || parentSecName.contains("soma")) {
+						ngxconnex.setFrom("N" + nn + secName);
+						ngxconnex.setFrom_loc(0);
+						ngxconnex.setTo("N" + nn + "soma");
+						ngxconnex.setTo_loc((int) fractAlongParent);
+					} else {
+						ngxconnex.setFrom("N" + nn + secName);
+						ngxconnex.setFrom_loc(0);
+						ngxconnex.setTo("N" + nn + parentSecName);
+						ngxconnex.setTo_loc((int) fractAlongParent);
+					}
 				}
 				
 				connections.add(ngxconnex);

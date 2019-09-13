@@ -26,7 +26,7 @@ public final class NGNetExport {
     private File file;
 
     public enum ExportType{
-        TXT("txt"), NGX("ngx"), CSV("csv"), HOC("hoc"), sHOC("shoc"), NeuroML("neuroml");
+        TXT("txt"), NGX("ngx"), CSV("csv"), HOC("hoc"), sHOC("shoc"), NeuroML("neuroml");//ngx and hoc are not supported for hipp, hoc is not supported for running without gui
 
         private final String value;
 
@@ -145,19 +145,20 @@ public final class NGNetExport {
             return;
         }
 
-        logger.info("Exporting sHOC data to... " + file.getAbsolutePath());
+        logger.info("Exporting HOC data to... " + file.getAbsolutePath());
         HocWriter hocWriter=new HocWriter(net, file);
         hocWriter.exportNet();
     }
 
-    public static void export_network_in_neuroML(Net net, File file) throws Exception{
+    public static void export_network_in_neuroML(Net net, File file, Integer[] levels) throws Exception{
         if(file==null){
             System.err.println("Please import a file");
             return;
         }
 
-        logger.info("Exporting sHOC data to... " + file.getAbsolutePath());
+        logger.info("Exporting neuronML data (level="+ Arrays.toString(levels)+") to... " + file.getAbsolutePath());
         NeuroMLWriter write = new NeuroMLWriter(); // see NeuronMLWriterTask.java
+        write.setNeuromLevels(levels);
         write.exportData(file, net);
     }
 
@@ -189,8 +190,8 @@ public final class NGNetExport {
         export_network_in_hoc(net,file);
     }
 
-    public void export_network_in_neuroML()throws Exception{
-        export_network_in_neuroML(net,file);
+    public void export_network_in_neuroML(Integer[] levels)throws Exception{
+        export_network_in_neuroML(net,file, levels);
     }
 
 

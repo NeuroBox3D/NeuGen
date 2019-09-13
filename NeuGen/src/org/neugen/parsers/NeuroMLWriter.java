@@ -79,6 +79,8 @@ import org.neugen.datastructures.Pair;
 import org.neugen.datastructures.Section;
 import org.neugen.datastructures.Segment;
 import static org.neugen.gui.NeuGenConstants.VERSION;
+
+import org.neugen.gui.NeuGenConstants;
 import org.neugen.gui.NeuGenView;
 import org.neugen.gui.NeuroMLLevelSelector;
 import org.neugen.parsers.NeuroML.NetworkML.NetworkMLElement;
@@ -322,6 +324,7 @@ public final class NeuroMLWriter {
 	private final static String NEUROML_SPECIFICATION = "v1.8.1";
 
 	private static final long serialVersionUID = 1L;
+	private Integer[] levels={1,2,3};
 
 	/**
 	 * use to log messages
@@ -346,6 +349,8 @@ public final class NeuroMLWriter {
 	public void setNeuromlLevel(int neuromlLevel) {
 		this.neuromlLevel = neuromlLevel;
 	}
+
+	public void setNeuromLevels(Integer[] levels){this.levels=levels;}
 
 	/**
 	 * @brief set the xstream options to allow for NeuroML Level 1, 2 and 3 output
@@ -504,80 +509,83 @@ public final class NeuroMLWriter {
 		Map<Section, Pair<Integer, Integer>> sectionToStartEndSegment = new HashMap<Section, Pair<Integer, Integer>>();
 
 		// fuelle die Liste: jetzt ist nur die erste Sektion des Teilbaumes in der Liste
-		Section.Iterator secIterator = sections.get(0).getIterator();
-		//Section section = secIterator.getNext();
-		sections.clear();
-		while (secIterator.hasNext()) {
-			Section section = secIterator.next();
-			sections.add(section);
-			//section = secIterator.next();
-		}
 
-		for (Section section : sections) {
-			//logger.info("section id: " + section.getId() + " | section name: " + section.getName());
-			float fractAlongParent = -1.0f;
-			List<Segment> segments = section.getSegments();
+		if(sections.get(0)!=null) {
+			Section.Iterator secIterator = sections.get(0).getIterator();
+			//Section section = secIterator.getNext();
+			sections.clear();
+			while (secIterator.hasNext()) {
+				Section section = secIterator.next();
+				sections.add(section);
+				//section = secIterator.next();
+			}
 
-			if (segments.size() > 0) {
-				int startSegId = segments.get(0).getId();
-				int endSegId = startSegId;
+			for (Section section : sections) {
+				//logger.info("section id: " + section.getId() + " | section name: " + section.getName());
+				float fractAlongParent = -1.0f;
+				List<Segment> segments = section.getSegments();
+
 				if (segments.size() > 0) {
-					endSegId = segments.get((segments.size() - 1)).getId();
-				}
-
-				sectionToStartEndSegment.put(section, new Pair<Integer, Integer>(startSegId, endSegId));
-				int counter = 0;
-				for (Segment segment : segments) {
-					sstart = segment.getStart();
-					send = segment.getEnd();
-					sradiusstart = segment.getStartRadius();
-					sradiusend = segment.getEndRadius();
-					NeuroMLSegment neuroMLSegment = new NeuroMLSegment();
-					neuroMLSegment.id = segment.getId();
-					neuroMLSegment.cable = section.getId();
-					neuroMLSegment.name = segment.getName();
-					if (segment.getName() == null) {
-						neuroMLSegment.name = "N" + nn + cableName + section.getId() + "_seg_id_" + segment.getId();
+					int startSegId = segments.get(0).getId();
+					int endSegId = startSegId;
+					if (segments.size() > 0) {
+						endSegId = segments.get((segments.size() - 1)).getId();
 					}
-					if (counter == 0) {
-						if (section.getParentalLink() != null && section.getParentalLink().getParental() != null) {
-							Section parentSection = section.getParentalLink().getParental();
-							fractAlongParent = parentSection.getFractAlongParentForChild(section);
-							int parentID = -1;
-							if (fractAlongParent > 0.0f) {
-								parentID = sectionToStartEndSegment.get(parentSection).second;
-								//logger.info("parentID if: " + parentID);
-							} else {
-								parentID = sectionToStartEndSegment.get(parentSection).first;
-								//logger.info("parentID else: " + parentID);
-							}
-							neuroMLSegment.parent = parentID;
+
+					sectionToStartEndSegment.put(section, new Pair<Integer, Integer>(startSegId, endSegId));
+					int counter = 0;
+					for (Segment segment : segments) {
+						sstart = segment.getStart();
+						send = segment.getEnd();
+						sradiusstart = segment.getStartRadius();
+						sradiusend = segment.getEndRadius();
+						NeuroMLSegment neuroMLSegment = new NeuroMLSegment();
+						neuroMLSegment.id = segment.getId();
+						neuroMLSegment.cable = section.getId();
+						neuroMLSegment.name = segment.getName();
+						if (segment.getName() == null) {
+							neuroMLSegment.name = "N" + nn + cableName + section.getId() + "_seg_id_" + segment.getId();
 						}
+						if (counter == 0) {
+							if (section.getParentalLink() != null && section.getParentalLink().getParental() != null) {
+								Section parentSection = section.getParentalLink().getParental();
+								fractAlongParent = parentSection.getFractAlongParentForChild(section);
+								int parentID = -1;
+								if (fractAlongParent > 0.0f) {
+									parentID = sectionToStartEndSegment.get(parentSection).second;
+									//logger.info("parentID if: " + parentID);
+								} else {
+									parentID = sectionToStartEndSegment.get(parentSection).first;
+									//logger.info("parentID else: " + parentID);
+								}
+								neuroMLSegment.parent = parentID;
+							}
+						} else {
+							neuroMLSegment.parent = neuroMLSegment.id - 1;
+						}
+
+						if (counter == 0) {
+							neuroMLSegment.proximal = new Proximal(sstart.x, sstart.y, sstart.z, sradiusstart * 2);
+						}
+						neuroMLSegment.distal = new Distal(send.x, send.y, send.z, sradiusend * 2);
+						neuroMLList.add(neuroMLSegment);
+						counter++;
+					}
+					int sectionID = section.getId();
+					Cable cable = null;
+					if (fractAlongParent > -1.0f) {
+						//CableFAP cableFAP = new CableFAP(sectionID, "N" + nn + cableName + sectionID);
+						CableFAP cableFAP = new CableFAP(sectionID, section.getName());
+						cableFAP.fractAlongParent = (int) fractAlongParent;
+						cable = cableFAP;
 					} else {
-						neuroMLSegment.parent = neuroMLSegment.id - 1;
+						//cable = new Cable(sectionID, "N" + nn + cableName + sectionID);
+						cable = new Cable(sectionID, section.getName());
 					}
 
-					if (counter == 0) {
-						neuroMLSegment.proximal = new Proximal(sstart.x, sstart.y, sstart.z, sradiusstart * 2);
-					}
-					neuroMLSegment.distal = new Distal(send.x, send.y, send.z, sradiusend * 2);
-					neuroMLList.add(neuroMLSegment);
-					counter++;
+					cables.add(cable);
 				}
-				int sectionID = section.getId();
-				Cable cable = null;
-				if (fractAlongParent > -1.0f) {
-					//CableFAP cableFAP = new CableFAP(sectionID, "N" + nn + cableName + sectionID);
-					CableFAP cableFAP = new CableFAP(sectionID, section.getName());
-					cableFAP.fractAlongParent = (int) fractAlongParent;
-					cable = cableFAP;
-				} else {
-					//cable = new Cable(sectionID, "N" + nn + cableName + sectionID);
-					cable = new Cable(sectionID, section.getName());
-				}
-
-				cables.add(cable);
-              			}
+			}
 		}
 	}
 
@@ -680,7 +688,9 @@ public final class NeuroMLWriter {
 		NeuroMLProjection current_projection = new NeuroMLProjection();
 		
 		ArrayList<NetworkMLElement> elements = new ArrayList<NetworkMLElement>();
-		task.setMyProgress(0.0f);
+		if(NeuGenConstants.WITH_GUI) {
+			task.setMyProgress(0.0f);
+		}
 			int i = 0;
 			for (NeuroMLSynapse synapse : neuroMLSynapses) {
 				logger.info("Synapse: " + synapse.toString());
@@ -700,15 +710,17 @@ public final class NeuroMLWriter {
 					logger.error(e, e);
 			}
 
+		if(NeuGenConstants.WITH_GUI) {
 			if (task != null) {
 				i++;
 				logger.info("progress: " + i / (float) neuroMLSynapses.size());
-				task.setMyProgress( i / (float) neuroMLSynapses.size());
+				task.setMyProgress(i / (float) neuroMLSynapses.size());
 			}
-			
+
 			if (task != null) {
 				task.setMyProgress(1.0f);
 			}
+		}
 	}
 
 	/**
@@ -853,6 +865,8 @@ public final class NeuroMLWriter {
 		}
 	}
 
+
+
 	/**
 	 * @brief exports the NeuroML data, i. e. level 1, 2 or 3
 	 * 
@@ -884,14 +898,33 @@ public final class NeuroMLWriter {
 	 * @param net
 	 * @throws IOException
 	 */
-	public static void exportData(File file, Net net) throws IOException {
+
+	public void exportData(File file, Net net) throws IOException {
+		if(NeuGenConstants.WITH_GUI) {
+			NeuroMLLevelSelector choser = new NeuroMLLevelSelector(NeuGenView.getInstance().getFrame(), true);
+			choser.setVisible(true);
+			System.err.println("LEVELS: " + Arrays.toString(choser.getNeuroMLLevels()));
+			exportData(file, net,choser.getNeuroMLLevels());
+		}else{
+			exportData(file, net, levels);
+		}
+	}
+
+
+	public static void exportData(File file, Net net, Integer[] levels) throws IOException {
 		/// get the NeuroML level choser dialog
-		NeuroMLLevelSelector choser = new NeuroMLLevelSelector(NeuGenView.getInstance().getFrame(), true);
-		choser.setVisible(true);
-		System.err.println("LEVELS: " + Arrays.toString(choser.getNeuroMLLevels()));
-		
+
+		/*if(NeuGenConstants.WITH_GUI) {
+			NeuroMLLevelSelector choser = new NeuroMLLevelSelector(NeuGenView.getInstance().getFrame(), true);
+			choser.setVisible(true);
+			System.err.println("LEVELS: " + Arrays.toString(choser.getNeuroMLLevels()));
+			levels=choser.getNeuroMLLevels();
+
+		}/*else{
+			NeuroMLLevelSelector choser = new NeuroMLLevelSelector();
+		}*/
 		/// for each specified level we export
-		for (int level : choser.getNeuroMLLevels()) {
+		for (int level : levels) {
 			NeuroMLWriter exportML = new NeuroMLWriter();
 			exportML.setNeuromlLevel(level);
 			exportML.initXStream();

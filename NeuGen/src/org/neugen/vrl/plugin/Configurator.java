@@ -103,8 +103,8 @@ public class Configurator extends VPluginConfigurator{
         }, ActionDelegator.TOOL_MENU);
 
 
-        vapi.addTypeRepresentation(VCanvas3DType.class);
-        vapi.addComponent(DensityVisualizationParamsInput.class);
+        //vapi.addTypeRepresentation(VCanvas3DType.class);
+        //vapi.addComponent(DensityVisualizationParamsInput.class);
 
         vapi.addComponent(VRLNeuGenProjectCreate.class);
         vapi.addComponent(VRLNeuGenParameterLoad.class);
@@ -115,8 +115,10 @@ public class Configurator extends VPluginConfigurator{
 
         vapi.addComponent(VRLNeuGenNeuronSelection.class);
         vapi.addComponent(VRLNeuGenNeuronVisual.class);
+        vapi.addComponent(VRLNeuGenNeuronRead.class);
 
         vapi.addComponent(VRLNeuGenNetVisual.class);
+        vapi.addComponent(VRLNeuGenVisualColor.class);
         vapi.addComponent(VRLNeuGenNetSave.class);
 
     }

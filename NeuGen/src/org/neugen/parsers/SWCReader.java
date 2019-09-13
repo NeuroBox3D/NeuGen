@@ -145,6 +145,7 @@ public class SWCReader {
             net = new NetBase();
         }
         */
+        //
         net = new NetBase();
         neuron = new NeuronBase();
         soma = neuron.getSoma();
@@ -153,8 +154,13 @@ public class SWCReader {
     }
 
     public Net getNet() {
+
+        /*Net net = new NetBase();
+        net.getNeuronList().add(neuron);*/
         return net;
     }
+
+    public Neuron getNeuron(){return neuron;}
 
     public void readSWC(File f) {
         Reader in = null;
@@ -489,10 +495,10 @@ public class SWCReader {
 
             neuron.setName(f.getName());
 
-            if (ngView != null) {
+            /*if (ngView != null) {
                 ngView.outPrintln(swcComment);
                 ngView.setNet(net);
-            }
+            }*/
             neuron.infoNeuron();
         } catch (IOException e) {
             logger.error(e, e);
