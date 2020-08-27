@@ -11,7 +11,7 @@ The generated neurons can be exported into a 3D graphic format for visualization
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 # Build prerequisites
-1. Ant
+1. Ant >= 1.9
 2. JDK >= 6 and JDK <= 12 
 
 # Howto build NeuGen
