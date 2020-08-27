@@ -5,6 +5,12 @@ NeuGen generates nonidentical neurons of morphological classes of the cortex, e.
 
 The generated neurons can be exported into a 3D graphic format for visualization and into multi-compartment files for simulations with the program NEURON. NeuGen is intended for scientists aiming at simulations of realistic networks in 3D.
 
+[![CI Build Status](https://travis-ci.org/NeuroBox3D/NeuGen.svg?branch=master)](https://travis-ci.org/NeuroBox3D/NeuGen)
+[![CI Build Status](https://travis-ci.org/NeuroBox3D/NeuGen.svg?branch=devel)](https://travis-ci.org/NeuroBox3D/NeuGen)
+[![CI Coverage Status](https://coveralls.io/repos/NeuroBox3D/NeuGen/badge.png)](https://coveralls.io/r/NeuroBox3D/NeuGen)
+[![Build status](https://ci.appveyor.com/api/projects/status/ovyhr78ydpolbjfc?svg=true)](https://ci.appveyor.com/project/stephanmg/neugen)
+[![LGPLv3](https://img.shields.io/badge/license-LGPLv3-blue.svg)](./README.md)
+
 # Howto build NeuGen
 1. Netbeans: Clean & Build
 2. Ant: ant from NeuGen folder
@@ -16,30 +22,12 @@ The generated neurons can be exported into a 3D graphic format for visualization
 ## Releases
 NeuGen 2.0 - git tag v2.0
 Current development on devel branch, current stable on master branch.
-
-## See Also
-[NeuGen](http://www.neugen.org)
-[NeuroBox3D](http://www.neurobox.eu)
+See also please the project websites [NeuGen](http://www.neugen.org) and [NeuroBox3D](http://www.neurobox.eu)
 
 ## Samples
 ![](/resources/img/synapse.jpg)
 ![](/resources/img/soma.jpg)
 ![](/resources/img/neugen.jpg)
-
-## Development
-### Travis (Linux/Mac build status)
-* [![CI Build Status](https://travis-ci.org/NeuroBox3D/NeuGen.svg?branch=master)](https://travis-ci.org/NeuroBox3D/NeuGen)
-[![CI Build Status](https://travis-ci.org/NeuroBox3D/NeuGen.svg?branch=devel)](https://travis-ci.org/NeuroBox3D/NeuGen)
-[![CI Coverage Status](https://coveralls.io/repos/NeuroBox3D/NeuGen/badge.png)](https://coveralls.io/r/NeuroBox3D/NeuGen)
-
-### Appveyor (Windows build status)
-* [![Build status](https://ci.appveyor.com/api/projects/status/ovyhr78ydpolbjfc?svg=true)](https://ci.appveyor.com/project/stephanmg/neugen)
-
-### Issues
-* [![Stories in Ready](https://badge.waffle.io/NeuroBox3D/NeuGen.png?label=ready&title=Ready)](http://waffle.io/NeuroBox3D/NeuGen)
-
-### License
-* [![LGPLv3](https://img.shields.io/badge/license-LGPLv3-blue.svg)](./README.md)
 
 ## Documentation
 Export .ngx (NeuGen XML) from the GUI by Save Dialog or Ctrl-Shift-N.
