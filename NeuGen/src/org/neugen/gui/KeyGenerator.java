@@ -69,27 +69,27 @@ public class KeyGenerator {
     private static String externLocalKey = "neuroKey";
     private static String internLocalKey = "01234567";
 
-    public String getInternCodedKey(String newPass) throws Exception {
+    public static String getInternCodedKey(String newPass) throws Exception {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         encode(newPass.getBytes(), out, internLocalKey);
 	
 	return Base64.encodeBase64String(out.toByteArray());
     }
 
-    public String getExternCodedKey(String newPass) throws Exception {
+    public static String getExternCodedKey(String newPass) throws Exception {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         encode(newPass.getBytes(), out, externLocalKey);
 	return Base64.encodeBase64String(out.toByteArray());
     }
 
-    public String getInternDecodedKey(String codedPass) throws IOException, Exception {
+    public static String getInternDecodedKey(String codedPass) throws IOException, Exception {
         byte[] decode = Base64.decodeBase64(codedPass);
         InputStream is = new ByteArrayInputStream(decode);
         String decodedLK = new String(decode(is, internLocalKey)).trim();
         return decodedLK;
     }
 
-    public String getExternDecodedKey(String codedPass) throws IOException, Exception {
+    public static String getExternDecodedKey(String codedPass) throws IOException, Exception {
         byte[] decode = Base64.decodeBase64(codedPass);
         InputStream is = new ByteArrayInputStream(decode);
         String decodedLK = new String(decode(is, externLocalKey)).trim();
