@@ -6,6 +6,11 @@ jdk:
 env:
 - TERM=dumb
 
+branches:
+  except:
+  - devel
+
+
 before_install:
    - cd NeuGen
 
