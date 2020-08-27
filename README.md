@@ -23,7 +23,7 @@ The generated neurons can be exported into a 3D graphic format for visualization
 
 ## Releases
 NeuGen 2.0 - git tag v2.0
-Current development on devel branch, current stable on master branch. See also the proejct website [NeuGen](http://www.neugen.org) and [NeuroBox3D](http://neurobox.eu).
+Current development on devel branch, current stable on master branch. See also the project website [NeuGen](http://www.neugen.org) and [NeuroBox3D](http://neurobox.eu).
 
 ## Samples
 ![](/resources/img/synapse.jpg)
