@@ -75,7 +75,6 @@ import org.apache.log4j.Logger;
 import org.neugen.datastructures.DataStructureConstants;
 import org.neugen.datastructures.Net;
 import org.neugen.datastructures.Region;
-import org.neugen.datastructures.xml.TreeNode;
 import org.neugen.datastructures.xml.XMLObject;
 import org.neugen.gui.NeuGenConstants;
 import org.neugen.gui.NeuGenLib;
