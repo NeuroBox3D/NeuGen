@@ -96,7 +96,7 @@ public class KeyGenerator {
         return decodedLK;
     }
 
-    public void encode(byte[] bytes, OutputStream out, String pass) throws Exception {
+    public static void encode(byte[] bytes, OutputStream out, String pass) throws Exception {
         Cipher c = Cipher.getInstance("DES");
         Key k = new SecretKeySpec(pass.getBytes(), "DES");
         c.init(Cipher.ENCRYPT_MODE, k);
@@ -106,7 +106,7 @@ public class KeyGenerator {
         cos.close();
     }
 
-    public byte[] decode(InputStream is, String pass) throws Exception {
+    public static byte[] decode(InputStream is, String pass) throws Exception {
         Cipher c = Cipher.getInstance("DES");
         Key k = new SecretKeySpec(pass.getBytes(), "DES");
         c.init(Cipher.DECRYPT_MODE, k);
