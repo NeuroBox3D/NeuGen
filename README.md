@@ -12,7 +12,7 @@ The generated neurons can be exported into a 3D graphic format for visualization
 
 # Build prerequisites
 1. Ant
-2. JDK >= 6 and JDK <= 12
+2. JDK >= 6 and JDK <= 12 
 
 # Howto build NeuGen
 1. Netbeans: Clean & Build
