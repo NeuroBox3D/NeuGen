@@ -362,7 +362,7 @@ public final class NGBackend {
 	 * @param currentRoot
 	 * @param projectDirPath
 	 */
-	private void save_param(TreeNode currentRoot, String projectDirPath) {
+	private void save_param(Enumeration<TreeNode> currentRoot, String projectDirPath) {
 		save(currentRoot, projectDirPath, NeuGenConstants.PARAM);
 	}
 
@@ -371,7 +371,7 @@ public final class NGBackend {
 	 * @param currentRoot
 	 * @param projectDirPath
 	 */
-	private void save_interna(TreeNode currentRoot, String projectDirPath) {
+	private void save_interna(Enumeration<TreeNode> currentRoot, String projectDirPath) {
 		save(currentRoot, projectDirPath, NeuGenConstants.INTERNA);
 	}
 
@@ -391,7 +391,7 @@ public final class NGBackend {
 	 * @param projectDirPath
 	 * @param param
 	 */
-	private void save(TreeNode currentRoot, String projectDirPath, String param) {
+	private void save(Enumeration<TreeNode> currentRoot, String projectDirPath, String param) {
 		logger.info("leaf count: " + currentRoot.getLeafCount());
 		
 		/**
