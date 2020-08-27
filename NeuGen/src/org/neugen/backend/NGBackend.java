@@ -75,7 +75,7 @@ import org.apache.log4j.Logger;
 import org.neugen.datastructures.DataStructureConstants;
 import org.neugen.datastructures.Net;
 import org.neugen.datastructures.Region;
-import org.neugen.datastructures.xml.TreeNode;
+import org.neugen.datastructures.xml.XMLNode;
 import org.neugen.datastructures.xml.XMLObject;
 import org.neugen.gui.NeuGenConstants;
 import org.neugen.gui.NeuGenLib;
@@ -363,7 +363,7 @@ public final class NGBackend {
 	 * @param currentRoot
 	 * @param projectDirPath
 	 */
-	private void save_param(TreeNode currentRoot, String projectDirPath) {
+	private void save_param(XMLNode currentRoot, String projectDirPath) {
 		save(currentRoot, projectDirPath, NeuGenConstants.PARAM);
 	}
 
@@ -372,7 +372,7 @@ public final class NGBackend {
 	 * @param currentRoot
 	 * @param projectDirPath
 	 */
-	private void save_interna(TreeNode currentRoot, String projectDirPath) {
+	private void save_interna(XMLNode currentRoot, String projectDirPath) {
 		save(currentRoot, projectDirPath, NeuGenConstants.INTERNA);
 	}
 
@@ -392,7 +392,7 @@ public final class NGBackend {
 	 * @param projectDirPath
 	 * @param param
 	 */
-	private void save(TreeNode currentRoot, String projectDirPath, String param) {
+	private void save(XMLNode currentRoot, String projectDirPath, String param) {
 		logger.info("leaf count: " + currentRoot.getLeafCount());
 		
 		/**
@@ -877,7 +877,7 @@ public final class NGBackend {
 	 * @param identifier
 	 */
 	@SuppressWarnings("unchecked")
-	private void modifyParameter_rec(TreeNode root, double param, ArrayList<String> identifier) {
+	private void modifyParameter_rec(XMLNode root, double param, ArrayList<String> identifier) {
 		Enumeration<TreeNode> childs = root.children();
 		while (childs.hasMoreElements()) {
 			TreeNode node = childs.nextElement();
@@ -904,7 +904,7 @@ public final class NGBackend {
 	 * @param replacement
 	 */
 	@SuppressWarnings("unchecked")
-	private void correct_siblings(TreeNode child, String identifier, double replacement) {
+	private void correct_siblings(XMLNode child, String identifier, double replacement) {
 		/// only one child called siblings within childs of current TreeNode child
 		Enumeration<TreeNode> childs = child.children();
 		TreeNode sibling = childs.nextElement();
