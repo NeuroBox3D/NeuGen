@@ -11,7 +11,9 @@ The generated neurons can be exported into a 3D graphic format for visualization
 [![Codacy Badge](https://api.codacy.com/project/badge/grade/b3714ff664c1490893efdf05afb52027)](https://www.codacy.com/app/stephan_5/NeuGen)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-
+# Build prerequisites
+1. Ant
+2. JDK >= 6 and JDK <= 12
 
 # Howto build NeuGen
 1. Netbeans: Clean & Build
