@@ -12,16 +12,17 @@ The generated neurons can be exported into a 3D graphic format for visualization
 [![LGPLv3](https://img.shields.io/badge/license-LGPLv3-blue.svg)](./README.md)
 
 # Howto build NeuGen
-1. Netbeans: Clean & Build
-2. Ant: ant from NeuGen folder
+1. Netbeans: Clean & Build in GUI
+2. Ant: Enter `ant` from NeuGen folder
 
 # Howto run NeuGen
 1. Netbeans: Run File ```NeuGenApp.java```
-2. Terminal: Goto rls folder - execute run script according to your OS
+2. Terminal: Goto rls folder - execute run (`run.sh`) script according to your OS
 
 ## Releases
+NeuGen 1.0 - git tag v1.0
 NeuGen 2.0 - git tag v2.0
-Current development on devel branch, current stable on master branch.
+Current development on devel branch (NeuGen 3.0), current stable version is on master branch.
 See also please the project websites [NeuGen](http://www.neugen.org) and [NeuroBox3D](http://www.neurobox.eu)
 
 ## Samples
