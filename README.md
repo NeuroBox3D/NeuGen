@@ -20,10 +20,11 @@ The generated neurons can be exported into a 3D graphic format for visualization
 2. Terminal: Goto rls folder - execute run (`run.sh`) script according to your OS
 
 ## Releases
-NeuGen 1.0 - git tag v1.0
-NeuGen 2.0 - git tag v2.0
-Current development on devel branch (NeuGen 3.0), current stable version is on master branch.
-VRL integration of NeuGen 2.0 into VRL-Studio on branch vrl-devel.
+- NeuGen 1.0 - git tag v1.0
+- NeuGen 2.0 - git tag v2.0
+- Current development on devel branch (NeuGen 3.0), current stable version is on master branch.
+-VRL integration of NeuGen 2.0 into VRL-Studio on branch vrl-devel.
+
 See also please the project websites [NeuGen](http://www.neugen.org) and [NeuroBox3D](http://www.neurobox.eu)
 
 ## Samples
