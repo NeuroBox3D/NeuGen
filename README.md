@@ -13,7 +13,7 @@ The generated neurons can be exported into a 3D graphic format for visualization
 
 # Howto build NeuGen
 1. Netbeans: Clean & Build in GUI
-2. Ant: Enter `ant` from NeuGen folder
+2. Ant: Enter `ant release` from NeuGen folder (Will create a fat jar)
 
 # Howto run NeuGen
 1. Netbeans: Run File ```NeuGenApp.java```
