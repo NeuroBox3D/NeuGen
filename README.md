@@ -16,11 +16,12 @@ The generated neurons can be exported into a 3D graphic format for visualization
 
 # Howto build NeuGen
 1. Netbeans: Clean & Build
-2. Ant: ant from NeuGen folder
+2. Ant: ant release from NeuGen folder
 
 # Howto run NeuGen
 1. Netbeans: Run File ```NeuGenApp.java```
-2. Terminal: Goto rls folder - execute run script according to your OS
+2. Terminal: Go to rls folder - execute run script according to your OS
+
 
 ## Releases
 NeuGen 2.0 - git tag v2.0
